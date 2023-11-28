@@ -35,21 +35,6 @@ public class TestCommand implements CucumberyCommandExecutor
 		}
 		try
 		{
-			switch (args[0])
-			{
-				case "explode" -> {
-					Player player = (Player) sender;
-					ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
-					PacketContainer fakeExplosion = new PacketContainer(PacketType.Play.Server.EXPLOSION);
-					fakeExplosion.getDoubles()
-							.write(0, player.getLocation().getX())
-							.write(1, player.getLocation().getY())
-							.write(2, player.getLocation().getZ());
-					fakeExplosion.getFloat().write(0, 3.0F);
-					fakeExplosion.getBlockPositionCollectionModifier().write(0, new ArrayList<>());
-					protocolManager.sendServerPacket(player, fakeExplosion);
-				}
-			}
 			if (args[0].equals("arrow"))
 			{
 				for (Entity entity : SelectorUtil.getEntities(sender, args[1]))
