@@ -13,25 +13,22 @@ import org.bukkit.inventory.ItemStack;
 
 public class PrepareResult implements Listener
 {
-  public void onPrepareResult(PrepareResultEvent event)
-  {
-    HumanEntity humanEntity = event.getView().getPlayer();
-    if (humanEntity instanceof Player player)
-    {
-      ItemStack result = event.getResult();
-      if (!ItemStackUtil.itemExists(result))
-      {
-        return;
-      }
-      if (event.getInventory().getType() == InventoryType.ANVIL)
-      {
-        return;
-      }
-      if (Method.usingLoreFeature(player))
-      {
-        ItemLore.setItemLore(result, new ItemLoreView(player));
-        event.setResult(result);
-      }
-    }
-  }
+	public void onPrepareResult(PrepareResultEvent event)
+	{
+		HumanEntity humanEntity = event.getView().getPlayer();
+		if (humanEntity instanceof Player player)
+		{
+			ItemStack result = event.getResult();
+			if (!ItemStackUtil.itemExists(result))
+			{
+				return;
+			}
+			if (event.getInventory().getType() == InventoryType.ANVIL)
+			{
+				return;
+			}
+			ItemLore.setItemLore(result, new ItemLoreView(player));
+			event.setResult(result);
+		}
+	}
 }

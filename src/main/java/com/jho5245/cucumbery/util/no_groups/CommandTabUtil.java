@@ -393,7 +393,7 @@ public class CommandTabUtil
         list.add(Completion.completion(uuid, hover));
       }
     }
-    if (lastArg.equals(""))
+    if (lastArg.isEmpty())
     {
       list.add(Completion.completion("#", ComponentUtil.translate("특정 태그가 있는 개체 (예 : #foo)")));
     }
@@ -844,7 +844,7 @@ public class CommandTabUtil
         continue;
       }
       String s = k.toString();
-/*      if (k instanceof NamespacedKey && !args[args.length - 1].equals("") && !args[args.length - 1].contains(":"))
+/*      if (k instanceof NamespacedKey && !args[args.length - 1].isEmpty() && !args[args.length - 1].contains(":"))
       {
         args[args.length - 1] = "cucumbery:" + args[args.length - 1];
       }*/
@@ -913,7 +913,7 @@ public class CommandTabUtil
     String tabArg = args[args.length - 1];
     Completion completion = key instanceof Completion c ? c : Completion.completion(key.toString(), ComponentUtil.translate("범위 제한 : %s %s %s %s",
             Constant.Sosu2.format(from), excludeFrom ? "초과" : "이상", Constant.Sosu2.format(to), excludeTo ? "미만" : "이하"));
-    if (tabArg.equals(""))
+    if (tabArg.isEmpty())
     {
       return Collections.singletonList(completion);
     }
@@ -946,7 +946,7 @@ public class CommandTabUtil
   {
     String tabArg = args[args.length - 1];
     Completion completion = key instanceof Completion c ? c : Completion.completion(key.toString(), ComponentUtil.translate("범위 제한 : %s 이상 %s 이하", Constant.Sosu2.format(from), Constant.Sosu2.format(to)));
-    if (tabArg.equals(""))
+    if (tabArg.isEmpty())
     {
       return Collections.singletonList(completion);
     }
@@ -979,7 +979,7 @@ public class CommandTabUtil
   {
     String tabArg = args[args.length - 1];
     Completion completion = key instanceof Completion c ? c : Completion.completion(key.toString(), ComponentUtil.translate("범위 제한 : %s 이상 %s 이하", Constant.Sosu2.format(from), Constant.Sosu2.format(to)));
-    if (tabArg.equals(""))
+    if (tabArg.isEmpty())
     {
       return Collections.singletonList(completion);
     }
@@ -1068,7 +1068,7 @@ public class CommandTabUtil
     String arg = args[args.length - 1];
     if (targetBlock == null || !"$target_block".startsWith(arg))
     {
-      if (!arg.equals(""))
+      if (!arg.isEmpty())
       {
         if (arg.equals("~ ~ ~") || arg.equals("^ ^ ^"))
         {
@@ -1263,7 +1263,7 @@ public class CommandTabUtil
             Completion.completion(yaw + " " + pitch, ComponentUtil.translate("현재 바라보고 있는 방향"))
     ));
     String arg = args[args.length - 1];
-    if (!arg.equals(""))
+    if (!arg.isEmpty())
     {
       if (arg.equals("~ ~"))
       {
@@ -1348,7 +1348,7 @@ public class CommandTabUtil
   {
     List<Completion> list = new ArrayList<>(tabCompleterList(args, Material.values(), key, material -> material.isAir() || !material.isItem()));
     String arg = args[args.length - 1];
-    boolean regex = arg.equals("") || (arg.matches("(.*[a-z0-9_-])") && !arg.contains("{"));
+    boolean regex = arg.isEmpty() || (arg.matches("(.*[a-z0-9_-])") && !arg.contains("{"));
     if (regex)
     {
       try

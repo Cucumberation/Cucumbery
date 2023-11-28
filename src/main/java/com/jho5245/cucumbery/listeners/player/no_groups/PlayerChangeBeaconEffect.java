@@ -72,27 +72,24 @@ public class PlayerChangeBeaconEffect implements Listener
       }
 
       Block block = event.getBeacon();
-      if (block != null)
-      {
-        ItemStack placedBlockDataItemStack = BlockPlaceDataConfig.getItem(block.getLocation());
-        if (NBTAPI.isRestricted(player, placedBlockDataItemStack, Constant.RestrictionType.NO_BLOCK_BEACON))
-        {
-          event.setCancelled(true);
-          if (!Permission.EVENT_ERROR_HIDE.has(player) && !Variable.playerChangeBeaconEffectAlertCooldown.contains(uuid))
-          {
-            Variable.playerChangeBeaconEffectAlertCooldown.add(uuid);
-            MessageUtil.sendTitle(player, "&c사용 불가!", "&r효과를 적용하거나 바꿀 수 없는 신호기입니다", 5, 80, 15);
-            SoundPlay.playSound(player, Constant.ERROR_SOUND);
-            Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> Variable.playerChangeBeaconEffectAlertCooldown.remove(uuid), 100L);
-          }
-          if (player.getInventory().firstEmpty() != -1)
-          {
-            Variable.playerChangeBeaconEffectItemDropCooldown.add(uuid);
-            Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> Variable.playerChangeBeaconEffectItemDropCooldown.remove(uuid), 0L);
-          }
+			ItemStack placedBlockDataItemStack = BlockPlaceDataConfig.getItem(block.getLocation());
+			if (NBTAPI.isRestricted(player, placedBlockDataItemStack, Constant.RestrictionType.NO_BLOCK_BEACON))
+			{
+				event.setCancelled(true);
+				if (!Permission.EVENT_ERROR_HIDE.has(player) && !Variable.playerChangeBeaconEffectAlertCooldown.contains(uuid))
+				{
+					Variable.playerChangeBeaconEffectAlertCooldown.add(uuid);
+					MessageUtil.sendTitle(player, "&c사용 불가!", "&r효과를 적용하거나 바꿀 수 없는 신호기입니다", 5, 80, 15);
+					SoundPlay.playSound(player, Constant.ERROR_SOUND);
+					Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> Variable.playerChangeBeaconEffectAlertCooldown.remove(uuid), 100L);
+				}
+				if (player.getInventory().firstEmpty() != -1)
+				{
+					Variable.playerChangeBeaconEffectItemDropCooldown.add(uuid);
+					Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> Variable.playerChangeBeaconEffectItemDropCooldown.remove(uuid), 0L);
+				}
 //          return;
-        }
-      }
-    }
+			}
+		}
   }
 }

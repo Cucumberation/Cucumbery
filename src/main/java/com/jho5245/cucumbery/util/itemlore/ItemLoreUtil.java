@@ -96,7 +96,7 @@ public class ItemLoreUtil
         if (firstLor instanceof TranslatableComponent translatableComponent)
         {
           String key = translatableComponent.key();
-          if (key.replace(" ", "").equals(""))
+          if (key.replace(" ", "").isEmpty())
           {
             List<Component> args = translatableComponent.args();
             if (args.size() == 1 && args.get(0) instanceof TextComponent)
@@ -114,7 +114,7 @@ public class ItemLoreUtil
         {
           String firstLorSerial = ComponentUtil.serialize(firstLor);
           String secondLorSerial = MessageUtil.stripColor(ComponentUtil.serialize(lore.get(1)));
-          if (firstLorSerial.equals("") && secondLorSerial.startsWith("아이템 종류"))
+          if (firstLorSerial.isEmpty() && secondLorSerial.startsWith("아이템 종류"))
           {
             return true;
           }

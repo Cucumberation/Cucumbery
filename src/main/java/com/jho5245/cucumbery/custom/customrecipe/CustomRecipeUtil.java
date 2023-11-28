@@ -199,7 +199,7 @@ public class CustomRecipeUtil
       {
         finalValueString = "";
       }
-      if (!finalValueString.equals(""))
+      if (!finalValueString.isEmpty())
       {
         requirementsLore.add(ComponentUtil.create(finalValueString));
       }
@@ -261,7 +261,7 @@ public class CustomRecipeUtil
       {
         finalValue = "";
       }
-      if (!finalValue.equals(""))
+      if (!finalValue.isEmpty())
       {
         requirementsLore.add(ComponentUtil.create(finalValue));
       }
@@ -326,7 +326,7 @@ public class CustomRecipeUtil
       {
         finalValue = "";
       }
-      if (!finalValue.equals(""))
+      if (!finalValue.isEmpty())
       {
         requirementsLore.add(ComponentUtil.create(finalValue));
       }
@@ -391,7 +391,7 @@ public class CustomRecipeUtil
       {
         finalValue = "";
       }
-      if (!finalValue.equals(""))
+      if (!finalValue.isEmpty())
       {
         requirementsLore.add(ComponentUtil.create(finalValue));
       }
@@ -457,7 +457,7 @@ public class CustomRecipeUtil
       {
         finalValue = "";
       }
-      if (!finalValue.equals(""))
+      if (!finalValue.isEmpty())
       {
         requirementsLore.add(ComponentUtil.create(finalValue));
       }
@@ -526,7 +526,7 @@ public class CustomRecipeUtil
         {
           finalValue = "";
         }
-        if (!finalValue.equals(""))
+        if (!finalValue.isEmpty())
         {
           requirementsLore.add(ComponentUtil.create(finalValue));
         }
@@ -580,7 +580,7 @@ public class CustomRecipeUtil
       {
         finalValue = "";
       }
-      if (!finalValue.equals(""))
+      if (!finalValue.isEmpty())
       {
         requirementsLore.add(ComponentUtil.create(finalValue));
       }
@@ -638,7 +638,7 @@ public class CustomRecipeUtil
       {
         finalValue = "";
       }
-      if (!finalValue.equals(""))
+      if (!finalValue.isEmpty())
       {
         requirementsLore.add(ComponentUtil.create(finalValue));
       }
@@ -707,7 +707,7 @@ public class CustomRecipeUtil
       {
         finalValue = "";
       }
-      if (!finalValue.equals(""))
+      if (!finalValue.isEmpty())
       {
         requirementsLore.add(ComponentUtil.create(finalValue));
       }
@@ -759,7 +759,7 @@ public class CustomRecipeUtil
       {
         finalValue = "";
       }
-      if (!finalValue.equals(""))
+      if (!finalValue.isEmpty())
       {
         requirementsLore.add(ComponentUtil.create(finalValue));
       }
@@ -811,7 +811,7 @@ public class CustomRecipeUtil
       {
         finalValue = "";
       }
-      if (!finalValue.equals(""))
+      if (!finalValue.isEmpty())
       {
         requirementsLore.add(ComponentUtil.create(finalValue));
       }
@@ -863,7 +863,7 @@ public class CustomRecipeUtil
       {
         finalValue = "";
       }
-      if (!finalValue.equals(""))
+      if (!finalValue.isEmpty())
       {
         requirementsLore.add(ComponentUtil.create(finalValue));
       }
@@ -915,7 +915,7 @@ public class CustomRecipeUtil
       {
         finalValue = "";
       }
-      if (!finalValue.equals(""))
+      if (!finalValue.isEmpty())
       {
         requirementsLore.add(ComponentUtil.create(finalValue));
       }
@@ -1685,7 +1685,7 @@ Cucumbery.getPlugin().getLogger().warning(          e.getMessage());
                   {
                     finalValue = "";
                   }
-                  if (!finalValue.equals(""))
+                  if (!finalValue.isEmpty())
                   {
                     args.add(ComponentUtil.create(finalValue));
                     requirementsLore.add(statisticDisplay.args(args));
@@ -1852,7 +1852,7 @@ Cucumbery.getPlugin().getLogger().warning(          e.getMessage());
     else if (ratio < 1d)
     {
       int red = 255, green = 0;
-      green += (250d * ratio);
+      green += (int) (250d * ratio);
       if (green > 255)
       {
         green = 255;
@@ -1861,9 +1861,9 @@ Cucumbery.getPlugin().getLogger().warning(          e.getMessage());
       {
         green = 0;
       }
-      if (ratio >= 0.7 && ratio < 1d)
+      if (ratio >= 0.7)
       {
-        red -= (50d * (ratio - 0.7));
+        red -= (int) (50d * (ratio - 0.7));
       }
       if (red < 0)
       {

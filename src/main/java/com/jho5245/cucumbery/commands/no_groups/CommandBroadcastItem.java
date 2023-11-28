@@ -71,7 +71,7 @@ public class CommandBroadcastItem implements CucumberyCommandExecutor
       MessageUtil.sendError(sender, Prefix.NO_HOLDING_ITEM);
       return true;
     }
-    if (msg.equals(""))
+    if (msg.isEmpty())
     {
       if (CustomEffectManager.hasEffect(player, CustomEffectTypeCooldown.COOLDOWN_ITEM_MEGAPHONE))
       {

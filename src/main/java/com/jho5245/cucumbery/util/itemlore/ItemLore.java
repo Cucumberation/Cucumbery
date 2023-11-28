@@ -88,7 +88,7 @@ public class ItemLore
       ItemLoreCustomItem.itemLore(itemStack, nbtItem, customMaterial);
       itemMeta = itemStack.getItemMeta();
     }
-    if (!customType.equals(""))
+    if (!customType.isEmpty())
     {
       ItemLoreCustomItem.itemLore(itemStack, nbtItem, customType);
       itemMeta = itemStack.getItemMeta();
@@ -161,7 +161,7 @@ public class ItemLore
       itemGroup = ComponentUtil.translate(customMaterial.getCategory());
       rarity = customMaterial.getRarity();
     }
-    if (!customType.equals(""))
+    if (!customType.isEmpty())
     {
       try
       {

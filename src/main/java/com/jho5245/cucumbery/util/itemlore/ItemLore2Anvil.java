@@ -41,7 +41,7 @@ public class ItemLore2Anvil
         if (maxDura != -1 && itemMeta instanceof Damageable)
         {
           int dura = ((Damageable) itemMeta).getDamage();
-          penalty *= dura * 1d / maxDura;
+          penalty *= (long) (dura * 1d / maxDura);
           // 내구도가 높을 수록 희귀도 차감량 감소
           double what = dura / 200d;
           if (what < 0.5d)
@@ -50,14 +50,14 @@ public class ItemLore2Anvil
           }
           if (what > 0d)
           {
-            penalty /= what;
+            penalty /= (long) what;
           }
         }
 
         // 수선이 있을 경우 모루 합성 횟수로 인한 아이템 희귀도 차감량 반감
         if (itemMeta.hasEnchant(Enchantment.MENDING) && itemMeta.getEnchantLevel(Enchantment.MENDING) > 0)
         {
-          penalty /= 2.0;
+          penalty /= 2L;
         }
         // 내구성이 있을 경우 모루 합성 횟수로 인한 아이템 희귀도 차감량 감소
         int duraEnch = -1;

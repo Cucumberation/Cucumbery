@@ -18,49 +18,48 @@ import org.bukkit.inventory.ItemStack;
 
 public class PlayerPickupArrow implements Listener
 {
-  @EventHandler(priority = EventPriority.HIGHEST)
-  public void onPlayerPickupArrow(PlayerPickupArrowEvent event)
-  {
-    if (event.isCancelled())
-    {
-      return;
-    }
-    Player player = event.getPlayer();
-    if (UserData.SPECTATOR_MODE.getBoolean(player))
-    {
-      event.setCancelled(true);
-      return;
-    }
-    String pickUpMode = UserData.ITEM_PICKUP_MODE.getString(player);
-    switch (pickUpMode)
-    {
-      case "sneak" -> {
-        if (!player.isSneaking())
-        {
-          event.setCancelled(true);
-          return;
-        }
-      }
-      case "disabled" -> {
-        event.setCancelled(true);
-        return;
-      }
-    }
-    AbstractArrow abstractArrow = event.getArrow();
-    if (Method.usingLoreFeature(player))
-    {
-      event.setCancelled(true);
-      ItemStack itemStack = abstractArrow.getItemStack();
-      if (Variable.entityShootBowConsumableMap.containsKey(abstractArrow.getUniqueId()))
-      {
-        itemStack = ItemSerializer.deserialize(Variable.entityShootBowConsumableMap.get(abstractArrow.getUniqueId()));
-        Variable.entityShootBowConsumableMap.remove(abstractArrow.getUniqueId());
-      }
-      player.getInventory().addItem(ItemLore.setItemLore(itemStack));
-      player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.3F, (float) (2F - Math.random() * 0.1f));
-      player.incrementStatistic(Statistic.PICKUP, itemStack.getType());
-      abstractArrow.remove();
-    }
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPlayerPickupArrow(PlayerPickupArrowEvent event)
+	{
+		if (event.isCancelled())
+		{
+			return;
+		}
+		Player player = event.getPlayer();
+		if (UserData.SPECTATOR_MODE.getBoolean(player))
+		{
+			event.setCancelled(true);
+			return;
+		}
+		String pickUpMode = UserData.ITEM_PICKUP_MODE.getString(player);
+		switch (pickUpMode)
+		{
+			case "sneak" ->
+			{
+				if (!player.isSneaking())
+				{
+					event.setCancelled(true);
+					return;
+				}
+			}
+			case "disabled" ->
+			{
+				event.setCancelled(true);
+				return;
+			}
+		}
+		AbstractArrow abstractArrow = event.getArrow();
+		event.setCancelled(true);
+		ItemStack itemStack = abstractArrow.getItemStack();
+		if (Variable.entityShootBowConsumableMap.containsKey(abstractArrow.getUniqueId()))
+		{
+			itemStack = ItemSerializer.deserialize(Variable.entityShootBowConsumableMap.get(abstractArrow.getUniqueId()));
+			Variable.entityShootBowConsumableMap.remove(abstractArrow.getUniqueId());
+		}
+		player.getInventory().addItem(ItemLore.setItemLore(itemStack));
+		player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.3F, (float) (2F - Math.random() * 0.1f));
+		player.incrementStatistic(Statistic.PICKUP, itemStack.getType());
+		abstractArrow.remove();
 /*    if (Method.usingLoreFeature(player))
     {
       Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
@@ -141,5 +140,5 @@ public class PlayerPickupArrow implements Listener
         }
       }, 0L);
     }*/
-  }
+	}
 }

@@ -881,7 +881,7 @@ Cucumbery.getPlugin().getLogger().warning(              e.getMessage());
           list.addAll(Arrays.asList("weapon", "weapon.mainhand", "weapon.offhand", "armor.head", "armor.chest", "armor.legs", "armor.feet"));
           return Method.tabCompleterList(args, list, "<슬롯>");
         default:
-          if (!args[length - 1].equals(""))
+          if (!args[length - 1].isEmpty())
           {
             return Collections.singletonList(Prefix.ARGS_LONG.toString());
           }
@@ -932,7 +932,7 @@ Cucumbery.getPlugin().getLogger().warning(              e.getMessage());
         case "remove":
           return Method.tabCompleterBoolean(args, "[명령어 출력 숨김 여부]");
         default:
-          if (!args[length - 1].equals(""))
+          if (!args[length - 1].isEmpty())
           {
             return Collections.singletonList(Prefix.ARGS_LONG.toString());
           }
@@ -961,7 +961,7 @@ Cucumbery.getPlugin().getLogger().warning(              e.getMessage());
         case "checkamount":
           return Method.tabCompleterIntegerRadius(args, 0, 32767, "[내구도 조건]", "-1");
         default:
-          if (!args[length - 1].equals(""))
+          if (!args[length - 1].isEmpty())
           {
             return Collections.singletonList(Prefix.ARGS_LONG.toString());
           }

@@ -40,7 +40,7 @@ public class ItemLore2Restriction
             }
           }
         }
-        if (!restrictionTagLore.toString().equals(""))
+        if (!restrictionTagLore.toString().isEmpty())
         {
           String restrictionTagLoreString = restrictionTagLore.toString();
           if (type.isEdible())

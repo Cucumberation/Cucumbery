@@ -63,7 +63,7 @@ public class CommandTrashCan implements CommandExecutor, TabCompleter
       {
         customName = MessageUtil.listToString(" ", 2, args.length, args);
       }
-      Inventory inventory = Bukkit.createInventory(null, 54, Constant.TRASH_CAN + ((customName.equals("")) ? MessageUtil.n2s("&8쓰레기통") : MessageUtil.n2s("&8" + customName)));
+      Inventory inventory = Bukkit.createInventory(null, 54, Constant.TRASH_CAN + ((customName.isEmpty()) ? MessageUtil.n2s("&8쓰레기통") : MessageUtil.n2s("&8" + customName)));
       target.openInventory(inventory);
       if (!(args.length >= 2 && args[1].equalsIgnoreCase("true")))
       {

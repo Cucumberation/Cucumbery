@@ -1,14 +1,6 @@
 package com.jho5245.cucumbery.util.no_groups;
 
-import com.comphenix.protocol.PacketType.Play;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.reflect.StructureModifier;
-import com.comphenix.protocol.wrappers.WrappedDataValue;
-import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.google.common.base.Predicates;
-import com.google.common.collect.Lists;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.util.itemlore.ItemLore;
@@ -935,56 +927,22 @@ public class Method extends SoundPlay
 					try
 					{
 						NBTCompound blockStateTag = new NBTItem(item).getCompound(CucumberyTag.MINECRAFT_BLOCK_STATE_TAG_KEY);
-						String pitchString = blockStateTag.getString("note");
-						String instrument = blockStateTag.getString("instrument");
-						float pitch = switch (pitchString)
+						String pitchString = null;
+						if (blockStateTag != null)
 						{
-							case "0" -> 0.5F;
-							case "1" -> 0.529732F;
-							case "2" -> 0.561231F;
-							case "3" -> 0.594604F;
-							case "4" -> 0.629961F;
-							case "5" -> 0.667420F;
-							case "6" -> 0.707107F;
-							case "7" -> 0.749154F;
-							case "8" -> 0.793701F;
-							case "9" -> 0.840896F;
-							case "10" -> 0.890899F;
-							case "11" -> 0.943874F;
-							case "12" -> 1F;
-							case "13" -> 1.059463F;
-							case "14" -> 1.122462F;
-							case "15" -> 1.189207F;
-							case "16" -> 1.259921F;
-							case "17" -> 1.334840F;
-							case "18" -> 1.414214F;
-							case "19" -> 1.498307F;
-							case "20" -> 1.587401F;
-							case "21" -> 1.681793F;
-							case "22" -> 1.781797F;
-							case "23" -> 1.887749F;
-							case "24" -> 2F;
-							default -> 0F;
-						};
-						Sound sound = switch (instrument)
+							pitchString = blockStateTag.getString("note");
+						}
+						String instrument = null;
+						if (blockStateTag != null)
 						{
-							case "banjo" -> Sound.BLOCK_NOTE_BLOCK_BANJO;
-							case "bassdrum" -> Sound.BLOCK_NOTE_BLOCK_BASEDRUM;
-							case "bass" -> Sound.BLOCK_NOTE_BLOCK_GUITAR;
-							case "bell" -> Sound.BLOCK_NOTE_BLOCK_BELL;
-							case "bit" -> Sound.BLOCK_NOTE_BLOCK_BIT;
-							case "chime" -> Sound.BLOCK_NOTE_BLOCK_CHIME;
-							case "cow_bell" -> Sound.BLOCK_NOTE_BLOCK_COW_BELL;
-							case "dingeridoo" -> Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO;
-							case "flute" -> Sound.BLOCK_NOTE_BLOCK_FLUTE;
-							case "iron_xylophone" -> Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE;
-							case "pling" -> Sound.BLOCK_NOTE_BLOCK_PLING;
-							case "snare" -> Sound.BLOCK_NOTE_BLOCK_SNARE;
-							case "hat" -> Sound.BLOCK_NOTE_BLOCK_HAT;
-							case "xylophone" -> Sound.BLOCK_NOTE_BLOCK_XYLOPHONE;
-							default -> Sound.BLOCK_NOTE_BLOCK_HARP;
-						};
-						playSound(player, sound, 1F, pitch);
+							instrument = blockStateTag.getString("instrument");
+						}
+						float pitch = getPitch(pitchString);
+						Sound sound = getSound(instrument);
+						if (sound != null)
+						{
+							playSound(player, sound, 1F, pitch);
+						}
 					}
 					catch (Exception e)
 					{
@@ -1179,6 +1137,72 @@ public class Method extends SoundPlay
 		}
 	}
 
+	@Nullable
+	private static Sound getSound(String instrument)
+	{
+		Sound sound = null;
+		if (instrument != null)
+		{
+			sound = switch (instrument)
+			{
+				case "banjo" -> Sound.BLOCK_NOTE_BLOCK_BANJO;
+				case "bassdrum" -> Sound.BLOCK_NOTE_BLOCK_BASEDRUM;
+				case "bass" -> Sound.BLOCK_NOTE_BLOCK_GUITAR;
+				case "bell" -> Sound.BLOCK_NOTE_BLOCK_BELL;
+				case "bit" -> Sound.BLOCK_NOTE_BLOCK_BIT;
+				case "chime" -> Sound.BLOCK_NOTE_BLOCK_CHIME;
+				case "cow_bell" -> Sound.BLOCK_NOTE_BLOCK_COW_BELL;
+				case "dingeridoo" -> Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO;
+				case "flute" -> Sound.BLOCK_NOTE_BLOCK_FLUTE;
+				case "iron_xylophone" -> Sound.BLOCK_NOTE_BLOCK_IRON_XYLOPHONE;
+				case "pling" -> Sound.BLOCK_NOTE_BLOCK_PLING;
+				case "snare" -> Sound.BLOCK_NOTE_BLOCK_SNARE;
+				case "hat" -> Sound.BLOCK_NOTE_BLOCK_HAT;
+				case "xylophone" -> Sound.BLOCK_NOTE_BLOCK_XYLOPHONE;
+				default -> Sound.BLOCK_NOTE_BLOCK_HARP;
+			};
+		}
+		return sound;
+	}
+
+	private static float getPitch(String pitchString)
+	{
+		float pitch = 0;
+		if (pitchString != null)
+		{
+			pitch = switch (pitchString)
+			{
+				case "0" -> 0.5F;
+				case "1" -> 0.529732F;
+				case "2" -> 0.561231F;
+				case "3" -> 0.594604F;
+				case "4" -> 0.629961F;
+				case "5" -> 0.667420F;
+				case "6" -> 0.707107F;
+				case "7" -> 0.749154F;
+				case "8" -> 0.793701F;
+				case "9" -> 0.840896F;
+				case "10" -> 0.890899F;
+				case "11" -> 0.943874F;
+				case "12" -> 1F;
+				case "13" -> 1.059463F;
+				case "14" -> 1.122462F;
+				case "15" -> 1.189207F;
+				case "16" -> 1.259921F;
+				case "17" -> 1.334840F;
+				case "18" -> 1.414214F;
+				case "19" -> 1.498307F;
+				case "20" -> 1.587401F;
+				case "21" -> 1.681793F;
+				case "22" -> 1.781797F;
+				case "23" -> 1.887749F;
+				case "24" -> 2F;
+				default -> 0F;
+			};
+		}
+		return pitch;
+	}
+
 	@NotNull
 	public static String getWorldDisplayName(@NotNull World world)
 	{
@@ -1221,6 +1245,10 @@ public class Method extends SoundPlay
 					return online;
 				}
 			}
+		}
+		if (notice && sender != null && player == null)
+		{
+			MessageUtil.sendError(sender, Prefix.NO_PLAYER, name);
 		}
 		return player;
 	}
@@ -1619,6 +1647,7 @@ public class Method extends SoundPlay
 		return Method.startsWith(input, Method.arrayToList(args), reverse);
 	}
 
+	@SuppressWarnings("all")
 	public static boolean allStartsWith(String input, boolean reverse, String... args)
 	{
 		if (input == null || args == null)
@@ -1828,23 +1857,6 @@ public class Method extends SoundPlay
 	}
 
 	/**
-	 * 해당 플레이어가 아이템 설명을 추가해야하는지 제거해야하는지를 반환한다.
-	 *
-	 * @param player
-	 * 		해당 플레이어
-	 * @return 추가/제거 여부
-	 */
-	public static boolean usingLoreFeature(@NotNull Player player)
-	{
-		return true;
-	}
-
-	public static boolean usingLoreFeature(@NotNull Location location)
-	{
-		return true;
-	}
-
-	/**
 	 * 아이템의 정보를 갱신하여 CustomName의 값을 올바르게 수정합니다.
 	 *
 	 * @param itemEntity
@@ -1899,14 +1911,7 @@ public class Method extends SoundPlay
 		}
 		// 아이템 설명 업데이트
 		{
-			if (Method.usingLoreFeature(itemEntity.getLocation()))
-			{
-				ItemLore.setItemLore(item);
-			}
-			else
-			{
-				ItemLore.removeItemLore(item);
-			}
+			ItemLore.setItemLore(item);
 		}
 		// 이름이 표시되지 않을 아이템이면 표시하지 않고 빠꾸
 		{
@@ -1940,7 +1945,7 @@ public class Method extends SoundPlay
 		// ProtocolLib 사용 시 플레이어마다 아이템 이름 표시를 다르게 함
 		// 버그로 인해 비활성화
 		//    if (Cucumbery.using_ProtocolLib)
-		if (false)
+/*		if (false)
 		{
 			itemEntity.setCustomNameVisible(false);
 			Bukkit.getScheduler().runTaskLaterAsynchronously(Cucumbery.getPlugin(), () ->
@@ -1988,7 +1993,7 @@ public class Method extends SoundPlay
 			}, 0L);
 		}
 		// 이외의 경우에는 config 설정에 따른 전역 아이템 표시 여부 결정
-		else if (Cucumbery.config.getBoolean("name-tag-on-item-spawn"))
+		else */if (Cucumbery.config.getBoolean("name-tag-on-item-spawn"))
 		{
 			itemEntity.setCustomNameVisible(true);
 		}
@@ -2685,13 +2690,13 @@ public class Method extends SoundPlay
 	public static List<String> tabCompleterList(String[] args, List<String> list, String key, boolean ignoreEmpty)
 	{
 		String tabArg = args[args.length - 1];
-		if ((!ignoreEmpty && tabArg.equals("") && (list == null || list.isEmpty())) || (ignoreEmpty && (list == null || list.isEmpty())))
+		if ((!ignoreEmpty && tabArg.isEmpty() && (list == null || list.isEmpty())) || (ignoreEmpty && (list == null || list.isEmpty())))
 		{
 			return Collections.singletonList(key);
 		}
 		list.remove(null);
 		int length = tabArg.length();
-		if (!tabArg.equals(""))
+		if (!tabArg.isEmpty())
 		{
 			if (length == 1 && tabArg.charAt(0) >= '가' && tabArg.charAt(0) <= '힣')
 			{
@@ -2717,14 +2722,14 @@ public class Method extends SoundPlay
 					returnValue.add(str);
 				}
 			}
-			if (returnValue.isEmpty() && !key.equals("") && !ignoreEmpty)
+			if (returnValue.isEmpty() && !key.isEmpty() && !ignoreEmpty)
 			{
 				return Collections.singletonList(
 						"'" + tabArg + "'" + MessageUtil.getFinalConsonant(tabArg, MessageUtil.ConsonantType.은는) + " 잘못되거나 알 수 없는 " + key.replace("<", "").replace(">", "")
 								.replace("[", "").replace("]", "") + "입니다" + ".");
 			}
 			returnValue = Method.sort(returnValue);
-			if ((ignoreEmpty && returnValue.isEmpty()) || (!key.equals("") && returnValue.size() == 1 && returnValue.get(0).equalsIgnoreCase(tabArg)))
+			if ((ignoreEmpty && returnValue.isEmpty()) || (!key.isEmpty() && returnValue.size() == 1 && returnValue.get(0).equalsIgnoreCase(tabArg)))
 			{
 				return Collections.singletonList(key);
 			}
@@ -2797,14 +2802,14 @@ public class Method extends SoundPlay
 	public static List<String> tabCompleterIntegerRadius(String[] args, int from, int to, String key, String... additionalArgs)
 	{
 		String tabArg = args[args.length - 1];
-		if (additionalArgs != null && ((additionalArgs.length >= 1 && !additionalArgs[0].equals("") && (tabArg.equals("")) || Method.startsWith(tabArg, true,
+		if (additionalArgs != null && ((additionalArgs.length >= 1 && !additionalArgs[0].isEmpty() && (tabArg.isEmpty()) || Method.startsWith(tabArg, true,
 				additionalArgs))))
 		{
 			List<String> list = new ArrayList<>(Collections.singletonList(Constant.TAB_COMPLETER_QUOTE_ESCAPE + key));
 			list.addAll(Method.arrayToList(additionalArgs));
 			return Method.tabCompleterList(args, list, key);
 		}
-		if (tabArg.equals(""))
+		if (tabArg.isEmpty())
 		{
 			return Collections.singletonList(key);
 		}
@@ -2845,14 +2850,14 @@ public class Method extends SoundPlay
 	public static List<String> tabCompleterLongRadius(String[] args, long from, long to, String key, String... additionalArgs)
 	{
 		String tabArg = args[args.length - 1];
-		if (additionalArgs != null && ((additionalArgs.length >= 1 && !additionalArgs[0].equals("") && (tabArg.equals("")) || Method.startsWith(tabArg, true,
+		if (additionalArgs != null && ((additionalArgs.length >= 1 && !additionalArgs[0].isEmpty() && (tabArg.isEmpty()) || Method.startsWith(tabArg, true,
 				additionalArgs))))
 		{
 			List<String> list = new ArrayList<>(Collections.singletonList(Constant.TAB_COMPLETER_QUOTE_ESCAPE + key));
 			list.addAll(Method.arrayToList(additionalArgs));
 			return Method.tabCompleterList(args, list, key);
 		}
-		if (tabArg.equals(""))
+		if (tabArg.isEmpty())
 		{
 			return Collections.singletonList(key);
 		}
@@ -2907,13 +2912,13 @@ public class Method extends SoundPlay
 			String... additionalArgs)
 	{
 		String tabArg = args[args.length - 1];
-		if (additionalArgs.length >= 1 && !additionalArgs[0].equals("") && (tabArg.equals("") || Method.startsWith(tabArg, true, additionalArgs)))
+		if (additionalArgs.length >= 1 && !additionalArgs[0].isEmpty() && (tabArg.isEmpty() || Method.startsWith(tabArg, true, additionalArgs)))
 		{
 			List<String> list = new ArrayList<>(Collections.singletonList(Constant.TAB_COMPLETER_QUOTE_ESCAPE + key));
 			list.addAll(Method.arrayToList(additionalArgs));
 			return Method.tabCompleterList(args, list, key);
 		}
-		if (tabArg.equals(""))
+		if (tabArg.isEmpty())
 		{
 			return Collections.singletonList(key);
 		}

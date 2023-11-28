@@ -827,7 +827,7 @@ public class BlockPlaceDataConfig extends ChunkConfig
 
   public static void onPlayerChunkUnload(PlayerChunkUnloadEvent event)
   {
-    if (true)
+/*    if (true)
     {
       return;
     }
@@ -871,6 +871,6 @@ public class BlockPlaceDataConfig extends ChunkConfig
       };
       timer.schedule(task, 0, 5);
       TIMERS.add(timer);
-    }
+    }*/
   }
 }

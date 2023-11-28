@@ -38,11 +38,11 @@ public class CommandSendTitle extends CommandBase
 			try
 			{
 				String[] split = MessageUtil.splitEscape(input, ';');
-				if (!split[0].equals(""))
+				if (!split[0].isEmpty())
 				{
 					title = split[0];
 				}
-				if (!split[1].equals(""))
+				if (!split[1].isEmpty())
 				{
 					subTtitle = split[1];
 				}

@@ -53,7 +53,7 @@ public class DamageDebugCommand implements CommandExecutor
 				return true;
 			}
 			
-			else if (!debug.containsKey(player))
+			else
 			{
 				debug.put(player, true);
 				

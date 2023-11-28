@@ -114,7 +114,7 @@ public enum Prefix
 
   public Component get(boolean n2s)
   {
-    if (!this.color.equals(""))
+    if (!this.color.isEmpty())
     {
       return ComponentUtil.translate(color + BRACKET, n2s,
               ComponentUtil.translate(text)).hoverEvent(HoverEvent.showText(Component.text(Method.getCurrentTime(Calendar.getInstance(), true, false))));

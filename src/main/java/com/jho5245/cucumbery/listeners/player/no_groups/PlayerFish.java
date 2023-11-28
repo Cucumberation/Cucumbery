@@ -70,7 +70,7 @@ public class PlayerFish implements Listener
       switch (state)
       {
         case FISHING:
-          if (customItemTagCompound != null && customItemTagCompound.hasKey(CucumberyTag.CUSTOM_ITEM_FISHING_ROD_MULTIPLIER))
+          if (customItemTagCompound != null && customItemTagCompound.hasTag(CucumberyTag.CUSTOM_ITEM_FISHING_ROD_MULTIPLIER))
           {
             Double doubleObj = NBTAPI.getDouble(customItemTagCompound, CucumberyTag.CUSTOM_ITEM_FISHING_ROD_MULTIPLIER);
             double multiplier = doubleObj == null ? 0d : doubleObj;
@@ -84,7 +84,7 @@ public class PlayerFish implements Listener
         case IN_GROUND:
         case CAUGHT_ENTITY:
         case REEL_IN:
-          if (customItemTagCompound != null && customItemTagCompound.hasKey(CucumberyTag.CUSTOM_ITEM_FISHING_ROD_MAX_VALUES))
+          if (customItemTagCompound != null && customItemTagCompound.hasTag(CucumberyTag.CUSTOM_ITEM_FISHING_ROD_MAX_VALUES))
           {
             NBTCompound maxValuesTag = NBTAPI.getCompound(customItemTagCompound, CucumberyTag.CUSTOM_ITEM_FISHING_ROD_MAX_VALUES);
             if (maxValuesTag != null)

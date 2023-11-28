@@ -53,7 +53,7 @@ public class PlayerHeadInfo
     if (type == PlayerHeadInfoType.NAME)
     {
       String name = skullOwner.getString("Name");
-      if (name != null && !name.equals(""))
+      if (name != null && !name.isEmpty())
       {
         return name;
       }

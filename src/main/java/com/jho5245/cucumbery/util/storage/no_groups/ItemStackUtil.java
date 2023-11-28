@@ -9,7 +9,6 @@ import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
-import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.no_groups.Method2;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
@@ -298,10 +297,7 @@ public class ItemStackUtil
 	public static ItemStack loredItemStack(@NotNull Material type, @Nullable Player player)
 	{
 		ItemStack item = new ItemStack(type);
-		if (player == null || Method.usingLoreFeature(player))
-		{
-			ItemLore.setItemLore(item, player != null ? ItemLoreView.of(player) : null);
-		}
+		ItemLore.setItemLore(item, player != null ? ItemLoreView.of(player) : null);
 		return item;
 	}
 
@@ -578,14 +574,7 @@ public class ItemStackUtil
 			}
 			if (player != null)
 			{
-				if (Method.usingLoreFeature(player))
-				{
-					ItemLore.setItemLore(drop);
-				}
-				else
-				{
-					ItemLore.removeItemLore(drop);
-				}
+				ItemLore.setItemLore(drop, ItemLoreView.of(player));
 			}
 			dropsClone.add(drop);
 		}
@@ -719,16 +708,13 @@ public class ItemStackUtil
 			itemStack.setItemMeta(blockStateMeta);
 		}
 		Location location = block.getLocation();
-		if (Method.usingLoreFeature(location))
+		ItemLore.setItemLore(itemStack);
+		itemMeta = itemStack.getItemMeta();
+		if (itemMeta instanceof BlockDataMeta blockDataMeta)
 		{
+			blockDataMeta.setBlockData(block.getBlockData());
+			itemStack.setItemMeta(blockDataMeta);
 			ItemLore.setItemLore(itemStack);
-			itemMeta = itemStack.getItemMeta();
-			if (itemMeta instanceof BlockDataMeta blockDataMeta)
-			{
-				blockDataMeta.setBlockData(block.getBlockData());
-				itemStack.setItemMeta(blockDataMeta);
-				ItemLore.setItemLore(itemStack);
-			}
 		}
 		List<Component> lore = itemMeta.lore();
 		if (lore == null)
@@ -952,8 +938,8 @@ public class ItemStackUtil
 		try
 		{
 			NBTContainer nbtContainer = new NBTContainer(predicate);
-			String id = nbtContainer.getString("id") + "";
-			if (!id.equals(""))
+			String id = nbtContainer.getString("id");
+			if (!id.isEmpty())
 			{
 				CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
 				if (customMaterial != null)

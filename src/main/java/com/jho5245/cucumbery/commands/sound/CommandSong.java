@@ -147,7 +147,7 @@ public class CommandSong implements CucumberyCommandExecutor
             boolean random = fileName.startsWith("--random");
             String contain = random && fileName.startsWith("--random/") ? fileName.substring("--random/".length()) : "";
             List<String> list = new ArrayList<>(Variable.songFiles);
-            if (!contain.equals(""))
+            if (!contain.isEmpty())
             {
               list.removeIf(s -> !s.toLowerCase().replace(" ", "").contains(contain.toLowerCase()));
             }
@@ -676,7 +676,7 @@ Cucumbery.getPlugin().getLogger().warning(              e.getMessage());
             boolean random = fileName.startsWith("--random");
             String contain = random && fileName.startsWith("--random/") ? fileName.substring("--random/".length()) : "";
             List<String> list = new ArrayList<>(Variable.songFiles);
-            if (!contain.equals(""))
+            if (!contain.isEmpty())
             {
               list.removeIf(s -> !s.toLowerCase().replace(" ", "").contains(contain.toLowerCase()));
             }
@@ -964,7 +964,7 @@ Cucumbery.getPlugin().getLogger().warning(              e.getMessage());
             boolean random = fileName.startsWith("--random");
             String contain = random && fileName.startsWith("--random/") ? fileName.substring("--random/".length()) : "";
             List<String> list = new ArrayList<>(Variable.songFiles);
-            if (!contain.equals(""))
+            if (!contain.isEmpty())
             {
               list.removeIf(s -> !s.toLowerCase().replace(" ", "").contains(contain.toLowerCase()));
             }

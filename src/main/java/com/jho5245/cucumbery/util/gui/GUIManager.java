@@ -19,7 +19,6 @@ import org.bukkit.inventory.InventoryView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -164,7 +163,7 @@ public class GUIManager
     inv.setItem(31, CreateItemStack.toggleItem(getBool(player, UserData.SHOW_ACTIONBAR_WHEN_ITEM_IS_COOLDOWN), "&b아이템 재사용/재발동 대기시간 액션바",
             Arrays.asList("&7아이템의 남은 재사용 대기 시간 혹은 ", "&7남은 재발동 대기 시간을 액션바에 띄웁니다", "&e특정 상황에서는 해당 기능을 사용해도", "&e액션바가 뜨지 않을 수 있습니다"), trueLore, falseLore));
 
-    List<String> list = new ArrayList<>(Arrays.asList(
+/*    List<String> list = new ArrayList<>(Arrays.asList(
             "&7바닥에 떨어져 있는 아이템의 이름을 표시합니다", "&e특정 상황에서 또는 특정 아이템은 해당 기능에 관계없이", "&e이름이 표시되지 않거나 항상 표시될 수 있습니다"
     ));
 
@@ -172,7 +171,7 @@ public class GUIManager
     {
       list.add("");
       list.add("&c현재 바닥에 떨어진 아이템 이름을 볼 수 없는 상태입니다");
-    }
+    }*/
 
 //    inv.setItem(32, CreateItemStack.toggleItem(getBool(player, UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME), "&b바닥에 떨어진 아이템 이름 표시",
 //            list, trueLore, falseLore));

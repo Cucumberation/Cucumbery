@@ -594,7 +594,7 @@ public class CommandItemTagTabCompleter implements TabCompleter
                     return Collections.singletonList("정수가 필요합니다 (" + input + ")");
                   }
                   String[] split = input.split(",");
-                  if (!input.equals(""))
+                  if (!input.isEmpty())
                   {
                     for (String s : split)
                     {
@@ -645,7 +645,7 @@ public class CommandItemTagTabCompleter implements TabCompleter
                     return Collections.singletonList("정수가 필요합니다 (" + input + ")");
                   }
                   split = input.split(",");
-                  if (!input.equals(""))
+                  if (!input.isEmpty())
                   {
                     for (String s2 : split)
                     {
@@ -675,7 +675,7 @@ public class CommandItemTagTabCompleter implements TabCompleter
                     return Collections.singletonList("정수가 필요합니다 (" + input + ")");
                   }
                   split = input.split(",");
-                  if (!input.equals(""))
+                  if (!input.isEmpty())
                   {
                     for (String s2 : split)
                     {
@@ -704,7 +704,7 @@ public class CommandItemTagTabCompleter implements TabCompleter
                     return Collections.singletonList("정수가 필요합니다 (" + input + ")");
                   }
                   split = input.split(",");
-                  if (!input.equals(""))
+                  if (!input.isEmpty())
                   {
                     for (String s2 : split)
                     {
@@ -723,7 +723,7 @@ public class CommandItemTagTabCompleter implements TabCompleter
                     return Collections.singletonList("정수가 필요합니다 (" + input + ")");
                   }
                   split = input.split(",");
-                  if (!input.equals(""))
+                  if (!input.isEmpty())
                   {
                     for (String s2 : split)
                     {
@@ -756,7 +756,7 @@ public class CommandItemTagTabCompleter implements TabCompleter
                     return Collections.singletonList("숫자가 필요합니다 (" + input + ")");
                   }
                   split = input.split(",");
-                  if (!input.equals(""))
+                  if (!input.isEmpty())
                   {
                     for (String s2 : split)
                     {
@@ -802,7 +802,7 @@ public class CommandItemTagTabCompleter implements TabCompleter
                     return Collections.singletonList("숫자가 필요합니다 (" + input + ")");
                   }
                   split = input.split(",");
-                  if (!input.equals(""))
+                  if (!input.isEmpty())
                   {
                     for (String s2 : split)
                     {
@@ -899,7 +899,7 @@ public class CommandItemTagTabCompleter implements TabCompleter
                 {
                   case "add" -> {
                     String nbt = args[4];
-                    if (!nbt.equals(""))
+                    if (!nbt.isEmpty())
                     try
                     {
                       new NBTContainer(nbt);
@@ -967,7 +967,7 @@ public class CommandItemTagTabCompleter implements TabCompleter
               if ("set".equals(args[2]))
               {
                 String nbt = args[5];
-                if (!nbt.equals(""))
+                if (!nbt.isEmpty())
                   try
                   {
                     new NBTContainer(nbt);
@@ -1039,7 +1039,7 @@ public class CommandItemTagTabCompleter implements TabCompleter
             {
               int input = Integer.parseInt(args[2]);
               String lore = customLore.get(input - 1);
-              if (args[3].equals("") && customLore.size() >= input && input > 0)
+              if (args[3].isEmpty() && customLore.size() >= input && input > 0)
               {
                 return Method.tabCompleterList(args, "<커스텀 설명>", true, "<커스텀 설명>", "--empty", lore.replace("§", "&"));
               }
@@ -1105,7 +1105,7 @@ public class CommandItemTagTabCompleter implements TabCompleter
             {
               int input = Integer.parseInt(args[2]);
               String lore = customLore.get(input - 1);
-              if (args[3].equals("") && customLore.size() >= input && input > 0)
+              if (args[3].isEmpty() && customLore.size() >= input && input > 0)
               {
                 return Method.tabCompleterList(args, "<상단 커스텀 설명>", true, "<상단 커스텀 설명>", "--empty", lore.replace("§", "&"));
               }
@@ -1237,7 +1237,7 @@ public class CommandItemTagTabCompleter implements TabCompleter
         if (args[1].equals("merge"))
         {
           String input = MessageUtil.listToString(" ", 2, args.length, args);
-          if (!input.equals(""))
+          if (!input.isEmpty())
           {
             try
             {
@@ -1263,7 +1263,7 @@ public class CommandItemTagTabCompleter implements TabCompleter
               return Method.tabCompleterList(args, "[값]", true);
             case "compound":
               String input = MessageUtil.listToString(" ", 4, args.length, args);
-              if (!input.equals(""))
+              if (!input.isEmpty())
               {
                 try
                 {
@@ -1290,7 +1290,7 @@ public class CommandItemTagTabCompleter implements TabCompleter
             case "compound-list":
               input = MessageUtil.listToString(" ", 4, args.length, args);
               String[] split = input.split(";;");
-              if (!input.equals(""))
+              if (!input.isEmpty())
               {
                 for (String compoundString : split)
                 {
@@ -1401,7 +1401,7 @@ public class CommandItemTagTabCompleter implements TabCompleter
             NBTList<String> commands = NBTAPI.getStringList(NBTAPI.getCompound(usageTag, itemUsageType.getKey()), CucumberyTag.USAGE_COMMANDS_KEY);
             int input = Integer.parseInt(args[4]);
             String command = commands.get(input - 1);
-            if (args[5].equals("") && commands.size() >= input && input > 0)
+            if (args[5].isEmpty() && commands.size() >= input && input > 0)
             {
               newCmds.add(command);
               return Method.tabCompleterList(args, newCmds, "<명령어>", true);

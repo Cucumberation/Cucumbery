@@ -928,19 +928,14 @@ public class CommandCustomRecipeTabCompleter implements TabCompleter
                   {
                     return Collections.singletonList(args[2] + MessageUtil.getFinalConsonant(args[2], MessageUtil.ConsonantType.은는) + " 잘못되거나 알 수 없는 레시피 목록입니다");
                   }
-                  List<String> commands = config == null ? null : config.getStringList("recipes." + args[3] + ".extra.commands." + args[5]);
-                  switch (args[5])
-                  {
-                    case "craft":
-                      commandTypeStr = "제작 완료";
-                      break;
-                    case "success":
-                      commandTypeStr = "제작 성공";
-                      break;
-                    case "failure":
-                      commandTypeStr = "제작 실패";
-                      break;
-                  }
+                  List<String> commands = config.getStringList("recipes." + args[3] + ".extra.commands." + args[5]);
+									commandTypeStr = switch (args[5])
+									{
+										case "craft" -> "제작 완료";
+										case "success" -> "제작 성공";
+										case "failure" -> "제작 실패";
+										default -> commandTypeStr;
+									};
                   switch (args[6])
                   {
                     case "remove":

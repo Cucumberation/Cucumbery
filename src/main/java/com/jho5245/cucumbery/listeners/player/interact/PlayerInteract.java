@@ -609,10 +609,7 @@ public class PlayerInteract implements Listener
 								event.setCancelled(true);
 								return;
 							}
-							if (Method.usingLoreFeature(player))
-							{
-								Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
-							}
+							Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
 						}
 					}
 
@@ -628,10 +625,7 @@ public class PlayerInteract implements Listener
 								event.setCancelled(true);
 								return;
 							}
-							if (Method.usingLoreFeature(player))
-							{
-								Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
-							}
+							Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
 						}
 					}
 					// 손에 나침반을 든 상태로 블록 우클릭
@@ -639,63 +633,59 @@ public class PlayerInteract implements Listener
 					{
 						if (clickedBlockType == Material.LODESTONE)
 						{
-							if (Method.usingLoreFeature(player))
+							if (item.getAmount() == 1 && player.getGameMode() != GameMode.CREATIVE)
 							{
-								if (item.getAmount() == 1 && player.getGameMode() != GameMode.CREATIVE)
-								{
-									Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
-								}
-								else
-								{
-									Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-									{
-										ItemStack item2 = null;
-										for (int i = 0; i < player.getInventory().getSize(); i++)
-										{
-											item2 = player.getInventory().getItem(i);
-											if (ItemStackUtil.itemExists(item2) && item2.getType() == Material.COMPASS)
-											{
-												ItemMeta item1Meta = item.getItemMeta(), item2Meta = item2.getItemMeta();
-												CompassMeta compassMeta1 = (CompassMeta) item1Meta, compassMeta2 = (CompassMeta) item2Meta;
-												if (ItemStackUtil.hasLore(item) && ItemStackUtil.hasLore(item2)
-														&& Objects.requireNonNull(item1Meta.lore()).size() == Objects.requireNonNull(item2Meta.lore()).size()
-														&& !compassMeta1.hasLodestone() && !compassMeta1.isLodestoneTracked() && (compassMeta2.hasLodestone()
-														|| compassMeta2.isLodestoneTracked()))
-												{
-													item2 = player.getInventory().getItem(i);
-													break;
-												}
-											}
-										}
-										if (item2 != null)
-										{
-											ItemStack item2Clone = item2.clone();
-											player.getInventory().remove(item2);
-											ItemLore.setItemLore(item2Clone);
-											player.getInventory().addItem(item2Clone);
-										}
-										for (int i = 0; i < player.getInventory().getSize(); i++)
-										{
-											item2 = player.getInventory().getItem(i);
-											if (ItemStackUtil.itemExists(item2) && item2.getType() == Material.COMPASS)
-											{
-												ItemMeta item1Meta = item.getItemMeta(), item2Meta = item2.getItemMeta();
-												CompassMeta compassMeta1 = (CompassMeta) item1Meta, compassMeta2 = (CompassMeta) item2Meta;
-												if (ItemStackUtil.hasLore(item) && ItemStackUtil.hasLore(item2)
-														&& Objects.requireNonNull(item1Meta.lore()).size() == Objects.requireNonNull(item2Meta.lore()).size() && (
-														compassMeta1.hasLodestone() || compassMeta1.isLodestoneTracked()) && (compassMeta2.hasLodestone()
-														|| compassMeta2.isLodestoneTracked()))
-												{
-													ItemStack item2Clone = item2.clone();
-													player.getInventory().remove(item2);
-													ItemLore.setItemLore(item2Clone);
-													player.getInventory().addItem(item2Clone);
-												}
-											}
-										}
-									}, 0L);
-								}
+								Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
 							}
+							else
+							{
+								Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+								{
+									ItemStack item2 = null;
+									for (int i = 0; i < player.getInventory().getSize(); i++)
+									{
+										item2 = player.getInventory().getItem(i);
+										if (ItemStackUtil.itemExists(item2) && item2.getType() == Material.COMPASS)
+										{
+											ItemMeta item1Meta = item.getItemMeta(), item2Meta = item2.getItemMeta();
+											CompassMeta compassMeta1 = (CompassMeta) item1Meta, compassMeta2 = (CompassMeta) item2Meta;
+											if (ItemStackUtil.hasLore(item) && ItemStackUtil.hasLore(item2)
+													&& Objects.requireNonNull(item1Meta.lore()).size() == Objects.requireNonNull(item2Meta.lore()).size() && !compassMeta1.hasLodestone()
+													&& !compassMeta1.isLodestoneTracked() && (compassMeta2.hasLodestone() || compassMeta2.isLodestoneTracked()))
+											{
+												item2 = player.getInventory().getItem(i);
+												break;
+											}
+										}
+									}
+									if (item2 != null)
+									{
+										ItemStack item2Clone = item2.clone();
+										player.getInventory().remove(item2);
+										ItemLore.setItemLore(item2Clone);
+										player.getInventory().addItem(item2Clone);
+									}
+									for (int i = 0; i < player.getInventory().getSize(); i++)
+									{
+										item2 = player.getInventory().getItem(i);
+										if (ItemStackUtil.itemExists(item2) && item2.getType() == Material.COMPASS)
+										{
+											ItemMeta item1Meta = item.getItemMeta(), item2Meta = item2.getItemMeta();
+											CompassMeta compassMeta1 = (CompassMeta) item1Meta, compassMeta2 = (CompassMeta) item2Meta;
+											if (ItemStackUtil.hasLore(item) && ItemStackUtil.hasLore(item2)
+													&& Objects.requireNonNull(item1Meta.lore()).size() == Objects.requireNonNull(item2Meta.lore()).size() && (compassMeta1.hasLodestone()
+													|| compassMeta1.isLodestoneTracked()) && (compassMeta2.hasLodestone() || compassMeta2.isLodestoneTracked()))
+											{
+												ItemStack item2Clone = item2.clone();
+												player.getInventory().remove(item2);
+												ItemLore.setItemLore(item2Clone);
+												player.getInventory().addItem(item2Clone);
+											}
+										}
+									}
+								}, 0L);
+							}
+
 						}
 					}
 
@@ -779,10 +769,7 @@ public class PlayerInteract implements Listener
 				// 손에 지도를 든 상태로 우클릭
 				if (itemType == Material.MAP)
 				{
-					if (Method.usingLoreFeature(player))
-					{
-						Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
-					}
+					Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
 				}
 
 				// 손에 유리병을 든 상태로 우클릭
@@ -797,60 +784,57 @@ public class PlayerInteract implements Listener
 							ProjectileSource shooter = effect.getSource();
 							if (shooter instanceof EnderDragon)
 							{
-								if (Method.usingLoreFeature(player))
+								if (item.getAmount() == 1)
 								{
-									if (item.getAmount() == 1)
+									Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
 									{
-										Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+										boolean valid = false;
+										ItemStack item2 = null;
+										int slot = -1;
+										for (int i = 0; i < player.getInventory().getSize(); i++)
 										{
-											boolean valid = false;
-											ItemStack item2 = null;
-											int slot = -1;
-											for (int i = 0; i < player.getInventory().getSize(); i++)
+											item2 = player.getInventory().getItem(i);
+											if (ItemStackUtil.itemExists(item2) && item2.getType() == Material.DRAGON_BREATH && !ItemStackUtil.hasLore(item2))
 											{
-												item2 = player.getInventory().getItem(i);
-												if (ItemStackUtil.itemExists(item2) && item2.getType() == Material.DRAGON_BREATH && !ItemStackUtil.hasLore(item2))
-												{
-													slot = i;
-													valid = true;
-													break;
-												}
+												slot = i;
+												valid = true;
+												break;
 											}
-											if (valid && item2 != null)
-											{
-												player.getInventory().remove(item2);
-												ItemStack newItem = new ItemStack(Material.DRAGON_BREATH);
-												ItemLore.setItemLore(newItem);
-												player.getInventory().setItem(slot, newItem);
-											}
-										}, 0L);
-									}
-									else
-									{
-										Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+										}
+										if (valid && item2 != null)
 										{
-											boolean valid = false;
-											ItemStack item2 = null;
-											for (int i = 0; i < player.getInventory().getSize(); i++)
-											{
-												item2 = player.getInventory().getItem(i);
-												if (ItemStackUtil.itemExists(item2) && item2.getType() == Material.DRAGON_BREATH && !ItemStackUtil.hasLore(item2))
-												{
-													valid = true;
-													break;
-												}
-											}
-											if (valid && item2 != null)
-											{
-												player.getInventory().remove(item2);
-												ItemStack newItem = new ItemStack(Material.DRAGON_BREATH);
-												ItemLore.setItemLore(newItem);
-												player.getInventory().addItem(newItem);
-											}
-										}, 0L);
-									}
-									break;
+											player.getInventory().remove(item2);
+											ItemStack newItem = new ItemStack(Material.DRAGON_BREATH);
+											ItemLore.setItemLore(newItem);
+											player.getInventory().setItem(slot, newItem);
+										}
+									}, 0L);
 								}
+								else
+								{
+									Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+									{
+										boolean valid = false;
+										ItemStack item2 = null;
+										for (int i = 0; i < player.getInventory().getSize(); i++)
+										{
+											item2 = player.getInventory().getItem(i);
+											if (ItemStackUtil.itemExists(item2) && item2.getType() == Material.DRAGON_BREATH && !ItemStackUtil.hasLore(item2))
+											{
+												valid = true;
+												break;
+											}
+										}
+										if (valid && item2 != null)
+										{
+											player.getInventory().remove(item2);
+											ItemStack newItem = new ItemStack(Material.DRAGON_BREATH);
+											ItemLore.setItemLore(newItem);
+											player.getInventory().addItem(newItem);
+										}
+									}, 0L);
+								}
+								break;
 							}
 						}
 					}
@@ -1081,10 +1065,7 @@ public class PlayerInteract implements Listener
 				Block waterSource = player.getTargetBlockExact(5, FluidCollisionMode.ALWAYS);
 				if (waterSource != null && waterSource.getType() == Material.WATER)
 				{
-					if (Method.usingLoreFeature(player))
-					{
-						Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
-					}
+					Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
 				}
 			}
 			// 허공 우클릭
@@ -1255,10 +1236,7 @@ public class PlayerInteract implements Listener
 		{
 			if (itemType == Material.DEBUG_STICK)
 			{
-				if (Method.usingLoreFeature(player))
-				{
-					Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
-				}
+				Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
 			}
 		}
 
@@ -1594,40 +1572,40 @@ public class PlayerInteract implements Listener
 			Double damage = 0D;
 			int cooldown = 0;
 			int piercing = 1;
-			boolean penetration = customItemTagCompound.hasKey(CucumberyTag.CUSTOM_ITEM_RAILGUN_BLOCK_PENETRATE);
+			boolean penetration = customItemTagCompound.hasTag(CucumberyTag.CUSTOM_ITEM_RAILGUN_BLOCK_PENETRATE);
 			boolean[] isRailgun = new boolean[3];
-			boolean useFireworkAmmo = customItemTagCompound.hasKey(CucumberyTag.CUSTOM_ITEM_RAILGUN_FIREWORK_ROCKET_REQUIRED);
+			boolean useFireworkAmmo = customItemTagCompound.hasTag(CucumberyTag.CUSTOM_ITEM_RAILGUN_FIREWORK_ROCKET_REQUIRED);
 			boolean hasAmmo = false;
-			boolean sortParticle = customItemTagCompound.hasKey(CucumberyTag.CUSTOM_ITEM_RAILGUN_SORT_PARTICLE);
+			boolean sortParticle = customItemTagCompound.hasTag(CucumberyTag.CUSTOM_ITEM_RAILGUN_SORT_PARTICLE);
 			double density = 4D;
 			double width = 1D;
 			int fireworkType = 1;
-			boolean ignoreInvincible = customItemTagCompound.hasKey(CucumberyTag.CUSTOM_ITEM_RAILGUN_IGNORE_INVINCIBLE);
-			boolean reverse = customItemTagCompound.hasKey(CucumberyTag.CUSTOM_ITEM_RAILGUN_REVERSE);
-			boolean suicide = customItemTagCompound.hasKey(CucumberyTag.CUSTOM_ITEM_RAILGUN_SUICIDE);
-			if (customItemTagCompound.hasKey(CucumberyTag.CUSTOM_ITEM_RAILGUN_RANGE))
+			boolean ignoreInvincible = customItemTagCompound.hasTag(CucumberyTag.CUSTOM_ITEM_RAILGUN_IGNORE_INVINCIBLE);
+			boolean reverse = customItemTagCompound.hasTag(CucumberyTag.CUSTOM_ITEM_RAILGUN_REVERSE);
+			boolean suicide = customItemTagCompound.hasTag(CucumberyTag.CUSTOM_ITEM_RAILGUN_SUICIDE);
+			if (customItemTagCompound.hasTag(CucumberyTag.CUSTOM_ITEM_RAILGUN_RANGE))
 			{
 				range = customItemTagCompound.getInteger(CucumberyTag.CUSTOM_ITEM_RAILGUN_RANGE);
 				isRailgun[0] = true;
 			}
-			if (customItemTagCompound.hasKey(CucumberyTag.COOLDOWN_KEY))
+			if (customItemTagCompound.hasTag(CucumberyTag.COOLDOWN_KEY))
 			{
 				cooldown = (int) (customItemTagCompound.getDouble(CucumberyTag.COOLDOWN_KEY) * 20d);
 				isRailgun[1] = true;
 			}
-			if (customItemTagCompound.hasKey(CucumberyTag.CUSTOM_ITEM_RAILGUN_PIERCING))
+			if (customItemTagCompound.hasTag(CucumberyTag.CUSTOM_ITEM_RAILGUN_PIERCING))
 			{
 				piercing = customItemTagCompound.getInteger(CucumberyTag.CUSTOM_ITEM_RAILGUN_PIERCING) + 1;
 			}
-			if (customItemTagCompound.hasKey(CucumberyTag.CUSTOM_ITEM_RAILGUN_FIREWORK_TYPE))
+			if (customItemTagCompound.hasTag(CucumberyTag.CUSTOM_ITEM_RAILGUN_FIREWORK_TYPE))
 			{
 				fireworkType = customItemTagCompound.getInteger(CucumberyTag.CUSTOM_ITEM_RAILGUN_FIREWORK_TYPE);
 			}
-			if (customItemTagCompound.hasKey(CucumberyTag.CUSTOM_ITEM_RAILGUN_DENSITY))
+			if (customItemTagCompound.hasTag(CucumberyTag.CUSTOM_ITEM_RAILGUN_DENSITY))
 			{
 				density = customItemTagCompound.getDouble(CucumberyTag.CUSTOM_ITEM_RAILGUN_DENSITY);
 			}
-			if (customItemTagCompound.hasKey(CucumberyTag.CUSTOM_ITEM_RAILGUN_DAMAGE))
+			if (customItemTagCompound.hasTag(CucumberyTag.CUSTOM_ITEM_RAILGUN_DAMAGE))
 			{
 				damage = customItemTagCompound.getDouble(CucumberyTag.CUSTOM_ITEM_RAILGUN_DAMAGE);
 				if (damage == null || damage.isNaN() || damage.isInfinite() || damage > Long.MAX_VALUE)
@@ -1636,7 +1614,7 @@ public class PlayerInteract implements Listener
 				}
 				isRailgun[2] = true;
 			}
-			if (customItemTagCompound.hasKey(CucumberyTag.CUSTOM_ITEM_RAILGUN_LASER_WIDTH))
+			if (customItemTagCompound.hasTag(CucumberyTag.CUSTOM_ITEM_RAILGUN_LASER_WIDTH))
 			{
 				width = customItemTagCompound.getDouble(CucumberyTag.CUSTOM_ITEM_RAILGUN_LASER_WIDTH);
 			}
@@ -1686,7 +1664,7 @@ public class PlayerInteract implements Listener
 				return;
 			}
 			String cooldownTag = customItemTagCompound.getString(CucumberyTag.CUSTOM_ITEM_RAILGUN_COOLDOWN_TAG);
-			if (cooldownTag == null || cooldownTag.equals(""))
+			if (cooldownTag == null || cooldownTag.isEmpty())
 			{
 				cooldownTag = "railgun-default";
 			}
@@ -1763,7 +1741,7 @@ public class PlayerInteract implements Listener
 				step = origin.getDirection().multiply(1D / density * (reverse ? -1d : 1d));
 			}
 			Particle particle = Particle.FIREWORKS_SPARK;
-			if (customItemTagCompound.hasKey(CucumberyTag.CUSTOM_ITEM_RAILGUN_PARTICLE_TYPE))
+			if (customItemTagCompound.hasTag(CucumberyTag.CUSTOM_ITEM_RAILGUN_PARTICLE_TYPE))
 			{
 				try
 				{

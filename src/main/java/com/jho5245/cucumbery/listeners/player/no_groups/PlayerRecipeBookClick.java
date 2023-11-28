@@ -14,28 +14,24 @@ import org.bukkit.inventory.PlayerInventory;
 
 public class PlayerRecipeBookClick implements Listener
 {
-  @EventHandler
-  public void onPlayerRecipeBookClick(PlayerRecipeBookClickEvent event)
-  {
-    if (event.isCancelled())
-    {
-      return;
-    }
-    Player player = event.getPlayer();
-    if (Method.usingLoreFeature(player))
-    {
-      PlayerInventory playerInventory = player.getInventory();
-      for (int i = 0; i < 36; i++)
-      {
-        ItemStack item = playerInventory.getItem(i);
-        if (ItemStackUtil.itemExists(item))
-        {
-          ItemLore.removeItemLore(item);
-        }
-      }
-      event.setRecipe(event.getRecipe());
-      Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-              ItemStackUtil.updateInventory(player), 0L);
-    }
-  }
+	@EventHandler
+	public void onPlayerRecipeBookClick(PlayerRecipeBookClickEvent event)
+	{
+		if (event.isCancelled())
+		{
+			return;
+		}
+		Player player = event.getPlayer();
+		PlayerInventory playerInventory = player.getInventory();
+		for (int i = 0; i < 36; i++)
+		{
+			ItemStack item = playerInventory.getItem(i);
+			if (ItemStackUtil.itemExists(item))
+			{
+				ItemLore.removeItemLore(item);
+			}
+		}
+		event.setRecipe(event.getRecipe());
+		Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
+	}
 }

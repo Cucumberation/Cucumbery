@@ -179,7 +179,7 @@ public class ItemLore2
       for (String key : blockStateTag.getKeys())
       {
         String value = blockStateTag.getString(key);
-        if (value == null || value.equals(""))
+        if (value == null || value.isEmpty())
         {
           Integer integer = blockStateTag.getInteger(key);
           if (integer != null)
@@ -234,7 +234,7 @@ public class ItemLore2
                 };
         lore.add(Component.empty());
         lore.add(ComponentUtil.translate("&3[강화 정보]"));
-        if (itemType != null && !itemType.equals(""))
+        if (itemType != null && !itemType.isEmpty())
         {
           lore.add(ComponentUtil.translate("rg255,204;아이템 분류 : %s", itemType));
         }
@@ -381,7 +381,7 @@ public class ItemLore2
       arguments.add(prefix.isEmpty() ? Component.empty() : prefixComponent);
       if (displayName == null)
       {
-        if (name != null && !name.equals(""))
+        if (name != null && !name.isEmpty())
         {
           displayName = ComponentUtil.create(name);
         }

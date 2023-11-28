@@ -57,7 +57,7 @@ public class ItemStackComponent
     hover.setItemMeta(bundleMeta);
     NBTItem nbtItem = new NBTItem(hover, true);
     nbtItem.setString("test", "test");
-    if (itemName instanceof TextComponent textComponent && textComponent.content().equals(""))
+    if (itemName instanceof TextComponent textComponent && textComponent.content().isEmpty())
     {
       List<Component> children = new ArrayList<>(itemName.children());
       children.replaceAll(component -> component.hoverEvent(hover.asHoverEvent()));

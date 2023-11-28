@@ -3024,9 +3024,9 @@ public class CommandItemTag implements CommandExecutor
 												boolean inputBoolean = Boolean.parseBoolean(args[3]);
 												if (!inputBoolean)
 												{
-													if ((args[2].equals("sortparticle") && !customItemTagCompound.hasKey(CucumberyTag.CUSTOM_ITEM_RAILGUN_SORT_PARTICLE)) || (
-															args[2].equals("ignoreinvincible") && !customItemTagCompound.hasKey(CucumberyTag.CUSTOM_ITEM_RAILGUN_IGNORE_INVINCIBLE)) || (
-															args[2].equals("blockpenetrate") && !customItemTagCompound.hasKey(CucumberyTag.CUSTOM_ITEM_RAILGUN_BLOCK_PENETRATE)) || (
+													if ((args[2].equals("sortparticle") && !customItemTagCompound.hasTag(CucumberyTag.CUSTOM_ITEM_RAILGUN_SORT_PARTICLE)) || (
+															args[2].equals("ignoreinvincible") && !customItemTagCompound.hasTag(CucumberyTag.CUSTOM_ITEM_RAILGUN_IGNORE_INVINCIBLE)) || (
+															args[2].equals("blockpenetrate") && !customItemTagCompound.hasTag(CucumberyTag.CUSTOM_ITEM_RAILGUN_BLOCK_PENETRATE)) || (
 															args[2].equals("fireworkrocketrequired") && !customItemTagCompound.hasKey(
 																	CucumberyTag.CUSTOM_ITEM_RAILGUN_FIREWORK_ROCKET_REQUIRED)) || (args[2].equals("reverse") && !customItemTagCompound.hasKey(
 															CucumberyTag.CUSTOM_ITEM_RAILGUN_REVERSE)) || (args[2].equals("suicide") && !customItemTagCompound.hasKey(
@@ -3074,19 +3074,19 @@ public class CommandItemTag implements CommandExecutor
 												return true;
 											}
 										}
-										if (!customItemTagCompound.hasKey(CucumberyTag.CUSTOM_ITEM_RAILGUN_RANGE))
+										if (!customItemTagCompound.hasTag(CucumberyTag.CUSTOM_ITEM_RAILGUN_RANGE))
 										{
 											customItemTagCompound.setInteger(CucumberyTag.CUSTOM_ITEM_RAILGUN_RANGE, 10);
 										}
-										if (!customItemTagCompound.hasKey(CucumberyTag.COOLDOWN_KEY))
+										if (!customItemTagCompound.hasTag(CucumberyTag.COOLDOWN_KEY))
 										{
 											customItemTagCompound.setDouble(CucumberyTag.COOLDOWN_KEY, 1.5d);
 										}
-										if (!customItemTagCompound.hasKey(CucumberyTag.CUSTOM_ITEM_RAILGUN_DAMAGE))
+										if (!customItemTagCompound.hasTag(CucumberyTag.CUSTOM_ITEM_RAILGUN_DAMAGE))
 										{
 											customItemTagCompound.setDouble(CucumberyTag.CUSTOM_ITEM_RAILGUN_DAMAGE, 5d);
 										}
-										if (!customItemTagCompound.hasKey(CucumberyTag.CUSTOM_ITEM_RAILGUN_COOLDOWN_TAG))
+										if (!customItemTagCompound.hasTag(CucumberyTag.CUSTOM_ITEM_RAILGUN_COOLDOWN_TAG))
 										{
 											customItemTagCompound.setString(CucumberyTag.CUSTOM_ITEM_RAILGUN_COOLDOWN_TAG, "railgun-" + System.currentTimeMillis());
 										}
@@ -3847,7 +3847,7 @@ public class CommandItemTag implements CommandExecutor
 									ItemStack itemStack = nbtItem.getItem();
 									ItemMeta itemMeta = itemStack.getItemMeta();
 									Component displayName = itemMeta.displayName();
-									if ((originalName == null || originalName.equals("")) && displayName != null && !(displayName instanceof TranslatableComponent t
+									if ((originalName == null || originalName.isEmpty()) && displayName != null && !(displayName instanceof TranslatableComponent t
 											&& t.args().size() == 4 && t.args().get(3) instanceof TextComponent c && c.content().equals("Custom Display")))
 									{
 										originalName = ComponentUtil.serializeAsJson(displayName);
@@ -3855,7 +3855,7 @@ public class CommandItemTag implements CommandExecutor
 										itemStack = nbtItem.getItem();
 										itemMeta = itemStack.getItemMeta();
 									}
-									itemMeta.displayName(originalName == null || originalName.equals("") ? null : ComponentUtil.create(originalName));
+									itemMeta.displayName(originalName == null || originalName.isEmpty() ? null : ComponentUtil.create(originalName));
 									itemStack.setItemMeta(itemMeta);
 									ItemLore.setItemLore(itemStack);
 									playerInventory.setItemInMainHand(itemStack);
@@ -3907,7 +3907,7 @@ public class CommandItemTag implements CommandExecutor
 										NBTAPI.removeKey(displayCompound, CucumberyTag.ITEMSTACK_DISPLAY_PREFIX);
 										ItemStack itemStack = nbtItem.getItem();
 										ItemMeta itemMeta = itemStack.getItemMeta();
-										itemMeta.displayName(originalName == null || originalName.equals("") ? null : ComponentUtil.create(originalName));
+										itemMeta.displayName(originalName == null || originalName.isEmpty() ? null : ComponentUtil.create(originalName));
 										itemStack.setItemMeta(itemMeta);
 										ItemLore.setItemLore(itemStack);
 										playerInventory.setItemInMainHand(itemStack);
@@ -3927,7 +3927,7 @@ public class CommandItemTag implements CommandExecutor
 									prefixes.remove(line);
 									ItemStack itemStack = nbtItem.getItem();
 									ItemMeta itemMeta = itemStack.getItemMeta();
-									itemMeta.displayName(originalName == null || originalName.equals("") ? null : ComponentUtil.create(originalName));
+									itemMeta.displayName(originalName == null || originalName.isEmpty() ? null : ComponentUtil.create(originalName));
 									itemStack.setItemMeta(itemMeta);
 									ItemLore.setItemLore(itemStack);
 									playerInventory.setItemInMainHand(itemStack);
@@ -3987,7 +3987,7 @@ public class CommandItemTag implements CommandExecutor
 									String originalName = displayCompound.getString(CucumberyTag.ORIGINAL_NAME);
 									ItemStack itemStack = nbtItem.getItem();
 									ItemMeta itemMeta = itemStack.getItemMeta();
-									itemMeta.displayName(originalName == null || originalName.equals("") ? null : ComponentUtil.create(originalName));
+									itemMeta.displayName(originalName == null || originalName.isEmpty() ? null : ComponentUtil.create(originalName));
 									itemStack.setItemMeta(itemMeta);
 									ItemLore.setItemLore(itemStack);
 									playerInventory.setItemInMainHand(itemStack);
@@ -4103,7 +4103,7 @@ public class CommandItemTag implements CommandExecutor
 									ItemStack itemStack = nbtItem.getItem();
 									ItemMeta itemMeta = itemStack.getItemMeta();
 									Component displayName = itemMeta.displayName();
-									if ((originalName == null || originalName.equals("")) && displayName != null && !(displayName instanceof TranslatableComponent t
+									if ((originalName == null || originalName.isEmpty()) && displayName != null && !(displayName instanceof TranslatableComponent t
 											&& t.args().size() == 4 && t.args().get(3) instanceof TextComponent c && c.content().equals("Custom Display")))
 									{
 										originalName = ComponentUtil.serializeAsJson(displayName);
@@ -4111,7 +4111,7 @@ public class CommandItemTag implements CommandExecutor
 										itemStack = nbtItem.getItem();
 										itemMeta = itemStack.getItemMeta();
 									}
-									itemMeta.displayName(originalName == null || originalName.equals("") ? null : ComponentUtil.create(originalName));
+									itemMeta.displayName(originalName == null || originalName.isEmpty() ? null : ComponentUtil.create(originalName));
 									itemStack.setItemMeta(itemMeta);
 									ItemLore.setItemLore(itemStack);
 									playerInventory.setItemInMainHand(itemStack);
@@ -4163,7 +4163,7 @@ public class CommandItemTag implements CommandExecutor
 										NBTAPI.removeKey(displayCompound, CucumberyTag.ITEMSTACK_DISPLAY_SUFFIX);
 										ItemStack itemStack = nbtItem.getItem();
 										ItemMeta itemMeta = itemStack.getItemMeta();
-										itemMeta.displayName(originalName == null || originalName.equals("") ? null : ComponentUtil.create(originalName));
+										itemMeta.displayName(originalName == null || originalName.isEmpty() ? null : ComponentUtil.create(originalName));
 										itemStack.setItemMeta(itemMeta);
 										ItemLore.setItemLore(itemStack);
 										playerInventory.setItemInMainHand(itemStack);
@@ -4183,7 +4183,7 @@ public class CommandItemTag implements CommandExecutor
 									suffixes.remove(line);
 									ItemStack itemStack = nbtItem.getItem();
 									ItemMeta itemMeta = itemStack.getItemMeta();
-									itemMeta.displayName(originalName == null || originalName.equals("") ? null : ComponentUtil.create(originalName));
+									itemMeta.displayName(originalName == null || originalName.isEmpty() ? null : ComponentUtil.create(originalName));
 									itemStack.setItemMeta(itemMeta);
 									ItemLore.setItemLore(itemStack);
 									playerInventory.setItemInMainHand(itemStack);
@@ -4243,7 +4243,7 @@ public class CommandItemTag implements CommandExecutor
 									String originalName = displayCompound.getString(CucumberyTag.ORIGINAL_NAME);
 									ItemStack itemStack = nbtItem.getItem();
 									ItemMeta itemMeta = itemStack.getItemMeta();
-									itemMeta.displayName(originalName == null || originalName.equals("") ? null : ComponentUtil.create(originalName));
+									itemMeta.displayName(originalName == null || originalName.isEmpty() ? null : ComponentUtil.create(originalName));
 									itemStack.setItemMeta(itemMeta);
 									ItemLore.setItemLore(itemStack);
 									playerInventory.setItemInMainHand(itemStack);
@@ -4299,7 +4299,7 @@ public class CommandItemTag implements CommandExecutor
 								ItemStack itemStack = nbtItem.getItem();
 								ItemMeta itemMeta = itemStack.getItemMeta();
 								Component displayName = itemMeta.displayName();
-								if ((originalName == null || originalName.equals("")) && displayName != null && !(displayName instanceof TranslatableComponent t
+								if ((originalName == null || originalName.isEmpty()) && displayName != null && !(displayName instanceof TranslatableComponent t
 										&& t.args().size() == 4 && t.args().get(3) instanceof TextComponent c && c.content().equals("Custom Display")))
 								{
 									originalName = ComponentUtil.serializeAsJson(displayName);
@@ -4307,7 +4307,7 @@ public class CommandItemTag implements CommandExecutor
 									itemStack = nbtItem.getItem();
 									itemMeta = itemStack.getItemMeta();
 								}
-								itemMeta.displayName(originalName == null || originalName.equals("") ? null : ComponentUtil.create(originalName));
+								itemMeta.displayName(originalName == null || originalName.isEmpty() ? null : ComponentUtil.create(originalName));
 								itemStack.setItemMeta(itemMeta);
 								ItemLore.setItemLore(itemStack);
 								playerInventory.setItemInMainHand(itemStack);
@@ -4332,7 +4332,7 @@ public class CommandItemTag implements CommandExecutor
 							ItemStack itemStack = nbtItem.getItem();
 							ItemMeta itemMeta = itemStack.getItemMeta();
 							Component displayName = itemMeta.displayName();
-							if ((originalName == null || originalName.equals("")) && displayName != null && !(displayName instanceof TranslatableComponent t
+							if ((originalName == null || originalName.isEmpty()) && displayName != null && !(displayName instanceof TranslatableComponent t
 									&& t.args().size() == 4 && t.args().get(3) instanceof TextComponent c && c.content().equals("Custom Display")))
 							{
 								originalName = ComponentUtil.serializeAsJson(displayName);
@@ -4340,7 +4340,7 @@ public class CommandItemTag implements CommandExecutor
 								itemStack = nbtItem.getItem();
 								itemMeta = itemStack.getItemMeta();
 							}
-							itemMeta.displayName(originalName == null || originalName.equals("") ? null : ComponentUtil.create(originalName));
+							itemMeta.displayName(originalName == null || originalName.isEmpty() ? null : ComponentUtil.create(originalName));
 							itemStack.setItemMeta(itemMeta);
 							ItemLore.setItemLore(itemStack);
 							playerInventory.setItemInMainHand(itemStack);
@@ -4366,7 +4366,7 @@ public class CommandItemTag implements CommandExecutor
 							}
 							ItemStack itemStack = nbtItem.getItem();
 							ItemMeta itemMeta = itemStack.getItemMeta();
-							itemMeta.displayName(originalName == null || originalName.equals("") ? null : ComponentUtil.create(originalName));
+							itemMeta.displayName(originalName == null || originalName.isEmpty() ? null : ComponentUtil.create(originalName));
 							itemStack.setItemMeta(itemMeta);
 							ItemLore.setItemLore(itemStack);
 							playerInventory.setItemInMainHand(itemStack);

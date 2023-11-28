@@ -235,10 +235,7 @@ public class DeathManager
 							{
 								key = "fireball";
 								ItemStack itemStack = sizedFireball.getDisplayItem().clone();
-								if (Method.usingLoreFeature(entity.getLocation()))
-								{
-									ItemLore.setItemLore(itemStack);
-								}
+								ItemLore.setItemLore(itemStack);
 								extraArgs.add(ComponentUtil.create(itemStack));
 							}
 							else if (fireball instanceof WitherSkull)
@@ -1069,7 +1066,7 @@ public class DeathManager
 			}
 			else if (projectile instanceof AbstractArrow abstractArrow)
 			{
-				return Method.usingLoreFeature(projectile.getLocation()) ? ItemLore.setItemLore(abstractArrow.getItemStack()) : abstractArrow.getItemStack();
+				return ItemLore.setItemLore(abstractArrow.getItemStack());
 			}
 			else
 			{
@@ -1077,7 +1074,7 @@ public class DeathManager
 				{
 					ItemStack itemStack = new ItemStack(Material.FIREWORK_ROCKET);
 					itemStack.setItemMeta(firework.getFireworkMeta());
-					return Method.usingLoreFeature(projectile.getLocation()) ? ItemLore.setItemLore(itemStack) : itemStack;
+					return ItemLore.setItemLore(itemStack);
 				}
 			}
 			AreaEffectCloud areaEffectCloud = getDamagerAreaEffectCloud(event);

@@ -903,11 +903,11 @@ public class CommandWhoIs implements CucumberyCommandExecutor
       {
         offlinePlayer = Bukkit.getOfflinePlayer(UUID.fromString(args[0]));
       }
-      else if (!args[0].equals(""))
+      else if (!args[0].isEmpty())
       {
         offlinePlayer = Bukkit.getOfflinePlayerIfCached(args[0]);
       }
-      if (args[0].equals("") || (player == null && (offlinePlayer == null || !offlinePlayer.isOnline())))
+      if (args[0].isEmpty() || (player == null && (offlinePlayer == null || !offlinePlayer.isOnline())))
       {
         if (Method.equals(args[1], "pos", "state", "effect"))
         {

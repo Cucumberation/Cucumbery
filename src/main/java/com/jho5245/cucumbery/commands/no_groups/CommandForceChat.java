@@ -88,7 +88,7 @@ public class CommandForceChat implements CucumberyCommandExecutor
     }
     if (!hideOutput)
     {
-      if (!players.equals(sender))
+      if (!players.contains(sender))
       {
         MessageUtil.info(players, "%s이(가) 당신에게 %s 메시지를 강제로 채팅시켰습니다", sender, Constant.THE_COLOR_HEX + msg);
       }

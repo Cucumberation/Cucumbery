@@ -278,7 +278,7 @@ public class RecipeInventoryCategory
             }
           }
           String setType = resultNBTItem.getString("SetType");
-          if (!setType.equals(""))
+          if (!setType.isEmpty())
           {
             try
             {

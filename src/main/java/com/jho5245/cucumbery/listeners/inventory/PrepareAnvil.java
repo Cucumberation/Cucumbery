@@ -561,7 +561,7 @@ public class PrepareAnvil implements Listener
 			ItemLore.setItemLore(resultItem, new ItemLoreView(player));
 			event.setResult(resultItem);
 		}
-		else if (Method.usingLoreFeature(player))
+		else
 		{
 			ItemStack item = event.getResult();
 			if (ItemStackUtil.itemExists(item))

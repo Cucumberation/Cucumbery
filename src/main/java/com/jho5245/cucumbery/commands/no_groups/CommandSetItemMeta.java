@@ -599,7 +599,7 @@ public class CommandSetItemMeta implements CommandExecutor, TabCompleter
       {
         try
         {
-          if (args[1].equals(""))
+          if (args[1].isEmpty())
           {
             return Method.tabCompleterList(args, "<설명>", true, "<설명>", "--empty", item.getItemMeta().getLore().get(Integer.parseInt(args[0]) - 1).replace("§", "&"));
           }

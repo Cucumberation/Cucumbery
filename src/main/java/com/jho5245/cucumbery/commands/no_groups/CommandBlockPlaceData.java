@@ -244,7 +244,7 @@ public class CommandBlockPlaceData implements CucumberyCommandExecutor
         stack++;
         if (stack > 1000)
         {
-          if (length == 1 && args[0].equals(""))
+          if (length == 1 && args[0].isEmpty())
           {
             MessageUtil.sendWarn(sender, "데이터가 너무 많아 일부 생략했습니다");
           }

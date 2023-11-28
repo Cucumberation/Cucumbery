@@ -44,10 +44,9 @@ public class PlayerFlowerPotManipulate implements Listener
       }
       return;
     }
-    if (!event.isPlacing() && Method.usingLoreFeature(player))
+    if (!event.isPlacing())
     {
       PlayerInventory inventory = player.getInventory();
-      MessageUtil.sendMessage(player, event.isPlacing() + "", itemStack);
       Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
       {
         ItemLore.setItemLore(inventory.getItemInMainHand(), player);

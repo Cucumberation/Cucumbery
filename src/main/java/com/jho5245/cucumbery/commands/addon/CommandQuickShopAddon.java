@@ -42,7 +42,7 @@ public class CommandQuickShopAddon implements CucumberyCommandExecutor
     }
     if (!Cucumbery.using_QuickShop)
     {
-      MessageUtil.sendError(sender, "%s플러그인을 사용하고 있지 않습니다", Constant.THE_COLOR_HEX + "QuickShop");
+      MessageUtil.sendError(sender, "%s 플러그인을 사용하고 있지 않습니다", Constant.THE_COLOR_HEX + "QuickShop");
       return true;
     }
     if (args.length < 5)
@@ -124,16 +124,14 @@ public class CommandQuickShopAddon implements CucumberyCommandExecutor
           {
             if (!hideOutput)
             {
-              MessageUtil.sendError(sender, "변경 사항이 없습니다. 이미 " + world.getName() + " " + x + " " + y + " " + z + "에 있는 상점(rg255,204;" + ItemNameUtil.itemName(shop.getItem()) +
-                      "&r)의 거래 가격이 rg255,204;" + Constant.Sosu15.format(price) + "원&r입니다");
+              MessageUtil.sendError(sender, "변경 사항이 없습니다. 이미 %s에 있는 상점(%s)의 거래 가격이 %s입니다", location, shop.getItem(), Constant.THE_COLOR_HEX + Constant.Sosu15.format(price) + "원");
             }
             return true;
           }
           shop.setPrice(price);
           if (!hideOutput)
           {
-            MessageUtil.info(sender, world.getName() + " " + x + " " + y + " " + z + "에 있는 상점(rg255,204;" + ItemNameUtil.itemName(shop.getItem()) + "&r)의 거래 가격을 rg255,204;"
-                    + Constant.Sosu15.format(price) + "원&r으로 설정했습니다");
+            MessageUtil.info(sender, "%s에 있는 상점(%s)의 거래 가격을 %s으로 설정했습니다", location, shop.getItem(), Constant.THE_COLOR_HEX + Constant.Sosu15.format(price) + "원");
           }
         }
         case "amount" -> {
@@ -145,7 +143,7 @@ public class CommandQuickShopAddon implements CucumberyCommandExecutor
           ItemStack item = shop.getItem();
           if (item.getMaxStackSize() == 1)
           {
-            MessageUtil.sendError(sender, Constant.THE_COLOR_HEX + ItemNameUtil.itemName(shop.getItem()) + "&r의 최대 거래 개수가 rg255,204;1개&r여서 변경할 수 없습니다");
+            MessageUtil.sendError(sender, "%s의 최대 거래 개수가 1개여서 변경할 수 없습니다", item);
             return true;
           }
           if (!MessageUtil.checkNumberSize(sender, amount, 1, item.getMaxStackSize()))
@@ -156,8 +154,7 @@ public class CommandQuickShopAddon implements CucumberyCommandExecutor
           {
             if (!hideOutput)
             {
-              MessageUtil.sendError(sender, "변경 사항이 없습니다. 이미 " + world.getName() + " " + x + " " + y + " " + z + "에 있는 상점(rg255,204;" + ItemNameUtil.itemName(shop.getItem()) + "&r)의 거래 개수가 rg255,204;" + amount +
-                      "개&r입니다");
+              MessageUtil.sendError(sender, "변경 사항이 없습니다. 이미 %s에 있는 상점(%s)의 거래 개수가 %s입니다", location, shop.getItem(), Constant.THE_COLOR_HEX + amount + "개");
             }
             return true;
           }
@@ -166,7 +163,7 @@ public class CommandQuickShopAddon implements CucumberyCommandExecutor
           shop.setItem(item);
           if (!hideOutput)
           {
-            MessageUtil.info(sender, world.getName() + " " + x + " " + y + " " + z + "에 있는 상점(rg255,204;" + ItemNameUtil.itemName(shop.getItem()) + "&r)의 거래 개수를 rg255,204;" + Constant.Sosu15.format(amount) + "개&r로 설정했습니다");
+            MessageUtil.info(sender, "%s에 있는 상점(%s)의 거래 개수를 %s로 설정했습니다", location, item, Constant.THE_COLOR_HEX + amount + "개");
           }
         }
         case "type" -> {
@@ -190,14 +187,14 @@ public class CommandQuickShopAddon implements CucumberyCommandExecutor
           {
             if (!hideOutput)
             {
-              MessageUtil.sendError(sender, "변경 사항이 없습니다. 이미 " + world.getName() + " " + x + " " + y + " " + z + "에 있는 상점(rg255,204;" + ItemNameUtil.itemName(shop.getItem()) + "&r)이 " + typeString + "입니다");
+              MessageUtil.sendError(sender, "변경 사항이 없습니다. 이미 %s에 있는 상점(%s)이 %s입니다", location, shop.getItem(), typeString);
             }
             return true;
           }
           shop.setShopType(shopType);
           if (!hideOutput)
           {
-            MessageUtil.info(sender, world.getName() + " " + x + " " + y + " " + z + "에 있는 상점(rg255,204;" + ItemNameUtil.itemName(shop.getItem()) + "&r)을 " + typeString + "으로 설정했습니다");
+            MessageUtil.info(sender, "%s에 있는 상점(%s)을 %s(으)로 설정했습니다", location, shop.getItem(), typeString);
           }
         }
         case "get" -> {
@@ -222,7 +219,7 @@ public class CommandQuickShopAddon implements CucumberyCommandExecutor
             item.setAmount(amount);
           }
           ((Player) sender).getInventory().addItem(item);
-          MessageUtil.info(sender, world.getName() + " " + x + " " + y + " " + z + "에 있는 상점의 아이템을 rg255,204;" + amount + "개&r 지급받았습니다 (rg255,204;" + ItemNameUtil.itemName(shop.getItem()) + "&r)");
+          MessageUtil.info(sender, "%s에 있는 상점의 아이템 %s을(를) %s 지급받았습니다.", location, item, Constant.THE_COLOR_HEX + amount + "개");
         }
         case "info" -> {
           if (args.length == 5)

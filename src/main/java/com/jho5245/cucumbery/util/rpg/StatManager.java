@@ -41,6 +41,7 @@ public class StatManager implements Listener
 
 				BufferedWriter w = new BufferedWriter(new FileWriter(StatFile));
 
+				// 9
 				w.append("스탯 포인트 : " + "0" + "\n" + // 1
 						"STR : " + "0" + "\n" + // 2
 						"DEX : " + "0" + "\n" + // 3
@@ -49,8 +50,7 @@ public class StatManager implements Listener
 						"숙련도 : " + "1500" + "\n" + // 6
 						"활당김 : " + "0" + "\n" + // 7
 						"레벨 : " + "1" + "\n" + // 8
-						"경험치 : " + "0" + "" + // 9
-						"");
+						"경험치 : " + "0");
 
 				w.flush();
 				w.close();
@@ -82,6 +82,7 @@ public class StatManager implements Listener
 				StatFile.createNewFile();
 				BufferedWriter w = new BufferedWriter(new FileWriter(StatFile));
 
+				// 9
 				w.append("스탯 포인트 : " + "0" + "\n" + // 1
 						"STR : " + "0" + "\n" + // 2
 						"DEX : " + "0" + "\n" + // 3
@@ -90,8 +91,7 @@ public class StatManager implements Listener
 						"숙련도 : " + "1500" + "\n" + // 6
 						"활당김 : " + "0" + "\n" + // 7
 						"레벨 : " + "1" + "\n" + // 8
-						"경험치 : " + "0" + "" + // 9
-						"");
+						"경험치 : " + "0");
 
 				w.flush();
 				w.close();
@@ -99,20 +99,20 @@ public class StatManager implements Listener
 
 			BufferedReader r = new BufferedReader(new FileReader(StatFile));
 
-			List<Long> list = new ArrayList<Long>();
+			List<Long> list = new ArrayList<>();
 
-			String temp = "";
+			String temp;
 
 			while ((temp = r.readLine()) != null)
 			{
-				list.add(Long.valueOf(cutter(temp)));
+				list.add(cutter(temp));
 			}
 
 			r.close();
 
 			for (int i = 0; i < size; i++)
 			{
-				stat[i] = Long.valueOf(list.get(i));
+				stat[i] = list.get(i);
 			}
 
 			return stat;
@@ -182,6 +182,7 @@ Cucumbery.getPlugin().getLogger().warning(			e.getMessage());
 
 			BufferedWriter w = new BufferedWriter(new FileWriter(StatFile));
 
+			// 9
 			w.append("스탯 포인트 : " + stat[0] + "\n" + // 1
 					"STR : " + stat[1] + "\n" + // 2
 					"DEX : " + stat[2] + "\n" + // 3
@@ -190,8 +191,7 @@ Cucumbery.getPlugin().getLogger().warning(			e.getMessage());
 					"숙련도 : " + stat[5] + "\n" + // 6
 					"활당김 : " + stat[6] + "\n" + // 7
 					"레벨 : " + stat[7] + "\n" + // 8
-					"경험치 : " + stat[8] + "" + // 9
-					"");
+					"경험치 : " + stat[8]);
 
 			w.flush();
 			w.close();
@@ -333,7 +333,7 @@ Cucumbery.getPlugin().getLogger().warning(			exception.getMessage());
 				break;
 		}
 
-		stat[0] += 5 * levelUp;
+		stat[0] += 5L * levelUp;
 
 		if (levelUp >= 1)
 		{

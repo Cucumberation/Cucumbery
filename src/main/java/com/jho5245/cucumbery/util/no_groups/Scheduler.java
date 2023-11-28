@@ -978,7 +978,7 @@ public class Scheduler
         {
           NBTCompound customItemTagTag = customItemTag.getCompound(CucumberyTag.TAG_KEY);
           String railgunCooldownTag = customItemTagTag.getString(CucumberyTag.CUSTOM_ITEM_RAILGUN_COOLDOWN_TAG);
-          if (railgunCooldownTag == null || railgunCooldownTag.equals(""))
+          if (railgunCooldownTag == null || railgunCooldownTag.isEmpty())
           {
             railgunCooldownTag = "railgun-default";
           }
@@ -1029,7 +1029,7 @@ public class Scheduler
     {
       actionbar += getCooldownActionbar(uuid, item, true);
     }
-    if (!actionbar.equals(""))
+    if (!actionbar.isEmpty())
     {
       if (actionbar.endsWith(", "))
       {

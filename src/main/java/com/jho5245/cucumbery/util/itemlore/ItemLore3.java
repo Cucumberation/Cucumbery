@@ -314,7 +314,7 @@ public class ItemLore3
           }
         }
       }
-      if (!customType.equals(""))
+      if (!customType.isEmpty())
       {
         ConfigurationSection root = Variable.customItemsConfig.getConfigurationSection(customType);
         if (root != null)

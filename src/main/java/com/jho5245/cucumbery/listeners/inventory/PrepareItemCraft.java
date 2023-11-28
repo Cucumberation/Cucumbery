@@ -274,10 +274,6 @@ public class PrepareItemCraft implements Listener
 
   private void itemLore(PrepareItemCraftEvent event, Player player)
   {
-    if (!Method.usingLoreFeature(player))
-    {
-      return;
-    }
     ItemStack result = event.getView().getItem(0);
     if (!ItemStackUtil.itemExists(result))
     {

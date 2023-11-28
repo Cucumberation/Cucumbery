@@ -16,6 +16,7 @@ import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.Nameable;
 import org.bukkit.block.*;
+import org.bukkit.block.sign.Side;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -44,48 +45,23 @@ public class ItemLore2BlockState
           customName = ItemNameUtil.itemName(item);
         }
 
-        String colorPrefix = "&2";
-        switch (type)
-        {
-          case SHULKER_BOX -> colorPrefix = "#B274E2;";
-          case BLACK_SHULKER_BOX, GRAY_SHULKER_BOX, LIGHT_GRAY_SHULKER_BOX -> colorPrefix = "#808080;";
-          case BLUE_SHULKER_BOX -> colorPrefix = "#415DFF;";
-          case BROWN_SHULKER_BOX -> colorPrefix = "#995700;";
-          case CYAN_SHULKER_BOX -> colorPrefix = "&3";
-          case GREEN_SHULKER_BOX -> colorPrefix = "#00A800;";
-          case LIGHT_BLUE_SHULKER_BOX -> colorPrefix = "#46CDEC;";
-          case LIME_SHULKER_BOX -> colorPrefix = "#73DC00;";
-          case MAGENTA_SHULKER_BOX -> colorPrefix = "#D043C4;";
-          case ORANGE_SHULKER_BOX -> colorPrefix = "#FF7414;";
-          case PINK_SHULKER_BOX -> colorPrefix = "#FF8FA8;";
-          case PURPLE_SHULKER_BOX -> colorPrefix = "#A400D6;";
-          case RED_SHULKER_BOX -> colorPrefix = "#E9483A;";
-          case WHITE_SHULKER_BOX -> colorPrefix = "#F5F5F5;";
-          case YELLOW_SHULKER_BOX -> colorPrefix = "#FFD400;";
-          case CHEST, TRAPPED_CHEST -> colorPrefix = "#CC8500;";
-          case BARREL -> colorPrefix = "#B5703B;";
-          case CAMPFIRE -> colorPrefix = "#FFC700;";
-          case SOUL_CAMPFIRE -> colorPrefix = "#81E9F4;";
-          case BEE_NEST -> colorPrefix = "#F8AD0D;";
-          case BEEHIVE -> colorPrefix = "#CAA863;";
-          case FURNACE, BLAST_FURNACE, SMOKER, DROPPER, DISPENSER, HOPPER -> colorPrefix = "#978E87;";
-        }
+        String colorPrefix = getColorPrefix(type);
         Component customNameLore = ComponentUtil.translate(colorPrefix + "[%s의 내용물]", customName);
 
         if (blockState instanceof Sign sign)
         {
-          boolean isGlowingText = sign.isGlowingText();
+          boolean isGlowingText = sign.getSide(Side.FRONT).isGlowingText();
           lore.add(Component.empty());
           lore.add(ComponentUtil.translate("&9" + (isGlowingText ? "&l" : "") + "[%s의 내용]", customName));
 
-          DyeColor dyeColor = sign.getColor();
+          DyeColor dyeColor = sign.getSide(Side.FRONT).getColor();
           Color color = dyeColor != null ? dyeColor.getColor() : null;
           TextColor textColor = color != null ? TextColor.color(color.asRGB()) : NamedTextColor.WHITE;
           if (dyeColor == DyeColor.BLACK)
           {
             textColor = NamedTextColor.WHITE;
           }
-          List<Component> lines = sign.lines();
+          List<Component> lines = sign.getSide(Side.FRONT).lines();
           boolean hasAtleastOne = false;
           for (int i = 0; i < lines.size(); i++)
           {
@@ -100,7 +76,26 @@ public class ItemLore2BlockState
               lore.add(ComponentUtil.translate("&7%s번째 텍스트 : %s", (i + 1), line));
             }
           }
-
+          if (!hasAtleastOne)
+          {
+            lore.remove(lore.size() - 1);
+            lore.remove(lore.size() - 1);
+          }
+          lines = sign.getSide(Side.BACK).lines();
+          hasAtleastOne = false;
+          for (int i = 0; i < lines.size(); i++)
+          {
+            Component line = lines.get(i);
+            if (line.color() == null)
+            {
+              line = line.color(textColor);
+            }
+            if (!(line.equals(Component.empty())))
+            {
+              hasAtleastOne = true;
+              lore.add(ComponentUtil.translate("&7%s번째 텍스트 : %s", (i + 1), line));
+            }
+          }
           if (!hasAtleastOne)
           {
             lore.remove(lore.size() - 1);
@@ -248,7 +243,11 @@ public class ItemLore2BlockState
           lore.add(customNameLore);
           lore.add(ComponentUtil.translate("#b07c15;벌 %s", beeCount == 0 ? "없음" : "#e6ac6d;" + beeCount + "마리"));
           //Location flowerPos = beehive.getFlower(); must be placed
-          NBTCompound flowerPos = blockEntityTag.getCompound("FlowerPos");
+          NBTCompound flowerPos = null;
+          if (blockEntityTag != null)
+          {
+            flowerPos = blockEntityTag.getCompound("FlowerPos");
+          }
           if (flowerPos != null)
           {
             lore.add(ComponentUtil.translate("#b07c15;꽃 좌표 : %s",
@@ -260,7 +259,11 @@ public class ItemLore2BlockState
           LootTable lootTable = lootable.getLootTable();
           if (lootTable != null)
           {
-            Long seed = blockEntityTag.getLong("LootTableSeed");
+            Long seed = null;
+            if (blockEntityTag != null)
+            {
+              seed = blockEntityTag.getLong("LootTableSeed");
+            }
             lore.add(Component.empty());
             lore.add(ComponentUtil.translate("&7루트테이블 : %s", lootTable.getKey()));
             if (seed != null)
@@ -289,7 +292,7 @@ public class ItemLore2BlockState
           int successCount = commandBlock.getSuccessCount();
           lore.add(Component.empty());
           lore.add(ComponentUtil.translate("&7이름 : %s", name));
-          if (!command.equals(""))
+          if (!command.isEmpty())
           {
             lore.add(ComponentUtil.translate("&7명령어 : %s", Component.text(command)));
           }
@@ -301,17 +304,29 @@ public class ItemLore2BlockState
           {
             lore.add(ComponentUtil.translate("&7성공 횟수 : %s", successCount));
           }
-          Boolean auto = blockEntityTag.getBoolean("auto");
+          Boolean auto = null;
+          if (blockEntityTag != null)
+          {
+            auto = blockEntityTag.getBoolean("auto");
+          }
           if (auto != null)
           {
             lore.add(ComponentUtil.translate("&7항상 활성화 : %s", auto + ""));
           }
-          Boolean powered = blockEntityTag.getBoolean("powered");
+          Boolean powered = null;
+          if (blockEntityTag != null)
+          {
+            powered = blockEntityTag.getBoolean("powered");
+          }
           if (powered != null)
           {
             lore.add(ComponentUtil.translate("&7활성화 여부 : %s", powered + ""));
           }
-          Long lastExecution = blockEntityTag.getLong("LastExecution");
+          Long lastExecution = null;
+          if (blockEntityTag != null)
+          {
+            lastExecution = blockEntityTag.getLong("LastExecution");
+          }
           if (lastExecution != null)
           {
             lore.add(ComponentUtil.translate("&7마지막으로 실행된 시각 : %s", lastExecution));
@@ -319,5 +334,37 @@ public class ItemLore2BlockState
         }
       }
     }
+  }
+
+  @NotNull
+  private static String getColorPrefix(@NotNull Material type)
+  {
+    String colorPrefix = "&2";
+    switch (type)
+    {
+      case SHULKER_BOX -> colorPrefix = "#B274E2;";
+      case BLACK_SHULKER_BOX, GRAY_SHULKER_BOX, LIGHT_GRAY_SHULKER_BOX -> colorPrefix = "#808080;";
+      case BLUE_SHULKER_BOX -> colorPrefix = "#415DFF;";
+      case BROWN_SHULKER_BOX -> colorPrefix = "#995700;";
+      case CYAN_SHULKER_BOX -> colorPrefix = "&3";
+      case GREEN_SHULKER_BOX -> colorPrefix = "#00A800;";
+      case LIGHT_BLUE_SHULKER_BOX -> colorPrefix = "#46CDEC;";
+      case LIME_SHULKER_BOX -> colorPrefix = "#73DC00;";
+      case MAGENTA_SHULKER_BOX -> colorPrefix = "#D043C4;";
+      case ORANGE_SHULKER_BOX -> colorPrefix = "#FF7414;";
+      case PINK_SHULKER_BOX -> colorPrefix = "#FF8FA8;";
+      case PURPLE_SHULKER_BOX -> colorPrefix = "#A400D6;";
+      case RED_SHULKER_BOX -> colorPrefix = "#E9483A;";
+      case WHITE_SHULKER_BOX -> colorPrefix = "#F5F5F5;";
+      case YELLOW_SHULKER_BOX -> colorPrefix = "#FFD400;";
+      case CHEST, TRAPPED_CHEST -> colorPrefix = "#CC8500;";
+      case BARREL -> colorPrefix = "#B5703B;";
+      case CAMPFIRE -> colorPrefix = "#FFC700;";
+      case SOUL_CAMPFIRE -> colorPrefix = "#81E9F4;";
+      case BEE_NEST -> colorPrefix = "#F8AD0D;";
+      case BEEHIVE -> colorPrefix = "#CAA863;";
+      case FURNACE, BLAST_FURNACE, SMOKER, DROPPER, DISPENSER, HOPPER -> colorPrefix = "#978E87;";
+    }
+    return colorPrefix;
   }
 }
