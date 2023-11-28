@@ -68,8 +68,7 @@ public class CommandRide extends CommandBase
 
 	private boolean ride(@NotNull Entity passenger, @NotNull Entity vehicle)
 	{
-		if (vehicle instanceof Player && !(passenger instanceof Animals || passenger instanceof Item || (passenger instanceof ArmorStand armorStand
-				&& armorStand.isMarker()) || passenger instanceof Display || passenger instanceof Vehicle))
+		if (vehicle instanceof Player && (passenger instanceof Zombie || passenger instanceof Skeleton))
 		{
 			AreaEffectCloud areaEffectCloud = vehicle.getWorld().spawn(vehicle.getLocation(), AreaEffectCloud.class, cloud ->
 			{
