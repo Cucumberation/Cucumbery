@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
+@SuppressWarnings("unused")
 public class SoundPlay
 {
   public static void playSound(@NotNull Object audience, @NotNull Sound sound)

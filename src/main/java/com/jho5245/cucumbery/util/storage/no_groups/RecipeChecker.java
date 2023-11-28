@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.RecipeChoice.ExactChoice;
+import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -62,22 +63,25 @@ public class RecipeChecker
       {
         if (recipe instanceof ShapelessRecipe shapelessRecipe)
         {
-          List<ItemStack> ingredientList = shapelessRecipe.getIngredientList();
-          for (ItemStack ingredient : ingredientList)
+          List<RecipeChoice> choiceList = shapelessRecipe.getChoiceList();
+          for (RecipeChoice recipeChoice : choiceList)
           {
-            if (ingredient.getType() == type)
+            if (recipeChoice instanceof MaterialChoice materialChoice)
             {
-              return true;
+              if (materialChoice.getChoices().contains(type))
+              {
+                return true;
+              }
             }
           }
         }
         if (recipe instanceof ShapedRecipe shapedRecipe)
         {
-          Map<Character, ItemStack> ingredientMap = shapedRecipe.getIngredientMap();
-          for (char c : ingredientMap.keySet())
+          Map<Character, RecipeChoice> choiceMap = shapedRecipe.getChoiceMap();
+          for (char c : choiceMap.keySet())
           {
-            ItemStack item = ingredientMap.get(c);
-            if (item != null && item.getType() == type)
+            RecipeChoice recipeChoice = choiceMap.get(c);
+            if (recipeChoice instanceof MaterialChoice materialChoice && materialChoice.getChoices().contains(type))
             {
               return true;
             }
@@ -122,7 +126,7 @@ public class RecipeChecker
         if (recipe instanceof CookingRecipe<?> cookingRecipe)
         {
           RecipeChoice recipeChoice = cookingRecipe.getInputChoice();
-          if (recipeChoice.test(itemStack) || cookingRecipe.getInput().isSimilar(itemStack))
+          if (recipeChoice.test(itemStack) || cookingRecipe.getInputChoice().test(itemStack))
           {
             return true;
           }

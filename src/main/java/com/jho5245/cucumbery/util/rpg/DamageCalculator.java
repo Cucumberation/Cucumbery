@@ -5,7 +5,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.Random;
 
-
+@SuppressWarnings("all")
+@Deprecated
 public class DamageCalculator
 {
 	private static final DamageCalculator damageCalculator = new DamageCalculator();

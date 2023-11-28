@@ -6,7 +6,7 @@ import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "deprecation"})
 public class ItemStackBuilder
 {
   private final ItemStack itemStack;

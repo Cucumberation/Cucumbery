@@ -1,5 +1,7 @@
 package com.jho5245.cucumbery.util.rpg;
 
+@SuppressWarnings("all")
+@Deprecated
 public class Level
 {
 	public static long[] level_exp = new long[250];

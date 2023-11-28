@@ -19,9 +19,6 @@ import java.util.*;
 
 public class Variable
 {
-  public static final HashMap<UUID, BukkitTask> itemUpdateScheduler = new HashMap<>();
-  public static Set<UUID> viewDamage = new HashSet<>();
-
   public static Set<UUID> blockBreakAlertCooldown = new HashSet<>();
 
   public static Set<UUID> blockBreakCropHarvestAlertCooldown = new HashSet<>();
@@ -117,10 +114,6 @@ public class Variable
 
   public static HashMap<UUID, Location> spectateUpdater = new HashMap<>();
 
-  public static HashMap<UUID, ItemStack> rpg_bow = new HashMap<>();
-
-  public static HashMap<UUID, Integer> rpg_bow2 = new HashMap<>();
-
   /**
    * UUID에 대한 유저 데이터 config 파일
    */
@@ -139,31 +132,14 @@ public class Variable
 
   public static YamlConfiguration customItemsConfig = new YamlConfiguration();
 
-  /**
-   * @String 파일 경로와 이름
-   * @YamlConfiguration config 파일
-   */
-  public static HashMap<String, YamlConfiguration> warps = new HashMap<>();
-  /**
-   * @String 파일 경로와 이름
-   * @YamlConfiguration config 파일
-   */
-  public static HashMap<String, YamlConfiguration> itemStorage = new HashMap<>();
-  /**
-   * @String 파일 경로와 이름
-   * @YamlConfiguration config 파일
-   */
-  public static HashMap<String, YamlConfiguration> commandPacks = new HashMap<>();
-  /**
-   * @String 파일 경로와 이름
-   * @YamlConfiguration config 파일
-   */
-  public static HashMap<String, YamlConfiguration> customRecipes = new HashMap<>();
 
-  /**
-   * @String 파일 경로와 이름
-   * @YamlConfiguration config 파일
-   */
+  public static HashMap<String, YamlConfiguration> warps = new HashMap<>();
+
+  public static HashMap<String, YamlConfiguration> itemStorage = new HashMap<>();
+
+  public static HashMap<String, YamlConfiguration> commandPacks = new HashMap<>();
+
+  public static HashMap<String, YamlConfiguration> customRecipes = new HashMap<>();
   public static HashMap<String, YamlConfiguration> customItems = new HashMap<>();
 
   public static HashMap<UUID, YamlConfiguration> craftingTime = new HashMap<>();
@@ -185,13 +161,6 @@ public class Variable
    * 플레이어들의 id, displayname, listname에 대한 uuid 값 (닉네임을 넣어서 uuid를 반환)
    */
   public static HashMap<String, UUID> cachedUUIDs = new HashMap<>();
-
-  /**
-   * 블록을 설치했을 때 해당 아이템의 NBT 보존
-   */
-//  public static HashMap<String, YamlConfiguration> blockPlaceData = new HashMap<>();
-
-  public static HashMap<String, YamlConfiguration> customGameRules = new HashMap<>();
   /**
    * QuickShop 상점 데이터
    */

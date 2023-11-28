@@ -2,8 +2,6 @@ package com.jho5245.cucumbery.util.storage.no_groups;
 
 import com.jho5245.cucumbery.util.no_groups.Method;
 import org.bukkit.Material;
-import org.bukkit.block.data.Ageable;
-import org.bukkit.block.data.AnaloguePowerable;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockDataMeta;
@@ -127,36 +125,7 @@ public class BlockDataInfo
     return null;
   }
 
-  @Nullable
-  public static String[] blockDataKeys(@NotNull Material material)
-  {
-    List<String> keys = new ArrayList<>();
-    ItemStack itemStack = new ItemStack(material);
-    if (!ItemStackUtil.itemExists(itemStack))
-    {
-      return null;
-    }
-    ItemMeta itemMeta = itemStack.getItemMeta();
-    if (!(itemMeta instanceof BlockDataMeta blockDataMeta))
-    {
-      return null;
-    }
-    if (blockDataMeta instanceof Ageable ageable)
-    {
-      keys.add("age");
-    }
-    if (blockDataMeta instanceof AnaloguePowerable)
-    {
-      keys.add("power");
-    }
-    if (!keys.isEmpty())
-    {
-      return Method.listToArray(keys);
-    }
-    return null;
-  }
-
-  @Nullable
+	@Nullable
   public static String[] getBlockDataValues(@NotNull Material material, @NotNull String key)
   {
     switch (material)
@@ -312,7 +281,7 @@ public class BlockDataInfo
         break;
       case BEETROOT:
       case BEETROOTS:
-      case NETHER_WART:
+      case NETHER_WART, FROSTED_ICE, SWEET_BERRIES, SWEET_BERRY_BUSH:
         if (key.equals("age"))
         {
           return getNumbers(3);
@@ -701,15 +670,7 @@ public class BlockDataInfo
             return BOOLEAN;
         }
         break;
-      case FROSTED_ICE:
-      case SWEET_BERRIES:
-      case SWEET_BERRY_BUSH:
-        if (key.equals("age"))
-        {
-          return getNumbers(3);
-        }
-        break;
-      case GRASS_BLOCK:
+			case GRASS_BLOCK:
       case MYCELIUM:
       case PODZOL:
         if (key.equals("snowy"))

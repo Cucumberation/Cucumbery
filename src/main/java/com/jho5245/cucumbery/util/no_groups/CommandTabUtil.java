@@ -245,41 +245,7 @@ public class CommandTabUtil
           }
         }
       }
-/*      String wholeCommand = cmdLabel + " " + MessageUtil.listToString(args); // 실제로 채팅에 입력한 명령어 ig : /give @a diamond
-      int start;
-      if (wholeCommand.contains(" "))
-      {
-        start = wholeCommand.length() - wholeCommand.replace(" ", "").length();
-      }
-      else
-      {
-        start = 0;
-      }
-      @SuppressWarnings("unchecked")
-      ParseResults<?> parseResults = Brigadier.getCommandDispatcher().parse(cmdLabel, Brigadier.getBrigadierSourceFromCommandSender(sender));
-      List<Completion> errors = new ArrayList<>();
-      for (CommandSyntaxException exception : parseResults.getExceptions().values())
-      {
-        errors.add(Completion.completion(exception.getRawMessage().getString(), ComponentUtil.translate(exception.getRawMessage().getString())));
-      }
-      if (!errors.isEmpty())
-      {
-        return errors;
-      }
-      List<Suggestion> suggestionsList = new ArrayList<>();
-      Brigadier.getCommandDispatcher().getCompletionSuggestions(parseResults).thenApply((suggestionsObject) -> {
-        Suggestions suggestions = (Suggestions) suggestionsObject;
-        Suggestions s = new Suggestions(new StringRange(start, start + suggestions.getRange().getLength()), suggestions.getList());
-        suggestionsList.addAll(s.getList());
-        return s;
-      });
-      List<Completion> completions = new ArrayList<>();
-      suggestionsList.forEach(s -> completions.add(Completion.completion(s.getText(), ComponentUtil.translate(s.getText()))));
-      if (!completions.isEmpty())
-      {
-        return completions;
-      }*/
-      return Collections.singletonList(Completion.completion("[<인수>]", ComponentUtil.translate("인수")));
+			return Collections.singletonList(Completion.completion("[<인수>]", ComponentUtil.translate("인수")));
     }
   }
 
@@ -468,69 +434,7 @@ public class CommandTabUtil
         }
       }
     }
-/*    if (sender instanceof Player player)
-    {
-      UUID uuid = player.getUniqueId();
-      if (selectorErrorMessage.containsKey(uuid))
-      {
-        List<Completion> completions = selectorErrorMessage.get(uuid);
-        taskHashMap.put(uuid, Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-                selectorErrorMessage.remove(uuid), 2L));
-        return completions;
-      }
-      Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-      {
-        BukkitTask bukkitTask = taskHashMap.get(uuid);
-        try
-        {
-          List<Entity> entities = Bukkit.selectEntities(sender, args[args.length - 1]);
-          if (entities.isEmpty())
-          {
-            if (bukkitTask != null)
-            {
-              bukkitTask.cancel();
-            }
-            selectorErrorMessage.put(uuid, errorMessage("argument.entity.notfound.entity"));
-            return;
-          }
-          if (!multiple && entities.size() > 1)
-          {
-            if (!sender.hasPermission("minecraft.command.selector"))
-            {
-              if (bukkitTask != null)
-              {
-                bukkitTask.cancel();
-              }
-              selectorErrorMessage.put(uuid, errorMessage("argument.entity.selector.not_allowed"));
-              return;
-            }
-            if (bukkitTask != null)
-            {
-              bukkitTask.cancel();
-            }
-            selectorErrorMessage.put(uuid, errorMessage("argument.entity.toomany"));
-          }
-        }
-        catch (IllegalArgumentException e)
-        {
-          if (!sender.hasPermission("minecraft.command.selector"))
-          {
-            if (bukkitTask != null)
-            {
-              bukkitTask.cancel();
-            }
-            selectorErrorMessage.put(uuid, errorMessage("argument.entity.selector.not_allowed"));
-            return;
-          }
-          if (bukkitTask != null)
-          {
-            bukkitTask.cancel();
-          }
-          selectorErrorMessage.put(uuid, errorMessage(SelectorUtil.errorMessage(args[args.length - 1], e)));
-        }
-      }, 0L);
-    }*/
-    return tabCompleterList(args, list, key, arg.startsWith("@") || arg.startsWith("#"));
+		return tabCompleterList(args, list, key, arg.startsWith("@") || arg.startsWith("#"));
   }
 
   @NotNull
@@ -844,10 +748,6 @@ public class CommandTabUtil
         continue;
       }
       String s = k.toString();
-/*      if (k instanceof NamespacedKey && !args[args.length - 1].isEmpty() && !args[args.length - 1].contains(":"))
-      {
-        args[args.length - 1] = "cucumbery:" + args[args.length - 1];
-      }*/
       String lastArg = args[args.length - 1];
       if (k instanceof NamespacedKey && !lastArg.isEmpty() && lastArg.length() <= 2)
       {

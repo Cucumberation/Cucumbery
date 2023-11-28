@@ -9,6 +9,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 
+@SuppressWarnings("all")
+@Deprecated
 public class StatGUI
 {
 /*	private static final StatGUI statGUI = new StatGUI();

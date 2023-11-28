@@ -14,6 +14,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.List;
 
+@SuppressWarnings("all")
+@Deprecated
 public class DamageDebugCommand implements CommandExecutor
 {
 	public static HashMap<Player, Boolean> debug = new HashMap<Player, Boolean>();

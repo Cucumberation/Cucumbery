@@ -127,11 +127,13 @@ public class BossBarMessage
     }
   }
 
+  @SuppressWarnings("unused")
   public int getDisplayTimeTicks()
   {
     return displayTimeTicks;
   }
 
+  @SuppressWarnings("unused")
   public void setDisplayTimeTicks(int displayTimeTicks)
   {
     this.displayTimeTicks = displayTimeTicks;
@@ -147,21 +149,25 @@ public class BossBarMessage
     this.color = color;
   }
 
+  @SuppressWarnings("unused")
   public Overlay getOverlay()
   {
     return overlay;
   }
 
+  @SuppressWarnings("unused")
   public void setOverlay(Overlay overlay)
   {
     this.overlay = overlay;
   }
 
+  @SuppressWarnings("unused")
   public Flag getFlag()
   {
     return flag;
   }
 
+  @SuppressWarnings("unused")
   public void setFlag(Flag flag)
   {
     this.flag = flag;

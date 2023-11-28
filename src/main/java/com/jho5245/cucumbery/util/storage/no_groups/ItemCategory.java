@@ -105,7 +105,7 @@ public class ItemCategory
 		_DIVINE(16, 0, "&b&lDIVINE"),
 		_SPECIAL(17, 0, "&c&lSPECIAL"),
 		_VERY_SPECIAL(18, 0, "&c&lVERY SPECIAL"),
-		_ADMIN(999, 0, "&4[관리자]");;
+		_ADMIN(999, 0, "&4[관리자]");
 
 		private final int rarityNumber;
 

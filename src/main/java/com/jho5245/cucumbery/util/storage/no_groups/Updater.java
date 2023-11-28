@@ -114,14 +114,14 @@ public class Updater
     {
       if (file.exists())
       {
-        file.delete();
+        if (!file.delete()) MessageUtil.consoleSendMessage("Updater Error");
       }
-      file.getParentFile().mkdirs();
-      file.createNewFile();
+      if (!file.getParentFile().mkdirs()) MessageUtil.consoleSendMessage("Updater Error");
+      if (!file.createNewFile()) MessageUtil.consoleSendMessage("Updater Error");
     }
     catch (SecurityException | IOException exception)
     {
-      file.delete();
+      if (!file.delete()) MessageUtil.consoleSendMessage("Updater Error");
       throw exception;
     }
 
@@ -141,7 +141,7 @@ public class Updater
     }
     catch (Exception exception)
     {
-      file.delete();
+      if (!file.delete()) MessageUtil.consoleSendMessage("Updater Error");
       throw exception;
     }
 
@@ -163,7 +163,7 @@ public class Updater
     byte[] data;
     data = Files.readAllBytes(tempFile.toPath());
     Path path = newFile.toPath();
-    tempFile.delete();
+    if (!tempFile.delete()) MessageUtil.consoleSendMessage("Updater Error");
     Files.write(path, data);
 
     Bukkit.getScheduler().runTask(PLUGIN, () ->
@@ -171,7 +171,7 @@ public class Updater
       PluginLoader.unload();
       if (!newFile.getPath().equals(FILE.getPath()))
       {
-        FILE.delete();
+        if (!FILE.delete()) MessageUtil.consoleSendMessage("Updater Error");
       }
       PluginLoader.load(newFile);
     });

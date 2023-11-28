@@ -28,11 +28,6 @@ public class ColorCode
             };
   }
 
-  public static String getColorName(Color color)
-  {
-    return getColorName(color, "");
-  }
-
   public static String getColorName(Color color, String key)
   {
     int red = color.getRed(), green = color.getGreen(), blue = color.getBlue();

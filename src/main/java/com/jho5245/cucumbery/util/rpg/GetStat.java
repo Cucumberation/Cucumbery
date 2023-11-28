@@ -1,5 +1,7 @@
 package com.jho5245.cucumbery.util.rpg;
 
+@SuppressWarnings("all")
+@Deprecated
 public class GetStat
 {
 /*	private static final GetStat getStat = new GetStat();

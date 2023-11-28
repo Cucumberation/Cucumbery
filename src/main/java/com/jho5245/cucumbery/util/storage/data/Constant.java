@@ -18,21 +18,14 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.*;
 
-@SuppressWarnings("unused")
 public class Constant
 {
   // 아이템 제한 태그
-
   public static final String NO_CRAFT_ITEM_DISPLAYNAME = "&c[조합 불가!]";
-
   public static final String NO_ANVIL_ITEM_DISPLAYNAME = "&c[모루 사용 불가!]";
-
   public static final String NO_SMITHING_ITEM_DISPLAYNAME = "&c[대장장이 작업대 사용 불가!]";
 
-  public static final String CONSOLE = "콘솔";
-
   public static final String AIR = "산소량";
-
   public static final String AIR_PREFIX = "§산§소§량§b";
 
   public static final String SEPARATOR = "&m                                                                        ";
@@ -64,14 +57,6 @@ public class Constant
   public static final Component ITEM_MODIFIERS_MAINHAND = ComponentUtil.translate(ITEM_MODIFIERS_BRACKET, ComponentUtil.translate("item.modifiers.mainhand"));
   public static final Component ITEM_MODIFIERS_OFFHAND = ComponentUtil.translate(ITEM_MODIFIERS_BRACKET, ComponentUtil.translate("item.modifiers.offhand"));
   public static final String TMI_LORE_NBT_TAG_COPIED = "[NBT 태그 복사됨]";
-  public static final String ITEM_LORE_MATERIAL_CRAFTABLE = "#F0E68C;[조합 가능]";
-  public static final String ITEM_LORE_MATERIAL_CRAFTABLE_ONLY_CRAFTING_TABLE = "#F0E68C;[제작대에서만 조합 가능]";
-  public static final String ITEM_LORE_MATERIAL_CRAFTABLE_ONLY_INVENTORY = "#F0E68C;[인벤토리에서만 조합 가능]";
-
-  // ItemLore 기능 관련 상수
-  public static final String ITEM_LORE_MATERIAL_BREWABLE = "rgb255,56,159;[양조 가능]";
-  public static final String ITEM_LORE_MATERIAL_SMELTABLE = "rgb255,79,48;[제련 가능]";
-  public static final String ITEM_LORE_MATERIAL_SMELTABLE_COOK = "#F07447;[조리 가능]";
   public static final String ITEM_LORE_MATERIAL_COMPOSTABLE = "rgb200,151,119;퇴비 제작 확률 : %s";
   public static final String ITEM_LORE_FUEL = "rgb255,49,18;[연소 가능]";
   public static final String ITEM_LORE_STATUS_EFFECT = "rgb255,56,159;[상태 효과]";
@@ -79,8 +64,6 @@ public class Constant
   public static final String ITEM_LORE_PLACABLE = "#32CD32;[설치 가능]";
   public static final String ITEM_LORE_ENCHANTED = "rgb224,133,255;[부여된 마법]";
   public static final String ITEM_LORE_STORED_ENCHANT = "rgb224,133,255;[부여 가능한 마법]";
-  public static final String ITEM_LORE_RETURN_BOWL_AFTER_EATEN = "&7섭취 후 그릇은 반환된다";
-  public static final String ITEM_LORE_GRAVITION = "&7중력의 영향을 받는다";
   public static final String ITEM_LORE_ONLY_WITH_SILKTOUCH_OR_SWEARS = "%s이 부여된 아이템이나 %s로만 직접 얻을 수 있다";
   public static final Component ITEM_LORE_ONLY_WITH_SILKTOUCH_OR_SWEARS_COMPONENT =
           ComponentUtil.translate(ITEM_LORE_ONLY_WITH_SILKTOUCH_OR_SWEARS)
@@ -89,21 +72,6 @@ public class Constant
                   .args(
                           ComponentUtil.translate("enchantment.minecraft.silk_touch").color(TextColor.color(255, 255, 85)),
                           ComponentUtil.translate("item.minecraft.shears").color(TextColor.color(255, 255, 85)));
-  public static final String ITEM_LORE_ONLY_WITH_SWEARS = "%s로만 직접 얻을 수 있다";
-  public static final Component ITEM_LORE_ONLY_WITH_SHEARS_COMPONENT =
-          ComponentUtil.translate(ITEM_LORE_ONLY_WITH_SWEARS)
-                  .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE)
-                  .color(TextColor.color(170, 170, 170))
-                  .args(
-                          ComponentUtil.translate("item.minecraft.shears").color(TextColor.color(255, 255, 85)));
-  public static final String ITEM_LORE_ONLY_WITH_SILKTOUCH = "%s이 부여된 아이템으로만 직접 얻을 수 있다";
-  public static final Component ITEM_LORE_ONLY_WITH_SILKTOUCH_COMPONENT =
-          ComponentUtil.translate(ITEM_LORE_ONLY_WITH_SILKTOUCH)
-                  .decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE)
-                  .color(TextColor.color(170, 170, 170))
-                  .args(
-                          ComponentUtil.translate("enchantment.minecraft.silk_touch").color(TextColor.color(255, 255, 85)));
-
   // DecimalFormat
   public static final DecimalFormat rawFormat = new DecimalFormat("###0.#############");
   public static final DecimalFormat Sosu2rawFormat = new DecimalFormat("###0.##");
@@ -117,11 +85,11 @@ public class Constant
   public static final DecimalFormat Sosu2Floor = new DecimalFormat("#,##0.##");
   public static final DecimalFormat Sosu2Force = new DecimalFormat("#,##0.00");
   public static final DecimalFormat Sosu3 = new DecimalFormat("#,##0.###");
+  @SuppressWarnings("unused")
   public static final DecimalFormat Sosu3Force = new DecimalFormat("#,##0.000");
   public static final DecimalFormat Sosu4 = new DecimalFormat("#,##0.####");
   public static final DecimalFormat Sosu15 = new DecimalFormat("#,##0.###############");
   public static final String GUI_SUFFIX = "§큐§컴§버§리§G§U§I";
-  public static final String GUI_NO_ITEM_LORE_FEATURE = "§아§이§템§ §설§명§ §없§음" + GUI_SUFFIX;
   public static final String CANCEL_STRING = "§클§릭§캔§슬" + GUI_SUFFIX;
   public static final TranslatableComponent GUI_PREFIX = ComponentUtil.translate("%1$s").args(Component.empty(), Component.empty(), Component.text(CANCEL_STRING));
   public static final String POTION_EFFECTS = "potion_effects";
@@ -133,7 +101,6 @@ public class Constant
 
   // GUI
   public static final String ITEM_PICKUP_MODE_MENU = "§아§이§템§ §줍§기§ §모§드§ §설§정§3아이템 줍기 모드 설정" + GUI_SUFFIX;
-  public static final String ITEM_USE_MODE_MENU = "§아§이§템§ §사§용§ §모§드§ §설§정§3아이템 사용 모드 설정" + GUI_SUFFIX;
   public static final String CUSTOM_RECIPE_RECIPE_LIST_MENU = "§커§스§텀§레§시§피§ §메§인§ §메§뉴§8레시피 목록" + GUI_SUFFIX;
   public static final String CUSTOM_RECIPE_MENU = "§커§스§텀§레§시§피§ §카§테§고§리§ §메§뉴" + GUI_SUFFIX;
   public static final String CUSTOM_RECIPE_CRAFTING_MENU = "§커§스§텀§레§시§피§ §제§작§ §메§뉴" + GUI_SUFFIX;
@@ -175,18 +142,12 @@ public class Constant
   public static final Set<Material> ARMORS = new HashSet<>();
   public static final Set<Material> INSTANTLY_BREAKABLE_BLOCKS, TOOLS_LOSE_DURABILITY_BY_BREAKING_BLOCKS;
   public static final Set<Material> CROP_BLOCKS = new HashSet<>(Arrays.asList(Material.WHEAT, Material.CARROTS, Material.POTATOES, Material.NETHER_WART, Material.BEETROOTS));
-  public static final Set<Material> BUCKETS = new HashSet<>(Arrays.asList(Material.BUCKET, Material.WATER_BUCKET, Material.LAVA_BUCKET, Material.MILK_BUCKET, Material.PUFFERFISH_BUCKET,
-          Material.SALMON_BUCKET, Material.COD_BUCKET, Material.TROPICAL_FISH_BUCKET, Material.AXOLOTL_BUCKET));
   public static final Set<Material> EQUIPABLE_HEADS = new HashSet<>(
           Arrays.asList(Material.CREEPER_HEAD, Material.DRAGON_HEAD, Material.PLAYER_HEAD, Material.ZOMBIE_HEAD, Material.SKELETON_SKULL, Material.WITHER_SKELETON_SKULL));
   /**
    * 6면이 완전히 꽉찬 블록
    */
   public static final Set<Material> PENETRATABLE_BLOCKS = new HashSet<>(Arrays.asList(Material.AIR, Material.CAVE_AIR, Material.VOID_AIR, Material.WATER, Material.LAVA));
-  public static final Set<Material> LEAVES = new HashSet<>(
-          Arrays.asList(Material.ACACIA_LEAVES, Material.BIRCH_LEAVES, Material.JUNGLE_LEAVES, Material.OAK_LEAVES, Material.SPRUCE_LEAVES, Material.DARK_OAK_LEAVES));
-  public static final Set<Material> SAPLINGS = new HashSet<>(
-          Arrays.asList(Material.ACACIA_SAPLING, Material.BIRCH_SAPLING, Material.JUNGLE_SAPLING, Material.OAK_SAPLING, Material.SPRUCE_SAPLING, Material.DARK_OAK_SAPLING));
   public static final Set<Material> OCCLUDING_BLOCKS = new HashSet<>();
   public static final List<Material> WOOL = new ArrayList<>(), PLANKS = new ArrayList<>(), FLOWERS = new ArrayList<>(), SMALL_FLOWERS = new ArrayList<>(), TALL_FLOWERS = new ArrayList<>(),
           WITHER_IMMUNE = new ArrayList<>(), BEACON_BASE_BLOCKS = new ArrayList<>(), DYES = new ArrayList<>(), SHULKER_BOXES = new ArrayList<>();
@@ -310,19 +271,21 @@ public class Constant
                     Material.GOLDEN_SWORD, Material.NETHERITE_AXE, Material.NETHERITE_PICKAXE, Material.NETHERITE_SHOVEL, Material.NETHERITE_SWORD,
                     Material.DIAMOND_HOE, Material.GOLDEN_HOE, Material.IRON_HOE, Material.STONE_HOE, Material.NETHERITE_HOE, Material.WOODEN_HOE));
   }
-
+  @SuppressWarnings("unused")
   public static String Sosu5Force(double input)
   {
     String value = Constant.privateSosu5Force.format(input);
     return (!value.startsWith("-") ? "&a+" : "&c") + value;
   }
 
+  @SuppressWarnings("unused")
   public static String Sosu2Force(double input)
   {
     String value = Constant.privateSosu2Force.format(input);
     return (!value.startsWith("-") ? "&a+" : "&c") + value;
   }
 
+  @SuppressWarnings("unused")
   public static String Sosu2OnlyForce(double input)
   {
     String value = Constant.privateOnlySosu2Force.format(input);

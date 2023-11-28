@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public class CreateItemStack
 {
   public static ItemStack toggleItem(boolean bool, String trueName, List<?> trueLore, String falseName, List<?> falseLore)
@@ -123,16 +124,5 @@ public class CreateItemStack
     nbtItem.setBoolean(CucumberyTag.GUI_BUTTON_PREVIOUS, true);
     itemStack.setItemMeta(nbtItem.getItem().getItemMeta());
     return itemStack;
-  }
-
-  public static boolean isPreviousButton(@NotNull ItemStack itemStack)
-  {
-    if (itemStack.getType() != Material.ARROW)
-    {
-      return false;
-    }
-    NBTItem nbtItem = new NBTItem(itemStack);
-    Boolean b = nbtItem.getBoolean(CucumberyTag.GUI_BUTTON_PREVIOUS);
-    return b != null && b;
   }
 }

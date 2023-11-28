@@ -290,15 +290,6 @@ public abstract class CustomEnchant extends Enchantment
 	@NotNull
 	public abstract String translationKey();
 
-	@NotNull
-	public String translationKeyFallback()
-	{
-		String key = translationKey();
-		if (key.startsWith("key:"))
-			return key.split("\\|")[1];
-		return key;
-	}
-
 	@Override
 	public boolean isTradeable()
 	{
@@ -337,11 +328,6 @@ public abstract class CustomEnchant extends Enchantment
 	public boolean isUltimate()
 	{
 		return this instanceof CustomEnchantUltimate;
-	}
-
-	public int enchantCost()
-	{
-		return 5;
 	}
 
   public int getMinModifiedCost(int i)

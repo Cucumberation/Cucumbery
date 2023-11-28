@@ -429,6 +429,7 @@ public enum CustomMaterial implements Translatable
     this(displayMaterial, displayName, Rarity.NORMAL, "itemGroup.ingredients");
   }
 
+  @SuppressWarnings("unused")
   CustomMaterial(Material displayMaterial, Component displayName)
   {
     this(displayMaterial, displayName, Rarity.NORMAL, "itemGroup.ingredients");
@@ -444,11 +445,13 @@ public enum CustomMaterial implements Translatable
     this(displayMaterial, displayName, Rarity.NORMAL, category);
   }
 
+  @SuppressWarnings("unused")
   CustomMaterial(Material displayMaterial, Component displayName, CreativeCategory category)
   {
     this(displayMaterial, displayName, Rarity.NORMAL, category.translationKey());
   }
 
+  @SuppressWarnings("unused")
   CustomMaterial(Material displayMaterial, Component displayName, String category)
   {
     this(displayMaterial, displayName, Rarity.NORMAL, category);
@@ -554,6 +557,7 @@ public enum CustomMaterial implements Translatable
             };
   }
 
+  @SuppressWarnings("all")
   @Nullable
   public Material getSmeltedItemVanilla()
   {
@@ -600,7 +604,7 @@ public enum CustomMaterial implements Translatable
   }
 
   /**
-   * @return A translation key of this item's {@link CreativeCategory#translationKey} or custom category key.
+   * @return A translation key of this item's {@link CreativeCategory#translationKey()} or custom category key.
    */
   @NotNull
   public String getCategory()
@@ -662,6 +666,7 @@ public enum CustomMaterial implements Translatable
    * @param removeLore If true, will be removed lore item
    * @return Created {@link ItemStack}.
    */
+  @SuppressWarnings("deprecation")
   @NotNull
   public ItemStack create(int amount, boolean removeLore)
   {

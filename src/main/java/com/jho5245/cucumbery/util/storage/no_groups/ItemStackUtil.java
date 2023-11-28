@@ -37,6 +37,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+@SuppressWarnings("all")
 public class ItemStackUtil
 {
 	/**

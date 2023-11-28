@@ -415,25 +415,6 @@ public class Initializer
 
     loadNicknamesConfig();
 
-//    Variable.blockPlaceData.clear();
-//    File blockPlaceDataFolder = new File(getPlugin().getDataFolder() + "/data/BlockPlaceData");
-//    if (blockPlaceDataFolder.exists())
-//    {
-//      File[] dataFiles = blockPlaceDataFolder.listFiles();
-//      if (dataFiles != null)
-//      {
-//        for (File file : dataFiles)
-//        {
-//          String fileName = file.getName();
-//          if (fileName.endsWith(".yml"))
-//          {
-//            fileName = fileName.substring(0, fileName.length() - 4);
-//            Variable.blockPlaceData.put(fileName, CustomConfig.getCustomConfig(file).getConfig());
-//          }
-//        }
-//      }
-//    }
-
     MerchantData.merchantDataHashMap.clear();
     File customMerchantFolder = new File(getPlugin().getDataFolder() + "/data/CustomMerchants");
     if (customMerchantFolder.exists())

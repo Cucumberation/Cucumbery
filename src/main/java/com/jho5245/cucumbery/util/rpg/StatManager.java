@@ -13,6 +13,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("all")
+@Deprecated
 public class StatManager implements Listener
 {
 //	private static final StatManager statManager = new StatManager();
