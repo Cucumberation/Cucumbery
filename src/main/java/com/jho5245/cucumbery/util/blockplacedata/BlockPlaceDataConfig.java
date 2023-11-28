@@ -399,14 +399,14 @@ public class BlockPlaceDataConfig extends ChunkConfig
     PacketContainer edit = protocolManager.createPacket(Server.ENTITY_METADATA);
     StructureModifier<List<WrappedDataValue>> watchableAccessor = edit.getDataValueCollectionModifier();
     List<WrappedDataValue> values = Lists.newArrayList(
-            new WrappedDataValue(10, Registry.get(Vector3f.class), new Vector3f(
+            new WrappedDataValue(11, Registry.get(Vector3f.class), new Vector3f(
                     translationX + offset[0] * scaleX,
                     translationY + offset[1] * scaleY,
                     translationZ + offset[2] * scaleZ)),
-            new WrappedDataValue(11, Registry.get(Vector3f.class), new Vector3f(
-                    1.0005f * scaleX,
-                    1.0005f * scaleY,
-                    1.0005f * scaleZ)),
+            new WrappedDataValue(12, Registry.get(Vector3f.class), new Vector3f(
+                    1.0001f * scaleX,
+                    1.0001f * scaleY,
+                    1.0001f * scaleZ)),
             // TODO: NO serializer for 4d packet yet
 //            new WrappedDataValue(12, Registry.get(Vector4f.class), new Vector4f(
 //                    leftRotationX, leftRotationY, leftRotationZ, leftRotationW
@@ -414,13 +414,13 @@ public class BlockPlaceDataConfig extends ChunkConfig
 //            new WrappedDataValue(13, Registry.get(Vector4f.class), new Vector4f(
 //                    rightRotationX, rightRotationY, rightRotationZ, rightRotationW
 //            )),
-            new WrappedDataValue(14, Registry.get(Byte.class), billBoard),
-            new WrappedDataValue(16, Registry.get(Float.class), viewRange * ("player_heads".equals(type) ? 0.5f : 1f)),
-            new WrappedDataValue(17, Registry.get(Float.class), shadowRadius),
-            new WrappedDataValue(18, Registry.get(Float.class), shadowStrength),
-            new WrappedDataValue(19, Registry.get(Float.class), width),
-            new WrappedDataValue(20, Registry.get(Float.class), height),
-            new WrappedDataValue(21, Registry.get(Integer.class), glowColorOverride)
+            new WrappedDataValue(15, Registry.get(Byte.class), billBoard),
+            new WrappedDataValue(17, Registry.get(Float.class), viewRange * ("player_heads".equals(type) ? 0.5f : 1f)),
+            new WrappedDataValue(18, Registry.get(Float.class), shadowRadius),
+            new WrappedDataValue(19, Registry.get(Float.class), shadowStrength),
+            new WrappedDataValue(20, Registry.get(Float.class), width),
+            new WrappedDataValue(21, Registry.get(Float.class), height),
+            new WrappedDataValue(22, Registry.get(Integer.class), glowColorOverride)
     );
     if (glowing != null)
     {
@@ -428,7 +428,7 @@ public class BlockPlaceDataConfig extends ChunkConfig
     }
     if (brightnessBlock != -1 && brightnessSky != -1)
     {
-      values.add(new WrappedDataValue(15, Registry.get(Integer.class), brightnessBlock << 4 | brightnessSky << 20));
+      values.add(new WrappedDataValue(16, Registry.get(Integer.class), brightnessBlock << 4 | brightnessSky << 20));
     }
     switch (type)
     {
@@ -445,7 +445,8 @@ public class BlockPlaceDataConfig extends ChunkConfig
           MessageUtil.sendWarn(Bukkit.getConsoleSender(), "잘못된 블록 데이터가 있습니다: " + value);
           material = Material.AIR;
         }
-        values.add(new WrappedDataValue(23, Registry.get(Integer.class), material.getId() + (1 << 0xC)));
+        packet.getIntegers().write(4, 1);
+        //values.add(new WrappedDataValue(23, Registry.get(Integer.class), material.getId() + (material.getData().getModifiers() << 0xC)));
       }
       case "player_head", "player_heads" ->
       {
@@ -454,7 +455,7 @@ public class BlockPlaceDataConfig extends ChunkConfig
         ItemStackUtil.setTexture(skullMeta, value);
         itemStack.setItemMeta(skullMeta);
         Object minecraftItemStack = MinecraftReflection.getMinecraftItemStack(itemStack);
-        values.add(new WrappedDataValue(22, Registry.getItemStackSerializer(false), minecraftItemStack));
+        values.add(new WrappedDataValue(23, Registry.getItemStackSerializer(false), minecraftItemStack));
         int itemDisplay = 0;
         if (nbtItem.hasTag("item_display") && nbtItem.getType("item_display") == NBTType.NBTTagString)
         {
@@ -473,8 +474,7 @@ public class BlockPlaceDataConfig extends ChunkConfig
         }
         if (itemDisplay != 0)
         {
-          // TODO: packet bug?? disabled temporaly
-//          values.add(new WrappedDataValue(23, Registry.get(Integer.class), itemDisplay));
+          values.add(new WrappedDataValue(24, Registry.get(Integer.class), itemDisplay));
         }
       }
       case "item" ->
@@ -509,14 +509,13 @@ public class BlockPlaceDataConfig extends ChunkConfig
         }
         if (itemDisplay != 0)
         {
-          // TODO: packet bug?? disabled temporaly
           values.add(new WrappedDataValue(24, Registry.get(Integer.class), itemDisplay));
         }
       }
       case "text" ->
       {
         WrappedChatComponent wrappedChatComponent = WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(ComponentUtil.create(value)));
-        values.add(new WrappedDataValue(22, Registry.getChatComponentSerializer(), wrappedChatComponent.getHandle()));
+        values.add(new WrappedDataValue(23, Registry.getChatComponentSerializer(), wrappedChatComponent.getHandle()));
         int lineWidth = nbtItem.hasTag("line_width") && nbtItem.getType("line_width") == NBTType.NBTTagInt ? nbtItem.getInteger("line_width") : 200;
         int background = nbtItem.hasTag("background") && nbtItem.getType("background") == NBTType.NBTTagInt ? nbtItem.getInteger("background") : 0x40_00_00_00;
         byte textOpacity = nbtItem.hasTag("text_opacity") && nbtItem.getType("text_opacity") == NBTType.NBTTagByte ? nbtItem.getByte("text_opacity") : -1;
@@ -533,10 +532,10 @@ public class BlockPlaceDataConfig extends ChunkConfig
         {
           bitMask |= 0x04;
         }
-        values.add(new WrappedDataValue(23, Registry.get(Integer.class), lineWidth));
-        values.add(new WrappedDataValue(24, Registry.get(Integer.class), background));
-        values.add(new WrappedDataValue(25, Registry.get(Byte.class), textOpacity));
-        values.add(new WrappedDataValue(26, Registry.get(Byte.class), bitMask));
+        values.add(new WrappedDataValue(24, Registry.get(Integer.class), lineWidth));
+        values.add(new WrappedDataValue(25, Registry.get(Integer.class), background));
+        values.add(new WrappedDataValue(26, Registry.get(Byte.class), textOpacity));
+        values.add(new WrappedDataValue(27, Registry.get(Byte.class), bitMask));
       }
     }
 
