@@ -14,9 +14,13 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.BundleMeta;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.trim.ArmorTrim;
+import org.bukkit.inventory.meta.trim.TrimMaterial;
+import org.bukkit.inventory.meta.trim.TrimPattern;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -142,6 +146,60 @@ public class ItemLore2Meta2
             }
           }
         }
+      }
+      case SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE, COAST_ARMOR_TRIM_SMITHING_TEMPLATE, DUNE_ARMOR_TRIM_SMITHING_TEMPLATE, EYE_ARMOR_TRIM_SMITHING_TEMPLATE, HOST_ARMOR_TRIM_SMITHING_TEMPLATE,
+          RAISER_ARMOR_TRIM_SMITHING_TEMPLATE, RIB_ARMOR_TRIM_SMITHING_TEMPLATE, SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE, SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE, SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE,
+          SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE, TIDE_ARMOR_TRIM_SMITHING_TEMPLATE, VEX_ARMOR_TRIM_SMITHING_TEMPLATE, WARD_ARMOR_TRIM_SMITHING_TEMPLATE, WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE,
+          WILD_ARMOR_TRIM_SMITHING_TEMPLATE -> {
+        itemMeta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
+        String pattern = type.toString().toLowerCase().split("_")[0];
+        lore.add(Component.empty());
+        lore.add(ComponentUtil.translate("&7key:cucumbery.item_lore.description.trim_smithing_template|%s에서 갑옷에 주괴 및 수정으로 장식할 수 있다.", Material.SMITHING_TABLE));
+        lore.add(Component.empty());
+        lore.add(ComponentUtil.translate("&ekey:cucumbery.item_lore.trim_smithing_template|형판 유형 : %s", ComponentUtil.translate("&6trim_pattern.minecraft." + pattern)));
+      }
+      case NETHERITE_UPGRADE_SMITHING_TEMPLATE -> {
+        itemMeta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
+        lore.add(Component.empty());
+        lore.add(ComponentUtil.translate("&7key:cucumbery.item_lore.description.netherite_upgrade_smithing_template|%s에서 다이아몬드 장비와 네더라이트 주괴를", Material.SMITHING_TABLE));
+        lore.add(ComponentUtil.translate("&7key:cucumbery.item_lore.description.netherite_upgrade_smithing_template_2|사용하여 네더라이트 장비로 업그레이드할 수 있다."));
+      }
+    }
+
+    if (itemMeta instanceof ArmorMeta armorMeta)
+    {
+      if (armorMeta.hasTrim())
+      {
+        ArmorTrim armorTrim = armorMeta.getTrim();
+        if (armorTrim == null)
+        {
+          itemMeta.removeItemFlags(ItemFlag.HIDE_ARMOR_TRIM);
+          return;
+        }
+        itemMeta.addItemFlags(ItemFlag.HIDE_ARMOR_TRIM);
+        TrimMaterial trimMaterial = armorTrim.getMaterial();
+        TrimPattern trimPattern = armorTrim.getPattern();
+        lore.add(Component.empty());
+        lore.add(ComponentUtil.translate("&akey:cucumbery.item_lore.armor_trim_smithing_template|[형판 장식]"));
+        String color = switch (trimMaterial.getKey().getKey()) {
+          case "amethyst" -> "rgb152,91,196;";
+          case "copper" -> "rgb178,103;76;";
+          case "diamond" -> "rgb109,233,207;";
+          case "emerald" -> "rgb17,158,53;";
+          case "gold" -> "rgb219,175,44;";
+          case "iron" -> "rgb233,233,233;";
+          case "lapis" -> "rgb64,109,149;";
+          case "netherite" -> "rgb97,87,88;";
+          case "quartz" -> "rgb224,209,194;";
+          case "redstone" -> "rgb149,22,7;";
+          default -> "&7&o";
+        };
+        lore.add(ComponentUtil.translate(color + "trim_pattern.minecraft." + trimPattern.getKey().getKey()));
+        lore.add(ComponentUtil.translate(color + "trim_material.minecraft." + trimMaterial.getKey().getKey()));
+      }
+      else
+      {
+        itemMeta.removeItemFlags(ItemFlag.HIDE_ARMOR_TRIM);
       }
     }
   }
