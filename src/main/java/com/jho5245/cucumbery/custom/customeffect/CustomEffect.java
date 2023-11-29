@@ -366,6 +366,7 @@ public class CustomEffect
     return this.effectType.isKeepOnDeath();
   }
 
+  @SuppressWarnings("all")
   public boolean isKeepOnQuit()
   {
     return this.effectType.isKeepOnQuit();
@@ -393,6 +394,7 @@ public class CustomEffect
     return effectType.isTimeHidden() || duration == -1;
   }
 
+  @SuppressWarnings("unused")
   public boolean isTimeHiddenWhenFull()
   {
     return effectType.isTimeHiddenWhenFull() || duration + 1 >= initDuration;
@@ -407,6 +409,7 @@ public class CustomEffect
     return this.effectType.getIcon();
   }
 
+  @SuppressWarnings("unused")
   public boolean isHiddenEnum()
   {
     return this.effectType.isHiddenEnum();

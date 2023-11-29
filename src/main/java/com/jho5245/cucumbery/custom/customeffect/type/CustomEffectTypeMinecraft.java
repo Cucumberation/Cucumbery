@@ -1,7 +1,5 @@
 package com.jho5245.cucumbery.custom.customeffect.type;
 
-import com.jho5245.cucumbery.custom.customeffect.CustomEffect.DisplayType;
-import com.jho5245.cucumbery.custom.customeffect.TypeBuilder;
 import org.bukkit.NamespacedKey;
 import org.bukkit.potion.PotionEffectType;
 

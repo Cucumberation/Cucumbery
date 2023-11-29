@@ -91,6 +91,7 @@ public class MiningManager
    * @param sync          to call event synchronously.
    * @return Player's mining result or null if current block is on cooldown(bedrock), or player cannot mine(protection by 3rd party plugins)
    */
+  @SuppressWarnings("deprecation")
   @Nullable
   public static MiningResult getMiningInfo(@NotNull Player player, @NotNull Location blockLocation, boolean sync)
   {
@@ -109,28 +110,7 @@ public class MiningManager
         return null;
       }
     }
-    // 아니 레지던스 왜 이상해
-    if (Cucumbery.using_Residence)
-    {
-     // try
-     // {
-//        Class<?> clazz = Class.forName("com.bekvon.bukkit.residence.Residence");
-//        Class<?> clazz2 = Class.forName("com.bekvon.bukkit.residence.protection.PlayerManager");
-//        Class<?> clazz3 = Class.forName("com.bekvon.bukkit.residence.containers.ResidencePlayer");
-//        java.lang.reflect.Method method = clazz.getMethod("getPlayerManager");
-//        java.lang.reflect.Method method2 = clazz2.getMethod("getResidencePlayer", Player.class);
-//        java.lang.reflect.Method method3 = clazz3.getMethod("canBreakBlock", Block.class, boolean.class);
-////        Residence.getInstance().getPlayerManager().getResidencePlayer(player);
-//        if (!UserData.EVENT_EXCEPTION_ACCESS.getBoolean(player) && !((boolean) method3.invoke(method2.invoke(method.invoke(clazz), player), blockLocation.getBlock(), false)))
-//        {
-//          return null;
-//        }
-    //  }
-     // catch (Exception e)
-     // {
-//Cucumbery.getPlugin().getLogger().warning(        e.getMessage());
-    //  }
-    }
+
     ItemStack itemStack = player.getInventory().getItemInMainHand().clone();
     if (NBTAPI.isRestricted(player, itemStack, RestrictionType.NO_BREAK))
     {
