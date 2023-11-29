@@ -50,7 +50,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.BoundingBox;
-import org.bukkit.util.Consumer;
+import java.util.function.Consumer;
 import org.bukkit.util.Transformation;
 import org.joml.Vector3f;
 

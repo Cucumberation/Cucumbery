@@ -417,7 +417,7 @@ public class CustomEffectType implements Translatable, EnumHideable
     }
     this.namespacedKey = namespacedKey;
     this.id = namespacedKey.value();
-    this.translationKey = key;
+    this.translationKey = key.isEmpty() ? namespacedKey.value() : key;
     this.shortenTranslationKey = key2;
 
     this.isBuffFreezable = builder.isBuffFreezable();
@@ -450,7 +450,7 @@ public class CustomEffectType implements Translatable, EnumHideable
   {
     this.namespacedKey = namespacedKey;
     this.id = namespacedKey.value();
-    this.translationKey = translationKey;
+    this.translationKey = translationKey.isEmpty() ? namespacedKey.value() : translationKey;
     this.shortenTranslationKey = builder.getShortenTranslationKey();
 
     this.isBuffFreezable = builder.isBuffFreezable();

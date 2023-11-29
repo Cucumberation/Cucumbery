@@ -86,11 +86,13 @@ public class CustomEffectScheduler
 								throw new NullPointerException("Invalid Potion Effect Type: " + namespacedKey.getKey());
 							}
 							PotionEffect potionEffect = livingEntity.getPotionEffect(potionEffectType);
-							if (potionEffect != null && potionEffect.getAmplifier() == customEffect.getAmplifier() && potionEffect.getDuration() != customEffect.getDuration())
+							if (potionEffect != null && potionEffect.getAmplifier() == customEffect.getAmplifier()
+									&& Math.abs(potionEffect.getDuration() - customEffect.getDuration()) > 1)
 							{
 								// 새로운 효과는 지속 시간이 짧으므로 기존 효과를 없애고 새로 지급 (농도 레벨이 다른 모든 효과가 전부 사라짐)
 								livingEntity.removePotionEffect(potionEffectType);
-								new PotionEffect(potionEffectType, Math.max(1, remain), potionEffect.getAmplifier(), potionEffect.isAmbient(), potionEffect.hasParticles(), potionEffect.hasIcon()).apply(livingEntity);
+								new PotionEffect(potionEffectType, Math.max(1, remain - 1), potionEffect.getAmplifier(), potionEffect.isAmbient(), potionEffect.hasParticles(),
+										potionEffect.hasIcon()).apply(livingEntity);
 							}
 						}
 					}
@@ -440,9 +442,14 @@ public class CustomEffectScheduler
 					throw new NullPointerException("Invalid Potion Effect Type: " + customEffectType.getIdString());
 				}
 				PotionEffect potionEffect = livingEntity.getPotionEffect(potionEffectType);
-				if (potionEffect == null || customEffect.getAmplifier() != potionEffect.getAmplifier())
-					livingEntity.addPotionEffect(new PotionEffect(potionEffectType, customEffect.getDuration(), customEffect.getAmplifier(),
-							potionEffect != null && potionEffect.isAmbient(), potionEffect != null && potionEffect.hasParticles(), potionEffect != null && potionEffect.hasIcon()));
+				if (potionEffect == null || customEffect.getAmplifier() != potionEffect.getAmplifier()
+						|| Math.abs(customEffect.getDuration() - potionEffect.getDuration()) > 1)
+				{
+					livingEntity.removePotionEffect(potionEffectType);
+					livingEntity.addPotionEffect(
+							new PotionEffect(potionEffectType, customEffect.getDuration(), customEffect.getAmplifier(), potionEffect != null && potionEffect.isAmbient(),
+									potionEffect != null && potionEffect.hasParticles(), potionEffect != null && potionEffect.hasIcon()));
+				}
 			}
 		}
 	}

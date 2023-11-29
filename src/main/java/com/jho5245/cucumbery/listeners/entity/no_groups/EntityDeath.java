@@ -28,7 +28,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.util.Consumer;
+import java.util.function.Consumer;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 

@@ -4,6 +4,7 @@ import com.jho5245.cucumbery.custom.customeffect.CustomEffect;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCustomMining;
+import com.jho5245.cucumbery.events.entity.EntityCustomEffectAbstractApplyEvent.ApplyReason;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
 import com.jho5245.cucumbery.util.storage.data.Variable;
@@ -60,7 +61,7 @@ public class EntityPotionEffect implements Listener
 				CustomEffectType customEffectType = CustomEffectType.getByKey(effectType.getKey());
 				CustomEffect customEffect = customEffectType != null ? CustomEffectManager.getEffectNullable(entity, customEffectType) : null;
 				if (customEffectType != null && (customEffect == null || customEffect.getAmplifier() != newEffect.getAmplifier()
-						|| Math.abs(customEffect.getDuration() - newEffect.getDuration()) <= 1))
+						|| Math.abs(customEffect.getDuration() - newEffect.getDuration()) >= 2))
 				{
 					// 바닐라 효과와 유사한 커스텀 효과(예: 우유를 마셔도 안사라지는 독)가 있을 경우 효과를 지급하지 않음
 					boolean hasSimilar = false;
@@ -75,7 +76,7 @@ public class EntityPotionEffect implements Listener
 						}
 					}
 					if (!hasSimilar)
-						CustomEffectManager.addEffect(entity, customEffectType, duration, newEffect.getAmplifier());
+						CustomEffectManager.addEffect(entity, new CustomEffect(customEffectType, duration, newEffect.getAmplifier()),  ApplyReason.PLUGIN,false, false);
 				}
 			}
 		}
