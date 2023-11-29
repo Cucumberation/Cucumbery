@@ -67,11 +67,11 @@ public class CommandSummon2 extends CommandBase
       {
         if (entity instanceof Explosive explosive)
         {
-          if (nbtContainer.hasKey("ExplodePower") && nbtContainer.getType("ExplodePower") == NBTType.NBTTagFloat)
+          if (nbtContainer.hasTag("ExplodePower") && nbtContainer.getType("ExplodePower") == NBTType.NBTTagFloat)
           {
             explosive.setYield(nbtContainer.getFloat("ExplodePower"));
           }
-          if (nbtContainer.hasKey("SetFire") && nbtContainer.getType("SetFire") == NBTType.NBTTagByte)
+          if (nbtContainer.hasTag("SetFire") && nbtContainer.getType("SetFire") == NBTType.NBTTagByte)
           {
             explosive.setIsIncendiary(nbtContainer.getBoolean("SetFire"));
           }
@@ -84,6 +84,7 @@ public class CommandSummon2 extends CommandBase
       MessageUtil.sendAdminMessage(sender, "새로운 %s을(를) %s" + (entity instanceof Mob ? "마리" : "개") + " 소환했습니다", entity, Constant.THE_COLOR_HEX + amount);
     }
   }
+  @SuppressWarnings("all")
 
   public void registerCommand(String command, String permission, String... aliases)
   {

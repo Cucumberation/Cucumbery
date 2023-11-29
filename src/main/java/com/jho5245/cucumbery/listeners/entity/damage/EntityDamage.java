@@ -667,10 +667,7 @@ public class EntityDamage implements Listener
         Transformation newTransformation = new Transformation(new Vector3f(0f, 0.5f * sizeModifier, 0f), transformation.getLeftRotation(), transformation.getScale(), transformation.getRightRotation());
         textDisplay.setTransformation(newTransformation);
       }, 12L);
-      Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-      {
-        textDisplay.setTextOpacity((byte) 127);
-      }, 15L);
+      Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> textDisplay.setTextOpacity((byte) 127), 15L);
       Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
       {
         textDisplay.setInterpolationDelay(-1);
