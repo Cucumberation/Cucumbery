@@ -35,6 +35,7 @@ public class TestCommand implements CucumberyCommandExecutor
 		}
 		try
 		{
+			// foo
 			if (args[0].equals("arrow"))
 			{
 				for (Entity entity : SelectorUtil.getEntities(sender, args[1]))
