@@ -581,7 +581,7 @@ public class CustomEffectType implements Translatable, EnumHideable
       }
       return modifiedDescrption;
     }
-    return switch ((this.getNamespacedKey().getNamespace().equals("minecraft") ? "MINECRAFT_" : "") + this.getIdString().toUpperCase())
+    return switch ((this.getNamespacedKey().getNamespace().equals("minecraft") ? "MINECRAFT_" : "") + this.getIdString().split("__")[0].toUpperCase())
             {
               case "MUTE" -> ComponentUtil.translate("채팅을 할 수 없는 상태입니다");
               case "CURSE_OF_MUSHROOM" -> ComponentUtil.translate("농도 레벨 * 0.1% 확률로 5초마다 인벤토리에 버섯이 들어옵니다");
@@ -781,8 +781,8 @@ public class CustomEffectType implements Translatable, EnumHideable
                       .append(ComponentUtil.translate("rg255,204;또한, 스택이 중첩될 수록 최대 지속 시간이 감소합니다"));
               case "MINECRAFT_SPEED" -> VanillaEffectDescription.getDescription(PotionEffectType.SPEED);
               case "MINECRAFT_SLOWNESS" -> VanillaEffectDescription.getDescription(PotionEffectType.SLOW);
-              case "MINECRAFT_HASTE" -> VanillaEffectDescription.getDescription(PotionEffectType.FAST_DIGGING, viewer);
-              case "MINECRAFT_MINING_FATIGUE" -> VanillaEffectDescription.getDescription(PotionEffectType.SLOW_DIGGING, viewer);
+              case "MINECRAFT_HASTE" -> VanillaEffectDescription.getDescription(PotionEffectType.FAST_DIGGING);
+              case "MINECRAFT_MINING_FATIGUE" -> VanillaEffectDescription.getDescription(PotionEffectType.SLOW_DIGGING);
               case "MINECRAFT_STRENGTH" -> VanillaEffectDescription.getDescription(PotionEffectType.INCREASE_DAMAGE);
               case "MINECRAFT_WEAKNESS" -> VanillaEffectDescription.getDescription(PotionEffectType.WEAKNESS);
               case "MINECRAFT_INSTANT_DAMAGE" -> VanillaEffectDescription.getDescription(PotionEffectType.HARM);
@@ -840,7 +840,7 @@ public class CustomEffectType implements Translatable, EnumHideable
     }
     ItemStack itemStack = new ItemStack(Material.STONE);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    switch (this.getIdString().toUpperCase())
+    switch (this.getIdString().split("__")[0].toUpperCase())
     {
       case "AWKWARD", "CHEESE_EXPERIMENT", "VAR_PNEUMONIA" -> itemStack = new ItemStack(Material.PUFFERFISH);
       case "BANE_OF_ARTHROPODS", "DARKNESS_TERROR_RESISTANCE" -> itemStack = new ItemStack(Material.GLOW_INK_SAC);
@@ -930,11 +930,15 @@ public class CustomEffectType implements Translatable, EnumHideable
   /**
    * @return 아이콘에 부여할 CustomModelData magic value입니다
    */
+  @SuppressWarnings("all")
   public int getId()
   {
     if (this.namespacedKey.getNamespace().equals("minecraft"))
     {
-      PotionEffectType effectType = PotionEffectType.getByKey(namespacedKey);
+      NamespacedKey key = namespacedKey;
+      if (key.getKey().contains("__"))
+        key = new NamespacedKey(key.getNamespace(), key.getKey().split("__")[0]);
+      PotionEffectType effectType = PotionEffectType.getByKey(key);
       if (effectType != null)
       {
         return 15200 + effectType.getId();
@@ -1220,6 +1224,7 @@ public class CustomEffectType implements Translatable, EnumHideable
     return isEnumHidden;
   }
 
+  @SuppressWarnings("all")
   public boolean isStackDisplayed()
   {
     return isStackDisplayed;

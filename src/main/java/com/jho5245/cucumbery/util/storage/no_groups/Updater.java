@@ -106,6 +106,7 @@ public class Updater
    * @return 다운로드한 플러그인 패키지 파일
    * @throws Exception 오류
    */
+  @SuppressWarnings("all")
   public static File download(String version) throws Exception
   {
     File file = new File(PLUGINS_DIR + "/" + version + ".temp");
@@ -114,15 +115,15 @@ public class Updater
     {
       if (file.exists())
       {
-        if (!file.delete()) MessageUtil.consoleSendMessage("Updater Error");
-      }
-      if (!file.getParentFile().mkdirs()) MessageUtil.consoleSendMessage("Updater Error");
-      if (!file.createNewFile()) MessageUtil.consoleSendMessage("Updater Error");
-    }
+				file.delete();
+			}
+			file.getParentFile().mkdirs();
+			file.createNewFile();
+		}
     catch (SecurityException | IOException exception)
     {
-      if (!file.delete()) MessageUtil.consoleSendMessage("Updater Error");
-      throw exception;
+			file.delete();
+			throw exception;
     }
 
     try

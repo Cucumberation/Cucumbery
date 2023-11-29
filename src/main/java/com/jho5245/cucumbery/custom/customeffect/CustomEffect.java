@@ -142,7 +142,7 @@ public class CustomEffect
   @NotNull
   public Component getDescription(@Nullable Player viewer, boolean excludeProperty)
   {
-    Component description = switch ((this.effectType.getNamespacedKey().getNamespace().equals("minecraft") ? "MINECRAFT_" : "") + effectType.getIdString().toUpperCase())
+    Component description = switch ((this.effectType.getNamespacedKey().getNamespace().equals("minecraft") ? "MINECRAFT_" : "") + effectType.getIdString().split("__")[0].toUpperCase())
             {
               case "CURSE_OF_MUSHROOM" -> ComponentUtil.translate("%s 확률로 5초마다 인벤토리에 버섯이 들어옵니다", Constant.THE_COLOR_HEX + ((amplifier + 1) / 10d) + "%");
               case "FEATHER_FALLING" -> ComponentUtil.translate("낙하 피해를 받기 위한 최소 높이가 %sm 증가하고,", Constant.THE_COLOR_HEX + ((amplifier + 1) * 5))

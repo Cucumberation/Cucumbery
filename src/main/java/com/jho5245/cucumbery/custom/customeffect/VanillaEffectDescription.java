@@ -24,28 +24,21 @@ public class VanillaEffectDescription
   @NotNull
   public static Component getDescription(@NotNull PotionEffectType type)
   {
-    return getDescription(type, null);
-  }
-
-  @NotNull
-  public static Component getDescription(@NotNull PotionEffectType type, @Nullable Player viewer)
-  {
-    boolean hasCustomMining = viewer != null && CustomEffectManager.hasEffect(viewer, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE);
     if (type.equals(PotionEffectType.SPEED))
     {
-      return ComponentUtil.translate("이동 속도가 증가합니다. %s와(과) 곱적용됩니다", "&c" + TranslatableKeyParser.getKey(PotionEffectType.SLOW));
+      return ComponentUtil.translate("이동 속도가 증가합니다. %s와(과) 곱적용됩니다", "&ctranslate:" + TranslatableKeyParser.getKey(PotionEffectType.SLOW));
     }
     if (type.equals(PotionEffectType.SLOW))
     {
-      return ComponentUtil.translate("이동 속도가 감소합니다. %s와(과) 곱적용됩니다", "&a" + TranslatableKeyParser.getKey(PotionEffectType.SPEED));
+      return ComponentUtil.translate("이동 속도가 감소합니다. %s와(과) 곱적용됩니다", "&atranslate:" + TranslatableKeyParser.getKey(PotionEffectType.SPEED));
     }
     if (type.equals(PotionEffectType.FAST_DIGGING))
     {
-      return ComponentUtil.translate("채광 속도와 공격 속도가 증가합니다. %s와(과) 곱적용됩니다", "translate:&c" + TranslatableKeyParser.getKey(PotionEffectType.SLOW_DIGGING));
+      return ComponentUtil.translate("채광 속도와 공격 속도가 증가합니다. %s와(과) 곱적용됩니다", "&atranslate:" + TranslatableKeyParser.getKey(PotionEffectType.SLOW_DIGGING));
     }
     if (type.equals(PotionEffectType.SLOW_DIGGING))
     {
-      return ComponentUtil.translate("채광 속도와 공격 속도가 감소합니다. %s와(과) 곱적용됩니다", "translate:&a" + TranslatableKeyParser.getKey(PotionEffectType.FAST_DIGGING));
+      return ComponentUtil.translate("채광 속도와 공격 속도가 감소합니다. %s와(과) 곱적용됩니다", "&ctranslate:" + TranslatableKeyParser.getKey(PotionEffectType.FAST_DIGGING));
     }
     if (type.equals(PotionEffectType.INCREASE_DAMAGE))
     {
@@ -196,11 +189,13 @@ public class VanillaEffectDescription
     int duration = potionEffect.getDuration();
     if (type.equals(PotionEffectType.SPEED))
     {
-      return ComponentUtil.translate("이동 속도가 %s 증가합니다. %s와(과) 곱적용됩니다", Constant.THE_COLOR_HEX + (amplifier + 1) * 20 + "%", PotionEffectType.SLOW);
+      return ComponentUtil.translate("이동 속도가 %s 증가합니다. %s와(과) 곱적용됩니다", Constant.THE_COLOR_HEX + (amplifier + 1) * 20 + "%",
+          "&ctranslate:" + TranslatableKeyParser.getKey(PotionEffectType.SLOW));
     }
     if (type.equals(PotionEffectType.SLOW))
     {
-      return ComponentUtil.translate("이동 속도가 %s 감소합니다. %s와(과) 곱적용됩니다", Constant.THE_COLOR_HEX + Math.min(100, (amplifier + 1) * 15) + "%", PotionEffectType.SPEED);
+      return ComponentUtil.translate("이동 속도가 %s 감소합니다. %s와(과) 곱적용됩니다", Constant.THE_COLOR_HEX + Math.min(100, (amplifier + 1) * 15) + "%",
+          "&atranslate:" + TranslatableKeyParser.getKey(PotionEffectType.SPEED));
     }
     if (type.equals(PotionEffectType.FAST_DIGGING))
     {
@@ -228,13 +223,15 @@ public class VanillaEffectDescription
       }
       return ComponentUtil.translate("채광 속도가 %s 증가하고 공격 속도가", Constant.THE_COLOR_HEX + display)
               .append(Component.text("\n"))
-              .append(ComponentUtil.translate("%s 증가합니다. %s와(과) 곱적용됩니다", Constant.THE_COLOR_HEX + (amplifier + 1) * 10 + "%", PotionEffectType.SLOW_DIGGING));
+              .append(ComponentUtil.translate("%s 증가합니다. %s와(과) 곱적용됩니다", Constant.THE_COLOR_HEX + (amplifier + 1) * 10 + "%",
+                  "&ctranslate:" + TranslatableKeyParser.getKey(PotionEffectType.SLOW_DIGGING)));
     }
     if (type.equals(PotionEffectType.SLOW_DIGGING))
     {
       return ComponentUtil.translate("채광 속도가 %s 감소하고 공격 속도가", Constant.THE_COLOR_HEX + Constant.Sosu2.format(100 - Math.pow(0.3, amplifier + 1) * 100) + "%")
               .append(Component.text("\n"))
-              .append(ComponentUtil.translate("%s 감소합니다. %s와(과) 곱적용됩니다", Constant.THE_COLOR_HEX + Math.min(10, amplifier + 1) * 10 + "%", PotionEffectType.FAST_DIGGING));
+              .append(ComponentUtil.translate("%s 감소합니다. %s와(과) 곱적용됩니다", Constant.THE_COLOR_HEX + Math.min(10, amplifier + 1) * 10 + "%",
+                  "&atranslate:" + TranslatableKeyParser.getKey(PotionEffectType.FAST_DIGGING)));
     }
     if (type.equals(PotionEffectType.INCREASE_DAMAGE))
     {
@@ -377,9 +374,33 @@ public class VanillaEffectDescription
     }
     if (type.equals(PotionEffectType.CONDUIT_POWER))
     {
-      return ComponentUtil.translate("채광 속도가 %s 증가하고 공격 속도가 %s 증가합니다. %s와(과) 곱적용됩니다. 또한, 어두운", Constant.THE_COLOR_HEX + (amplifier + 1) * 20 + "%", Constant.THE_COLOR_HEX + (amplifier + 1) * 10 + "%", PotionEffectType.SLOW_DIGGING)
+      String display;
+      if (hasCustomMining)
+      {
+        Block block = viewer.getTargetBlockExact(5);
+        MiningResult miningResult = MiningManager.getMiningInfo(viewer, block != null ? block.getLocation() : viewer.getLocation().add(0, -1, 0), true);
+        String formula = Cucumbery.config.getString("custom-mining.haste", "0.2*%mining_speed%*%level%")
+            .replace("%level%", (amplifier + 1) + "").replace("%mining_speed%", (miningResult != null ? miningResult.miningSpeedBeforeHaste() : 50) + "");
+        float value = 0f;
+        try
+        {
+          value = Float.parseFloat(PlaceHolderUtil.evalString("{eval:" + formula + "}"));
+        }
+        catch (NumberFormatException e)
+        {
+          MessageUtil.sendWarn(Bukkit.getConsoleSender(), "config.yml 파일에서 custom-mining.haste의 값이 잘못 지정되어 있습니다!");
+        }
+        display = Constant.Sosu2.format(value);
+      }
+      else
+      {
+        display = (amplifier + 1) * 20 + "%";
+      }
+      return ComponentUtil.translate("채광 속도가 %s 증가하고 공격 속도가 %s 증가합니다.", display, Constant.THE_COLOR_HEX + (amplifier + 1) * 10 + "%")
               .append(Component.text("\n"))
-              .append(ComponentUtil.translate("곳과 물 속을 밝게 볼 수 있고 익사 피해를 입지 않고 물 속에서 숨을 쉴 수 있게 됩니다"));
+              .append(ComponentUtil.translate("%s와(과) 곱적용됩니다. 또한 어두운 곳과 물 속을 밝게", "&ctranslate:" + TranslatableKeyParser.getKey(PotionEffectType.SLOW_DIGGING)))
+              .append(Component.text("\n"))
+              .append(ComponentUtil.translate("볼 수 있고, 익사 피해를 입지 않고 물 속에서 숨을 쉴 수 있게 됩니다"));
     }
     if (type.equals(PotionEffectType.HERO_OF_THE_VILLAGE))
     {

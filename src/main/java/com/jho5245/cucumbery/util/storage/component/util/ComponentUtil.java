@@ -235,7 +235,7 @@ public class ComponentUtil
 				Component concat = ComponentUtil.translate(effectKey,
 						CustomEffectManager.isVanillaNegative(potionEffectType) ? NamedTextColor.RED : NamedTextColor.GREEN);
 				Component hover = ComponentUtil.translate(effectKey);
-				hover = hover.append(VanillaEffectDescription.getDescription(potionEffectType, player));
+				hover = hover.append(VanillaEffectDescription.getDescription(potionEffectType));
 				if (player == null || player.hasPermission("asdf"))
 				{
 					hover = hover.append(Component.text("\n"));

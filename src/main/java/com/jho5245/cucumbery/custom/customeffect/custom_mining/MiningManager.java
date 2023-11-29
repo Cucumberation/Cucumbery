@@ -1069,6 +1069,11 @@ public class MiningManager
         {
           potionHasteLevel = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.HASTE).getAmplifier() + 1;
         }
+        
+        // 전달체의 힘 효과도 채광 속도를 증가시켜 주나 중첩되지 않음
+        PotionEffect conduitPower = player.getPotionEffect(PotionEffectType.CONDUIT_POWER);
+        potionHasteLevel = Math.max(potionHasteLevel, conduitPower != null ? conduitPower.getAmplifier() + 1 : 0);
+
         if (potionHasteLevel > 0)
         {
           String formula = Cucumbery.config.getString("custom-mining.haste", "0.2*%mining_speed%*%level%")

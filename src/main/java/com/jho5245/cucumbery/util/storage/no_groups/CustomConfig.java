@@ -2,7 +2,6 @@ package com.jho5245.cucumbery.util.storage.no_groups;
 
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.commands.sound.CommandSong;
-import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.no_groups.Method2;
 import com.jho5245.cucumbery.util.storage.data.Constant.AllPlayer;
@@ -39,16 +38,8 @@ public class CustomConfig
 				if (!file.getParentFile().exists())
 				{
 					boolean success = file.getParentFile().mkdirs();
-					if (!success)
-					{
-						MessageUtil.consoleSendMessage(getClass().getSimpleName() + " Error");
-					}
 				}
 				boolean success2 = file.createNewFile();
-				if (!success2)
-				{
-					MessageUtil.consoleSendMessage(getClass().getSimpleName() + " Updater Error");
-				}
 			}
 			catch (Exception e)
 			{

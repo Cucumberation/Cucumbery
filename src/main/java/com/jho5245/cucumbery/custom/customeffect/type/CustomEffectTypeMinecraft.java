@@ -1,5 +1,7 @@
 package com.jho5245.cucumbery.custom.customeffect.type;
 
+import com.jho5245.cucumbery.custom.customeffect.CustomEffect.DisplayType;
+import com.jho5245.cucumbery.custom.customeffect.TypeBuilder;
 import org.bukkit.NamespacedKey;
 import org.bukkit.potion.PotionEffectType;
 
@@ -39,7 +41,11 @@ public class CustomEffectTypeMinecraft extends CustomEffectType
           BAD_OMEN = new CustomEffectType(NamespacedKey.minecraft("bad_omen"), PotionEffectType.BAD_OMEN.translationKey(), builder().removeOnMilk().negative().maxAmplifier(255)),
           HERO_OF_THE_VILLAGE = new CustomEffectType(NamespacedKey.minecraft("hero_of_the_village"), PotionEffectType.HERO_OF_THE_VILLAGE.translationKey(), builder().removeOnMilk().maxAmplifier(255)),
           DARKNESS = new CustomEffectType(NamespacedKey.minecraft("darkness"), PotionEffectType.DARKNESS.translationKey(), builder().removeOnMilk().negative().maxAmplifier(255)),
-          POISON_M = new CustomEffectType(NamespacedKey.minecraft("poison_m"), PotionEffectType.POISON.translationKey(), builder().negative().enumHidden().maxAmplifier(255));
+          SPEED__M = new CustomEffectType(NamespacedKey.minecraft("speed__m"), PotionEffectType.SPEED.translationKey(), builder().maxAmplifier(255)),
+          SPEED__MR = new CustomEffectType(NamespacedKey.minecraft("speed__mr"), PotionEffectType.SPEED.translationKey(), builder().realDuration().maxAmplifier(255)),
+          SLOWNESS__M = new CustomEffectType(NamespacedKey.minecraft("slowness__m"), PotionEffectType.SLOW.translationKey(), builder().negative().maxAmplifier(255)),
+          POISON__M = new CustomEffectType(NamespacedKey.minecraft("poison__m"), PotionEffectType.POISON.translationKey(), builder().negative().maxAmplifier(255))
+              ;
 
   protected static void registerEffect()
   {
@@ -48,7 +54,7 @@ public class CustomEffectTypeMinecraft extends CustomEffectType
             RESISTANCE, FIRE_RESISTANCE, WATER_BREATHING, INVISIBILITY, BLINDNESS, NIGHT_VISION, HUNGER, WEAKNESS, POISON, WITHER,
             HEALTH_BOOST, ABSORPTION, SATURATION, GLOWING, LEVITATION, LUCK, UNLUCK, SLOW_FALLING, CONDUIT_POWER, DOLPHINS_GRACE,
             BAD_OMEN, HERO_OF_THE_VILLAGE, DARKNESS,
-            POISON_M
+            SPEED__M, SPEED__MR, SLOWNESS__M, POISON__M
     );
   }
 }
