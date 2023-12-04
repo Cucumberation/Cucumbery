@@ -168,6 +168,8 @@ public class ItemLore2
     }
     // custom material 유무에 상관 없이 아이템 설명 추가
     ItemLore2Meta2.setItemLore(item, type, customMaterial, itemMeta, lore, nbtItem, hideFireworkEffects);
+    // 생성 알 설명
+    ItemLoreSpawnEgg.setItemLore(item, itemMeta, lore, viewer);
     // 블록 엔티티 태그 설명
     ItemLore2BlockState.setItemLore(item, type, itemMeta, lore, nbtItem, hideBlockState, params);
     // 블록 데이터 태그 설명
