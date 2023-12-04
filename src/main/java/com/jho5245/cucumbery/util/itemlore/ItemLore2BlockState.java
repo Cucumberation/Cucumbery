@@ -365,7 +365,9 @@ public class ItemLore2BlockState
 					lore.add(ComponentUtil.translate("&7생성 수 : %s", spawnCount));
 					lore.add(ComponentUtil.translate("&7생성 거리 : %s", spawnRange));
 				}
-				if (blockState instanceof BrushableBlock brushableBlock)
+
+				// 2023.12.05 bug getItem()
+				if (false && blockState instanceof BrushableBlock brushableBlock)
 				{
 					ItemStack itemStack = brushableBlock.getItem();
 					if (ItemStackUtil.itemExists(itemStack))
