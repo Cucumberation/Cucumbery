@@ -128,7 +128,7 @@ public class Scheduler
     {
       playerExpireHandItemAsync();
     }, 1200L, 1200L);
-    Bukkit.getServer().getScheduler().runTaskTimer(cucumbery, () ->
+    Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(cucumbery, () ->
     {
       Initializer.saveUserData();
       Initializer.saveItemUsageData();

@@ -74,7 +74,7 @@ public class CommandViewInventory implements CucumberyCommandExecutor
           clone.setContents(contents);
           player.openInventory(clone);
           MessageUtil.info(player, ComponentUtil.translate("%s의 인벤토리 내용을 참조합니다", inventoryHolder));
-          MessageUtil.sendAdminMessage(player, "%s의 인벤토리 내용을 참조합니다", player, inventoryHolder);
+          MessageUtil.sendAdminMessage(player, "%s의 인벤토리 내용을 참조합니다", inventoryHolder);
         }
         else
         {

@@ -377,6 +377,7 @@ public class CustomConfig
 		SHOW_DEATH_PVP_MESSAGE("데스-메시지-PVP-표시", true),
 
 		SHOW_DEATH_LOCATION_ON_CHAT("사망-시-죽은-위치-채팅창에-표시", false),
+		DISALBE_PORTAL_USAGE_ON_CREATIVE("크리에이티브에서-포탈-사용-비활성화", false),
 		;
 
 		private final String key;

@@ -8,6 +8,7 @@ import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import de.tr7zw.changeme.nbtapi.NBTType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -263,7 +264,7 @@ public class ItemLore2BlockState
 						Long seed = null;
 						if (blockEntityTag != null)
 						{
-							seed = blockEntityTag.getLong("LootTableSeed");
+							seed = blockEntityTag.hasTag("LootTableSeed") && blockEntityTag.getType("LootTableSeed") == NBTType.NBTTagLong ? blockEntityTag.getLong("LootTableSeed") : null;
 						}
 						lore.add(Component.empty());
 						lore.add(ComponentUtil.translate("&7루트테이블 : %s", lootTable.getKey()));
@@ -365,9 +366,7 @@ public class ItemLore2BlockState
 					lore.add(ComponentUtil.translate("&7생성 수 : %s", spawnCount));
 					lore.add(ComponentUtil.translate("&7생성 거리 : %s", spawnRange));
 				}
-
-				// 2023.12.05 bug getItem()
-				if (false && blockState instanceof BrushableBlock brushableBlock)
+				if (blockState instanceof BrushableBlock brushableBlock)
 				{
 					ItemStack itemStack = brushableBlock.getItem();
 					if (ItemStackUtil.itemExists(itemStack))

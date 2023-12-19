@@ -37,12 +37,12 @@ public class VanillaEffectDescription
 		if (type.equals(PotionEffectType.FAST_DIGGING))
 		{
 			return ComponentUtil.translate("채광 속도와 공격 속도가 증가합니다. %s와(과) 곱적용됩니다",
-					ComponentUtil.translate("&atranslate:" + TranslatableKeyParser.getKey(PotionEffectType.SLOW_DIGGING)));
+					ComponentUtil.translate("&a" + TranslatableKeyParser.getKey(PotionEffectType.SLOW_DIGGING)));
 		}
 		if (type.equals(PotionEffectType.SLOW_DIGGING))
 		{
 			return ComponentUtil.translate("채광 속도와 공격 속도가 감소합니다. %s와(과) 곱적용됩니다",
-					ComponentUtil.translate("&ctranslate:" + TranslatableKeyParser.getKey(PotionEffectType.FAST_DIGGING)));
+					ComponentUtil.translate("&c" + TranslatableKeyParser.getKey(PotionEffectType.FAST_DIGGING)));
 		}
 		if (type.equals(PotionEffectType.INCREASE_DAMAGE))
 		{
@@ -222,14 +222,14 @@ public class VanillaEffectDescription
 			}
 			return ComponentUtil.translate("채광 속도가 %s 증가하고 공격 속도가", Constant.THE_COLOR_HEX + display).append(Component.text("\n")).append(
 					ComponentUtil.translate("%s 증가합니다. %s와(과) 곱적용됩니다", Constant.THE_COLOR_HEX + (amplifier + 1) * 10 + "%",
-							"&ctranslate:" + TranslatableKeyParser.getKey(PotionEffectType.SLOW_DIGGING)));
+							"&c" + TranslatableKeyParser.getKey(PotionEffectType.SLOW_DIGGING)));
 		}
 		if (type.equals(PotionEffectType.SLOW_DIGGING))
 		{
 			return ComponentUtil.translate("채광 속도가 %s 감소하고 공격 속도가", Constant.THE_COLOR_HEX + Constant.Sosu2.format(100 - Math.pow(0.3, amplifier + 1) * 100) + "%")
 					.append(Component.text("\n")).append(
 							ComponentUtil.translate("%s 감소합니다. %s와(과) 곱적용됩니다", Constant.THE_COLOR_HEX + Math.min(10, amplifier + 1) * 10 + "%",
-									"&atranslate:" + TranslatableKeyParser.getKey(PotionEffectType.FAST_DIGGING)));
+									"&a" + TranslatableKeyParser.getKey(PotionEffectType.FAST_DIGGING)));
 		}
 		if (type.equals(PotionEffectType.INCREASE_DAMAGE))
 		{

@@ -48,7 +48,7 @@ public class ItemLore2Anvil
           {
             what = 0.5d;
           }
-          if (what > 0d)
+          if ((long) what > 0)
           {
             penalty /= (long) what;
           }
