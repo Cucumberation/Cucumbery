@@ -302,7 +302,6 @@ public class CustomConfig
 		ITEM_DROP_DELAY_ALERT("아이템-버리기-딜레이-금지-타이틀-띄움", false),
 		ITEM_DROP_MODE("아이템-버리기-모드", "normal"),
 		ITEM_PICKUP_MODE("아이템-줍기-모드", "normal"),
-
 		ITEM_USE_DELAY("아이템-사용-딜레이", 2),
 		LISTEN_CHAT("채팅-소리-들음", true),
 		LISTEN_CHAT_FORCE("채팅-소리-무조건-들음", false),
@@ -372,10 +371,8 @@ public class CustomConfig
 		USE_QUICK_COMMAND_BLOCK("빠른-명령-블록-사용", false),
 		UUID("UUID", "플레이어-UUID"),
 		SHOW_DEATH_MESSAGE("데스-메시지-표시", true),
-
 		SHOW_DEATH_SELF_MESSAGE("자신의-데스-메시지-표시", true),
 		SHOW_DEATH_PVP_MESSAGE("데스-메시지-PVP-표시", true),
-
 		SHOW_DEATH_LOCATION_ON_CHAT("사망-시-죽은-위치-채팅창에-표시", false),
 		DISABLE_PORTAL_USAGE_ON_CREATIVE("크리에이티브에서-포탈-사용-비활성화", false),
 		;

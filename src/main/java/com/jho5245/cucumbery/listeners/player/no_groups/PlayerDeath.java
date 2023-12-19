@@ -86,7 +86,9 @@ public class PlayerDeath implements Listener
       if (!customEffect.isKeepOnDeath() &&
               (!hasBuffFreeze || (!customEffect.getType().isBuffFreezable() && !customEffect.getType().isNegative())))
       {
-        CustomEffectManager.removeEffect(player, customEffect.getType(), RemoveReason.DEATH);
+        // for some case
+        Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+            CustomEffectManager.removeEffect(player, customEffect.getType(), RemoveReason.DEATH), 0L);
       }
     }
     if (UserData.IMMEDIATE_RESPAWN.getBoolean(player))
