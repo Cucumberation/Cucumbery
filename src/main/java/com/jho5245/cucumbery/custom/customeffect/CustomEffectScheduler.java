@@ -158,7 +158,15 @@ public class CustomEffectScheduler
 			}
 			return false;
 		});
-		List<PotionEffect> potionEffects = CustomEffectManager.removeDisplay(player, player.getActivePotionEffects());
+		List<PotionEffect> potionEffects;
+		try
+		{
+			potionEffects = CustomEffectManager.removeDisplay(player, player.getActivePotionEffects());
+		}
+		catch (ConcurrentModificationException ignored)
+		{
+			potionEffects = new ArrayList<>();
+		}
 		boolean showPotionEffect = Cucumbery.config.getBoolean("show-vanilla-potion-effects-on-bossbar") && !potionEffects.isEmpty();
 		if (!showPotionEffect && customEffects.isEmpty())
 		{
