@@ -20,7 +20,7 @@ public class PlayerPortal implements Listener
 
 		Player player = event.getPlayer();
 
-		if (player.getGameMode() == GameMode.CREATIVE && UserData.DISALBE_PORTAL_USAGE_ON_CREATIVE.getBoolean(player))
+		if (player.getGameMode() == GameMode.CREATIVE && UserData.DISABLE_PORTAL_USAGE_ON_CREATIVE.getBoolean(player))
 		{
 			event.setCancelled(true);
 			MessageUtil.sendWarn(player, "포탈 사용이 비활성화되어있는 상태입니다.");
