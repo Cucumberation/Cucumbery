@@ -12,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
+import org.bukkit.enchantments.EnchantmentWrapper;
 import org.bukkit.entity.EntityCategory;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -207,7 +208,7 @@ public abstract class CustomEnchant extends Enchantment
 
 	private static CustomEnchant registerEnchant(@NotNull CustomEnchant enchant)
 	{
-		Enchantment.registerEnchantment(enchant);
+		// Enchantment.registerEnchantment(enchant);
 		byKey.put(enchant.getKey(), enchant);
 		byName.put(enchant.getName(), enchant);
 		return enchant;
@@ -218,14 +219,18 @@ public abstract class CustomEnchant extends Enchantment
 		return GLOW != null;
 	}
 
+	private final NamespacedKey key;
+
 	public CustomEnchant(@NotNull NamespacedKey namespacedKey)
 	{
-		super(namespacedKey);
+//		super(namespacedKey);
+		this.key = namespacedKey;
 	}
 
 	public CustomEnchant(@NotNull String name)
 	{
-		super(Objects.requireNonNull(NamespacedKey.fromString(name, Cucumbery.getPlugin())));
+		// super(Objects.requireNonNull(NamespacedKey.fromString(name, Cucumbery.getPlugin())));
+		this.key = NamespacedKey.fromString(name, Cucumbery.getPlugin());
 	}
 
 	@Override
@@ -339,6 +344,12 @@ public abstract class CustomEnchant extends Enchantment
   {
     return 0;
   }
+
+	@Override
+	public @NotNull NamespacedKey getKey()
+	{
+		return key;
+	}
 
 	public static void onEnable()
 	{

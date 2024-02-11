@@ -97,7 +97,7 @@ public class ItemLore
     NBTCompoundList potionsTag = NBTAPI.getCompoundList(itemTagReadOnly, CucumberyTag.CUSTOM_EFFECTS);
     if (Cucumbery.config.getBoolean("use-no-effect-potions-weirdly") && itemStack.getItemMeta() instanceof PotionMeta potionMeta && potionsTag == null)
     {
-      PotionType potionType = potionMeta.getBasePotionData().getType();
+      PotionType potionType = potionMeta.getBasePotionType();
       CustomEffectType customEffectType = switch (potionType)
       {
         case AWKWARD -> CustomEffectType.AWKWARD;
@@ -189,7 +189,7 @@ public class ItemLore
     long rarityValue = rarity.getRarityValue();
     // 기본 설명 추가(공백, 종류, 등급)
     // 아이템의 맨 첫번째 설명은 아이템의 등급 수치 추가
-    List<Component> defaultLore = new ArrayList<>(Collections.singletonList(ComponentUtil.translate(ItemLoreUtil.FIRST_LINE_EMPTY_LORE).args(Component.text(rarityValue))));
+    List<Component> defaultLore = new ArrayList<>(Collections.singletonList(ComponentUtil.translate(ItemLoreUtil.FIRST_LINE_EMPTY_LORE).arguments(Component.text(rarityValue))));
     // 그 다음 2번째 설명에는 아이템의 종류를 추가
     Component itemGroupComponent = ComponentUtil.translate("&7아이템 종류 : [%s]", itemGroup);
     defaultLore.add(itemGroupComponent);

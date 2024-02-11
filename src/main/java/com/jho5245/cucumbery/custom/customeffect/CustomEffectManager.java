@@ -250,10 +250,21 @@ public class CustomEffectManager
 
 	public static boolean removeEffect(@NotNull Entity entity, @NotNull CustomEffectType effectType)
 	{
-		return removeEffect(entity, effectType, RemoveReason.PLUGIN);
+		return removeEffect(entity, effectType, RemoveReason.PLUGIN, false);
 	}
 
+	public static boolean removeEffect(@NotNull Entity entity, @NotNull CustomEffectType effectType, boolean callEvent)
+	{
+		return removeEffect(entity, effectType, RemoveReason.PLUGIN, callEvent);
+	}
+
+
 	public static boolean removeEffect(@NotNull Entity entity, @NotNull CustomEffectType effectType, @NotNull EntityCustomEffectRemoveEvent.RemoveReason reason)
+	{
+		return removeEffect(entity, effectType, reason, true);
+	}
+
+	public static boolean removeEffect(@NotNull Entity entity, @NotNull CustomEffectType effectType, @NotNull EntityCustomEffectRemoveEvent.RemoveReason reason, boolean callEvent)
 	{
 		if (!hasEffect(entity, effectType))
 		{
@@ -265,7 +276,7 @@ public class CustomEffectManager
 		{
 			if (effect.getType() == effectType)
 			{
-				if (effect.getType().doesCallEvent())
+				if (callEvent && effect.getType().doesCallEvent())
 				{
 					EntityCustomEffectPreRemoveEvent event = new EntityCustomEffectPreRemoveEvent(entity, effect, reason);
 					try
@@ -292,7 +303,7 @@ public class CustomEffectManager
 		{
 			for (CustomEffect effect : removed)
 			{
-				if (effect.getType().doesCallEvent())
+				if (callEvent && effect.getType().doesCallEvent())
 				{
 					EntityCustomEffectRemoveEvent event = new EntityCustomEffectRemoveEvent(entity, effect, reason);
 					try

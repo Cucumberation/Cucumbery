@@ -653,7 +653,7 @@ public class Method extends SoundPlay
 				case JUNGLE_SAPLING:
 				case ACACIA_SAPLING:
 				case DARK_OAK_SAPLING:
-				case GRASS:
+				case SHORT_GRASS:
 				case GRASS_BLOCK:
 				case FERN:
 				case DEAD_BUSH:

@@ -206,7 +206,7 @@ public class Cucumbery extends JavaPlugin
 		}
 		catch (Throwable e)
 		{
-			Cucumbery.getPlugin().getLogger().warning(e.getMessage());
+			getLogger().warning(e.getMessage());
 		}
 	}
 
@@ -542,7 +542,7 @@ public class Cucumbery extends JavaPlugin
 		}
 		try
 		{
-			this.registerEvents();
+			// this.registerEvents();
 		}
 		catch (Throwable e)
 		{

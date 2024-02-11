@@ -59,33 +59,6 @@ public class BlockPlaceDataConfig extends ChunkConfig
 				config.save();
 			}
 		});
-/*    if (!keySet.isEmpty())
-    {
-      Timer timer = new Timer();
-      TimerTask task = new TimerTask()
-      {
-        @Override
-        public void run()
-        {
-          if (keySet.isEmpty())
-          {
-            timer.cancel();
-            return;
-          }
-          if (MAP.containsKey(keySet.get(0)))
-          {
-            BlockPlaceDataConfig cfg = MAP.get(keySet.get(0));
-            if (cfg != null)
-            {
-              cfg.saveConfig();
-            }
-            keySet.remove(0);
-          }
-        }
-      };
-      timer.schedule(task, 0, 50);
-      TIMERS.add(timer);
-    }*/
 		MAP.keySet().removeIf(s -> !MAP.get(s).getChunk().isLoaded());
 	}
 

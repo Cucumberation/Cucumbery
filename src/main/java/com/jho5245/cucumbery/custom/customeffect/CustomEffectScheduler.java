@@ -450,13 +450,16 @@ public class CustomEffectScheduler
 					throw new NullPointerException("Invalid Potion Effect Type: " + customEffectType.getIdString());
 				}
 				PotionEffect potionEffect = livingEntity.getPotionEffect(potionEffectType);
-				if (potionEffect == null || customEffect.getAmplifier() != potionEffect.getAmplifier()
+				if (potionEffect == null || customEffect.getAmplifier() > potionEffect.getAmplifier()
 						|| Math.abs(customEffect.getDuration() - potionEffect.getDuration()) > 1)
 				{
 					livingEntity.removePotionEffect(potionEffectType);
 					livingEntity.addPotionEffect(
-							new PotionEffect(potionEffectType, customEffect.getDuration(), customEffect.getAmplifier(), potionEffect != null && potionEffect.isAmbient(),
-									potionEffect != null && potionEffect.hasParticles(), potionEffect != null && potionEffect.hasIcon()));
+							new PotionEffect(potionEffectType, customEffect.getDuration(),
+									Math.max(customEffect.getAmplifier(), potionEffect != null ? potionEffect.getAmplifier() : 0),
+									potionEffect != null && potionEffect.isAmbient(),
+									potionEffect != null && potionEffect.hasParticles(),
+									potionEffect != null && potionEffect.hasIcon()));
 				}
 			}
 		}

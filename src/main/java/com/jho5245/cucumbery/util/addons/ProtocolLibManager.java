@@ -18,22 +18,29 @@ import com.jho5245.cucumbery.custom.customeffect.children.group.LocationCustomEf
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCustomMining;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeMinecraft;
+import com.jho5245.cucumbery.util.itemlore.ItemLore;
+import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
+import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method2;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.Variable;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.World;
+import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
+import net.kyori.adventure.text.Component;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.MerchantRecipe;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Constructor;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 public class ProtocolLibManager
 {
@@ -316,6 +323,44 @@ Cucumbery.getPlugin().getLogger().warning(                t.getMessage());
               }
             }
           }
+        }
+      }
+    });
+
+    protocolManager.addPacketListener(new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.NORMAL, Server.WINDOW_ITEMS, Server.OPEN_WINDOW_MERCHANT,
+        Server.SET_SLOT)
+    {
+      @Override
+      public void onPacketSending(PacketEvent event)
+      {
+        if (!Cucumbery.using_ProtocolLib)
+        {
+          return;
+        }
+        PacketContainer packet = event.getPacket();
+        Player player = event.getPlayer();
+        if (packet.getType() == Server.WINDOW_ITEMS)
+        {
+          StructureModifier<List<ItemStack>> modifier = packet.getItemListModifier();
+          for (ItemStack itemStack : modifier.read(0))
+          {
+            if (!ItemStackUtil.itemExists(itemStack))
+              continue;
+            ItemLore.setItemLore(itemStack, ItemLoreView.of(player));
+          }
+        }
+        else if (packet.getType() == Server.OPEN_WINDOW_MERCHANT)
+        {
+          StructureModifier<List<MerchantRecipe>> modifier = packet.getMerchantRecipeLists();
+        }
+        else if (packet.getType() == Server.SET_SLOT)
+        {
+          StructureModifier<ItemStack> modifier = packet.getItemModifier();
+          ItemStack itemStack = modifier.read(0);
+
+          if (!ItemStackUtil.itemExists(itemStack))
+            return;
+          ItemLore.setItemLore(itemStack, ItemLoreView.of(player));
         }
       }
     });

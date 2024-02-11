@@ -4,9 +4,13 @@ import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent.Completion;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
+import io.papermc.paper.inventory.tooltip.TooltipContext;
+import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.command.*;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -102,6 +106,13 @@ public class TestCommand implements CucumberyCommandExecutor
 					}
 				}
 				return true;
+			}
+			if (args[0].equals("tooltip"))
+			{
+				Player player = (Player) sender;
+				ItemStack itemStack = player.getInventory().getItemInMainHand();
+				List<Component> components = itemStack.computeTooltipLines(TooltipContext.create(Boolean.parseBoolean(args[1]), true), player);
+				components.forEach(component -> player.sendMessage(component));
 			}
 
 /*			RecipeChoice ingredient = PotionMix.createPredicateChoice(itemStack -> CustomMaterial.itemStackOf(itemStack) == CustomMaterial.JADE);

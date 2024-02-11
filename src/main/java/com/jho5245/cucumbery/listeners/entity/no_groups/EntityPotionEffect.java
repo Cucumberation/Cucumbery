@@ -93,6 +93,10 @@ public class EntityPotionEffect implements Listener
 				if (Math.abs(customEffect.getDuration() - oldEffect.getDuration()) <= 1 && customEffect.getAmplifier() == oldEffect.getAmplifier())
 				{
 					CustomEffectManager.removeEffect(entity, customEffectType, oldEffect.getAmplifier(), false);
+					if (cause == Cause.COMMAND)
+					{
+						CustomEffectManager.removeEffect(entity, customEffectType, false);
+					}
 				}
 			}
 		}
