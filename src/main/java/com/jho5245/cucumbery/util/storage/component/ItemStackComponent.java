@@ -3,6 +3,7 @@ package com.jho5245.cucumbery.util.storage.component;
 import com.comphenix.protocol.PacketType.Play.Server;
 import com.jho5245.cucumbery.util.addons.ProtocolLibManager;
 import com.jho5245.cucumbery.util.itemlore.ItemLore;
+import com.jho5245.cucumbery.util.itemlore.ItemLore.RemoveFlag;
 import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
@@ -73,27 +74,23 @@ public class ItemStackComponent
 			@Nullable Player viewer)
 	{
 		itemStack = itemStack.clone();
-		final Material originType = itemStack.getType();
 		ItemLore.removeItemLore(itemStack);
 		final ItemStack giveItem = itemStack.clone();
 		itemStack.setAmount(Math.max(1, Math.min(64, itemStack.getAmount())));
 		Component itemName = ItemNameUtil.itemName(itemStack, defaultColor, true);
 		ItemStack hover = new ItemStack(Material.BUNDLE);
-		ItemMeta itemMeta = itemStack.getItemMeta();
 		BundleMeta bundleMeta = (BundleMeta) hover.getItemMeta();
-		boolean isStorageMeta = false;
 		if (viewer != null)
 		{
-			boolean showItemLore = UserData.SHOW_ITEM_LORE.getBoolean(viewer), showEnchantGlints = UserData.SHOW_ENCHANTED_ITEM_GLINTS.getBoolean(
-					viewer), showAll = UserData.EVENT_EXCEPTION_ACCESS.getBoolean(viewer);
+			boolean showItemLore = UserData.SHOW_ITEM_LORE.getBoolean(viewer), showAll = UserData.EVENT_EXCEPTION_ACCESS.getBoolean(viewer);
 			NBTItem nbtItem = new NBTItem(itemStack.clone());
 			@Nullable NBTCompound itemTag = nbtItem.getCompound(CucumberyTag.KEY_MAIN);
 			NBTList<String> hideFlags = NBTAPI.getStringList(itemTag, CucumberyTag.HIDE_FLAGS_KEY);
 			boolean hideFlagsTagExists = hideFlags != null;
-			//showEnchantGlints = showEnchantGlints && !(hideFlagsTagExists && NBTAPI.arrayContainsValue(hideFlags, CucumberyHideFlag.ENCHANTS_GLINTS));
-			boolean showEnchants = !(hideFlagsTagExists && NBTAPI.arrayContainsValue(hideFlags, CucumberyHideFlag.ENCHANTS)) && !itemMeta.hasItemFlag(ItemFlag.HIDE_ENCHANTS);
 			ItemStack clone = itemStack.clone();
 			ItemMeta cloneMeta = clone.getItemMeta();
+			boolean showEnchants =
+					!(hideFlagsTagExists && NBTAPI.arrayContainsValue(hideFlags, CucumberyHideFlag.ENCHANTS)) && !cloneMeta.hasItemFlag(ItemFlag.HIDE_ENCHANTS);
 			if (showItemLore) // 아이템 설명을 사용할 경우 큐컴버리의 setItemLore의 설명만 사용하고 모든 ItemFlag 추가
 			{
 				ItemLore.setItemLore(clone, false, ItemLoreView.of(viewer));
@@ -118,38 +115,6 @@ public class ItemStackComponent
 			{
 				tooltip.add(0, ComponentUtil.translate("&8관리자 권한으로 숨겨진 마법을 참조합니다"));
 			}
-/*			if (!showEnchantGlints)
-			{
-				itemMeta.removeEnchantments();
-				switch (clone.getType())
-				{
-					case ENCHANTED_GOLDEN_APPLE, ENCHANTED_BOOK, END_CRYSTAL, NETHER_STAR, EXPERIENCE_BOTTLE ->
-					{
-						isStorageMeta = clone.getType() == Material.ENCHANTED_BOOK;
-						Material type = switch (clone.getType())
-						{
-							case ENCHANTED_BOOK -> Material.BOOK;
-							case ENCHANTED_GOLDEN_APPLE -> Material.GOLDEN_APPLE;
-							case END_CRYSTAL -> Material.PURPLE_STAINED_GLASS_PANE;
-							case NETHER_STAR -> Material.SUGAR;
-							case EXPERIENCE_BOTTLE -> Material.LIME_CANDLE;
-							default -> clone.getType();
-						};
-						itemStack.setType(type);
-						final Component displayName = itemMeta.displayName();
-						if (displayName == null)
-						{
-							itemMeta.displayName(ItemNameUtil.itemName(originType));
-						}
-						else if (displayName.color() == null)
-						{
-							ItemStack clone2 = clone.clone();
-							clone2.setType(originType);
-							itemMeta.displayName(displayName.color(ItemNameUtil.itemName(clone2).color()));
-						}
-					}
-				}
-			}*/
 			for (int i = 0; i < tooltip.size(); i++)
 			{
 				Component tooltip1 = tooltip.get(i);
@@ -187,19 +152,9 @@ public class ItemStackComponent
 			}
 			bundleMeta.lore(tooltip);
 		}
-		itemStack.setItemMeta(itemMeta);
 		bundleMeta.addItem(viewer != null ? ProtocolLibManager.setItemLore(Server.WINDOW_ITEMS, itemStack, viewer) : itemStack);
 		bundleMeta.addItemFlags(ItemFlag.values());
-		if (isStorageMeta)
-		{
-			ItemStack temp = new ItemStack(originType);
-			temp.setItemMeta(itemMeta);
-			bundleMeta.displayName(ItemNameUtil.itemName(temp));
-		}
-		else
-		{
-			bundleMeta.displayName(ItemNameUtil.itemName(itemStack));
-		}
+		bundleMeta.displayName(ItemNameUtil.itemName(itemStack));
 		hover.setItemMeta(bundleMeta);
 		if (itemName instanceof TextComponent textComponent && textComponent.content().isEmpty())
 		{
