@@ -12,6 +12,7 @@ import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.SoundCategory;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -62,7 +63,7 @@ public class BlockDamage implements Listener
       {
         if (CustomMaterial.itemStackOf(BlockPlaceDataConfig.getItem(location)) == CustomMaterial.SUS)
         {
-          SoundPlay.playSound(player, "custom_sus_breaking");
+          SoundPlay.playSound(player, "custom_sus_breaking", SoundCategory.BLOCKS, 0.8, 1);
         }
         CustomEffectManager.addEffect(player, new LocationCustomEffectImple(CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PROGRESS, location));
       }

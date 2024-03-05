@@ -459,89 +459,90 @@ public class Constant
 
   public enum CucumberyHideFlag
   {
-    ENCHANTS("마법 부여 숨김"),
-    ENCHANTS_TMI("TMI 마법 부여 숨김"),
-    TMI_DESCRIPTION("추가 TMI 설명 숨김"),
-    ATTRIBUTE_MODIFIERS("속성 수식어 숨김"),
-    DURABILITY("내구도 숨김"),
-    DURABILITY_CHANCE_NOT_TO_CONSUME("내구도 감소 무효 확률 숨김"),
+    EXISTENCE("존재감 숨김"),
+    EXISTENCE_ON_VILLAGER_TRADE("주민 거래에서 존재감 숨김"),
+    ABOVE_CUSTOM_LORE("상단 커스텀 설명 숨김"),
     ANVIL_USE_TIME("모루 사용 횟수 숨김"),
-    STATUS_EFFECTS("상태 효과 숨김"),
-    FIREWORK_EFFECTS("폭죽 효과 숨김"),
-    FIREWORK_FLIGHT_TIME("폭죽 체공 시간 숨김"),
-    COMPOSTABLE("퇴비 제작 확률 숨김"),
-    PLACABLE("설치 가능 숨김"),
-    CRAFTABLE("조합 가능 숨김"),
-    SMELTABLE("제련 가능 숭김"),
-    FUEL("연소 가능 숨김"),
-    CONSUMABLE("섭취 가능 숨김"),
-    BREWABLE("양조 가능 숨김"),
+    ATTRIBUTE_MODIFIERS("속성 수식어 숨김"),
     BANNER_PATTERN("현수막 무늬 숨김"),
-    STORAGE_CONTENTS("컨테이너 내용물 숨김"),
-    BOOK_TAG("책 태그 숨김"),
-    EXPIRE_DATE("유효 기간 숨김"),
-    CAN_PLACE_ON("마인크래프트 이 위에 설치 가능 숨김"),
-    CAN_DESTROY("마인크래프트 부술 수 있는 것 숨김"),
-
-
-    COOLDOWN("대기 시간 숨김"),
-
-    COOLDOWN_RIGHT_CLICK(ItemUsageType.RIGHT_CLICK.getDisplay() + " 대기 시간 숨김"),
-    COOLDOWN_LEFT_CLICK(ItemUsageType.LEFT_CLICK.getDisplay() + " 대기 시간 숨김"),
-
-    COOLDOWN_ATTACKS("공격 관련 대기 시간 숨김"),
-
-    COOLDOWN_ATTACK(ItemUsageType.ATTACK.getDisplay() + " 대기 시간 숨김"),
-    COOLDOWN_ATTACK_PLAYER(ItemUsageType.ATTACK_PLAYER.getDisplay() + " 대기 시간 숨김"),
-    COOLDOWN_ATTACK_ENTITY(ItemUsageType.ATTACK_ENTITY.getDisplay() + " 대기 시간 숨김"),
-
-    COOLDOWN_ATTACK_MELEE(ItemUsageType.ATTACK_MELEE.getDisplay() + " 대기 시간 숨김"),
-    COOLDOWN_ATTACK_PLAYER_MELEE(ItemUsageType.ATTACK_PLAYER_MELEE.getDisplay() + " 대기 시간 숨김"),
-    COOLDOWN_ATTACK_ENTITY_MELEE(ItemUsageType.ATTACK_ENTITY_MELEE.getDisplay() + " 대기 시간 숨김"),
-
-    COOLDOWN_ATTACK_RANGED(ItemUsageType.ATTACK_RANGED.getDisplay() + " 대기 시간 숨김"),
-    COOLDOWN_ATTACK_PLAYER_RANGED(ItemUsageType.ATTACK_PLAYER_RANGED.getDisplay() + " 대기 시간 숨김"),
-    COOLDOWN_ATTACK_ENTITY_RANGED(ItemUsageType.ATTACK_ENTITY_RANGED.getDisplay() + " 대기 시간 숨김"),
-
-    COOLDOWN_SNEAK_ATTACK(ItemUsageType.SNEAK_ATTACK.getDisplay() + " 대기 시간 숨김"),
-    COOLDOWN_SNEAK_ATTACK_PLAYER(ItemUsageType.SNEAK_ATTACK_PLAYER.getDisplay() + " 대기 시간 숨김"),
-    COOLDOWN_SNEAK_ATTACK_ENTITY(ItemUsageType.SNEAK_ATTACK_ENTITY.getDisplay() + " 대기 시간 숨김"),
-
-    COOLDOWN_SNEAK_ATTACK_MELEE(ItemUsageType.SNEAK_ATTACK_MELEE.getDisplay() + " 대기 시간 숨김"),
-    COOLDOWN_SNEAK_ATTACK_PLAYER_MELEE(ItemUsageType.SNEAK_ATTACK_PLAYER_MELEE.getDisplay() + " 대기 시간 숨김"),
-    COOLDOWN_SNEAK_ATTACK_ENTITY_MELEE(ItemUsageType.SNEAK_ATTACK_ENTITY_MELEE.getDisplay() + " 대기 시간 숨김"),
-
-    COOLDOWN_SNEAK_ATTACK_RANGED(ItemUsageType.SNEAK_ATTACK_RANGED.getDisplay() + " 대기 시간 숨김"),
-    COOLDOWN_SNEAK_ATTACK_PLAYER_RANGED(ItemUsageType.SNEAK_ATTACK_PLAYER_RANGED.getDisplay() + " 대기 시간 숨김"),
-    COOLDOWN_SNEAK_ATTACK_ENTITY_RANGED(ItemUsageType.SNEAK_ATTACK_ENTITY_RANGED.getDisplay() + " 대기 시간 숨김"),
-
-
-    COOLDOWN_CONSUME(ItemUsageType.CONSUME.getDisplay() + " 대기 시간 숨김"),
-    COOLDOWN_RESURRECT(ItemUsageType.RESURRECT.getDisplay() + " 대기 시간 숨김"),
-    COOLDOWN_SNEAK(ItemUsageType.SNEAK.getDisplay() + " 대기 시간 숨김"),
-    COOLDOWN_SWAP(ItemUsageType.SWAP.getDisplay() + " 대기 시간 숨김"),
-
     BANNER_PATTERN_ITEM("현수막 무늬의 무늬 설명 숨김"),
-    CUSTOM_NAME("바닥에 떨어뜨렸을 때 네임 태그 숨김"),
+    BEACON("신호기 설명 숨김"),
     BLOCK_DATA("블록 데이터 태그 숨김"),
     BLOCK_STATE("블록 엔티티 태그 숨김"),
-    RESTRICTION("사용 제한 태그 숨김"),
-    MUSIC_DISC("곡 설명 숨김"),
-    TOTEM_OF_UNDYING("불사의 토템 설명 숨김"),
-    PLAYER_HEAD("플레이어 머리 정보 숨김"),
-    DEBUG_STICK("디버그 막대기의 디버그 속성 숨김"),
+    BOOK_TAG("책 태그 숨김"),
+    BREWABLE("양조 가능 숨김"),
+    CAN_DESTROY("마인크래프트 부술 수 있는 것 숨김"),
+    CAN_PLACE_ON("마인크래프트 이 위에 설치 가능 숨김"),
     COMMAND_BLOCK("명령 블록 태그 숨김"),
-    BEACON("신호기 설명 숨김"),
-    JUKEBOX("주크박스 태그 숨김"),
-    LECTERN("독서대의 등록된 책 정보 태그 숨김"),
-    LEATHER_COLOR("가죽 관련 아이템 색상 태그 숨김"),
-    LODESTONE_LOCATION("자석석 좌표 태그 숨김"),
-    CUSTOM_LORE("커스텀 설명 숨김"),
-    ABOVE_CUSTOM_LORE("상단 커스텀 설명 숨김"),
+    COMPOSTABLE("퇴비 제작 확률 숨김"),
+    CONSUMABLE("섭취 가능 숨김"),
+    COOLDOWN("대기 시간 숨김"),
+    COOLDOWN_ATTACK(ItemUsageType.ATTACK.getDisplay() + " 대기 시간 숨김"),
+    COOLDOWN_ATTACKS("공격 관련 대기 시간 숨김"),
+    COOLDOWN_ATTACK_ENTITY(ItemUsageType.ATTACK_ENTITY.getDisplay() + " 대기 시간 숨김"),
+    COOLDOWN_ATTACK_ENTITY_MELEE(ItemUsageType.ATTACK_ENTITY_MELEE.getDisplay() + " 대기 시간 숨김"),
+    COOLDOWN_ATTACK_ENTITY_RANGED(ItemUsageType.ATTACK_ENTITY_RANGED.getDisplay() + " 대기 시간 숨김"),
+    COOLDOWN_ATTACK_MELEE(ItemUsageType.ATTACK_MELEE.getDisplay() + " 대기 시간 숨김"),
+    COOLDOWN_ATTACK_PLAYER(ItemUsageType.ATTACK_PLAYER.getDisplay() + " 대기 시간 숨김"),
+    COOLDOWN_ATTACK_PLAYER_MELEE(ItemUsageType.ATTACK_PLAYER_MELEE.getDisplay() + " 대기 시간 숨김"),
 
-    ORIGINAL_DISPLAY_NAME("원래 이름 표시 설명 숨김"),
+    COOLDOWN_ATTACK_PLAYER_RANGED(ItemUsageType.ATTACK_PLAYER_RANGED.getDisplay() + " 대기 시간 숨김"),
+
+    COOLDOWN_ATTACK_RANGED(ItemUsageType.ATTACK_RANGED.getDisplay() + " 대기 시간 숨김"),
+    COOLDOWN_CONSUME(ItemUsageType.CONSUME.getDisplay() + " 대기 시간 숨김"),
+
+    COOLDOWN_LEFT_CLICK(ItemUsageType.LEFT_CLICK.getDisplay() + " 대기 시간 숨김"),
+
+    COOLDOWN_RESURRECT(ItemUsageType.RESURRECT.getDisplay() + " 대기 시간 숨김"),
+    COOLDOWN_RIGHT_CLICK(ItemUsageType.RIGHT_CLICK.getDisplay() + " 대기 시간 숨김"),
+    COOLDOWN_SNEAK(ItemUsageType.SNEAK.getDisplay() + " 대기 시간 숨김"),
+
+    COOLDOWN_SNEAK_ATTACK(ItemUsageType.SNEAK_ATTACK.getDisplay() + " 대기 시간 숨김"),
+    COOLDOWN_SNEAK_ATTACK_ENTITY(ItemUsageType.SNEAK_ATTACK_ENTITY.getDisplay() + " 대기 시간 숨김"),
+    COOLDOWN_SNEAK_ATTACK_ENTITY_MELEE(ItemUsageType.SNEAK_ATTACK_ENTITY_MELEE.getDisplay() + " 대기 시간 숨김"),
+
+    COOLDOWN_SNEAK_ATTACK_ENTITY_RANGED(ItemUsageType.SNEAK_ATTACK_ENTITY_RANGED.getDisplay() + " 대기 시간 숨김"),
+    COOLDOWN_SNEAK_ATTACK_MELEE(ItemUsageType.SNEAK_ATTACK_MELEE.getDisplay() + " 대기 시간 숨김"),
+    COOLDOWN_SNEAK_ATTACK_PLAYER(ItemUsageType.SNEAK_ATTACK_PLAYER.getDisplay() + " 대기 시간 숨김"),
+
+    COOLDOWN_SNEAK_ATTACK_PLAYER_MELEE(ItemUsageType.SNEAK_ATTACK_PLAYER_MELEE.getDisplay() + " 대기 시간 숨김"),
+    COOLDOWN_SNEAK_ATTACK_PLAYER_RANGED(ItemUsageType.SNEAK_ATTACK_PLAYER_RANGED.getDisplay() + " 대기 시간 숨김"),
+    COOLDOWN_SNEAK_ATTACK_RANGED(ItemUsageType.SNEAK_ATTACK_RANGED.getDisplay() + " 대기 시간 숨김"),
+
+    COOLDOWN_SWAP(ItemUsageType.SWAP.getDisplay() + " 대기 시간 숨김"),
+    CRAFTABLE("조합 가능 숨김"),
+    CUSTOM_LORE("커스텀 설명 숨김"),
 
     CUSTOM_MININGS("채굴 관련 설명 숨김"),
+    CUSTOM_NAME("바닥에 떨어뜨렸을 때 네임 태그 숨김"),
+    DEBUG_STICK("디버그 막대기의 디버그 속성 숨김"),
+
+    DURABILITY("내구도 숨김"),
+    DURABILITY_CHANCE_NOT_TO_CONSUME("내구도 감소 무효 확률 숨김"),
+    ENCHANTS("마법 부여 숨김"),
+    ENCHANTS_GLINTS("마법이 부여된 아이템 반짝임 표시 숨김"),
+
+    ENCHANTS_TMI("TMI 마법 부여 숨김"),
+    EXPIRE_DATE("유효 기간 숨김"),
+    FIREWORK_EFFECTS("폭죽 효과 숨김"),
+    FIREWORK_FLIGHT_TIME("폭죽 체공 시간 숨김"),
+    FUEL("연소 가능 숨김"),
+    JUKEBOX("주크박스 태그 숨김"),
+    LEATHER_COLOR("가죽 관련 아이템 색상 태그 숨김"),
+    LECTERN("독서대의 등록된 책 정보 태그 숨김"),
+    LODESTONE_LOCATION("자석석 좌표 태그 숨김"),
+    MUSIC_DISC("곡 설명 숨김"),
+    ORIGINAL_DISPLAY_NAME("원래 이름 표시 설명 숨김"),
+    PLACABLE("설치 가능 숨김"),
+    PLAYER_HEAD("플레이어 머리 정보 숨김"),
+    RESTRICTION("사용 제한 태그 숨김"),
+    SMELTABLE("제련 가능 숭김"),
+    STATUS_EFFECTS("상태 효과 숨김"),
+    STORAGE_CONTENTS("컨테이너 내용물 숨김"),
+
+    TMI_DESCRIPTION("추가 TMI 설명 숨김"),
+
+    TOTEM_OF_UNDYING("불사의 토템 설명 숨김"),
     ;
 
     private final String display;

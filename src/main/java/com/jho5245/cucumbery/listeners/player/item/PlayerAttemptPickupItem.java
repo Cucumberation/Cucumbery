@@ -72,8 +72,6 @@ public class PlayerAttemptPickupItem implements Listener
 			return;
 		}
 
-		ItemLore.setItemLore(itemStack);
-		item.setItemStack(itemStack);
 		CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
 		if (customMaterial != null)
 		{

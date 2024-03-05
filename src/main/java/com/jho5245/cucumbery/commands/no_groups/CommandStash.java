@@ -77,11 +77,6 @@ public class CommandStash implements CommandExecutor, TabCompleter, AsyncTabComp
     {
       ItemStack itemStack = stash.get(i).clone();
       itemStack = itemStack.clone();
-      ItemLore.setItemLore(itemStack, ItemLoreView.of(player));
-      if (ItemLoreUtil.isCucumberyTMIFood(itemStack))
-      {
-        ItemLoreUtil.removeCucumberyTMIFood(itemStack);
-      }
       ItemMeta itemMeta = itemStack.getItemMeta();
       List<Component> lore = itemMeta.lore();
       if (lore == null)

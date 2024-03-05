@@ -283,18 +283,7 @@ public class Scheduler
         mountLoop(entity);
       }
     }
-//    for (World world : Bukkit.getWorlds())
-//    {
-//      for (Chunk chunk : world.getLoadedChunks())
-//      {
-//        for (Entity entity : chunk.getEntities())
-//        {
-//          // 커스텀 인챈트
-//          customEnchant(entity);
-//        }
-//      }
-//    }
-  }
+	}
 
   private static void playerTickAsync()
   {
@@ -304,11 +293,6 @@ public class Scheduler
       showSpectatorTargetInfoActionbar(player);
       // 주로 사용하는 손에 들고 있는 아이템의 재사용/재발동 대기 시간 액션바에 표시
       showCooldownActionbar(player);
-      // 특정 인벤토리(숫돌, 지도 제작대, 석재 절단기 등)의 인벤토리 결과물 실시간 업데이트
-      if (Cucumbery.config.getBoolean("use-helpful-lore-feature"))
-      {
-        itemLore(player);
-      }
       // 명령 블록 명령어 미리 보기
       commandBlockPreviewAsync(player);
       worldEditPositionParticleAsync(player);
@@ -391,12 +375,16 @@ public class Scheduler
       player.getWorld().getPlayers().forEach(p ->
       {
         ItemStack itemStack = Objects.requireNonNull(playerInventory.getHelmet()).clone();
+        ItemLore.setItemLore(itemStack, ItemLoreView.of(player));
         org.bukkit.inventory.meta.Damageable damageable = (org.bukkit.inventory.meta.Damageable) itemStack.getItemMeta();
         int damage = damageable.getDamage(), maxDamage = itemStack.getType().getMaxDurability();
+        MessageUtil.broadcastDebug(damage);
         itemStack.setType(Material.LEATHER_HELMET);
         int newMaxDamage = itemStack.getType().getMaxDurability();
         damage *= (int) (1d * newMaxDamage / maxDamage);
-        damageable.setDamage(damage);
+        MessageUtil.broadcast(newMaxDamage + ", " + maxDamage);
+        damageable.setDamage(damageable.getDamage() > 0 ? Math.max(1, damage) : damage);
+        MessageUtil.broadcastDebug(damage);
         itemStack.setItemMeta(damageable);
         LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
         leatherArmorMeta.addItemFlags(ItemFlag.HIDE_DYE);
@@ -417,6 +405,7 @@ public class Scheduler
       player.getWorld().getPlayers().forEach(p ->
       {
         ItemStack itemStack = Objects.requireNonNull(playerInventory.getChestplate()).clone();
+        ItemLore.setItemLore(itemStack, ItemLoreView.of(player));
         org.bukkit.inventory.meta.Damageable damageable = (org.bukkit.inventory.meta.Damageable) itemStack.getItemMeta();
         int damage = damageable.getDamage(), maxDamage = itemStack.getType().getMaxDurability();
         itemStack.setType(Material.LEATHER_CHESTPLATE);
@@ -443,6 +432,7 @@ public class Scheduler
       player.getWorld().getPlayers().forEach(p ->
       {
         ItemStack itemStack = Objects.requireNonNull(playerInventory.getLeggings()).clone();
+        ItemLore.setItemLore(itemStack, ItemLoreView.of(player));
         org.bukkit.inventory.meta.Damageable damageable = (org.bukkit.inventory.meta.Damageable) itemStack.getItemMeta();
         int damage = damageable.getDamage(), maxDamage = itemStack.getType().getMaxDurability();
         itemStack.setType(Material.LEATHER_LEGGINGS);
@@ -469,6 +459,7 @@ public class Scheduler
       player.getWorld().getPlayers().forEach(p ->
       {
         ItemStack itemStack = Objects.requireNonNull(playerInventory.getBoots()).clone();
+        ItemLore.setItemLore(itemStack, ItemLoreView.of(player));
         org.bukkit.inventory.meta.Damageable damageable = (org.bukkit.inventory.meta.Damageable) itemStack.getItemMeta();
         int damage = damageable.getDamage(), maxDamage = itemStack.getType().getMaxDurability();
         itemStack.setType(Material.LEATHER_BOOTS);
@@ -1435,215 +1426,12 @@ public class Scheduler
     }
   }
 
-  public static void itemLore(@NotNull Player player) // 아이템 설명 자동설정
-  {
-    if (player.getGameMode() == GameMode.SPECTATOR)
-    {
-      return;
-    }
-    World world = player.getLocation().getWorld();
-
-    if (player.getOpenInventory().getType() == InventoryType.CARTOGRAPHY)
-    {
-      ItemStack item = player.getOpenInventory().getTopInventory().getItem(2);
-      if (item != null)
-      {
-        Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-                ItemLore.setItemLore(item, new ItemLoreView(player)), 0L);
-      }
-      // 지도 제작대에서 지도 결과물 아이템 실시간 반영
-    }
-    if (player.getOpenInventory().getType() == InventoryType.STONECUTTER)
-    {
-      ItemStack item = player.getOpenInventory().getTopInventory().getItem(1);
-      if (item != null)
-      {
-        Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-                ItemLore.setItemLore(item, new ItemLoreView(player)), 0L);
-      }
-      // 석재 절단기에서 석재 결과물 아이템 실시간 반영
-    }
-    ItemStack mainHand = player.getInventory().getItemInMainHand(), offHand = player.getInventory().getItemInOffHand();
-    if (ItemStackUtil.itemExists(mainHand))
-    {
-      ItemMeta itemMeta = mainHand.getItemMeta();
-      Material type = mainHand.getType();
-      if (type == Material.WRITABLE_BOOK)
-      {
-        // 야생에서는 불가능. 명령어로 강제로 책의 서명을 없앨때만 생기는 현상
-        if (itemMeta.hasItemFlag(ItemFlag.HIDE_ITEM_SPECIFICS))
-        {
-          ItemLore.setItemLore(mainHand, new ItemLoreView(player));
-        }
-      }
-    }
-    if (ItemStackUtil.itemExists(offHand))
-    {
-      ItemMeta itemMeta = offHand.getItemMeta();
-      Material type = offHand.getType();
-      if (type == Material.WRITABLE_BOOK)
-      {
-        // 야생에서는 불가능. 명령어로 강제로 책의 서명을 없앨때만 생기는 현상
-        if (itemMeta.hasItemFlag(ItemFlag.HIDE_ITEM_SPECIFICS))
-        {
-          ItemLore.setItemLore(offHand, new ItemLoreView(player));
-        }
-      }
-    }
-  }
-
   /**
    * 아이템 유효기간 만료 체크를 5초마다 합니다. 만약 기간이 지난 아이템이 존재하면 삭제합니다. 인벤토리를 열고 있는 상태라면 인벤토리에 있는 아이템도 모두 체크합니다.
    */
   private static void expireItemAvailableTimeAsync() // 아이템 유효 기간
   {
-/*    for (World world : Bukkit.getServer().getWorlds())
-    {
-      for (Chunk chunk : world.getLoadedChunks())
-      {
-        for (Entity entity : chunk.getEntities())
-        {
-          EntityType type = entity.getType();
-          if (type == EntityType.DROPPED_ITEM)
-          {
-            Item itemEntity = (Item) entity;
-            ItemStack item = itemEntity.getItemStack();
-            String expireDate = NBTAPI.getString(NBTAPI.getMainCompound(item), CucumberyTag.EXPIRE_DATE_KEY);
-            if (expireDate != null && Method.isTimeUp(item, expireDate))
-            {
-              ItemLore.setItemLore(item);
-              Location location = itemEntity.getLocation();
-              Collection<Entity> nearByEntites = world.getNearbyEntities(location, 10D, 10D, 10D);
-              for (Entity nearByEntity : nearByEntites)
-              {
-                if (nearByEntity instanceof Player player)
-                {
-                  MessageUtil.info(player, ComponentUtil.translate("근처에 떨어져 있는 아이템 [%s](%s)의 유효 기간이 지나서 아이템이 제거되었습니다", item, location));
-                }
-              }
-              item.setAmount(0);
-              entity.remove();
-            }
-          }
-          if (type == EntityType.ITEM_FRAME)
-          {
-            ItemFrame itemFrame = (ItemFrame) entity;
-            ItemStack item = itemFrame.getItem();
-            String expireDate = NBTAPI.getString(NBTAPI.getMainCompound(item), CucumberyTag.EXPIRE_DATE_KEY);
-            if (expireDate != null && Method.isTimeUp(item, expireDate))
-            {
-              ItemLore.setItemLore(item);
-              Location location = itemFrame.getLocation();
-              Collection<Entity> nearByEntites = world.getNearbyEntities(location, 10D, 10D, 10D);
-              for (Entity nearByEntity : nearByEntites)
-              {
-                if (nearByEntity instanceof Player player)
-                {
-                  MessageUtil.info(player, ComponentUtil.translate("근처에 있는 아이템 액자(%s)에 설치되어 있는 아이템 %s의 유효 기간이 지나서 아이템이 제거되었습니다", location, item));
-                }
-              }
-              itemFrame.setItem(null);
-            }
-          }
-          if (type == EntityType.ARMOR_STAND)
-          {
-            ArmorStand armorStand = (ArmorStand) entity;
-            EntityEquipment entityEquipment = armorStand.getEquipment();
-            ItemStack item = entityEquipment.getHelmet();
-            Location location = armorStand.getLocation();
-            Collection<Entity> nearByEntites = world.getNearbyEntities(location, 10D, 10D, 10D);
-            String expireDate = NBTAPI.getString(NBTAPI.getMainCompound(item), CucumberyTag.EXPIRE_DATE_KEY);
-            if (expireDate != null && Method.isTimeUp(item, expireDate))
-            {
-              ItemLore.setItemLore(item);
-              for (Entity nearByEntity : nearByEntites)
-              {
-                if (nearByEntity.getType() == EntityType.PLAYER)
-                {
-                  Player player = (Player) nearByEntity;
-                  MessageUtil.info(player, ComponentUtil.translate("근처에 있는 갑옷 거치대(%s)의 머리에 장착되어 있는 아이템 %s의 유효 기간이 지나서 아이템이 제거되었습니다", location, item));
-                }
-              }
-              entityEquipment.setHelmet(null);
-            }
-            item = entityEquipment.getChestplate();
-            expireDate = NBTAPI.getString(NBTAPI.getMainCompound(item), CucumberyTag.EXPIRE_DATE_KEY);
-            if (expireDate != null && Method.isTimeUp(item, expireDate))
-            {
-              ItemLore.setItemLore(item);
-
-              for (Entity nearByEntity : nearByEntites)
-              {
-                if (nearByEntity instanceof Player player)
-                {
-                  MessageUtil.info(player, ComponentUtil.translate("근처에 있는 갑옷 거치대(%s)의 몸에 장착되어 있는 아이템 %s의 유효 기간이 지나서 아이템이 제거되었습니다", location, item));
-                }
-              }
-              entityEquipment.setChestplate(null);
-            }
-            item = entityEquipment.getLeggings();
-            expireDate = NBTAPI.getString(NBTAPI.getMainCompound(item), CucumberyTag.EXPIRE_DATE_KEY);
-            if (expireDate != null && Method.isTimeUp(item, expireDate))
-            {
-              ItemLore.setItemLore(item);
-
-              for (Entity nearByEntity : nearByEntites)
-              {
-                if (nearByEntity instanceof Player player)
-                {
-                  MessageUtil.info(player, ComponentUtil.translate("근처에 있는 갑옷 거치대(%s)의 다리에 장착되어 있는 아이템 %s의 유효 기간이 지나서 아이템이 제거되었습니다", location, item));
-                }
-              }
-              entityEquipment.setLeggings(null);
-            }
-            item = entityEquipment.getBoots();
-            expireDate = NBTAPI.getString(NBTAPI.getMainCompound(item), CucumberyTag.EXPIRE_DATE_KEY);
-            if (expireDate != null && Method.isTimeUp(item, expireDate))
-            {
-              ItemLore.setItemLore(item);
-
-              for (Entity nearByEntity : nearByEntites)
-              {
-                if (nearByEntity instanceof Player player)
-                {
-                  MessageUtil.info(player, ComponentUtil.translate("근처에 있는 갑옷 거치대(%s)의 발에 장착되어 있는 아이템 %s의 유효 기간이 지나서 아이템이 제거되었습니다", location, item));
-                }
-              }
-              entityEquipment.setBoots(null);
-            }
-            item = entityEquipment.getItemInMainHand();
-            expireDate = NBTAPI.getString(NBTAPI.getMainCompound(item), CucumberyTag.EXPIRE_DATE_KEY);
-            if (expireDate != null && Method.isTimeUp(item, expireDate))
-            {
-              ItemLore.setItemLore(item);
-              for (Entity nearByEntity : nearByEntites)
-              {
-                if (nearByEntity instanceof Player player)
-                {
-                  MessageUtil.info(player, ComponentUtil.translate("근처에 있는 갑옷 거치대(%s)의 주로 사용하는 손에 장착되어 있는 아이템 %s의 유효 기간이 지나서 아이템이 제거되었습니다", location, item));
-                }
-              }
-              entityEquipment.setItemInMainHand(null);
-            }
-            item = entityEquipment.getItemInOffHand();
-            expireDate = NBTAPI.getString(NBTAPI.getMainCompound(item), CucumberyTag.EXPIRE_DATE_KEY);
-            if (expireDate != null && Method.isTimeUp(item, expireDate))
-            {
-              ItemLore.setItemLore(item);
-              for (Entity nearByEntity : nearByEntites)
-              {
-                if (nearByEntity instanceof Player player)
-                {
-                  MessageUtil.info(player, ComponentUtil.translate("근처에 있는 갑옷 거치대(%s)의 다른 손에 장착되어 있는 아이템 %s의 유효 기간이 지나서 아이템이 제거되었습니다", location, item));
-                }
-              }
-              entityEquipment.setItemInOffHand(null);
-            }
-          }
-        }
-      }
-    }*/
-    for (Player player : Bukkit.getServer().getOnlinePlayers())
+		for (Player player : Bukkit.getServer().getOnlinePlayers())
     {
       if (player.getGameMode() == GameMode.SPECTATOR)
       {

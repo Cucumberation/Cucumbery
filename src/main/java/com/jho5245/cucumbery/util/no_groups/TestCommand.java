@@ -1,8 +1,21 @@
 package com.jho5245.cucumbery.util.no_groups;
 
+import com.comphenix.protocol.PacketType.Play;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.wrappers.*;
+import com.comphenix.protocol.wrappers.EnumWrappers.NativeGameMode;
+import com.comphenix.protocol.wrappers.EnumWrappers.PlayerAction;
+import com.comphenix.protocol.wrappers.EnumWrappers.PlayerInfoAction;
 import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent.Completion;
+import com.destroystokyo.paper.profile.PlayerProfile;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Lists;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
+import com.jho5245.cucumbery.util.addons.ProtocolLibManager;
+import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
 import io.papermc.paper.inventory.tooltip.TooltipContext;
 import net.kyori.adventure.text.Component;
@@ -13,6 +26,8 @@ import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 @SuppressWarnings("all")
@@ -111,8 +126,22 @@ public class TestCommand implements CucumberyCommandExecutor
 			{
 				Player player = (Player) sender;
 				ItemStack itemStack = player.getInventory().getItemInMainHand();
-				List<Component> components = itemStack.computeTooltipLines(TooltipContext.create(Boolean.parseBoolean(args[1]), true), player);
+				List<Component> components = itemStack.computeTooltipLines(TooltipContext.create(Boolean.parseBoolean(args[1]), Boolean.parseBoolean(args[2])),
+						SelectorUtil.getPlayer(sender, args[3]));
 				components.forEach(component -> player.sendMessage(component));
+				player.sendMessage(Component.text("-------------------------------------"));
+				itemStack.computeTooltipLines(TooltipContext.create(true, true), null).forEach(component -> player.sendMessage(component));
+			}
+			if (args[0].equals("item"))
+			{
+				Player player = (Player) sender;
+				MessageUtil.sendMessage(player, "foo is %s", player.getInventory().getItemInMainHand());
+				MessageUtil.sendMessage(player, 30, ComponentUtil.translate(player, "foo foo is %s", player.getInventory().getItemInMainHand()));
+			}
+			if (args[0].equals("tag"))
+			{
+				Player player = (Player) sender;
+				setPlayerNameTag(player, args[1]);
 			}
 
 /*			RecipeChoice ingredient = PotionMix.createPredicateChoice(itemStack -> CustomMaterial.itemStackOf(itemStack) == CustomMaterial.JADE);
@@ -141,6 +170,13 @@ public class TestCommand implements CucumberyCommandExecutor
 			Cucumbery.getPlugin().getLogger().warning(e.getMessage());
 		}
 		return true;
+	}
+
+	public static void setPlayerNameTag(Player player, String name)
+	{
+		PlayerProfile playerProfile = player.getPlayerProfile();
+		playerProfile.setName(name);
+		player.setPlayerProfile(playerProfile);
 	}
 
 	public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args)

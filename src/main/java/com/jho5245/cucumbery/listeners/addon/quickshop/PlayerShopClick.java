@@ -13,8 +13,6 @@ public class PlayerShopClick implements Listener
   @EventHandler
   public void onShopClick(PlayerShopClickEvent event)
   {
-    Shop shop = event.getShop();
-    Player player = event.getPlayer();
-    shop.setItem(ItemLore.setItemLore(shop.getItem(), ItemLoreView.of(player)));
+
   }
 }

@@ -18,14 +18,5 @@ public class PlayerLoomPatternSelect implements Listener
     {
       return;
     }
-    LoomInventory loomInventory = event.getLoomInventory();
-    Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> {
-
-      ItemStack result = loomInventory.getItem(3);
-      if (result != null)
-      {
-        ItemLore.setItemLore(result);
-      }
-    }, 0L);
   }
 }

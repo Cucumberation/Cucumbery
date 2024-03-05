@@ -3,8 +3,6 @@ package com.jho5245.cucumbery.commands.reinforce;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeReinforce;
-import com.jho5245.cucumbery.util.itemlore.ItemLore;
-import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
@@ -699,7 +697,6 @@ public class CommandReinforceConstantsAndUtils extends CommandReinforce
       {
 Cucumbery.getPlugin().getLogger().warning(        e.getMessage());
       }
-      ItemLore.setItemLore(itemStack, new ItemLoreView(player));
       player.getInventory().setItemInMainHand(itemStack);
       operate(player, OperationType.CONTINUE);
     }, 20L);

@@ -1,7 +1,6 @@
 package com.jho5245.cucumbery.commands.debug;
 
 import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent.Completion;
-import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.no_groups.*;
 
 import com.jho5245.cucumbery.util.storage.data.Permission;
@@ -90,7 +89,6 @@ public class CommandCheckAmount implements CucumberyCommandExecutor
 			Damageable duraMeta = (Damageable) compare.getItemMeta();
 			duraMeta.setDamage(durability);
 			compare.setItemMeta(duraMeta);
-			ItemLore.setItemLore(compare);
 			int number;
 			if (isSpace)
 			{

@@ -229,10 +229,6 @@ public class Cucumbery extends JavaPlugin
 							+ "&r 플러그인이 활성화 되었습니다");
 		}
 		MessageUtil.broadcastDebug("Cucumbery 플러그인 활성화");
-		if (config.getBoolean("use-custom-enchant-features") && !CustomEnchant.isEnabled())
-		{
-			MessageUtil.broadcastDebug("커스텀 인챈트 등록 도중 오류가 발생했습니다. 원활한 처리를 위해 서버를 껐다 키는 것을 권장합니다 (플러그인을 업데이트 했나요?)");
-		}
 		for (Player online : Bukkit.getOnlinePlayers())
 		{
 			if (UserData.SHOW_PLUGIN_DEV_DEBUG_MESSAGE.getBoolean(online))
@@ -315,11 +311,11 @@ public class Cucumbery extends JavaPlugin
 		}
 		for (Player player : Bukkit.getServer().getOnlinePlayers())
 		{
-			ItemStackUtil.updateInventory(player);
 			if (using_ProtocolLib)
 			{
 				Bukkit.getScheduler().runTaskLaterAsynchronously(cucumbery, () -> BlockPlaceDataConfig.display(player, player.getLocation()), 0L);
 			}
+			ItemStackUtil.updateInventory(player);
 		}
 		for (World world : Bukkit.getWorlds())
 		{
@@ -328,12 +324,6 @@ public class Cucumbery extends JavaPlugin
 				if (entity.getScoreboardTags().contains("damage_indicator"))
 				{
 					entity.remove();
-					continue;
-				}
-				if (entity instanceof ItemFrame itemFrame)
-				{
-					ItemStack itemStack = itemFrame.getItem();
-					itemFrame.setItem(ItemLore.setItemLore(itemStack));
 				}
 			}
 		}
@@ -542,7 +532,7 @@ public class Cucumbery extends JavaPlugin
 		}
 		try
 		{
-			// this.registerEvents();
+			this.registerEvents();
 		}
 		catch (Throwable e)
 		{

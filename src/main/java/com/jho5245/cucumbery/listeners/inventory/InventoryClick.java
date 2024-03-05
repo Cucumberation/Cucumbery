@@ -10,13 +10,11 @@ import com.jho5245.cucumbery.custom.customrecipe.recipeinventory.RecipeInventory
 import com.jho5245.cucumbery.custom.customrecipe.recipeinventory.RecipeInventoryRecipe;
 import com.jho5245.cucumbery.events.entity.EntityCustomEffectRemoveEvent.RemoveReason;
 import com.jho5245.cucumbery.util.additemmanager.AddItemUtil;
+import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
 import com.jho5245.cucumbery.util.gui.GUIManager;
 import com.jho5245.cucumbery.util.gui.GUIManager.GUIType;
-import com.jho5245.cucumbery.util.itemlore.ItemLore;
-import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
-import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
 import com.jho5245.cucumbery.util.no_groups.ItemSerializer;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method;
@@ -47,11 +45,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.InventoryType.SlotType;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -113,9 +113,8 @@ public class InventoryClick implements Listener
 						}
 						itemStacks.add(itemStack);
 					}
-					else if (ItemStackUtil.itemEquals(ItemLore.setItemLore(ingredient, ItemLoreView.of(player)), itemStack))
+					else if (ItemStackUtil.itemEquals(ingredient, itemStack))
 					{
-						ItemLore.setItemLore(ingredient, ItemLoreView.of(player));
 						int maxStackSize = ingredient.getMaxStackSize();
 						ingredient.setAmount(maxStackSize);
 						int stack = amount / maxStackSize;
@@ -222,8 +221,7 @@ public class InventoryClick implements Listener
 				}
 				else
 				{
-					CustomConfig playerCraftingTimeConfigFile = CustomConfig.getCustomConfig(
-							"data/CustomRecipe/CraftingTime/" + player.getUniqueId().toString() + ".yml");
+					CustomConfig playerCraftingTimeConfigFile = CustomConfig.getCustomConfig("data/CustomRecipe/CraftingTime/" + player.getUniqueId() + ".yml");
 					playerCraftingTimeConfigFile.getConfig().set("crafting-time." + recipeListName + "." + recipe, null);
 					playerCraftingTimeConfig.set("crafting-time." + recipeListName + "." + recipe, null);
 					ConfigurationSection categorySection = playerCraftingTimeConfig.getConfigurationSection("crafting-time." + recipeListName);
@@ -238,7 +236,7 @@ public class InventoryClick implements Listener
 			}
 			else
 			{
-				CustomConfig playerCraftingTimeConfigFile = CustomConfig.getCustomConfig("data/CustomRecipe/CraftingTime/" + player.getUniqueId().toString() + ".yml");
+				CustomConfig playerCraftingTimeConfigFile = CustomConfig.getCustomConfig("data/CustomRecipe/CraftingTime/" + player.getUniqueId() + ".yml");
 				if (playerCraftingTimeConfig == null)
 				{
 					playerCraftingTimeConfig = playerCraftingTimeConfigFile.getConfig();
@@ -415,7 +413,7 @@ public class InventoryClick implements Listener
 	private static void logCraft(Player player, String category, String recipe)
 	{
 		UUID uuid = player.getUniqueId();
-		CustomConfig craftLogConfig = CustomConfig.getCustomConfig("data/CustomRecipe/CraftsLog/" + player.getUniqueId().toString() + ".yml");
+		CustomConfig craftLogConfig = CustomConfig.getCustomConfig("data/CustomRecipe/CraftsLog/" + player.getUniqueId() + ".yml");
 		YamlConfiguration logConfig = Variable.craftsLog.get(uuid), logConfig2 = craftLogConfig.getConfig();
 		if (logConfig == null)
 		{
@@ -429,7 +427,7 @@ public class InventoryClick implements Listener
 		logConfig.set("crafts.recipes." + category + "." + recipe, craftAmount + 1);
 		craftLogConfig.saveConfig();
 		Variable.craftsLog.put(uuid, logConfig);
-		CustomConfig customConfigLastCraft = CustomConfig.getCustomConfig("data/CustomRecipe/LastCraftsLog/" + player.getUniqueId().toString() + ".yml");
+		CustomConfig customConfigLastCraft = CustomConfig.getCustomConfig("data/CustomRecipe/LastCraftsLog/" + player.getUniqueId() + ".yml");
 		YamlConfiguration configLastCraft = customConfigLastCraft.getConfig();
 		configLastCraft.set("last-crafts." + category + "." + recipe, System.currentTimeMillis());
 		customConfigLastCraft.saveConfig();
@@ -1325,6 +1323,7 @@ public class InventoryClick implements Listener
 
 	private void itemLore(InventoryClickEvent event, Player player)
 	{
+
 		// 소리 블록 설명 업데이트 감지
 		if (player.getGameMode() == GameMode.CREATIVE) // 소리 블록을 픽블록 했을 때 해당 블록의 음높이와 악기를 아이템 설명에 복사하는 기능
 		{
@@ -1374,7 +1373,6 @@ public class InventoryClick implements Listener
 								{
 									cursor = nbtItem.getItem();
 									event.setCursor(cursor);
-									ItemStackUtil.updateInventory(player);
 								}
 							}
 							catch (Exception e)
@@ -1426,7 +1424,6 @@ public class InventoryClick implements Listener
 						}
 						cursor = nbtItem.getItem();
 						event.setCursor(cursor);
-						ItemStackUtil.updateInventory(player);
 					}
 					catch (Exception ignored)
 					{
@@ -1436,88 +1433,6 @@ public class InventoryClick implements Listener
 			}
 		}
 
-		int noteSlot = event.getSlot(); // 소리 블록을 인벤토리가 가득 찬 상태에서 휠클릭 하면 간헐적으로 인벤토리에 기존 소리 블록이 생기는 버그를 고치기 위해 필요한 슬롯 변수
-
-		// 석재 절단기 아이템 제작 설명 추가
-		if (event.getInventory().getType() == InventoryType.STONECUTTER)
-		{
-			if ((event.getClick() == ClickType.SHIFT_LEFT || event.getClick() == ClickType.SHIFT_RIGHT) && event.getSlot() == 1
-					&& event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY && event.getSlotType() == InventoryType.SlotType.RESULT)
-			{
-				ItemStack ingre = event.getInventory().getItem(0); // 절단할 돌을 넣는 곳에 있는 아이템
-				ItemStack current = Objects.requireNonNull(event.getCurrentItem()).clone(); // 결과물 슬롯에 있는 아이템 (1~2개)
-				int ingreAmount = Objects.requireNonNull(ingre).getAmount(); // 재료의 개수
-				int currentAmount = current.getAmount(); // 결과물의 개수
-				if (ItemStackUtil.countSpace(player.getInventory(), current) == 1 && currentAmount == 2)
-				{
-					event.setCancelled(true);
-					return;
-				}
-				Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-				{
-					for (int i = 0; i < player.getInventory().getSize(); i++)
-					{
-						ItemStack item = player.getInventory().getItem(i);
-						if (item != null && item.getType() == current.getType() && !item.getItemMeta().hasLore())
-						{
-							player.getInventory().remove(item);
-						}
-					}
-					int space = ItemStackUtil.countSpace(player.getInventory(), current); // 해당 아이템이 인벤토리에 들어갈 수 있는 최대 수
-					int giveAmount = (ingreAmount - 1) * currentAmount; // 지급할 아이템의 양
-					int realAmount = Math.min(space, giveAmount); // 실제로 지급할 아이템의 양
-					if (realAmount > 0)
-					{
-						ingre.setAmount(ingreAmount - 1);
-					}
-					for (int i = 0; i < ingreAmount - 1; i++)
-					{
-						if (space < currentAmount)
-						{
-							event.setCancelled(true);
-							break;
-						}
-						else
-						{
-							player.getInventory().addItem(current);
-							current.setAmount(currentAmount);
-							ingre.setAmount(ingre.getAmount() - 1);
-							space -= currentAmount;
-						}
-					}
-					if (ingre.getAmount() == 0)
-					{
-						event.setCurrentItem(null);
-					}
-					player.updateInventory();
-				}, 0L);
-			}
-		}
-
-		// 꾸러미에 아이템 넣고 뺄 때 설명 업데이트
-		ItemStack currentItem = event.getCurrentItem(), cursorItem = event.getCursor();
-		if (ItemStackUtil.itemExists(currentItem) && currentItem.getType() == Material.BUNDLE
-				|| ItemStackUtil.itemExists(cursorItem) && cursorItem.getType() == Material.BUNDLE)
-		{
-			Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
-		}
-
-		if (event.getInventory().getType() == InventoryType.CARTOGRAPHY) // 지도 제작대를 이용한 뒤 결과 아이템 설명 업데이트
-		{
-			Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
-		}
-		if (event.getInventory().getType() == InventoryType.GRINDSTONE)
-		{
-			GrindstoneInventory grindstoneInventory = (GrindstoneInventory) event.getInventory();
-			ItemStack result = grindstoneInventory.getResult();
-			Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-			{
-				if (result != null)
-				{
-					ItemLore.setItemLore(result, new ItemLoreView(player));
-				}
-			}, 0L);
-		}
 		if (player.getGameMode() == GameMode.CREATIVE)
 		{
 			// 픽블록 기능이 크리에이티브 인벤토리에서만 호출되야함
@@ -1527,8 +1442,6 @@ public class InventoryClick implements Listener
 			}
 			ItemStack current = player.getInventory().getItemInMainHand();
 			ItemStack cursor = Objects.requireNonNull(event.getCursor()).clone();
-			ItemLore.setItemLore(cursor, new ItemLoreView(player));
-			ItemLore.setItemLore(event.getCursor(), new ItemLoreView(player));
 			boolean barHasEmptySlot = false;
 			ItemStack[] hotBars = new ItemStack[9];
 			List<Material> types = new ArrayList<>();
@@ -1566,7 +1479,7 @@ public class InventoryClick implements Listener
 					{
 						ItemStack hotBar = hotBars[i].clone();
 						hotBar.setAmount(1);
-						if (ItemStackUtil.isPickBlockable(cursor.getType()) && hotBar.equals(cursor) && cursor.equals(ItemStackUtil.loredItemStack(cursor.getType()))
+						if (ItemStackUtil.isPickBlockable(cursor.getType()) && hotBar.equals(cursor) && cursor.equals(new ItemStack(cursor.getType()))
 								&& i != event.getSlot())
 						{
 							if (!check.contains(player))
@@ -1637,6 +1550,11 @@ public class InventoryClick implements Listener
 				check.add(player);
 				Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> check.remove(player), 2L);
 			}
+		}
+
+		if (player.getGameMode() != GameMode.CREATIVE && ItemStackUtil.itemExists(event.getCursor()))
+		{
+			Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player, true, true), 0L);
 		}
 	}
 
@@ -1962,11 +1880,6 @@ public class InventoryClick implements Listener
 				GUIManager.openGUI(player, GUIType.SERVER_SETTINGS);
 			}
 
-			//      else if (slot == 5 && Cucumbery.config.getBoolean("rpg-enabled") && !Cucumbery.config.getStringList("no-rpg-enabled-worlds").contains(player.getLocation().getWorld().getName()))
-			//      {
-			//        StatGUI.getStatGUI().statGUI(player);
-			//      }
-
 			else if (slot == 5)
 			{
 				RecipeInventoryMainMenu.openRecipeInventory(player, 1, true);
@@ -2076,10 +1989,6 @@ public class InventoryClick implements Listener
 					UserData.SHOW_ACTIONBAR_WHEN_ITEM_IS_COOLDOWN.setToggle(uuid);
 					saveConfig = true;
 					break;
-				//        case 32:
-				//          UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME.setToggle(uuid);
-				//          saveConfig = true;
-				//          break;
 				case 33:
 					UserData.SHOW_DAMAGE_INDICATOR.setToggle(uuid);
 					saveConfig = true;
@@ -2094,9 +2003,6 @@ public class InventoryClick implements Listener
 				case 41:
 					GUIManager.openGUI(player, GUIType.ITEM_PICKUP_MODE_MENU);
 					break;
-				//        case 41:
-				//          GUI.openGUI(player, GUIType.ITEM_USE_MODE_MENU);
-				//          break;
 				case 7:
 					if (player.getGameMode() == GameMode.CREATIVE)
 					{
@@ -2473,7 +2379,6 @@ public class InventoryClick implements Listener
 									ItemStack ingredient = itemStacks == null || itemStacks.isEmpty() ? ingredients.get(0).clone() : itemStacks.get(0).clone();
 									NBTItem ingredientNBTItem = new NBTItem(ingredient, true);
 									ingredientNBTItem.mergeCompound(merge);
-									ItemLore.setItemLore(ingredient, ItemLoreView.of(player));
 									ingredientNBTItem = new NBTItem(ingredient, true);
 									Long bonusDurability = resultNBTItem.getLong("BonusDurability");
 									if (bonusDurability != null)
@@ -2629,7 +2534,6 @@ public class InventoryClick implements Listener
 						ItemStack ingredient = itemStacks == null || itemStacks.isEmpty() ? ingredients.get(0).clone() : itemStacks.get(0).clone();
 						NBTItem ingredientNBTItem = new NBTItem(ingredient, true);
 						ingredientNBTItem.mergeCompound(merge);
-						ItemLore.setItemLore(ingredient, ItemLoreView.of(player));
 						ingredientNBTItem = new NBTItem(ingredient, true);
 						Long bonusDurability = resultNBTItem.getLong("BonusDurability");
 						if (bonusDurability != null)

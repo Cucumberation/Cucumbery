@@ -14,6 +14,6 @@ public class PlayerGameModeChange implements Listener
   public void onPlayerGameModeChange(PlayerGameModeChangeEvent event)
   {
     Player player = event.getPlayer();
-    Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 2L);
+    Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
   }
 }

@@ -1,5 +1,9 @@
 package com.jho5245.cucumbery.util.storage.no_groups;
 
+import com.comphenix.protocol.PacketType.Play;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.PacketContainer;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import com.jho5245.cucumbery.Cucumbery;
@@ -14,6 +18,7 @@ import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
+import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import de.tr7zw.changeme.nbtapi.NBTItem;
@@ -40,6 +45,20 @@ import java.util.*;
 @SuppressWarnings("all")
 public class ItemStackUtil
 {
+	public static final ItemStack AIR = new ItemStack(Material.AIR);
+
+	public static final ItemStack HIDDEN_ITEM;
+
+	static
+	{
+		HIDDEN_ITEM = new ItemStack(Material.TRIAL_SPAWNER);
+		ItemMeta itemMeta = HIDDEN_ITEM.getItemMeta();
+		itemMeta.displayName(ComponentUtil.translate("&ikey:item.cucumbery.hidden_item|???"));
+		itemMeta.lore(Collections.singletonList(ComponentUtil.translate("&7key:item.cucumbery.hidden_item.description|아이템의 정보가 숨겨져 있습니다!")));
+		itemMeta.addItemFlags(ItemFlag.values());
+		HIDDEN_ITEM.setItemMeta(itemMeta);
+	}
+
 	/**
 	 * 아이템의 모루 사용 횟수를 가져옵니다. 정상적인 횟수가 아닐 경우, -1을 반환합니다.
 	 *
@@ -62,7 +81,7 @@ public class ItemStackUtil
 			{
 				repairCost /= 2;
 				useTime++;
-				if (useTime > 1000)
+				if (useTime > 100)
 				{
 					break;
 				}
@@ -272,34 +291,6 @@ public class ItemStackUtil
 					true;
 			default -> false;
 		};
-	}
-
-	/**
-	 * 해당하는 물질의 아이템을 설명을 붙여 반환합니다.
-	 *
-	 * @param type
-	 * 		아이템의 물질
-	 * @return 설명이 적힌 아이템
-	 */
-	@NotNull
-	public static ItemStack loredItemStack(@NotNull Material type)
-	{
-		return loredItemStack(type, null);
-	}
-
-	/**
-	 * 해당하는 물질의 아이템을 설명을 붙여 반환합니다.
-	 *
-	 * @param type
-	 * 		아이템의 물질
-	 * @return 설명이 적힌 아이템
-	 */
-	@NotNull
-	public static ItemStack loredItemStack(@NotNull Material type, @Nullable Player player)
-	{
-		ItemStack item = new ItemStack(type);
-		ItemLore.setItemLore(item, player != null ? ItemLoreView.of(player) : null);
-		return item;
 	}
 
 	public static boolean itemExists(ItemStack item) // 아이템이 존재하는지 아닌지 판별
@@ -514,7 +505,7 @@ public class ItemStackUtil
 	 */
 	public static int countSpace(@NotNull Player player, @NotNull ItemStack itemStack)
 	{
-		return countSpace(player.getInventory(), ItemLore.setItemLore(itemStack.clone(), ItemLoreView.of(player)));
+		return countSpace(player.getInventory(), itemStack);
 	}
 
 	/**
@@ -564,7 +555,7 @@ public class ItemStackUtil
 					CustomMaterial smeltedItem = customMaterial.getSmeltedItem();
 					if (smeltedItem != null)
 					{
-						nbtItem.setString("id", smeltedItem.toString().toLowerCase());
+						nbtItem.setString(CustomMaterial.IDENDIFER, smeltedItem.toString().toLowerCase());
 					}
 					Material smeltedItemVanilla = customMaterial.getSmeltedItemVanilla();
 					if (smeltedItemVanilla != null)
@@ -572,10 +563,6 @@ public class ItemStackUtil
 						drop = new ItemStack(smeltedItemVanilla, drop.getAmount());
 					}
 				}
-			}
-			if (player != null)
-			{
-				ItemLore.setItemLore(drop, ItemLoreView.of(player));
 			}
 			dropsClone.add(drop);
 		}
@@ -709,13 +696,13 @@ public class ItemStackUtil
 			itemStack.setItemMeta(blockStateMeta);
 		}
 		Location location = block.getLocation();
-		ItemLore.setItemLore(itemStack);
+		ItemLore.setItemLore(itemStack, false);
 		itemMeta = itemStack.getItemMeta();
 		if (itemMeta instanceof BlockDataMeta blockDataMeta)
 		{
 			blockDataMeta.setBlockData(block.getBlockData());
 			itemStack.setItemMeta(blockDataMeta);
-			ItemLore.setItemLore(itemStack);
+			ItemLore.setItemLore(itemStack, false);
 		}
 		List<Component> lore = itemMeta.lore();
 		if (lore == null)
@@ -803,8 +790,17 @@ public class ItemStackUtil
 	@NotNull
 	public static List<Component> getItemInfoAsComponents(@NotNull ItemStack itemStack, @Nullable Object param, @Nullable Component tag, boolean separator)
 	{
+		return getItemInfoAsComponents(itemStack, param, tag, separator, true);
+	}
+
+	@NotNull
+	public static List<Component> getItemInfoAsComponents(@NotNull ItemStack itemStack, @Nullable Object param, @Nullable Component tag, boolean separator, boolean withLore)
+	{
 		itemStack = itemStack.clone();
-		ItemLore.setItemLore(itemStack, param);
+		if (withLore)
+		{
+			ItemLore.setItemLore(itemStack, false);
+		}
 		ItemMeta itemMeta = itemStack.getItemMeta();
 		if (itemMeta instanceof FireworkMeta fireworkMeta)
 		{
@@ -939,7 +935,7 @@ public class ItemStackUtil
 		try
 		{
 			NBTContainer nbtContainer = new NBTContainer(predicate);
-			String id = nbtContainer.getString("id");
+			String id = nbtContainer.getString(CustomMaterial.IDENDIFER);
 			if (!id.isEmpty())
 			{
 				CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
@@ -952,8 +948,7 @@ public class ItemStackUtil
 				{
 					ItemStack i = new ItemStack(Material.STONE);
 					NBTItem nbtItem = new NBTItem(i, true);
-					nbtItem.setString("id", id);
-					ItemLore.setItemLore(i);
+					nbtItem.setString(CustomMaterial.IDENDIFER, id);
 					itemStack = i;
 					display = i.getItemMeta().displayName();
 				}
@@ -1085,7 +1080,6 @@ public class ItemStackUtil
 		}
 		itemMeta.displayName(display);
 		itemStack.setItemMeta(itemMeta);
-		ItemLore.setItemLore(itemStack);
 		return itemStack;
 	}
 
@@ -1275,7 +1269,7 @@ public class ItemStackUtil
 	 */
 	public static void updateInventory(@NotNull Player player)
 	{
-		updateInventory(player, false);
+		updateInventory(player, false, true);
 	}
 
 	/**
@@ -1284,7 +1278,7 @@ public class ItemStackUtil
 	 * @param player
 	 * 		인벤토리에 있는 모든 아이템의 설명을 업데이트할 플레이어
 	 */
-	public static void updateInventory(@NotNull Player player, boolean callAPI)
+	public static void updateInventory(@NotNull Player player, boolean callAPI, boolean resendPacket)
 	{
 		InventoryView openInventory = player.getOpenInventory();
 		String title = openInventory.getTitle();
@@ -1300,7 +1294,11 @@ public class ItemStackUtil
 			{
 				continue;
 			}
-			ItemLore.setItemLore(item, new ItemLoreView(player));
+			if (CustomMaterial.itemStackOf(item) != null)
+			{
+				ItemLore.setItemLore(item, ItemLoreView.of(player));
+			}
+			ItemLore.removeItemLore(item, false, true);
 		}
 		inventory = openInventory.getTopInventory();
 		for (int i = 0; i < inventory.getSize(); i++)
@@ -1310,9 +1308,63 @@ public class ItemStackUtil
 			{
 				continue;
 			}
-			ItemLore.setItemLore(item, new ItemLoreView(player));
+			if (CustomMaterial.itemStackOf(item) != null)
+			{
+				ItemLore.setItemLore(item, ItemLoreView.of(player));
+			}
+			ItemLore.removeItemLore(item, false, true);
 		}
-		player.setItemOnCursor(ItemLore.setItemLore(player.getItemOnCursor(), new ItemLoreView(player)));
+		if (CustomMaterial.itemStackOf(player.getItemOnCursor()) != null)
+		{
+			player.setItemOnCursor(ItemLore.setItemLore(player.getItemOnCursor(), ItemLoreView.of(player)));
+		}
+		player.setItemOnCursor(ItemLore.removeItemLore(player.getItemOnCursor()));
+		if (resendPacket && Cucumbery.using_ProtocolLib)
+		{
+			ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
+			boolean showItemLore = UserData.SHOW_ITEM_LORE.getBoolean(player);
+			PacketContainer packet = protocolManager.createPacket(Play.Server.WINDOW_ITEMS);
+			InventoryView inventoryView = player.getOpenInventory();
+			Inventory top = inventoryView.getTopInventory(), bottom = inventoryView.getBottomInventory();
+			List<ItemStack> itemStackList = new ArrayList<>();
+			itemStackList.addAll(Arrays.asList(top.getContents()));
+			EntityEquipment entityEquipment = player.getEquipment();
+			itemStackList.add(entityEquipment.getHelmet());
+			itemStackList.add(entityEquipment.getChestplate());
+			itemStackList.add(entityEquipment.getLeggings());
+			itemStackList.add(entityEquipment.getBoots());
+			for (int i = 9; i < 36; i++)
+			{
+				itemStackList.add(bottom.getItem(i));
+			}
+			for (int i = 0; i < 9; i++)
+			{
+				itemStackList.add(bottom.getItem(i));
+			}
+			for (int i = 0; i < itemStackList.size(); i++)
+			{
+				ItemStack itemStack = itemStackList.get(i);
+				if (ItemStackUtil.itemExists(itemStack))
+				{
+					itemStack = itemStack.clone();
+					if (showItemLore)
+					{
+						ItemLore.setItemLore(itemStack, ItemLoreView.of(player));
+					}
+					else
+					{
+						ItemLore.removeItemLore(itemStack);
+					}
+				}
+				else
+				{
+					itemStackList.set(i, AIR);
+				}
+			}
+			packet.getItemListModifier().write(0, itemStackList);
+			packet.getIntegers().write(0, 0);
+			protocolManager.sendServerPacket(player, packet);
+		}
 		if (callAPI)
 		{
 			player.updateInventory();
@@ -1329,7 +1381,7 @@ public class ItemStackUtil
 	 */
 	public static void updateInventory(@NotNull Player player, @NotNull ItemStack item)
 	{
-		ItemLore.setItemLore(item, new ItemLoreView(player));
+		ItemLore.removeItemLore(item);
 	}
 }
 

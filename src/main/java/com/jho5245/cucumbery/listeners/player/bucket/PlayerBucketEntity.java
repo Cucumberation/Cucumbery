@@ -58,7 +58,5 @@ public class PlayerBucketEntity implements Listener
         event.setCancelled(true);
         return;
     }
-    ItemStack entityBucket = event.getEntityBucket();
-    ItemLore.setItemLore(entityBucket);
   }
 }

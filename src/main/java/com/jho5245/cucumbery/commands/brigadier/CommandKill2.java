@@ -76,7 +76,7 @@ public class CommandKill2 extends CommandBase
           {
             continue;
           }
-          player.setLastDamageCause(new EntityDamageEvent(player, DamageCause.VOID, Double.MAX_VALUE));
+          player.setLastDamageCause(new EntityDamageEvent(player, DamageCause.VOID, org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.GENERIC).build(), Double.MAX_VALUE));
           player.setLastDamage(Double.MAX_VALUE);
           player.setHealth(0);
           successEntities.add(player);

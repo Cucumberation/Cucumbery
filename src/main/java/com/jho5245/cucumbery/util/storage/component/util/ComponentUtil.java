@@ -6,7 +6,6 @@ import com.jho5245.cucumbery.custom.customeffect.CustomEffect.DisplayType;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.VanillaEffectDescription;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
-import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.itemlore.ItemLoreUtil;
 import com.jho5245.cucumbery.util.no_groups.ItemSerializer;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
@@ -147,23 +146,12 @@ public class ComponentUtil
 					component = component.append(ItemNameUtil.itemName(material, Constant.THE_COLOR));
 					continue;
 				}
-				ItemStack itemStack = ItemStackUtil.loredItemStack(material, player);
-				Component concat = create(player, itemStack);
+				Component concat = create(player, new ItemStack(material));
 				component = component.append(concat);
 			}
 			else if (object instanceof ItemStack itemStack)
 			{
-				itemStack = itemStack.clone();
-				ItemLore.setItemLore(itemStack, player);
-				Component concat = ItemStackComponent.itemStackComponent(itemStack, 1, null, false);
-				if (player != null && !player.hasPermission("asdf"))
-				{
-					concat = concat.clickEvent(null);
-				}
-				if (concat.color() == null)
-				{
-					concat = concat.color(Constant.THE_COLOR);
-				}
+				Component concat = ItemStackComponent.itemStackComponent(itemStack, 1, Constant.THE_COLOR, false, player);
 				component = component.append(concat);
 			}
 			else if (object instanceof CustomMaterial customMaterial)
@@ -682,10 +670,6 @@ public class ComponentUtil
 						itemMeta.displayName(ComponentUtil.translate("&c잘못된 아이템"));
 						itemStack.setItemMeta(itemMeta);
 					}
-					else if (player == null)
-					{
-						ItemLore.setItemLore(itemStack, player);
-					}
 					component = component.append(create(itemStack));
 				}
 				else if (string.startsWith("items:"))
@@ -697,10 +681,6 @@ public class ComponentUtil
 						ItemMeta itemMeta = itemStack.getItemMeta();
 						itemMeta.displayName(ComponentUtil.translate("&c잘못된 아이템"));
 						itemStack.setItemMeta(itemMeta);
-					}
-					else if (player == null)
-					{
-						ItemLore.setItemLore(itemStack, player);
 					}
 					component = component.append(ItemStackComponent.itemStackComponent(itemStack, Constant.THE_COLOR));
 				}
@@ -857,7 +837,7 @@ public class ComponentUtil
 	 */
 	public static Component create2(@Nullable Player player, @NotNull String value, boolean n2s)
 	{
-		List<Component> components = ComponentUtil.fromLegacyText(player, value, n2s);
+		List<Component> components = ComponentUtil.fromLegacyText(value, n2s);
 		Component component = Component.empty();
 		for (Component textComponent : components)
 		{
@@ -1011,7 +991,7 @@ public class ComponentUtil
 	public static TranslatableComponent translate(@Nullable Player player, @NotNull String key, @NotNull Object... args)
 	{
 		boolean n2s = args.length > 0 && (args[0] == null || !args[0].equals(false));
-		TranslatableComponent component = ComponentUtil.fromLegacyTextTranslate(player, key, n2s);
+		TranslatableComponent component = ComponentUtil.fromLegacyTextTranslate(key, n2s);
 		List<Component> componentArgs = new ArrayList<>();
 		for (Object obj : args)
 		{
@@ -1060,6 +1040,19 @@ public class ComponentUtil
 		{
 			component = component.args(componentArgs);
 			component = yeet(component.key(), component);
+			List<Component> children = new ArrayList<>(component.children());
+			if (!children.isEmpty())
+			{
+				for (int i = 0; i < children.size(); i++)
+				{
+					Component child = children.get(i);
+					if (child instanceof TranslatableComponent translatableChild)
+					{
+						children.set(i, translatableChild.args(componentArgs));
+					}
+				}
+				component = component.children(children);
+			}
 		}
 		return component;
 	}
@@ -1070,13 +1063,6 @@ public class ComponentUtil
 		return fromLegacyText(message, true);
 	}
 
-	@SuppressWarnings("all")
-	@NotNull
-	private static List<Component> fromLegacyText(@NotNull String message, boolean n2s)
-	{
-		return fromLegacyText(null, message, n2s);
-	}
-
 	/**
 	 * 구버전의 텍스트를 컴포넌트로 변환합니다.
 	 *
@@ -1085,7 +1071,7 @@ public class ComponentUtil
 	 * @return 컴포넌트
 	 */
 	@NotNull
-	private static List<Component> fromLegacyText(@Nullable Audience audience, @NotNull String message, boolean n2s)
+	private static List<Component> fromLegacyText(@NotNull String message, boolean n2s)
 	{
 		if (n2s)
 		{
@@ -1220,43 +1206,6 @@ public class ComponentUtil
 					}
 				}
 			}
-			else if (audience instanceof Player player && c == '[')
-			{
-				try
-				{
-					PlayerInventory playerInventory = player.getInventory();
-					char next = message.charAt(i + 1);
-					if (next == 'i' && message.charAt(i + 2) == ']')
-					{
-						i += 2;
-						ItemStack itemStack = playerInventory.getItemInMainHand();
-						if (ItemStackUtil.itemExists(itemStack))
-						{
-							if (!builder.isEmpty())
-							{
-								old = component;
-								old = old.content(builder.toString());
-								builder = new StringBuilder();
-								components.add(old);
-							}
-							Component com = ItemStackComponent.itemStackComponent(itemStack, itemStack.getAmount(), Constant.THE_COLOR, true);
-							if (com.color() == null)
-							{
-								com = com.color(Constant.THE_COLOR);
-							}
-							components.add(com);
-						}
-					}
-					else
-					{
-						builder.append(c);
-					}
-				}
-				catch (Exception e)
-				{
-					builder.append(c);
-				}
-			}
 			else
 			{
 				int pos = message.indexOf(32, i);
@@ -1298,11 +1247,6 @@ public class ComponentUtil
 	}
 
 	private static TranslatableComponent fromLegacyTextTranslate(@NotNull String message, boolean n2s)
-	{
-		return fromLegacyTextTranslate(null, message, n2s);
-	}
-
-	private static TranslatableComponent fromLegacyTextTranslate(@Nullable Audience audience, @NotNull String message, boolean n2s)
 	{
 		if (n2s)
 		{

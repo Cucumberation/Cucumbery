@@ -98,7 +98,7 @@ public class CommandDamage extends CommandBase
           if (!(damager instanceof LivingEntity))
           {
             @SuppressWarnings("deprecation")
-            EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(damager, entity, EntityDamageEvent.DamageCause.ENTITY_ATTACK, damage);
+            EntityDamageByEntityEvent damageByEntityEvent = new EntityDamageByEntityEvent(damager, entity, EntityDamageEvent.DamageCause.ENTITY_ATTACK, org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.GENERIC).build(), damage);
             Cucumbery.getPlugin().getPluginManager().callEvent(damageByEntityEvent);
           }
           livingEntity.damage(damage, damager);

@@ -160,8 +160,8 @@ public class CommandGive2 extends CommandBase
 			CustomMaterial customMaterial = CustomMaterial.valueOf(customType.toUpperCase());
 			ItemStack itemStack = new ItemStack(customMaterial.getDisplayMaterial());
 			NBTItem nbtItem = new NBTItem(itemStack, true);
-			nbtItem.setString("id", customMaterial.toString().toLowerCase());
-			return ItemLore.setItemLore(itemStack);
+			nbtItem.setString(CustomMaterial.IDENDIFER, customMaterial.toString().toLowerCase());
+			return itemStack;
 		}
 		catch (IllegalArgumentException e)
 		{
@@ -171,8 +171,8 @@ public class CommandGive2 extends CommandBase
 			}
 			ItemStack itemStack = new ItemStack(Material.STONE);
 			NBTItem nbtItem = new NBTItem(itemStack, true);
-			nbtItem.setString("id", customType);
-			return ItemLore.setItemLore(itemStack);
+			nbtItem.setString(CustomMaterial.IDENDIFER, customType);
+			return itemStack;
 		}
 	}
 

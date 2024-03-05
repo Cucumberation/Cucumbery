@@ -11,6 +11,7 @@ import com.jho5245.cucumbery.util.storage.data.Permission;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig;
+import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
 import net.kyori.adventure.text.Component;
@@ -83,7 +84,7 @@ public class PlayerItemHeld implements Listener
       return;
     }
 
-    if (Cucumbery.config.getBoolean("use-helpful-lore-feature"))
+    if (UserData.SHOW_ITEM_LORE.getBoolean(player))
     {
       if (player.getGameMode() == GameMode.CREATIVE && InventoryClick.check.contains(player))
       {

@@ -15,14 +15,9 @@ public class EnchantItem implements Listener
   @EventHandler
   public void onEnchantItem(EnchantItemEvent event)
   {
-    Player player = event.getEnchanter();
-    Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+    if (event.isCancelled())
     {
-      ItemStack item = event.getView().getItem(0);
-      if (item != null)
-      {
-        ItemLore.setItemLore(item, new ItemLoreView(player));
-      }
-    }, 0L);
+      return;
+    }
   }
 }

@@ -58,7 +58,7 @@ public class CommandKill3 implements CommandExecutor, AsyncTabCompleter
         if (!player.isDead())
         {
           double health = player.getHealth();
-          player.setLastDamageCause(new EntityDamageEvent(player, DamageCause.VOID, Double.MAX_VALUE));
+          player.setLastDamageCause(new EntityDamageEvent(player, DamageCause.VOID, org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.GENERIC).build(), Double.MAX_VALUE));
           player.setLastDamage(Double.MAX_VALUE);
           player.setHealth(0);
           if (player.getHealth() != health)

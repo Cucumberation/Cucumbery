@@ -33,7 +33,6 @@ public class ItemLore2Durability
         ItemLoreUtil.setItemRarityValue(lore, ItemCategory.Rarity.UNIQUE.getRarityValue());
         if (!hideDurability)
         {
-
           lore.add(Component.empty());
           lore.add(ComponentUtil.translate("rgb225,100,205;" + (isDrill ? "연료" : "내구도") + " : %s / %s", Component.text("∞"), Component.text("∞")));
         }
@@ -64,7 +63,6 @@ public class ItemLore2Durability
           {
             chanceNotToConsumeDura = 0d;
           }
-
           if (maxDurability != 0)
           {
             double originItemDuraDouble = getOriginItemDuraDouble(type, maxDurability, currentDurability);

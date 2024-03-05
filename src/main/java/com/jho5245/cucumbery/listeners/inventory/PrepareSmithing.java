@@ -100,10 +100,6 @@ public class PrepareSmithing implements Listener
 				return;
 			}
 			ItemStack item = event.getResult();
-			if (item != null)
-			{
-				ItemLore.setItemLore(item, new ItemLoreView(player));
-			}
 		}
 	}
 }

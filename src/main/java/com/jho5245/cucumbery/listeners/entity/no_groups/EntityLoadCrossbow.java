@@ -43,10 +43,6 @@ public class EntityLoadCrossbow implements Listener
 				}
 				return;
 			}
-			if (ItemStackUtil.itemExists(item))
-			{
-				Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemLore.setItemLore(item), 0L);
-			}
 		}
 	}
 }

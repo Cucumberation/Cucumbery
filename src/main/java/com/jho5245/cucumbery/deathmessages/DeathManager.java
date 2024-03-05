@@ -6,7 +6,6 @@ import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.children.group.StringCustomEffect;
 import com.jho5245.cucumbery.events.DeathMessageEvent;
-import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.no_groups.ItemSerializer;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method;
@@ -24,6 +23,7 @@ import net.kyori.adventure.text.event.HoverEvent;
 import org.bukkit.*;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -91,7 +91,7 @@ public class DeathManager
 			EntityDamageEvent damageCause = entity.getLastDamageCause();
 			if (damageCause == null)
 			{
-				damageCause = new EntityDamageEvent(entity, EntityDamageEvent.DamageCause.VOID, Double.MAX_VALUE);
+				damageCause = new EntityDamageEvent(entity, EntityDamageEvent.DamageCause.VOID, org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.GENERIC).build(), Double.MAX_VALUE);
 			}
 			EntityDamageEvent.DamageCause cause = damageCause.getCause();
 			List<Object> args = new ArrayList<>();
@@ -234,9 +234,7 @@ public class DeathManager
 							else if (fireball instanceof SizedFireball sizedFireball)
 							{
 								key = "fireball";
-								ItemStack itemStack = sizedFireball.getDisplayItem().clone();
-								ItemLore.setItemLore(itemStack);
-								extraArgs.add(ComponentUtil.create(itemStack));
+								extraArgs.add(ComponentUtil.create(sizedFireball.getDisplayItem().clone()));
 							}
 							else if (fireball instanceof WitherSkull)
 							{
@@ -374,6 +372,11 @@ public class DeathManager
 				}
 				case BLOCK_EXPLOSION ->
 				{
+					if (damageCause instanceof EntityDamageByBlockEvent damageByBlockEvent)
+					{
+						BlockState blockState = damageByBlockEvent.getDamagerBlockState();
+						MessageUtil.broadcastDebug(blockState);
+					}
 					key += "bad_respawn";
 					extraArgs.add(BAD_RESPAWM_POINT);
 				}
@@ -572,7 +575,7 @@ public class DeathManager
 			}
 			if (ItemStackUtil.itemExists(weapon))
 			{
-				args.add(ComponentUtil.create(weapon));
+				args.add(weapon);
 				key += "_item";
 			}
 			else
@@ -660,7 +663,9 @@ public class DeathManager
 				key = "%1$s이(가) 알 수 없는 이유로 죽었습니다. 죄송합니다! 이 메시지가 뜨면 서버 관리자가 플러그인 업데이트 유지 보수를 안 한겁니다! 서버 관리자에게 문의해주세요! 키 : %2$s";
 			}
 			args.addAll(extraArgs);
-			@Nullable Component deathMessageComponent = ComponentUtil.translate(key, args);
+			Component prefix = Component.empty();
+			List<Component> children = new ArrayList<>();
+			final Component deathMessageComponent = ComponentUtil.translate(key, args);
 			if (ComponentUtil.serializeAsJson(deathMessageComponent).length() > MAXIMUM_COMPONENT_SERIAL_LENGTH)
 			{
 				for (int i = 0; i < args.size(); i++)
@@ -675,10 +680,10 @@ public class DeathManager
 						}
 					}
 				}
-				deathMessageComponent = ComponentUtil.translate("death.attack.message_too_long", ComponentUtil.translate(key, args));
+				key = "death.attack.message_too_long";
+				args.clear();
+				args.add(ComponentUtil.translate(key, args));
 			}
-			final Component insiderComponent = deathMessageComponent;
-			Component insiderPrefix = Component.empty();
 			boolean isPvP = isPlayerDeath && (damager instanceof Player && !entity.equals(damager));
 			if (usePrefix)
 			{
@@ -700,8 +705,7 @@ public class DeathManager
 						isPvP = false;
 					}
 				}
-				deathMessageComponent = Component.empty().append(isPvP ? DEATH_PREFIX_PVP : DEATH_PREFIX).append(deathMessageComponent);
-				insiderPrefix = isPvP ? DEATH_PREFIX_PVP : DEATH_PREFIX;
+				prefix = isPvP ? DEATH_PREFIX_PVP : DEATH_PREFIX;
 			}
 			Variable.victimAndDamager.remove(entity.getUniqueId());
 			Variable.victimAndBlockDamager.remove(entity.getUniqueId());
@@ -723,7 +727,7 @@ public class DeathManager
 				if (!cancelledMessages.isEmpty())
 				{
 					String message = cancelledMessages.get(Method.random(0, cancelledMessages.size() - 1));
-					deathMessageComponent = deathMessageComponent.append(ComponentUtil.translate(message, entity));
+					children.add(ComponentUtil.translate(message, entity));
 				}
 			}
 			if (playerDeathEvent != null)
@@ -732,14 +736,19 @@ public class DeathManager
 			}
 			if (!key.equals("none"))
 			{
-				DeathMessageEvent deathMessageEvent = new DeathMessageEvent(entity, deathMessageComponent, isPvP, damager);
+				DeathMessageEvent deathMessageEvent = new DeathMessageEvent(entity, ComponentUtil.translate(key, args), isPvP, damager);
 				Bukkit.getPluginManager().callEvent(deathMessageEvent);
 				boolean finalIsPvP = isPvP;
 				@Nullable Object finalDamager = damager;
 				Predicate<Player> playerPredicate = player -> !(((player == entity || player == finalDamager) && UserData.SHOW_DEATH_SELF_MESSAGE.getBoolean(player))
 						|| (!(player == entity || player == finalDamager) && UserData.SHOW_DEATH_MESSAGE.getBoolean(player) && (!finalIsPvP
 						|| UserData.SHOW_DEATH_PVP_MESSAGE.getBoolean(player))));
-				MessageUtil.broadcastPlayer(playerPredicate, deathMessageComponent);
+				Collection<? extends Player> players = new ArrayList<>(Bukkit.getOnlinePlayers());
+				players.removeIf(playerPredicate);
+				for (Player player : players)
+				{
+					MessageUtil.sendMessage(player, prefix, ComponentUtil.translate(player, key, args).children(children));
+				}
 				if (CustomEffectManager.hasEffect(entity, CustomEffectType.CURSE_OF_BEANS))
 				{
 					for (Player online : Bukkit.getOnlinePlayers())
@@ -748,7 +757,7 @@ public class DeathManager
 						{
 							if (!CustomEffectManager.hasEffect(online, CustomEffectType.CURSE_OF_BEANS))
 							{
-								MessageUtil.sendMessage(online, deathMessageComponent);
+								MessageUtil.sendMessage(online, prefix, ComponentUtil.translate(online, key, args).children(children));
 							}
 						}
 					}
@@ -759,7 +768,7 @@ public class DeathManager
 					{
 						if (entity != online)
 						{
-							MessageUtil.sendTitle(online, insiderPrefix, insiderComponent, 5, 100, 15);
+							MessageUtil.sendTitle(online, prefix, deathMessageComponent.children(children), 5, 100, 15);
 						}
 					}
 				}
@@ -767,8 +776,8 @@ public class DeathManager
 				int y = location.getBlockY();
 				int z = location.getBlockZ();
 				// 콘솔에 디버그를 보내기 위함
-				deathMessageComponent = deathMessageComponent.append(ComponentUtil.create("&7 - " + worldName + ", " + x + ", " + y + ", " + z));
-				MessageUtil.consoleSendMessage(deathMessageComponent);
+				children.add(ComponentUtil.create("&7 - " + worldName + ", " + x + ", " + y + ", " + z));
+				MessageUtil.consoleSendMessage(prefix, deathMessageComponent.children(children));
 			}
 		}
 	}
@@ -820,7 +829,7 @@ public class DeathManager
 		EntityDamageEvent damageCause = entity.getLastDamageCause();
 		if (damageCause == null)
 		{
-			damageCause = new EntityDamageEvent(entity, DamageCause.KILL, Double.MAX_VALUE);
+			damageCause = new EntityDamageEvent(entity, DamageCause.KILL, org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.GENERIC).build(), Double.MAX_VALUE);
 		}
 		DamageCause cause = damageCause.getCause();
 		if (cause == DamageCause.VOID)
@@ -1066,7 +1075,7 @@ public class DeathManager
 			}
 			else if (projectile instanceof AbstractArrow abstractArrow)
 			{
-				return ItemLore.setItemLore(abstractArrow.getItemStack());
+				return abstractArrow.getItemStack();
 			}
 			else
 			{
@@ -1074,7 +1083,7 @@ public class DeathManager
 				{
 					ItemStack itemStack = new ItemStack(Material.FIREWORK_ROCKET);
 					itemStack.setItemMeta(firework.getFireworkMeta());
-					return ItemLore.setItemLore(itemStack);
+					return itemStack;
 				}
 			}
 			AreaEffectCloud areaEffectCloud = getDamagerAreaEffectCloud(event);

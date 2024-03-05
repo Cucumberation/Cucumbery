@@ -107,10 +107,6 @@ public class InventoryOpen implements Listener
 				}
 			}
 		}
-		if (inventory.getType() == InventoryType.BREWING)
-		{
-			ItemStackUtil.updateInventory(player);
-		}
 
 		// gui cache
 		InventoryView inventoryView = event.getView();
@@ -136,117 +132,7 @@ public class InventoryOpen implements Listener
 		{
 			mcMMOBrewingStandMap.put(inventory.getLocation().toString(), uuid);
 		}
-		// 인벤토리가 좌표가 있는 설치된 블록이거나 휴대용 셜커 상자일 경우 아이템 설명 업데이트
-		if (inventory.getViewers().size() <= 1 && location != null || location == null && inventory.getType() == InventoryType.SHULKER_BOX)
-		{
-			for (int i = 0; i < inventory.getSize(); i++)
-			{
-				ItemStack itemStack = inventory.getItem(i);
-				if (itemStack != null)
-				{
-					ItemLore.setItemLore(itemStack, new ItemLoreView(player));
-				}
-			}
-		}
-		if (inventory.getType() == InventoryType.MERCHANT)
-		{
-			try
-			{
-				// 제삼자 거래 인벤토리(Shopkeeper 플러그인 등)인 경우에는 거래 아이템 설명 업데이트를 하지 않음 == 인벤토리의 실질적인 주인이 주민이 아닌 경우
-				if (inventory.getHolder() != null)
-				{
-					MerchantInventory merchantInventory = (MerchantInventory) inventory;
-					Merchant merchant = merchantInventory.getMerchant();
-					List<MerchantRecipe> recipes = new ArrayList<>(merchant.getRecipes());
-					for (int i = 0; i < recipes.size(); i++)
-					{
-						MerchantRecipe recipe = recipes.get(i);
-						List<ItemStack> ingredients = recipe.getIngredients();
-						ItemStack ingre1 = ingredients.get(0);
-						ItemStack ingre2 = null;
-						if (ingredients.size() == 2)
-						{
-							ingre2 = ingredients.get(1);
-						}
-						ItemStack result = recipe.getResult();
-						boolean recipeIsCorrect = true; // 레시피의 모든 아이템 설명이 플러그인의 아이템 기본 설명과 동일한가?
-						if (ItemStackUtil.itemExists(ingre1))
-						{
-							if (!ItemStackUtil.hasLore(ingre1))
-							{
-								recipeIsCorrect = false;
-								ItemLore.setItemLore(ingre1, new ItemLoreView(player));
-							}
-							else
-							{
-								ItemStack clone = ingre1.clone();
-								ItemLore.setItemLore(clone, new ItemLoreView(player));
-								if (!ingre1.isSimilar(clone))
-								{
-									recipeIsCorrect = false;
-									ItemLore.setItemLore(ingre1, new ItemLoreView(player));
-								}
-							}
-						}
-						if (ItemStackUtil.itemExists(ingre2))
-						{
-							if (!ItemStackUtil.hasLore(ingre2))
-							{
-								recipeIsCorrect = false;
-								ItemLore.setItemLore(ingre2, new ItemLoreView(player));
-							}
-							else
-							{
-								ItemStack clone = ingre2.clone();
-								ItemLore.setItemLore(clone, new ItemLoreView(player));
-								if (!ingre2.isSimilar(clone))
-								{
-									recipeIsCorrect = false;
-									ItemLore.setItemLore(ingre2, new ItemLoreView(player));
-								}
-							}
-						}
-						if (!ItemStackUtil.hasLore(result))
-						{
-							recipeIsCorrect = false;
-							ItemLore.setItemLore(result, new ItemLoreView(player));
-						}
-						else
-						{
-							ItemStack clone = result.clone();
-							ItemLore.setItemLore(clone, new ItemLoreView(player));
-							if (!result.isSimilar(clone))
-							{
-								recipeIsCorrect = false;
-								ItemLore.setItemLore(result, new ItemLoreView(player));
-							}
-						}
-						if (recipeIsCorrect)
-						{
-							continue;
-						}
-						MerchantRecipe newRecipe = new MerchantRecipe(result, recipe.getUses(), recipe.getMaxUses(), recipe.hasExperienceReward(),
-								recipe.getVillagerExperience(), recipe.getPriceMultiplier());
-						newRecipe.setIngredients(Arrays.asList(ingre1, ingre2));
-						merchant.setRecipe(i, newRecipe);
-						event.setCancelled(true);
-						if (Cucumbery.config.getBoolean("send-actionbar-when-merchant-update-their-recipe"))
-						{
-							String actionbar = Cucumbery.config.getString("actionbar-when-merchant-update-their-recipe");
-							if (actionbar == null)
-							{
-								return;
-							}
-							MessageUtil.sendActionBar(player, MessageUtil.n2s(actionbar));
-						}
 
-					}
-				}
-			}
-			catch (Exception ignored)
-			{
-			}
-		}
 		if (!title.contains(Constant.CANCEL_STRING) && !title.contains(Constant.CUSTOM_RECIPE_CREATE_GUI) && !title.contains("의 인벤토리") && !title.contains(
 				"'s Inventory") && !UserData.EVENT_EXCEPTION_ACCESS.getBoolean(player.getUniqueId()) && inventory.getType() != InventoryType.MERCHANT)
 		{
@@ -256,7 +142,6 @@ public class InventoryOpen implements Listener
 				String expireDate = NBTAPI.getString(NBTAPI.getMainCompound(item), CucumberyTag.EXPIRE_DATE_KEY);
 				if (expireDate != null)
 				{
-					ItemStackUtil.updateInventory(player, item);
 					if (Method.isTimeUp(item, expireDate))
 					{
 						MessageUtil.info(player, "아이템 %s의 유효 기간이 지나서 아이템이 제거되었습니다", item);

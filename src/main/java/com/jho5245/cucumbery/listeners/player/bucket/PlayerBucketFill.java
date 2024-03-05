@@ -75,8 +75,6 @@ public class PlayerBucketFill implements Listener
           return;
         }
       }
-      Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-              ItemStackUtil.updateInventory(player), 0L);
     }
   }
 }

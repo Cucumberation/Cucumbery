@@ -3857,7 +3857,6 @@ public class CommandItemTag implements CommandExecutor
 									}
 									itemMeta.displayName(originalName == null || originalName.isEmpty() ? null : ComponentUtil.create(originalName));
 									itemStack.setItemMeta(itemMeta);
-									ItemLore.setItemLore(itemStack);
 									playerInventory.setItemInMainHand(itemStack);
 									Component prefixComponent = ComponentUtil.create(prefix);
 									if (prefixComponent.color() == null)
@@ -3909,7 +3908,6 @@ public class CommandItemTag implements CommandExecutor
 										ItemMeta itemMeta = itemStack.getItemMeta();
 										itemMeta.displayName(originalName == null || originalName.isEmpty() ? null : ComponentUtil.create(originalName));
 										itemStack.setItemMeta(itemMeta);
-										ItemLore.setItemLore(itemStack);
 										playerInventory.setItemInMainHand(itemStack);
 										MessageUtil.info(sender, "아이템의 모든 접두어를 제거했습니다. 전 : %s, 후 : %s", item, itemStack);
 										return true;
@@ -3929,7 +3927,6 @@ public class CommandItemTag implements CommandExecutor
 									ItemMeta itemMeta = itemStack.getItemMeta();
 									itemMeta.displayName(originalName == null || originalName.isEmpty() ? null : ComponentUtil.create(originalName));
 									itemStack.setItemMeta(itemMeta);
-									ItemLore.setItemLore(itemStack);
 									playerInventory.setItemInMainHand(itemStack);
 									MessageUtil.info(sender, "아이템의 %s번째 접두어 %s을(를) 제거했습니다. 전 : %s, 후 : %s", line + 1, prefixComponent, item, itemStack);
 								}
@@ -3989,7 +3986,6 @@ public class CommandItemTag implements CommandExecutor
 									ItemMeta itemMeta = itemStack.getItemMeta();
 									itemMeta.displayName(originalName == null || originalName.isEmpty() ? null : ComponentUtil.create(originalName));
 									itemStack.setItemMeta(itemMeta);
-									ItemLore.setItemLore(itemStack);
 									playerInventory.setItemInMainHand(itemStack);
 									Component prefixComponent = ComponentUtil.create(prefix);
 									if (prefixComponent.color() == null)
@@ -4113,7 +4109,6 @@ public class CommandItemTag implements CommandExecutor
 									}
 									itemMeta.displayName(originalName == null || originalName.isEmpty() ? null : ComponentUtil.create(originalName));
 									itemStack.setItemMeta(itemMeta);
-									ItemLore.setItemLore(itemStack);
 									playerInventory.setItemInMainHand(itemStack);
 									Component suffixComponent = ComponentUtil.create(suffix);
 									if (suffixComponent.color() == null)
@@ -4165,7 +4160,7 @@ public class CommandItemTag implements CommandExecutor
 										ItemMeta itemMeta = itemStack.getItemMeta();
 										itemMeta.displayName(originalName == null || originalName.isEmpty() ? null : ComponentUtil.create(originalName));
 										itemStack.setItemMeta(itemMeta);
-										ItemLore.setItemLore(itemStack);
+
 										playerInventory.setItemInMainHand(itemStack);
 										MessageUtil.info(sender, "아이템의 모든 접미어를 제거했습니다. 전 : %s, 후 : %s", item, itemStack);
 										return true;
@@ -4185,7 +4180,6 @@ public class CommandItemTag implements CommandExecutor
 									ItemMeta itemMeta = itemStack.getItemMeta();
 									itemMeta.displayName(originalName == null || originalName.isEmpty() ? null : ComponentUtil.create(originalName));
 									itemStack.setItemMeta(itemMeta);
-									ItemLore.setItemLore(itemStack);
 									playerInventory.setItemInMainHand(itemStack);
 									MessageUtil.info(sender, "아이템의 %s번째 접미어 %s을(를) 제거했습니다. 전 : %s, 후 : %s", line + 1, suffixComponent, item, itemStack);
 								}
@@ -4245,7 +4239,6 @@ public class CommandItemTag implements CommandExecutor
 									ItemMeta itemMeta = itemStack.getItemMeta();
 									itemMeta.displayName(originalName == null || originalName.isEmpty() ? null : ComponentUtil.create(originalName));
 									itemStack.setItemMeta(itemMeta);
-									ItemLore.setItemLore(itemStack);
 									playerInventory.setItemInMainHand(itemStack);
 									Component suffixComponent = ComponentUtil.create(suffix);
 									if (suffixComponent.color() == null)
@@ -4309,7 +4302,6 @@ public class CommandItemTag implements CommandExecutor
 								}
 								itemMeta.displayName(originalName == null || originalName.isEmpty() ? null : ComponentUtil.create(originalName));
 								itemStack.setItemMeta(itemMeta);
-								ItemLore.setItemLore(itemStack);
 								playerInventory.setItemInMainHand(itemStack);
 								Component nameComponent = ComponentUtil.create(name);
 								if (nameComponent.color() == null)
@@ -4342,7 +4334,6 @@ public class CommandItemTag implements CommandExecutor
 							}
 							itemMeta.displayName(originalName == null || originalName.isEmpty() ? null : ComponentUtil.create(originalName));
 							itemStack.setItemMeta(itemMeta);
-							ItemLore.setItemLore(itemStack);
 							playerInventory.setItemInMainHand(itemStack);
 							Component nameComponent = ComponentUtil.create(args[2]);
 							if (nameComponent.color() == null)
@@ -4368,7 +4359,6 @@ public class CommandItemTag implements CommandExecutor
 							ItemMeta itemMeta = itemStack.getItemMeta();
 							itemMeta.displayName(originalName == null || originalName.isEmpty() ? null : ComponentUtil.create(originalName));
 							itemStack.setItemMeta(itemMeta);
-							ItemLore.setItemLore(itemStack);
 							playerInventory.setItemInMainHand(itemStack);
 							MessageUtil.info(sender, "사용자 지정 이름 태그를 제거했습니다. 전 : %s, 후 : %s", item, itemStack);
 						}

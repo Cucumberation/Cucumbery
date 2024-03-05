@@ -384,11 +384,6 @@ public class PlayerInteract implements Listener
 					}
 				}
 
-				if (itemType == Material.BUNDLE)
-				{
-					Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
-				}
-
 				// 손에 아이템 있음 - 허공 우클릭
 				//				if (rightAir)
 				//				{
@@ -609,7 +604,6 @@ public class PlayerInteract implements Listener
 								event.setCancelled(true);
 								return;
 							}
-							Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
 						}
 					}
 
@@ -625,67 +619,6 @@ public class PlayerInteract implements Listener
 								event.setCancelled(true);
 								return;
 							}
-							Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
-						}
-					}
-					// 손에 나침반을 든 상태로 블록 우클릭
-					if (itemType == Material.COMPASS)
-					{
-						if (clickedBlockType == Material.LODESTONE)
-						{
-							if (item.getAmount() == 1 && player.getGameMode() != GameMode.CREATIVE)
-							{
-								Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
-							}
-							else
-							{
-								Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-								{
-									ItemStack item2 = null;
-									for (int i = 0; i < player.getInventory().getSize(); i++)
-									{
-										item2 = player.getInventory().getItem(i);
-										if (ItemStackUtil.itemExists(item2) && item2.getType() == Material.COMPASS)
-										{
-											ItemMeta item1Meta = item.getItemMeta(), item2Meta = item2.getItemMeta();
-											CompassMeta compassMeta1 = (CompassMeta) item1Meta, compassMeta2 = (CompassMeta) item2Meta;
-											if (ItemStackUtil.hasLore(item) && ItemStackUtil.hasLore(item2)
-													&& Objects.requireNonNull(item1Meta.lore()).size() == Objects.requireNonNull(item2Meta.lore()).size() && !compassMeta1.hasLodestone()
-													&& !compassMeta1.isLodestoneTracked() && (compassMeta2.hasLodestone() || compassMeta2.isLodestoneTracked()))
-											{
-												item2 = player.getInventory().getItem(i);
-												break;
-											}
-										}
-									}
-									if (item2 != null)
-									{
-										ItemStack item2Clone = item2.clone();
-										player.getInventory().remove(item2);
-										ItemLore.setItemLore(item2Clone);
-										player.getInventory().addItem(item2Clone);
-									}
-									for (int i = 0; i < player.getInventory().getSize(); i++)
-									{
-										item2 = player.getInventory().getItem(i);
-										if (ItemStackUtil.itemExists(item2) && item2.getType() == Material.COMPASS)
-										{
-											ItemMeta item1Meta = item.getItemMeta(), item2Meta = item2.getItemMeta();
-											CompassMeta compassMeta1 = (CompassMeta) item1Meta, compassMeta2 = (CompassMeta) item2Meta;
-											if (ItemStackUtil.hasLore(item) && ItemStackUtil.hasLore(item2)
-													&& Objects.requireNonNull(item1Meta.lore()).size() == Objects.requireNonNull(item2Meta.lore()).size() && (compassMeta1.hasLodestone()
-													|| compassMeta1.isLodestoneTracked()) && (compassMeta2.hasLodestone() || compassMeta2.isLodestoneTracked()))
-											{
-												ItemStack item2Clone = item2.clone();
-												player.getInventory().remove(item2);
-												ItemLore.setItemLore(item2Clone);
-												player.getInventory().addItem(item2Clone);
-											}
-										}
-									}
-								}, 0L);
-							}
-
 						}
 					}
 
@@ -762,80 +695,6 @@ public class PlayerInteract implements Listener
 									afterBlock.setType(Material.AIR);
 								}
 							}, 0L);
-						}
-					}
-				}
-
-				// 손에 지도를 든 상태로 우클릭
-				if (itemType == Material.MAP)
-				{
-					Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
-				}
-
-				// 손에 유리병을 든 상태로 우클릭
-				if (itemType == Material.GLASS_BOTTLE)
-				{
-					List<Entity> entities = player.getNearbyEntities(5D, 5D, 5D);
-					for (Entity entity : entities)
-					{
-						if (entity.getType() == EntityType.AREA_EFFECT_CLOUD)
-						{
-							AreaEffectCloud effect = (AreaEffectCloud) entity;
-							ProjectileSource shooter = effect.getSource();
-							if (shooter instanceof EnderDragon)
-							{
-								if (item.getAmount() == 1)
-								{
-									Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-									{
-										boolean valid = false;
-										ItemStack item2 = null;
-										int slot = -1;
-										for (int i = 0; i < player.getInventory().getSize(); i++)
-										{
-											item2 = player.getInventory().getItem(i);
-											if (ItemStackUtil.itemExists(item2) && item2.getType() == Material.DRAGON_BREATH && !ItemStackUtil.hasLore(item2))
-											{
-												slot = i;
-												valid = true;
-												break;
-											}
-										}
-										if (valid && item2 != null)
-										{
-											player.getInventory().remove(item2);
-											ItemStack newItem = new ItemStack(Material.DRAGON_BREATH);
-											ItemLore.setItemLore(newItem);
-											player.getInventory().setItem(slot, newItem);
-										}
-									}, 0L);
-								}
-								else
-								{
-									Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-									{
-										boolean valid = false;
-										ItemStack item2 = null;
-										for (int i = 0; i < player.getInventory().getSize(); i++)
-										{
-											item2 = player.getInventory().getItem(i);
-											if (ItemStackUtil.itemExists(item2) && item2.getType() == Material.DRAGON_BREATH && !ItemStackUtil.hasLore(item2))
-											{
-												valid = true;
-												break;
-											}
-										}
-										if (valid && item2 != null)
-										{
-											player.getInventory().remove(item2);
-											ItemStack newItem = new ItemStack(Material.DRAGON_BREATH);
-											ItemLore.setItemLore(newItem);
-											player.getInventory().addItem(newItem);
-										}
-									}, 0L);
-								}
-								break;
-							}
 						}
 					}
 				}
@@ -1059,15 +918,6 @@ public class PlayerInteract implements Listener
 		// 우클릭
 		if (rightClick)
 		{
-			// 유리병을 들고 물에 우클릭
-			if (itemType == Material.GLASS_BOTTLE)
-			{
-				Block waterSource = player.getTargetBlockExact(5, FluidCollisionMode.ALWAYS);
-				if (waterSource != null && waterSource.getType() == Material.WATER)
-				{
-					Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
-				}
-			}
 			// 허공 우클릭
 			//			if (rightAir)
 			//			{
@@ -1234,10 +1084,7 @@ public class PlayerInteract implements Listener
 		// 블록 좌/우클릭
 		if (blockClick)
 		{
-			if (itemType == Material.DEBUG_STICK)
-			{
-				Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
-			}
+
 		}
 
 		if (action == Action.PHYSICAL && block != null)
@@ -1862,7 +1709,7 @@ public class PlayerInteract implements Listener
 									victim.damage(damage, player);
 									if (ignoreInvincible && health == victim.getHealth())
 									{
-										EntityDamageByEntityEvent damageEvent = new EntityDamageByEntityEvent(player, victim, DamageCause.PROJECTILE, damage);
+										EntityDamageByEntityEvent damageEvent = new EntityDamageByEntityEvent(player, victim, DamageCause.PROJECTILE, org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.GENERIC).build(), damage);
 										victim.setHealth(Math.max(0, victim.getHealth() - damage));
 										victim.setLastDamageCause(damageEvent);
 										victim.setLastDamage(damage);
@@ -1872,7 +1719,7 @@ public class PlayerInteract implements Listener
 								{
 									try
 									{
-										EntityDamageByEntityEvent damageEvent = new EntityDamageByEntityEvent(player, victim, DamageCause.PROJECTILE, damage);
+										EntityDamageByEntityEvent damageEvent = new EntityDamageByEntityEvent(player, victim, DamageCause.PROJECTILE, org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.GENERIC).build(), damage);
 										victim.setHealth(Math.max(0, victim.getHealth() - damage));
 										victim.setLastDamageCause(damageEvent);
 										victim.setLastDamage(damage);
@@ -2093,7 +1940,6 @@ public class PlayerInteract implements Listener
 					default:
 						break;
 				}
-				ItemStackUtil.updateInventory(player);
 			}
 			catch (Exception e)
 			{
@@ -2148,6 +1994,5 @@ public class PlayerInteract implements Listener
 				}
 			}
 		}
-		ItemStackUtil.updateInventory(player);
 	}
 }

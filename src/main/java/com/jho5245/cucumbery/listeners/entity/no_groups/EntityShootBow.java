@@ -5,7 +5,6 @@ import com.jho5245.cucumbery.custom.customeffect.CustomEffect;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.children.group.DoubleCustomEffect;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
-import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
 import com.jho5245.cucumbery.util.no_groups.ItemSerializer;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
@@ -108,11 +107,9 @@ public class EntityShootBow implements Listener
     if (ItemStackUtil.itemExists(bow))
     {
       bow = bow.clone();
-      ItemLore.setItemLore(bow, event);
       if (ItemStackUtil.itemExists(consumable))
       {
         consumable = consumable.clone();
-        ItemLore.setItemLore(consumable);
         Variable.projectile.put(projectile.getUniqueId(), consumable);
       }
       Variable.attackerAndWeapon.put(livingEntity.getUniqueId(), bow);
@@ -135,7 +132,7 @@ public class EntityShootBow implements Listener
           if (projectile instanceof AbstractArrow abstractArrow)
           {
             ItemStack consumableClone = consumable != null ? consumable.clone() : CustomMaterial.ARROW_CRIT.create();
-            new NBTItem(consumableClone, true).setString("id", "arrow_crit");
+            new NBTItem(consumableClone, true).setString(CustomMaterial.IDENDIFER, "arrow_crit");
             consumableClone.setAmount(1);
             Variable.entityShootBowConsumableMap.put(abstractArrow.getUniqueId(), ItemSerializer.serialize(consumableClone));
             if (consumable != null)
@@ -185,7 +182,7 @@ public class EntityShootBow implements Listener
           if (projectile instanceof AbstractArrow abstractArrow)
           {
             ItemStack consumableClone = consumable != null ? consumable.clone() : CustomMaterial.ARROW_FLAME.create();
-            new NBTItem(consumableClone, true).setString("id", "arrow_flame");
+            new NBTItem(consumableClone, true).setString(CustomMaterial.IDENDIFER, "arrow_flame");
             consumableClone.setAmount(1);
             Variable.entityShootBowConsumableMap.put(abstractArrow.getUniqueId(), ItemSerializer.serialize(consumableClone));
             if (consumable != null)
@@ -210,7 +207,7 @@ public class EntityShootBow implements Listener
           if (projectile instanceof AbstractArrow abstractArrow)
           {
             ItemStack consumableClone = consumable != null ? consumable.clone() : CustomMaterial.ARROW_MOUNT.create();
-            new NBTItem(consumableClone, true).setString("id", "arrow_mount");
+            new NBTItem(consumableClone, true).setString(CustomMaterial.IDENDIFER, "arrow_mount");
             consumableClone.setAmount(1);
             Variable.entityShootBowConsumableMap.put(abstractArrow.getUniqueId(), ItemSerializer.serialize(consumableClone));
             if (consumable != null)

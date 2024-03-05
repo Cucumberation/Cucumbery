@@ -278,7 +278,6 @@ public class CustomConfig
 		COPY_NOTE_BLOCK_VALUE_WHEN_SNEAKING("웅크리기-상태에서만-소리-블록-값-복사", true),
 		CUSTOM_MINING_COOLDOWN_DISPLAY_BLOCK("커스텀-채광-쿨타임-표시-블록", Material.BEDROCK.toString()),
 		DISABLE_COMMAND_BLOCK_BREAK_WHEN_SNEAKING("웅크린-상태에서-명령-블록-파괴-방지", false),
-		DISABLE_HELPFUL_FEATURE_WHEN_CREATIVE("크리에이티브-모드에서-아이템-설명-기능-비활성화", false),
 		DISABLE_ITEM_COOLDOWN("아이템-재사용-대기-시간-무시(바닐라-아이템-전용)", false),
 		DISPLAY_NAME("닉네임", "플레이어-아이디"),
 		ENTITY_AGGRO("몬스터로부터-어그로가-끌림", true),
@@ -375,6 +374,9 @@ public class CustomConfig
 		SHOW_DEATH_PVP_MESSAGE("데스-메시지-PVP-표시", true),
 		SHOW_DEATH_LOCATION_ON_CHAT("사망-시-죽은-위치-채팅창에-표시", false),
 		DISABLE_PORTAL_USAGE_ON_CREATIVE("크리에이티브에서-포탈-사용-비활성화", false),
+		SHOW_ITEM_LORE("추가-아이템-설명-표시", true),
+		SHOW_ITEM_LORE_IN_CREATIVE_MODE("크리에이티브에서-추가-아이템-설명-표시", false),
+		SHOW_ENCHANTED_ITEM_GLINTS("마법이-부여된-아이템-반짝임-표시", true),
 		;
 
 		private final String key;
@@ -548,7 +550,7 @@ public class CustomConfig
 			{
 				switch (this)
 				{
-					case DISABLE_HELPFUL_FEATURE_WHEN_CREATIVE, EVENT_EXCEPTION_ACCESS, SHOW_ENCHANTMENT_TMI_DESCRIPTION -> ItemStackUtil.updateInventory(player);
+					case EVENT_EXCEPTION_ACCESS, SHOW_ENCHANTMENT_TMI_DESCRIPTION, SHOW_ITEM_LORE, SHOW_ENCHANTED_ITEM_GLINTS -> ItemStackUtil.updateInventory(player);
 					case ENTITY_AGGRO, SPECTATOR_MODE ->
 					{
 						if (!UserData.ENTITY_AGGRO.getBoolean(uuid) || UserData.SPECTATOR_MODE.getBoolean(uuid))

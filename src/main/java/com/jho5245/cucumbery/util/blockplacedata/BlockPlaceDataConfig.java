@@ -500,10 +500,6 @@ public class BlockPlaceDataConfig extends ChunkConfig
 					MessageUtil.sendWarn(Bukkit.getConsoleSender(), "잘못된 아이템 데이터가 있습니다: " + value);
 					itemStack = new ItemStack(Material.AIR);
 				}
-				else
-				{
-					ItemLore.setItemLore(itemStack);
-				}
 				Object minecraftItemStack = MinecraftReflection.getMinecraftItemStack(itemStack);
 				values.add(new WrappedDataValue(23, Registry.getItemStackSerializer(false), minecraftItemStack));
 				int itemDisplay = 0;

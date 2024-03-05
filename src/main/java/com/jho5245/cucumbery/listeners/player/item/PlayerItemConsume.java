@@ -114,70 +114,6 @@ public class PlayerItemConsume implements Listener
 			return;
 		}
 
-		// 아이템 사용 후 자동 지급되는 아이템에 아이템 설명 추가
-		if (player.getGameMode() != GameMode.CREATIVE && (type == Material.MILK_BUCKET || type == Material.POTION || type == Material.MUSHROOM_STEW
-				|| type == Material.RABBIT_STEW || type == Material.SUSPICIOUS_STEW || type == Material.BEETROOT_SOUP || type == Material.HONEY_BOTTLE))
-		{
-			Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-			{
-				if (item.getAmount() != 1)
-				{
-					ItemStack item2 = null;
-					PlayerInventory inv = player.getInventory();
-					for (int i = 0; i < inv.getSize(); i++)
-					{
-						item2 = inv.getItem(i);
-						if (ItemStackUtil.itemExists(item2) && !ItemStackUtil.hasLore(item2))
-						{
-							Material type2 = item2.getType();
-							if (type2 == Material.GLASS_BOTTLE)
-							{
-								break;
-							}
-						}
-					}
-					if (ItemStackUtil.itemExists(item2) && !ItemStackUtil.hasLore(item2))
-					{
-						Material type2 = item2.getType();
-						if (type2 == Material.GLASS_BOTTLE)
-						{
-							ItemStack newItem = item2.clone();
-							inv.remove(item2);
-							ItemLore.setItemLore(newItem);
-							ItemStack offHand = inv.getItemInOffHand();
-							if (ItemStackUtil.itemExists(offHand))
-							{
-								type2 = offHand.getType();
-								if (type2 == Material.GLASS_BOTTLE)
-								{
-									if (ItemStackUtil.itemEquals(newItem, offHand))
-									{
-										int remainSpace = offHand.getMaxStackSize() - offHand.getAmount();
-										if (remainSpace > newItem.getAmount())
-										{
-											offHand.setAmount(offHand.getAmount() + newItem.getAmount());
-											newItem.setAmount(0);
-										}
-										else
-										{
-											offHand.setAmount(offHand.getMaxStackSize());
-											newItem.setAmount(newItem.getAmount() - remainSpace);
-										}
-									}
-								}
-							}
-							if (newItem.getAmount() > 0)
-							{
-								inv.addItem(newItem);
-							}
-							Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
-						}
-					}
-				}
-				ItemStackUtil.updateInventory(player);
-			}, 0L);
-		}
-
 		this.consumeItemUsage(event, player, item, player.isSneaking());
 		if (event.isCancelled())
 		{
@@ -354,7 +290,7 @@ public class PlayerItemConsume implements Listener
 					}
 				}, 0L);
 			}
-			EquipmentSlot slot = ItemStackUtil.getPlayerUsingSlot(player, new HashSet<>(Collections.singletonList(item.getType())));
+			// EquipmentSlot slot = ItemStackUtil.getPlayerUsingSlot(player, new HashSet<>(Collections.singletonList(item.getType())));
 			if (usageConsumeTag.hasTag(CucumberyTag.USAGE_DISPOSABLE_KEY))
 			{
 				double disposableChance = 100d;
@@ -366,7 +302,7 @@ public class PlayerItemConsume implements Listener
 				{
 					Variable.playerItemConsumeCauseSwapCooldown.add(uuid);
 					Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> Variable.playerItemConsumeCauseSwapCooldown.remove(uuid), 0L);
-					ItemStack finalItem = item.clone();
+/*					ItemStack finalItem = item.clone();
 					Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
 					{
 						player.getInventory().setItem(slot, finalItem);
@@ -375,7 +311,7 @@ public class PlayerItemConsume implements Listener
 							ItemStack glassBottle = ItemStackUtil.loredItemStack(Material.GLASS_BOTTLE);
 							player.getInventory().removeItem(glassBottle);
 						}
-					}, 0L);
+					}, 0L);*/
 
 				}
 			}

@@ -368,7 +368,6 @@ Cucumbery.getPlugin().getLogger().warning(        e.getMessage());
         BlockDataMeta blockDataMeta = (BlockDataMeta) item.getItemMeta();
         blockDataMeta.setBlockData(blockData);
         item.setItemMeta(blockDataMeta);
-        ItemLore.setItemLore(item);
         List<Component> lore = ItemStackUtil.getItemInfoAsComponents(item, ComponentUtil.translate("rg255,204;[들고 있는 아이템]"), true);
         for (Component lor : lore)
         {
@@ -775,7 +774,7 @@ Cucumbery.getPlugin().getLogger().warning(        e.getMessage());
     {
       BlockData blockData = fallingBlock.getBlockData();
       Material type = blockData.getMaterial();
-      ItemStack itemStack = ItemStackUtil.loredItemStack(type);
+      ItemStack itemStack = new ItemStack(type);
       ItemMeta itemMeta = itemStack.getItemMeta();
       if (itemMeta instanceof BlockDataMeta blockDataMeta)
       {

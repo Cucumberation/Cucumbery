@@ -65,12 +65,6 @@ public class PlayerBucketEmpty implements Listener
 				ItemStack finalItem = original.clone();
 				Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> player.getInventory().setItem(event.getHand(), finalItem), 0L);
 			}
-			Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-			{
-				ItemStack main = player.getInventory().getItemInMainHand(), off = player.getInventory().getItemInOffHand();
-				ItemLore.setItemLore(main);
-				ItemLore.setItemLore(off);
-			}, 0L);
 		}
 	}
 }

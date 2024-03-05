@@ -18,15 +18,5 @@ public class PlayerStoneCutterRecipeSelect implements Listener
     {
       return;
     }
-
-    StonecutterInventory stonecutterInventory = event.getStonecutterInventory();
-    Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-    {
-      ItemStack item = stonecutterInventory.getResult();
-      if (item != null)
-      {
-        ItemLore.setItemLore(item);
-      }
-    }, 0L);
   }
 }

@@ -27,7 +27,6 @@ public class PrepareResult implements Listener
 			{
 				return;
 			}
-			ItemLore.setItemLore(result, new ItemLoreView(player));
 			event.setResult(result);
 		}
 	}

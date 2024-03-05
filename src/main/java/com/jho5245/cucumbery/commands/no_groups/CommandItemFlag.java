@@ -1,6 +1,5 @@
 package com.jho5245.cucumbery.commands.no_groups;
 
-import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.storage.data.Permission;
@@ -81,7 +80,6 @@ public class CommandItemFlag implements CommandExecutor, TabCompleter
         MessageUtil.sendMessage(player, Prefix.INFO_SETDATA, "주로 사용하는 손에 들고 있는 아이템에 rg255,204;" + args[1] + "&r 플래그를 추가했습니다");
         item.setItemMeta(meta);
         player.getInventory().setItemInMainHand(item);
-        ItemLore.setItemLore(player.getInventory().getItemInMainHand());
       }
       else if (args[0].equalsIgnoreCase("remove"))
       {
@@ -114,7 +112,6 @@ public class CommandItemFlag implements CommandExecutor, TabCompleter
         MessageUtil.sendMessage(player, Prefix.INFO_SETDATA, "주로 사용하는 손에 들고 있는 아이템에 rg255,204;" + args[1] + "&r 플래그를 제거했습니다");
         item.setItemMeta(meta);
         player.getInventory().setItemInMainHand(item);
-        ItemLore.setItemLore(player.getInventory().getItemInMainHand());
       }
       else
       {

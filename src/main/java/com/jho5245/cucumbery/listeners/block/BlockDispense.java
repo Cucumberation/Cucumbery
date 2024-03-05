@@ -4,7 +4,6 @@ import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.children.group.LongCustomEffectImple;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
-import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
@@ -21,7 +20,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -93,27 +91,6 @@ public class BlockDispense implements Listener
         if (NBTAPI.isRestricted(item, Constant.RestrictionType.NO_DROPPER_DISPENSE))
         {
           event.setCancelled(true);
-          return;
-        }
-      }
-      switch (item.getType())
-      {
-        case BUCKET, COD_BUCKET, SALMON_BUCKET, LAVA_BUCKET, WATER_BUCKET, PUFFERFISH_BUCKET, TROPICAL_FISH_BUCKET ->
-                Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-        {
-          Dispenser dispenser = (Dispenser) block.getState();
-          Inventory inv = dispenser.getInventory();
-          for (int i = 0; i < inv.getSize(); i++)
-          {
-            ItemStack invItem = inv.getItem(i);
-            if (ItemStackUtil.itemExists(invItem))
-            {
-              ItemLore.setItemLore(invItem);
-            }
-          }
-        }, 0L);
-        default ->
-        {
         }
       }
     }

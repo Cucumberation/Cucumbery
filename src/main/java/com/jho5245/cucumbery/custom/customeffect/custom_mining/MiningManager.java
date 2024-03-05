@@ -14,6 +14,7 @@ import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method;
+import com.jho5245.cucumbery.util.no_groups.Method2;
 import com.jho5245.cucumbery.util.no_groups.PlaceHolderUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Constant.ExtraTag;
@@ -853,10 +854,15 @@ public class MiningManager
         }
       }
     }
+    // 못부수는 블록 처리(설치된 상태로 파괴 불가)
+    if (!drops.isEmpty() && ItemStackUtil.itemExists(drops.get(0)) && NBTAPI.isRestricted(player, drops.get(0), RestrictionType.NO_BLOCK_BREAK))
+    {
+      return null;
+    }
     // 커스텀 아이템 id
-    String toolId = ItemStackUtil.itemExists(itemStack) ? new NBTItem(itemStack).getString("id") : "",
-            blockId = !drops.isEmpty() && ItemStackUtil.itemExists(drops.get(0)) ? new NBTItem(drops.get(0)).getString("id") : "";
-    if (CustomMaterial.FLINT_SHOVEL.toString().equalsIgnoreCase(toolId) && blockId.isEmpty() && blockType == Material.GRAVEL)
+    CustomMaterial toolId = ItemStackUtil.itemExists(itemStack) ? Method2.valueOf(new NBTItem(itemStack).getString(CustomMaterial.IDENDIFER), CustomMaterial.class) : null,
+            blockId = !drops.isEmpty() && ItemStackUtil.itemExists(drops.get(0)) ? Method2.valueOf(new NBTItem(drops.get(0)).getString(CustomMaterial.IDENDIFER), CustomMaterial.class) : null;
+    if (toolId == CustomMaterial.FLINT_SHOVEL && blockId == null && blockType == Material.GRAVEL)
     {
       drops.forEach(item ->
       {
@@ -917,15 +923,15 @@ public class MiningManager
             toolSpeed += (float) value;
           }
         }
-        if (CustomMaterial.MITHRIL_PICKAXE_REFINED.toString().equalsIgnoreCase(toolId) && CustomMaterial.MITHRIL_ORE.toString().equalsIgnoreCase(blockId))
+        if (toolId == CustomMaterial.MITHRIL_PICKAXE_REFINED && blockId == CustomMaterial.MITHRIL_ORE)
         {
           miningSpeed += 50f;
         }
-        if (CustomMaterial.TITANIUM_PICKAXE_REFINED.toString().equalsIgnoreCase(toolId) && CustomMaterial.TITANIUM_ORE.toString().equalsIgnoreCase(blockId))
+        if (toolId == CustomMaterial.TITANIUM_PICKAXE_REFINED && blockId == CustomMaterial.TITANIUM_ORE)
         {
           miningSpeed += 60f;
         }
-        if (CustomMaterial.STONK.toString().equalsIgnoreCase(toolId) && blockId.isEmpty() && (blockType == Material.STONE || blockType == Material.COBBLESTONE || blockType == Material.DEEPSLATE || blockType == Material.COBBLED_DEEPSLATE))
+        if (toolId == CustomMaterial.STONK && blockId == null && (blockType == Material.STONE || blockType == Material.COBBLESTONE || blockType == Material.DEEPSLATE || blockType == Material.COBBLED_DEEPSLATE))
         {
           miningSpeed += 10000f;
         }
@@ -1103,11 +1109,11 @@ public class MiningManager
       {
         miningFortune += (float) ((miningFortuneEffect.getAmplifier() + 1) * 0.05);
       }
-      if (CustomMaterial.MITHRIL_PICKAXE.toString().equalsIgnoreCase(toolId) && CustomMaterial.MITHRIL_ORE.toString().equalsIgnoreCase(blockId))
+      if (toolId == CustomMaterial.MITHRIL_PICKAXE && blockId == CustomMaterial.MITHRIL_ORE)
       {
         miningFortune += 0.15f;
       }
-      if (CustomMaterial.TITANIUM_PICKAXE.toString().equalsIgnoreCase(toolId) && CustomMaterial.TITANIUM_ORE.toString().equalsIgnoreCase(blockId))
+      if (toolId == CustomMaterial.TITANIUM_PICKAXE && blockId == CustomMaterial.TITANIUM_ORE)
       {
         miningFortune += 0.2f;
       }
@@ -1168,7 +1174,7 @@ public class MiningManager
 
     // 기타 처리
     {
-      if (Math.random() > 0.95 && CustomMaterial.TODWOT_PICKAXE.toString().equalsIgnoreCase(toolId))
+      if (Math.random() > 0.95 && toolId == CustomMaterial.TODWOT_PICKAXE)
       {
         drops.add(new ItemStack(Material.BONE));
       }

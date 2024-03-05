@@ -51,7 +51,6 @@ public class PredicateChoice implements RecipeChoice
   {
     ItemStack itemStack = new ItemStack(Material.STONE);
     new NBTItem(itemStack, true).mergeCompound(nbtContainer);
-    ItemLore.setItemLore(itemStack);
     return itemStack;
   }
 

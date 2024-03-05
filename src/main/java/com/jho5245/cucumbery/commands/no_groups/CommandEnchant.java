@@ -1,8 +1,6 @@
 package com.jho5245.cucumbery.commands.no_groups;
 
 import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent.Completion;
-import com.jho5245.cucumbery.util.itemlore.ItemLore;
-import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
 import com.jho5245.cucumbery.util.no_groups.CommandTabUtil;
 import com.jho5245.cucumbery.util.no_groups.CucumberyCommandExecutor;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
@@ -134,7 +132,7 @@ public class CommandEnchant implements CucumberyCommandExecutor
         MessageUtil.sendMessage(player, Prefix.INFO_SETDATA, "%s에 %s %s 부여 가능한 마법을 " + (change ? "변경" : "추가") + "했습니다", itemStack, enchantment, level);
       }
       itemStack.setItemMeta(itemMeta);
-      player.getInventory().setItemInMainHand(ItemLore.setItemLore(itemStack, ItemLoreView.of(player)));
+      player.getInventory().setItemInMainHand(itemStack);
     }
     else
     {
@@ -166,7 +164,7 @@ public class CommandEnchant implements CucumberyCommandExecutor
         MessageUtil.sendMessage(player, Prefix.INFO_SETDATA, "%s에 %s %s 마법을 " + (change ? "변경" : "추가") + "했습니다", itemStack, enchantment, level);
       }
       itemStack.setItemMeta(itemMeta);
-      player.getInventory().setItemInMainHand(ItemLore.setItemLore(itemStack, ItemLoreView.of(player)));
+      player.getInventory().setItemInMainHand(itemStack);
     }
     return true;
   }

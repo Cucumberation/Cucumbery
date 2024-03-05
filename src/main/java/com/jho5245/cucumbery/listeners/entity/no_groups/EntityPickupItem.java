@@ -6,8 +6,6 @@ import com.jho5245.cucumbery.custom.customeffect.children.group.PlayerCustomEffe
 import com.jho5245.cucumbery.custom.customeffect.children.group.StringCustomEffectImple;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeRune;
-import com.jho5245.cucumbery.util.itemlore.ItemLore;
-import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method;
@@ -215,21 +213,6 @@ public class EntityPickupItem implements Listener
 				return;
 			}
 
-/*
-      Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-      {
-        List<Entity> entities = entity.getNearbyEntities(3, 3, 3);
-        for (Entity entity1 : entities)
-        {
-          if (entity1 instanceof Item item)
-          {
-            Method.updateItem(item);
-          }
-        }
-      }, 0L);
-*/
-
-			ItemLore.setItemLore(itemStack, new ItemLoreView(player));
 			if (CustomEffectManager.hasEffect(entity, CustomEffectType.DO_NOT_PICKUP_BUT_THROW_IT))
 			{
 				event.setCancelled(true);

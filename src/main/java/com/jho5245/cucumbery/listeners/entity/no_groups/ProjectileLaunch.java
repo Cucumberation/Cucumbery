@@ -2,13 +2,11 @@ package com.jho5245.cucumbery.listeners.entity.no_groups;
 
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
+import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.custom_enchant.CustomEnchant;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Projectile;
-import org.bukkit.entity.Trident;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
@@ -50,6 +48,26 @@ public class ProjectileLaunch implements Listener
           Vector vector = entity.getLocation().getDirection();
           projectile.setVelocity(vector.add(new Vector(Math.random() * modifier - (modifier / 2d), Math.random() * modifier - (modifier / 2d), Math.random() * modifier - (modifier / 2d))));
         }
+      }
+    }
+
+    if (projectile instanceof Snowball snowball)
+    {
+      ItemStack snowBallItemStack = snowball.getItem();
+      CustomMaterial customMaterial = CustomMaterial.itemStackOf(snowBallItemStack);
+      if (customMaterial != null)
+      {
+        switch (customMaterial)
+        {
+          case BRICK_THROWABLE -> snowBallItemStack.setType(Material.BRICK);
+          case NETHER_BRICK_THROWABLE -> snowBallItemStack.setType(Material.NETHER_BRICK);
+          case COPPER_INGOT_THROWABLE -> snowBallItemStack.setType(Material.COPPER_INGOT);
+          case IRON_INGOT_THROWABLE -> snowBallItemStack.setType(Material.IRON_INGOT);
+          case GOLD_INGOT_THROWABLE -> snowBallItemStack.setType(Material.GOLD_INGOT);
+          case NETHERITE_INGOT_THROWABLE -> snowBallItemStack.setType(Material.NETHERITE_INGOT);
+        }
+        snowball.setItem(snowBallItemStack);
+        snowball.setVelocity(snowball.getVelocity().multiply(0.5d));
       }
     }
   }

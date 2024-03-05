@@ -30,6 +30,7 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.Nullable;
 
+import java.security.interfaces.RSAKey;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -505,7 +506,7 @@ public class PrepareAnvil implements Listener
 				if (applied)
 				{
 					result.setItemMeta(resultMeta);
-					event.setResult(ItemLore.setItemLore(result, ItemLoreView.of(player)));
+					event.setResult(result);
 					if (anvilInventory.getRepairCost() <= 0)
 					{
 						anvilInventory.setRepairCost(5);
@@ -558,16 +559,7 @@ public class PrepareAnvil implements Listener
 			Damageable duraMeta = (Damageable) resultItem.getItemMeta();
 			duraMeta.setDamage(resultDamage);
 			resultItem.setItemMeta(duraMeta);
-			ItemLore.setItemLore(resultItem, new ItemLoreView(player));
 			event.setResult(resultItem);
-		}
-		else
-		{
-			ItemStack item = event.getResult();
-			if (ItemStackUtil.itemExists(item))
-			{
-				ItemLore.setItemLore(item, new ItemLoreView(player));
-			}
 		}
 	}
 }

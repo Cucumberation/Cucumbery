@@ -42,16 +42,6 @@ public class PlayerFlowerPotManipulate implements Listener
         SoundPlay.playSound(player, Constant.ERROR_SOUND);
         Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> Variable.blockPlaceAlertCooldown2.remove(uuid), 100L);
       }
-      return;
-    }
-    if (!event.isPlacing())
-    {
-      PlayerInventory inventory = player.getInventory();
-      Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-      {
-        ItemLore.setItemLore(inventory.getItemInMainHand(), player);
-        ItemLore.setItemLore(inventory.getItemInOffHand(), player);
-      }, 0L);
     }
   }
 }

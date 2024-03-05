@@ -9,7 +9,6 @@ import com.jho5245.cucumbery.events.block.CustomBlockBreakEvent;
 import com.jho5245.cucumbery.util.additemmanager.AddItemUtil;
 import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
 import com.jho5245.cucumbery.util.itemlore.ItemLore;
-import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.TPSMeter;
@@ -492,7 +491,6 @@ public class MiningScheduler
 								}
 							}
 						}
-						ItemLore.setItemLore(breakParticleItem, ItemLoreView.of(player));
 						VoxelShape voxelShape = block.getCollisionShape();
 						Collection<BoundingBox> boundingBoxes = voxelShape.getBoundingBoxes();
 						int overridenSize = -1;
@@ -802,7 +800,7 @@ public class MiningScheduler
 				MiningManager.quitCustomMining(player);
 				// 채굴에 사용된 도구 내구도 처리 및 드릴의 연료 경고 처리(즉시 부숴지는 블록은 내구도가 깎이지 않음)
 				boolean dropDura = false;
-				if (!instaBreak && ItemStackUtil.itemExists(toolItemStack) && toolItemStack.hasItemMeta() && !toolItemStack.getItemMeta().isUnbreakable())
+				if (!instaBreak && ItemStackUtil.itemExists(toolItemStack) && !toolItemStack.getItemMeta().isUnbreakable())
 				{
 					NBTItem nbtItem = new NBTItem(toolItemStack, true);
 					NBTCompound itemTag = nbtItem.getCompound(CucumberyTag.KEY_MAIN);
@@ -857,10 +855,10 @@ public class MiningScheduler
 								{
 									damageable.setDamage((int) (currentDurability));
 								}
-								toolItemStack.setItemMeta(itemMeta);
+								toolItemStack.setItemMeta(damageable);
 							}
 						}
-						player.getInventory().setItemInMainHand(ItemLore.setItemLore(toolItemStack, ItemLoreView.of(player)));
+						player.getInventory().setItemInMainHand(ItemLore.setItemLore(toolItemStack));
 						if (dropDura && toolIsDrill)
 						{
 							double ratio = (maxDurability - currentDurability) * 1d / maxDurability;

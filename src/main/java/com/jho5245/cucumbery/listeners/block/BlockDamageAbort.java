@@ -3,6 +3,7 @@ package com.jho5245.cucumbery.listeners.block;
 import com.jho5245.cucumbery.custom.customeffect.custom_mining.MiningManager;
 import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
 import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,7 +19,7 @@ public class BlockDamageAbort implements Listener
     ItemStack itemStack = BlockPlaceDataConfig.getItem(event.getBlock().getLocation());
     if (CustomMaterial.itemStackOf(itemStack) == CustomMaterial.SUS)
     {
-      player.stopSound("custom_sus_breaking");
+      player.stopSound("custom_sus_breaking", SoundCategory.BLOCKS);
     }
     MiningManager.quitCustomMining(player);
   }

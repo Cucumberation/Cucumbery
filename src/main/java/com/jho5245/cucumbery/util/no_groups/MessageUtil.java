@@ -3,27 +3,17 @@ package com.jho5245.cucumbery.util.no_groups;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
-import com.jho5245.cucumbery.util.itemlore.ItemLore;
-import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
 import com.jho5245.cucumbery.util.josautil.KoreanUtils;
-import com.jho5245.cucumbery.util.storage.component.ItemStackComponent;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig;
-import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
-import de.tr7zw.changeme.nbtapi.NBTContainer;
-import de.tr7zw.changeme.nbtapi.NBTItem;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import io.papermc.paper.advancement.AdvancementDisplay.Frame;
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
-import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.event.HoverEvent.Action;
-import net.kyori.adventure.text.event.HoverEvent.ShowItem;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.format.TextDecoration.State;
@@ -36,8 +26,6 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BundleMeta;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.Permissible;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -381,91 +369,29 @@ public class MessageUtil
 		return objects;
 	}
 
-	/**
-	 * 플레이어마다 컵포넌트의 내용물을(주로 아이템) 다르게 하기 위함
-	 */
-	@SuppressWarnings("all")
-	@NotNull
-	private static Component translate(@NotNull Player player, @NotNull Component component)
+	private static Audience of(Object o)
 	{
-		HoverEvent<?> hoverEvent = component.hoverEvent();
-		if (hoverEvent != null && hoverEvent.action() == Action.SHOW_ITEM)
+		if (o instanceof Audience audience)
 		{
-			ShowItem showItem = (ShowItem) hoverEvent.value();
-			Material material = Material.valueOf(showItem.item().value().toUpperCase());
-			ItemStack itemStack = new ItemStack(material, showItem.count());
-			BinaryTagHolder binaryTagHolder = showItem.nbt();
-			NBTItem nbtItem = new NBTItem(itemStack, true);
-			if (binaryTagHolder != null)
-			{
-				nbtItem.mergeCompound(new NBTContainer(binaryTagHolder.string()));
-			}
-			if (material == Material.BUNDLE && "test".equals(new NBTItem(itemStack).getString("test")))
-			{
-				itemStack = ((BundleMeta) itemStack.getItemMeta()).getItems().get(0);
-				nbtItem = new NBTItem(itemStack);
-			}
-			ItemLore.setItemLore(itemStack, new ItemLoreView(player));
-			if (player.hasPermission("asdf") && (!nbtItem.hasTag("VirtualItem") || nbtItem.getBoolean("VirtualItem") == null || !nbtItem.getBoolean("VirtualItem")))
-			{
-				ItemMeta itemMeta = itemStack.getItemMeta();
-				List<Component> lore = itemMeta.lore();
-				if (lore == null)
-				{
-					lore = new ArrayList<>();
-				}
-				lore.add(Component.empty());
-				lore.add(ComponentUtil.translate("&7클릭하여 /give 명령어로 복사"));
-				if (UserData.SHOW_GIVE_COMMAND_NBT_ON_ITEM_ON_CHAT.getBoolean(player))
-				{
-					try
-					{
-						ItemStack clone = ItemLore.removeItemLore(itemStack.clone());
-						String nbt = new NBTItem(clone).getCompound().toString();
-						if (!nbt.equals("{}"))
-						{
-							int count = 0;
-							while (!nbt.isEmpty())
-							{
-								count++;
-								if (count > 20)
-								{
-									lore.add(ComponentUtil.translate("&7&ocontainer.shulkerBox.more", nbt.length() / 50));
-									break;
-								}
-								String cut = nbt.substring(0, Math.min(50, nbt.length()));
-								lore.add(Component.text(cut, NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, State.FALSE));
-								nbt = nbt.substring(cut.length());
-							}
-						}
-					}
-					catch (Exception ignored)
-					{
-
-					}
-				}
-				itemMeta.lore(lore);
-				itemStack.setItemMeta(itemMeta);
-			}
-			else
-			{
-				component = component.clickEvent(null);
-			}
-			component = component.hoverEvent(ItemStackComponent.itemStackComponent(itemStack).hoverEvent());
+			return audience;
 		}
-		if (component instanceof TranslatableComponent translatableComponent)
+		if (o instanceof UUID uuid)
 		{
-			List<Component> args = new ArrayList<>(translatableComponent.args());
-			args.replaceAll(component1 -> translate(player, component1));
-			component = translatableComponent.args(args);
+			Entity entity = Method2.getEntityAsync(uuid);
+			if (entity != null)
+			{
+				return entity;
+			}
 		}
-		if (!component.children().isEmpty())
+		List<Audience> audiences = new ArrayList<>();
+		if (o instanceof Collection<?> collection)
 		{
-			List<Component> children = new ArrayList<>(component.children());
-			children.replaceAll(component1 -> translate(player, component1));
-			component = component.children(children);
+			for (Object object : collection)
+			{
+				audiences.add(of(object));
+			}
 		}
-		return component;
+		return Audience.audience(audiences);
 	}
 
 	/**
@@ -478,61 +404,16 @@ public class MessageUtil
 	 */
 	public static void sendMessage(@NotNull Object audience, @NotNull Object... objects)
 	{
-		if (Cucumbery.using_CommandAPI && audience instanceof NativeProxyCommandSender proxyCommandSender)
+		Audience a = of(audience);
+		Component message = ComponentUtil.create(a instanceof Player player ? player : null, objects);
+		if (a instanceof ConsoleCommandSender)
 		{
-			audience = proxyCommandSender.getCallee();
+			message = ComponentUtil.create("#52ee52;[Cucumbery] ", message);
 		}
-		if (audience instanceof UUID uuid)
+		a.sendMessage(message);
+		if (a instanceof Entity entity && CustomEffectManager.hasEffect(entity, CustomEffectType.CURSE_OF_BEANS))
 		{
-			Entity entity = Bukkit.getEntity(uuid);
-			if (entity != null)
-			{
-				audience = entity;
-			}
-		}
-		if (audience instanceof Collection<?> list)
-		{
-			for (Object o : list)
-			{
-				MessageUtil.sendMessage(o, objects);
-			}
-		}
-		if (audience instanceof Audience a)
-		{
-			// command blocks never get feedback since 2023.02.13
-			if (a instanceof BlockCommandSender)
-			{
-				return;
-			}
-			Component message;
-			if (objects.length == 1 && objects[0] instanceof Component component)
-			{
-				message = component;
-				if (a instanceof Player player)
-				{
-					message = translate(player, message);
-				}
-			}
-			else
-			{
-				if (a instanceof Player player)
-				{
-					message = ComponentUtil.create(player, objects);
-				}
-				else
-				{
-					message = ComponentUtil.create(objects);
-				}
-			}
-			if (a instanceof ConsoleCommandSender)
-			{
-				message = ComponentUtil.create("#52ee52;[Cucumbery] ", message);
-			}
 			a.sendMessage(message);
-			if (a instanceof Entity entity && CustomEffectManager.hasEffect(entity, CustomEffectType.CURSE_OF_BEANS))
-			{
-				a.sendMessage(message);
-			}
 		}
 	}
 
@@ -565,22 +446,15 @@ public class MessageUtil
 	 */
 	public static void sendMessage(@NotNull Object audience, @Nullable Prefix prefix, @NotNull String key, @NotNull Object... args)
 	{
-		if (audience instanceof List<?> list)
+		Audience a = of(audience);
+		Component message = ComponentUtil.translate(a instanceof Player player ? player : null, key, args);
+		if (prefix != null)
 		{
-			for (Object o : list)
-			{
-				sendMessage(o, prefix, key, args);
-			}
+			sendMessage(a, prefix, message);
 		}
 		else
 		{
-			Player p = audience instanceof Player player ? player : null;
-			Component component = ComponentUtil.translate(p, key, args);
-			if (prefix != null)
-			{
-				component = ComponentUtil.create(prefix, component);
-			}
-			sendMessage(audience, component);
+			sendMessage(a, message);
 		}
 	}
 
@@ -644,8 +518,6 @@ public class MessageUtil
 		NamespacedKey namespacedKey = NamespacedKey.minecraft("z-cucumbery-toast-" + System.currentTimeMillis());
 		if (audience instanceof Player player)
 		{
-			itemStack = itemStack.clone();
-			ItemLore.setItemLore(itemStack, ItemLoreView.of(player));
 			new ToastMessage(namespacedKey, title, itemStack, frame).showTo(player);
 		}
 		else if (audience instanceof Collection<?> collection)
@@ -660,17 +532,17 @@ public class MessageUtil
 		}
 	}
 
-	/**
-	 * 관리자 메시지(회색 기울임꼴 문자)를 출력합니다. commandSender를 제외한 모든 관리자에게만 출력합니다.
-	 *
-	 * @param commandSender
-	 * 		해당 메시지를 실행한 주체
-	 * @param exception
-	 * 		추가로 메시지를 보여주지 않을 개체
-	 * @param component
-	 * 		출력할 메시지
-	 */
-	public static void sendAdminMessage(@NotNull Object commandSender, @Nullable List<Permissible> exception, @NotNull Component component)
+	public static void sendAdminMessage(@NotNull Object commandSender, @NotNull String key)
+	{
+		sendAdminMessage(commandSender, (List<Permissible>) null, key);
+	}
+
+	public static void sendAdminMessage(@NotNull Object commandSender, @NotNull String key, @NotNull Object... args)
+	{
+		sendAdminMessage(commandSender, null, key, args);
+	}
+
+	public static void sendAdminMessage(@NotNull Object commandSender, @Nullable List<Permissible> exception, @NotNull String key, @NotNull Object... args)
 	{
 		Collection<Permissible> collection = new ArrayList<>(Bukkit.getOnlinePlayers());
 		if (exception != null)
@@ -699,36 +571,23 @@ public class MessageUtil
 				!(commandSender instanceof BlockCommandSender blockCommandSender) || Boolean.TRUE.equals(
 						blockCommandSender.getBlock().getLocation().getWorld().getGameRuleValue(GameRule.COMMAND_BLOCK_OUTPUT))))
 		{
-			Component message = setAdminMessage(ComponentUtil.translate("chat.type.admin", commandSender, component));
-			sendMessage(collection, message);
+			for (Permissible permissible : collection)
+			{
+				if (permissible instanceof Player player)
+				{
+					Component message = setAdminMessage(ComponentUtil.translate("chat.type.admin", commandSender, ComponentUtil.translate(player, key, args)));
+					player.sendMessage(message);
+				}
+			}
 			if (!(commandSender instanceof ConsoleCommandSender))
 			{
+				Component message = setAdminMessage(ComponentUtil.translate("chat.type.admin", commandSender, ComponentUtil.translate(key, args)));
 				String worldName = location.getWorld().getName();
 				int x = location.getBlockX(), y = location.getBlockY(), z = location.getBlockZ();
 				message = message.append(ComponentUtil.create("&7 - " + worldName + ", " + x + ", " + y + ", " + z));
 				consoleSendMessage(message);
 			}
 		}
-	}
-
-	public static void sendAdminMessage(@NotNull Object commandSender, @Nullable List<Permissible> exception, @NotNull String key)
-	{
-		sendAdminMessage(commandSender, exception, ComponentUtil.translate(key));
-	}
-
-	public static void sendAdminMessage(@NotNull Object commandSender, @Nullable List<Permissible> exception, @NotNull String key, @NotNull Object... args)
-	{
-		sendAdminMessage(commandSender, exception, ComponentUtil.translate(key, args));
-	}
-
-	public static void sendAdminMessage(@NotNull Object commandSender, @NotNull String key)
-	{
-		sendAdminMessage(commandSender, null, ComponentUtil.translate(key));
-	}
-
-	public static void sendAdminMessage(@NotNull Object commandSender, @NotNull String key, @NotNull Object... args)
-	{
-		sendAdminMessage(commandSender, null, ComponentUtil.translate(key, args));
 	}
 
 	@NotNull

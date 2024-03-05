@@ -52,12 +52,5 @@ public class PlayerTakeLecternBook implements Listener
         Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> Variable.playerTakeLecternBookAlertCooldown.remove(uuid), 100L);
       }
     }
-    Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-    {
-      if (item != null)
-      {
-        ItemLore.setItemLore(item);
-      }
-    }, 0L);
   }
 }

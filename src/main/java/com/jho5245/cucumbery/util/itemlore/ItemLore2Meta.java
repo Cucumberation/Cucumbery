@@ -54,7 +54,6 @@ public class ItemLore2Meta
 					lore.addAll(ItemLorePotionDescription.getPotionList(viewer, item));
 				}
 				itemMeta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
-
 				PotionMeta potionMeta = (PotionMeta) itemMeta;
 				PotionData data = potionMeta.getBasePotionData();
 				PotionType potionType = data.getType();

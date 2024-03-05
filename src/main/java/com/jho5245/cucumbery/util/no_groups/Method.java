@@ -1,8 +1,18 @@
 package com.jho5245.cucumbery.util.no_groups;
 
+import com.comphenix.protocol.PacketType.Play;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.reflect.StructureModifier;
+import com.comphenix.protocol.utility.MinecraftReflection;
+import com.comphenix.protocol.wrappers.WrappedDataValue;
+import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.google.common.base.Predicates;
+import com.google.common.collect.Lists;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
+import com.jho5245.cucumbery.util.addons.ProtocolLibManager;
 import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
@@ -1890,10 +1900,10 @@ public class Method extends SoundPlay
 				return;
 			}
 		}
+		int amount = item.getAmount() + mergeAmount;
 		// 아이템 이름 설정
 		{
 			Component component = ItemNameUtil.itemName(item);
-			int amount = item.getAmount() + mergeAmount;
 			if (amount > 1)
 			{
 				component = ComponentUtil.translate("%s (%s)", component, Constant.THE_COLOR_HEX + amount);
@@ -1908,10 +1918,6 @@ public class Method extends SoundPlay
 			{
 				itemEntity.setInvulnerable(true);
 			}
-		}
-		// 아이템 설명 업데이트
-		{
-			ItemLore.setItemLore(item);
 		}
 		// 이름이 표시되지 않을 아이템이면 표시하지 않고 빠꾸
 		{
@@ -1942,10 +1948,7 @@ public class Method extends SoundPlay
 				}
 			}
 		}
-		// ProtocolLib 사용 시 플레이어마다 아이템 이름 표시를 다르게 함
-		// 버그로 인해 비활성화
-		//    if (Cucumbery.using_ProtocolLib)
-/*		if (false)
+		if (Cucumbery.using_ProtocolLib)
 		{
 			itemEntity.setCustomNameVisible(false);
 			Bukkit.getScheduler().runTaskLaterAsynchronously(Cucumbery.getPlugin(), () ->
@@ -1970,10 +1973,15 @@ public class Method extends SoundPlay
 						}
 						PacketContainer updateComponent = protocolManager.createPacket(Play.Server.ENTITY_METADATA);
 						StructureModifier<List<WrappedDataValue>> watchableAccessor = updateComponent.getDataValueCollectionModifier();
-						List<WrappedDataValue> values = Lists.newArrayList(new WrappedDataValue(3, WrappedDataWatcher.Registry.get(Boolean.class), showDrop));
+						ItemStack itemStack = item.clone();
+						itemStack.setAmount(amount);
+						List<WrappedDataValue> values = Lists.newArrayList(new WrappedDataValue(3, WrappedDataWatcher.Registry.get(Boolean.class), showDrop),
+								new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false),
+										MinecraftReflection.getMinecraftItemStack(ProtocolLibManager.setItemLore(Play.Server.ENTITY_METADATA, itemStack, player))));
 						watchableAccessor.write(0, values);
 						updateComponent.getIntegers().write(0, itemEntity.getEntityId());
 						protocolManager.sendServerPacket(player, updateComponent);
+						Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> protocolManager.sendServerPacket(player, updateComponent), 0L);
 					}
 				}
 				catch (ConcurrentModificationException ignored)
@@ -1993,7 +2001,7 @@ public class Method extends SoundPlay
 			}, 0L);
 		}
 		// 이외의 경우에는 config 설정에 따른 전역 아이템 표시 여부 결정
-		else */if (Cucumbery.config.getBoolean("name-tag-on-item-spawn"))
+		else if (Cucumbery.config.getBoolean("name-tag-on-item-spawn"))
 		{
 			itemEntity.setCustomNameVisible(true);
 		}
@@ -3345,7 +3353,6 @@ public class Method extends SoundPlay
 					itemTag.setString(CucumberyTag.EXPIRE_DATE_KEY, expireDate);
 					clone = nbtItem.getItem();
 					item.setItemMeta(clone.getItemMeta());
-					ItemLore.setItemLore(item);
 					deadLine = expireDate;
 				}
 			}
@@ -3473,14 +3480,15 @@ public class Method extends SoundPlay
 			{
 				if (UserData.FIREWORK_LAUNCH_ON_AIR.getBoolean(player.getUniqueId()))
 				{
-					Firework firework = (Firework) player.getWorld().spawnEntity(player.getEyeLocation().add(player.getEyeLocation().getDirection().multiply(radius)), EntityType.FIREWORK, SpawnReason.CUSTOM);
-          firework.setFireworkMeta(((FireworkMeta) itemMeta));
-          if (player.isSneaking())
-          {
-            firework.setShotAtAngle(true);
-            firework.setVelocity(player.getLocation().getDirection());
-          }
-          firework.setShooter(player);
+					Firework firework = (Firework) player.getWorld()
+							.spawnEntity(player.getEyeLocation().add(player.getEyeLocation().getDirection().multiply(radius)), EntityType.FIREWORK, SpawnReason.CUSTOM);
+					firework.setFireworkMeta(((FireworkMeta) itemMeta));
+					if (player.isSneaking())
+					{
+						firework.setShotAtAngle(true);
+						firework.setVelocity(player.getLocation().getDirection());
+					}
+					firework.setShooter(player);
 					// 통계 처리
 					player.incrementStatistic(Statistic.USE_ITEM, Material.FIREWORK_ROCKET);
 					// 팔 휘두름 처리

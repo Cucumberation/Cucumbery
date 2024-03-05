@@ -24,6 +24,10 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.reflect.Field;
 import java.util.*;
 
+/**
+ * @deprecated no longer allows custom enchantments.
+ */
+@Deprecated
 public abstract class CustomEnchant extends Enchantment
 {
 	/**
@@ -353,6 +357,8 @@ public abstract class CustomEnchant extends Enchantment
 
 	public static void onEnable()
 	{
+		if (true)
+			return;
 		try
 		{
 			Field f = Enchantment.class.getDeclaredField("acceptingNew");
@@ -369,6 +375,8 @@ public abstract class CustomEnchant extends Enchantment
 	@SuppressWarnings("unchecked")
 	public static void onDisable()
 	{
+		if (true)
+			return;
 		try
 		{
 			Field byKeyField = Enchantment.class.getDeclaredField("byKey");

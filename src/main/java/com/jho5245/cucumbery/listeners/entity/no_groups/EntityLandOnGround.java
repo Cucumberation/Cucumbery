@@ -6,6 +6,7 @@ import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.children.group.StringCustomEffectImple;
 import com.jho5245.cucumbery.events.entity.EntityLandOnGroundEvent;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -40,16 +41,16 @@ public class EntityLandOnGround implements Listener
         {
           Entity damager = damageByEntityEvent.getDamager();
           boolean isCritical = damageByEntityEvent.isCritical();
-          lastDamageCause = new EntityDamageByEntityEvent(damager, entity, DamageCause.FALL, map, map2, isCritical);
+          lastDamageCause = new EntityDamageByEntityEvent(damager, entity, DamageCause.FALL, org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.GENERIC).build(), map, map2, isCritical);
         }
         else if (lastDamageCause instanceof EntityDamageByBlockEvent damageByBlockEvent)
         {
           Block block = damageByBlockEvent.getDamager();
-          lastDamageCause = new EntityDamageByBlockEvent(block, entity, DamageCause.FALL, map, map2);
+          lastDamageCause = new EntityDamageByBlockEvent(block, entity, DamageCause.FALL, org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.GENERIC).build(), 1, block.getState());
         }
         else
         {
-          lastDamageCause = new EntityDamageEvent(entity, DamageCause.FALL, 1);
+          lastDamageCause = new EntityDamageEvent(entity, DamageCause.FALL, org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.GENERIC).build(), 1);
         }
         CustomEffectManager.addEffect(entity, new StringCustomEffectImple(CustomEffectType.CUSTOM_DEATH_MESSAGE, "fall"));
         player.damage(1);

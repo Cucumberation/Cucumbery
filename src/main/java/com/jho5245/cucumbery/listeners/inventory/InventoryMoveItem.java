@@ -62,24 +62,6 @@ public class InventoryMoveItem implements Listener
     // 아이템 이동 캔슬에 의한 체크 1번 더
     if (event.isCancelled())
       return;
-    try
-    {
-      Inventory dest = event.getDestination();
-      String worldName = Objects.requireNonNull(dest.getLocation()).getWorld().getName();
-      if (Cucumbery.config.getBoolean("use-helpful-lore-feature"))
-      {
-        if (!ItemStackUtil.hasLore(item))
-          ItemLore.setItemLore(item);
-      }
-      // mcmmo 사용중인 서버에선 양조기에 호퍼로 아이템을 넣을 때 기본 아이템 설명 삭제
-      if (dest.getType() == InventoryType.BREWING && Cucumbery.using_mcMMO)
-      {
-        ItemLore.removeItemLore(item);
-      }
-    }
-    catch (Exception ignored)
-    {
-    }
   }
 
   private void hopperItemMoveRestriction(InventoryMoveItemEvent event, ItemStack item)

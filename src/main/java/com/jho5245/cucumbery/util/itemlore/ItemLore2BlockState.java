@@ -12,10 +12,7 @@ import de.tr7zw.changeme.nbtapi.NBTType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.Color;
-import org.bukkit.DyeColor;
-import org.bukkit.Material;
-import org.bukkit.Nameable;
+import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.block.sign.Side;
 import org.bukkit.entity.EntityType;
@@ -212,6 +209,7 @@ public class ItemLore2BlockState
 							}
 							if (itemStackList.size() == 1)
 							{
+								Bukkit.broadcastMessage("why");
 								lore.addAll(ItemStackUtil.getItemInfoAsComponents(itemStackList.get(0), params, customNameLore, true));
 							}
 							else

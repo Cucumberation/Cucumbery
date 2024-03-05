@@ -2,7 +2,6 @@ package com.jho5245.cucumbery.listeners.player.item;
 
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.util.itemlore.ItemLore;
-import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
@@ -67,7 +66,6 @@ public class PlayerItemDamage implements Listener
 						ItemStack itemClone = nbtItem.getItem();
 						ItemMeta itemMeta = itemClone.getItemMeta();
 						event.getItem().setItemMeta(itemMeta);
-						Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemLore.setItemLore(event.getItem(), new ItemLoreView(player)), 0L);
 						return;
 					}
 					if (currentDurability < maxDurability - 1 && itemDurability == Material.ELYTRA.getMaxDurability() - 1)
@@ -77,15 +75,10 @@ public class PlayerItemDamage implements Listener
 						ItemStack itemClone = nbtItem.getItem();
 						ItemMeta itemMeta = itemClone.getItemMeta();
 						event.getItem().setItemMeta(itemMeta);
-						Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemLore.setItemLore(event.getItem(), new ItemLoreView(player)), 0L);
 						return;
 					}
 				}
 
-				if (ratio < 1d && itemDurability < 1)
-				{
-					itemDurability = 1;
-				}
 				if (currentDurability >= maxDurability)
 				{
 					if (CustomConfig.UserData.SHOW_ITEM_BREAK_TITLE.getBoolean(player.getUniqueId()) && Cucumbery.config.getBoolean("send-title-on-item-break"))
@@ -124,20 +117,9 @@ public class PlayerItemDamage implements Listener
 					ItemStack itemClone = nbtItem.getItem();
 					ItemMeta itemMeta = itemClone.getItemMeta();
 					event.getItem().setItemMeta(itemMeta);
-					Damageable duraMeta = (Damageable) itemMeta;
-					event.setDamage(0);
-					if (currentDurability >= maxDurability)
-					{
-						duraMeta.setDamage(itemDurability - 1);
-					}
-					else
-					{
-						duraMeta.setDamage(0);
-					}
-					event.getItem().setItemMeta(duraMeta);
+					Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemLore.setItemLore(item), 0L);
 				}
 			}
 		}
-		Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemLore.setItemLore(event.getItem(), ItemLoreView.of(player)), 0L);
 	}
 }

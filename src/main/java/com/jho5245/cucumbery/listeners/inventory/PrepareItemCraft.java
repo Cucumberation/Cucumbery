@@ -279,7 +279,6 @@ public class PrepareItemCraft implements Listener
     {
       return;
     }
-    ItemLore.setItemLore(result, new ItemLoreView(player));
     String expireDate = NBTAPI.getString(NBTAPI.getMainCompound(result), CucumberyTag.EXPIRE_DATE_KEY);
     if (expireDate != null)
     {

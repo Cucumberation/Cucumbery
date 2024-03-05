@@ -1957,7 +1957,6 @@ Cucumbery.getPlugin().getLogger().warning(          e.getMessage());
       for (int i = 0; i < ingredients.size(); i++)
       {
         ItemStack ingredient = ingredients.get(i);
-        ItemLore.setItemLore(ingredient, ItemLoreView.of(player));
         int amount = ingredientAmounts.get(i);
         int maxStackSize = ingredient.getMaxStackSize();
         ingredient.setAmount(maxStackSize);
@@ -1980,7 +1979,6 @@ Cucumbery.getPlugin().getLogger().warning(          e.getMessage());
     }
     if (ItemStackUtil.itemExists(result))
     {
-      ItemLore.setItemLore(result, ItemLoreView.of(player));
       gui.setItem(4, result);
     }
     else

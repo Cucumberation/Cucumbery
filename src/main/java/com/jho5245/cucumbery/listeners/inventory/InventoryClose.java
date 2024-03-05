@@ -82,23 +82,8 @@ public class InventoryClose implements Listener
             boxMeta.setBlockState(shulkerBox);
             shulker.setItemMeta(boxMeta);
             SoundPlay.playSound(player, Sound.BLOCK_SHULKER_BOX_CLOSE, SoundCategory.BLOCKS);
-            // 휴대용 셜커 상자의 설명 업데이트
-            Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-            ItemStackUtil.updateInventory(player), 0L);
             return;
           }
-        }
-      }
-      if (inventory.getType() == InventoryType.BREWING)
-      {
-        // mcMMO 연금술 기능 충돌로 인한 양조기 GUI찾을 닫을 때 인벤토리 업데이트
-        if (Cucumbery.using_mcMMO)
-        {
-          Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-          {
-            ItemStackUtil.updateInventory(player);
-            player.updateInventory();
-          }, 0L);
         }
       }
       if (title.contains(Constant.VIRTUAL_CHEST_MENU_PREFIX) && !title.contains(Constant.VIRTUAL_CHEST_ADMIN_MENU_PREFIX))
@@ -318,7 +303,6 @@ public class InventoryClose implements Listener
           String expireDate = NBTAPI.getString(NBTAPI.getMainCompound(item), CucumberyTag.EXPIRE_DATE_KEY);
           if (expireDate != null)
           {
-            ItemStackUtil.updateInventory(player, item);
             if (Method.isTimeUp(item, expireDate))
             {
               MessageUtil.info(player, ComponentUtil.translate("아이템 %s의 유효 기간이 지나서 아이템이 제거되었습니다", item));
@@ -344,6 +328,7 @@ public class InventoryClose implements Listener
           }
         }
       }
+      Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), player::updateInventory, 0L);
       if (player.getGameMode() != GameMode.SPECTATOR && CustomConfig.UserData.LISTEN_CONTAINER.getBoolean(player.getUniqueId()))
       {
         switch (inventoryType)

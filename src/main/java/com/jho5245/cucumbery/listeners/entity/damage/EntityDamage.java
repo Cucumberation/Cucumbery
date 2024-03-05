@@ -147,6 +147,23 @@ public class EntityDamage implements Listener
         {
           event.setDamage(event.getDamage() + Variable.DAMAGE_SPREAD_MAP.remove(damagerUUID));
         }
+        if (damager instanceof ThrowableProjectile throwableProjectile)
+        {
+          ItemStack thrownItem = throwableProjectile.getItem();
+          CustomMaterial customMaterial = CustomMaterial.itemStackOf(thrownItem);
+          if (customMaterial != null)
+          {
+            switch (customMaterial)
+            {
+              case BRICK_THROWABLE -> event.setDamage(Math.random() + 2.5);
+              case NETHER_BRICK_THROWABLE -> event.setDamage(Math.random() + 3);
+              case COPPER_INGOT_THROWABLE -> event.setDamage(Math.random() + 3.5);
+              case IRON_INGOT_THROWABLE -> event.setDamage(Math.random() + 4.5);
+              case GOLD_INGOT_THROWABLE -> event.setDamage(Math.random() + 6);
+              case NETHERITE_INGOT_THROWABLE -> event.setDamage(Math.random() + 9.5);
+            }
+          }
+        }
       }
     }
 
@@ -208,7 +225,8 @@ public class EntityDamage implements Listener
           AttributeInstance attributeInstance = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH);
           double damage = attributeInstance != null ? attributeInstance.getValue() : livingEntity.getHealth();
           CombatInfo combatInfo = DamageManager.getCombatInfo(new EntityDamageByEntityEvent(victim, livingEntity, DamageCause.CUSTOM,
-                  new EnumMap<>(ImmutableMap.of(DamageModifier.BASE, damage)),
+              org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.GENERIC).build(),
+              new EnumMap<>(ImmutableMap.of(DamageModifier.BASE, damage)),
                   new EnumMap<>(ImmutableMap.of(DamageModifier.BASE, Functions.constant(0d))), false));
           if (combatInfo != null)
           {

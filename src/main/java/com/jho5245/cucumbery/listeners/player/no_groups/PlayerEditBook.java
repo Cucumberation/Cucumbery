@@ -18,10 +18,5 @@ public class PlayerEditBook implements Listener
       return;
     }
     Player player = event.getPlayer();
-    Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-    {
-      ItemLore.setItemLore(player.getInventory().getItemInMainHand());
-      ItemLore.setItemLore(player.getInventory().getItemInOffHand());
-    }, 0L);
   }
 }

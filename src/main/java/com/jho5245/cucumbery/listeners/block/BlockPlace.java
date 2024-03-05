@@ -4,11 +4,9 @@ import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCustomMining;
-import com.jho5245.cucumbery.util.itemlore.ItemLore;
-import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
+import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
-import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.no_groups.Method2;
@@ -29,7 +27,6 @@ import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
@@ -47,13 +44,6 @@ public class BlockPlace implements Listener
     }
     Player player = event.getPlayer();
     Block block = event.getBlock();
-    if (block.getType() == Material.POWDER_SNOW)
-    {
-      EquipmentSlot hand = event.getHand();
-      ItemStack item = player.getInventory().getItem(hand);
-      Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-              ItemLore.setItemLore(item, ItemLoreView.of(player)), 0L);
-    }
 
     UUID uuid = player.getUniqueId();
     ItemStack item = event.getItemInHand();
@@ -268,7 +258,6 @@ public class BlockPlace implements Listener
     if (!special && Cucumbery.config.getBoolean("use-block-place-data-feature") && !Method.configContainsLocation(location, Cucumbery.config.getStringList("no-use-block-place-data-feature-location")))
     {
       item = item.clone();
-      ItemLore.removeItemLore(item);
       NBTItem nbtItem = new NBTItem(item, true);
       if (!NBTAPI.arrayContainsValue(extraTags, Constant.ExtraTag.PRESERVE_BLOCK_ENTITY_TAG))
       {

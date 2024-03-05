@@ -7,7 +7,6 @@ import com.jho5245.cucumbery.custom.customeffect.children.group.StringCustomEffe
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCustomMining;
 import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
-import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
 import com.jho5245.cucumbery.util.no_groups.ItemSerializer;
@@ -293,8 +292,8 @@ public class BlockBreak implements Listener
 			modified = true;
 		}
 
-		String toolId = (ItemStackUtil.itemExists(itemStack) ? new NBTItem(itemStack).getString("id") : "") + "", blockId =
-				(!drops.isEmpty() && ItemStackUtil.itemExists(drops.get(0)) ? new NBTItem(drops.get(0)).getString("id") : "") + "";
+		String toolId = ItemStackUtil.itemExists(itemStack) ? new NBTItem(itemStack).getString(CustomMaterial.IDENDIFER) : "", blockId =
+				!drops.isEmpty() && ItemStackUtil.itemExists(drops.get(0)) ? new NBTItem(drops.get(0)).getString(CustomMaterial.IDENDIFER) : "";
 		if (CustomMaterial.FLINT_SHOVEL.toString().equalsIgnoreCase(toolId) && blockId.isEmpty() && blockType == Material.GRAVEL)
 		{
 			modified = true;
@@ -385,7 +384,7 @@ public class BlockBreak implements Listener
 			{
 				event.setDropItems(false);
 				event.setExpToDrop(0);
-				ItemStack flint = ItemStackUtil.loredItemStack(Material.FLINT);
+				ItemStack flint = new ItemStack(Material.FLINT);
 				if (ItemStackUtil.countSpace(player.getInventory(), flint) >= 1 && isTelekinesis)
 				{
 					player.getInventory().addItem(flint);
@@ -500,7 +499,6 @@ public class BlockBreak implements Listener
 						{
 							for (ItemStack dropClone : dropsClone)
 							{
-								ItemLore.setItemLore(dropClone);
 								HashMap<Integer, ItemStack> lostItems = player.getInventory().addItem(dropClone);
 								// 텔레키네시스로 인벤토리에 아이템을 넣었는데 인벤토리 공간이 좁을 경우
 								if (!lostItems.isEmpty())
@@ -695,7 +693,6 @@ public class BlockBreak implements Listener
 							}
 							customLore.addAll(Arrays.asList("", MessageUtil.n2s("&6등급 : " + lore)));
 							result = nbtItem.getItem();
-							ItemLore.setItemLore(result);
 							player.getInventory().addItem(result);
 						}
 						default ->
@@ -756,7 +753,6 @@ public class BlockBreak implements Listener
 					}
 					customLore.addAll(Arrays.asList("", MessageUtil.n2s("&6등급 : " + lore)));
 					result = nbtItem.getItem();
-					ItemLore.setItemLore(result);
 					player.getInventory().addItem(result);
 				}
 			}

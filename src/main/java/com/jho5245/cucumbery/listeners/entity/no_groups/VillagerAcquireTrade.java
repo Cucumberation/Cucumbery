@@ -19,19 +19,5 @@ public class VillagerAcquireTrade implements Listener
     {
       return;
     }
-
-    MerchantRecipe recipe = event.getRecipe();
-    List<ItemStack> ingredients = recipe.getIngredients();
-    List<ItemStack> newIngredients = new ArrayList<>();
-    ItemStack result = recipe.getResult();
-    ItemLore.setItemLore(result);
-    for (ItemStack item : ingredients)
-    {
-      ItemLore.setItemLore(item);
-      newIngredients.add(item);
-    }
-    MerchantRecipe newRecipe = new MerchantRecipe(result, recipe.getUses(), recipe.getMaxUses(), recipe.hasExperienceReward(), recipe.getVillagerExperience(), recipe.getPriceMultiplier());
-    newRecipe.setIngredients(newIngredients);
-    event.setRecipe(newRecipe);
   }
 }

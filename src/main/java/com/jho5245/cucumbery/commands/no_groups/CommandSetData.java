@@ -1,8 +1,6 @@
 package com.jho5245.cucumbery.commands.no_groups;
 
 import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent.Completion;
-import com.jho5245.cucumbery.util.itemlore.ItemLore;
-import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
 import com.jho5245.cucumbery.util.no_groups.*;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
@@ -128,7 +126,6 @@ public class CommandSetData implements CommandExecutor, AsyncTabCompleter
               clone = new ItemStack(type);
             }
             player.getInventory().setItemInMainHand(clone);
-            ItemLore.setItemLore(player.getInventory().getItemInMainHand());
             if (!ItemStackUtil.itemExists(player.getInventory().getItemInMainHand()))
             {
               player.getInventory().setItemInMainHand(item);
@@ -156,7 +153,6 @@ public class CommandSetData implements CommandExecutor, AsyncTabCompleter
             String url = args[1];
             ItemStackUtil.setTexture(skullMeta, url);
             clone.setItemMeta(skullMeta);
-            ItemLore.setItemLore(clone, ItemLoreView.of(player));
             player.getInventory().setItemInMainHand(clone);
             MessageUtil.sendMessage(player, Prefix.INFO_SETDATA, "주로 사용하는 손에 들고 있는 플레이어 머리의 스킨 url을 %s(으)로 설정했습니다 (전 : %s, 후 : %s)", Component.text(url).insertion(url), item, clone);
             return true;

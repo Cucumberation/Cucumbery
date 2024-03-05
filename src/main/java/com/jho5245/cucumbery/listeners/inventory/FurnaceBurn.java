@@ -112,10 +112,6 @@ public class FurnaceBurn implements Listener
         }
       }
     }
-    if (!Cucumbery.config.getBoolean("use-helpful-lore-feature"))
-    {
-      return;
-    }
     if (NBTAPI.arrayContainsValue(NBTAPI.getStringList(NBTAPI.getMainCompound(fuel), CucumberyTag.EXTRA_TAGS_KEY), ExtraTag.INFINITE_FUEL.toString()))
     {
       MessageUtil.broadcastDebug("here");
@@ -133,7 +129,6 @@ public class FurnaceBurn implements Listener
           ItemStack bucket = inv.getItem(1);
           if (ItemStackUtil.itemExists(bucket))
           {
-            ItemLore.setItemLore(bucket);
           }
         }, 0L);
         case BLAST_FURNACE -> Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
@@ -143,7 +138,6 @@ public class FurnaceBurn implements Listener
           ItemStack bucket = inv.getItem(1);
           if (ItemStackUtil.itemExists(bucket))
           {
-            ItemLore.setItemLore(bucket);
           }
         }, 0L);
         case SMOKER -> Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
@@ -153,7 +147,6 @@ public class FurnaceBurn implements Listener
           ItemStack bucket = inv.getItem(1);
           if (ItemStackUtil.itemExists(bucket))
           {
-            ItemLore.setItemLore(bucket);
           }
         }, 0L);
         default ->

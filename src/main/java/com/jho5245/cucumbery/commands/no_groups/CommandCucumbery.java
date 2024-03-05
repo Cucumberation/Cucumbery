@@ -8,7 +8,6 @@ import com.jho5245.cucumbery.custom.customeffect.custom_mining.MiningScheduler;
 import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
 import com.jho5245.cucumbery.util.no_groups.*;
 import com.jho5245.cucumbery.util.plugin_support.CustomRecipeSupport;
-import com.jho5245.cucumbery.util.plugin_support.QuickShopSupport;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Permission;
@@ -31,6 +30,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.maxgamer.quickshop.QuickShop;
 import org.maxgamer.quickshop.api.QuickShopAPI;
 
 import java.io.File;
@@ -309,7 +309,7 @@ public class CommandCucumbery implements CucumberyCommandExecutor
           MessageUtil.sendError(sender, "rg255,204;QuickShop&r 플러그인을 사용하고 있지 않습니다");
           return true;
         }
-        int size = QuickShopSupport.updateQuickShopItems();
+        int size = QuickShop.getInstance().getShopManager().getAllShops().size();
         MessageUtil.info(sender, "rg255,204;QuickShop&r의 모든 상점 아이템을 업데이트 했습니다 (총 " + size + "개)");
       }
       case "update-customrecipe-item" ->

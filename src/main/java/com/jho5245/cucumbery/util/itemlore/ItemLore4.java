@@ -16,10 +16,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public class ItemLore4
 {
   protected static void setItemLore(@NotNull ItemStack itemStack, @NotNull List<Component> lore)
   {
+    if (true)
+    {
+      return;
+    }
     NBTItem nbtItem = new NBTItem(itemStack);
     ItemMeta itemMeta = itemStack.getItemMeta();
     NBTCompound nbtCompound = nbtItem.getCompound(CucumberyTag.KEY_TMI);
@@ -50,14 +55,14 @@ public class ItemLore4
       itemStack.setItemMeta(nbtItem.getItem().getItemMeta());
       return;
     }
-    if (customTags != null || nbtItem.hasTag("id") && !"".equals(nbtItem.getString("id")))
+    if (customTags != null || nbtItem.hasTag(CustomMaterial.IDENDIFER) && !"".equals(nbtItem.getString(CustomMaterial.IDENDIFER)))
     {
       itemStack.setItemMeta(nbtItem.getItem().getItemMeta());
       return;
     }
     NBTCompound vanillaTags = nbtCompound.addCompound(CucumberyTag.TMI_VANILLA_TAGS);
     Material type = itemStack.getType();
-    String customType = nbtItem.getString("id") + "";
+    String customType = nbtItem.getString(CustomMaterial.IDENDIFER) + "";
     try
     {
       type = Material.valueOf(customType.toUpperCase());
