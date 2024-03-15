@@ -30,7 +30,7 @@ public class CommandDamage extends CommandBase
 {
   final private DoubleArgument DAMAGE = new DoubleArgument("대미지", 0);
   final private IntegerArgument INVINCIBLE = new IntegerArgument("무적 시간(틱)", 0, 200);
-  final private MultiLiteralArgument NO_INVINCIBLE = new MultiLiteralArgument("-1", "-1" );
+  final private MultiLiteralArgument NO_INVINCIBLE = new MultiLiteralArgument("-1", "-1");
   final private EntitySelectorArgument.OneEntity DAMAGER = new EntitySelectorArgument.OneEntity("가해 개체");
   final private List<Argument<?>> list01 = List.of(MANY_ENTITIES, DAMAGE);
   final private List<Argument<?>> list02 = List.of(MANY_ENTITIES, DAMAGE, HIDE_OUTPUT);
