@@ -1,34 +1,25 @@
 package com.jho5245.cucumbery.util.no_groups;
 
-import com.comphenix.protocol.PacketType.Play;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.wrappers.*;
-import com.comphenix.protocol.wrappers.EnumWrappers.NativeGameMode;
-import com.comphenix.protocol.wrappers.EnumWrappers.PlayerAction;
-import com.comphenix.protocol.wrappers.EnumWrappers.PlayerInfoAction;
 import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent.Completion;
 import com.destroystokyo.paper.profile.PlayerProfile;
-import com.google.common.base.Predicates;
-import com.google.common.collect.Lists;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
-import com.jho5245.cucumbery.util.addons.ProtocolLibManager;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
 import io.papermc.paper.inventory.tooltip.TooltipContext;
 import net.kyori.adventure.text.Component;
-import org.bukkit.*;
-import org.bukkit.command.*;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.*;
+import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 
 @SuppressWarnings("all")
 public class TestCommand implements CucumberyCommandExecutor
