@@ -28,7 +28,7 @@ public class TestCommand implements CucumberyCommandExecutor
 
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args)
 	{
-		// test comment
+		// test comment foo
 		args = MessageUtil.wrapWithQuote(args);
 		if (!Method.hasPermission(sender, "asdf", true))
 		{
