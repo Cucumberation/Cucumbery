@@ -405,6 +405,11 @@ public class MessageUtil
 	public static void sendMessage(@NotNull Object audience, @NotNull Object... objects)
 	{
 		Audience a = of(audience);
+		// no messages for command blocks.
+		if (a instanceof BlockCommandSender)
+		{
+			return;
+		}
 		Component message = ComponentUtil.create(a instanceof Player player ? player : null, objects);
 		if (a instanceof ConsoleCommandSender)
 		{
