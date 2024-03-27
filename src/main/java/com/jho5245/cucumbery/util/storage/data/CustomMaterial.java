@@ -428,6 +428,63 @@ public enum CustomMaterial implements Translatable
   WEATHER_FORECAST(Material.ENDER_EYE, "&ikey:item.cucumbery.weather_forecast|날씨를 알려주는 눈", Rarity.ELITE, CreativeCategory.TOOLS),
 
   WNYNYA_ORE(Material.PLAYER_HEAD, "rgb200,100,255;key:block.cucumbery.wnynya_ore|완YEE 광석", Rarity.RARE, "itemGroup.natural"),
+  OAK_SLAB_VERTICAL(Material.OAK_SLAB, "&ikey:block.cucumbery.oak_slab_vertical|참나무 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  SPRUCE_SLAB_VERTICAL(Material.SPRUCE_SLAB, "&ikey:block.cucumbery.spruce_slab_vertical|가문비나무 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  BIRCH_SLAB_VERTICAL(Material.BIRCH_SLAB, "&ikey:block.cucumbery.birch_slab_vertical|자작나무 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  JUNGLE_SLAB_VERTICAL(Material.JUNGLE_SLAB, "&ikey:block.cucumbery.jungle_slab_vertical|정글나무 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  ACACIA_SLAB_VERTICAL(Material.ACACIA_SLAB, "&ikey:block.cucumbery.acacia_slab_vertical|아카시아나무 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  DARK_OAK_SLAB_VERTICAL(Material.DARK_OAK_SLAB, "&ikey:block.cucumbery.dark_oak_slab_vertical|짙은 참나무 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  MANGROVE_SLAB_VERTICAL(Material.MANGROVE_SLAB, "&ikey:block.cucumbery.mangrove_slab_vertical|맹그로브나무 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  CHERRY_SLAB_VERTICAL(Material.CHERRY_SLAB, "&ikey:block.cucumbery.cherry_slab_vertical|벚나무 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  BAMBOO_SLAB_VERTICAL(Material.BAMBOO_SLAB, "&ikey:block.cucumbery.bamboo_slab_vertical|대나무 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  BAMBOO_MOSAIC_SLAB_VERTICAL(Material.BAMBOO_MOSAIC_SLAB, "&ikey:block.cucumbery.bamboo_mosaic_slab_vertical|대나무 모자이크 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  CRIMSON_SLAB_VERTICAL(Material.CRIMSON_SLAB, "&ikey:block.cucumbery.crimson_slab_vertical|진홍빛 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  WARPED_SLAB_VERTICAL(Material.WARPED_SLAB, "&ikey:block.cucumbery.warped_slab_vertical|뒤틀린 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  STONE_SLAB_VERTICAL(Material.STONE_SLAB, "&ikey:block.cucumbery.stone_slab_vertical|돌 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  COBBLESTONE_SLAB_VERTICAL(Material.COBBLESTONE_SLAB, "&ikey:block.cucumbery.cobblestone_slab_vertical|조약돌 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  MOSSY_COBBLESTONE_SLAB_VERTICAL(Material.MOSSY_COBBLESTONE_SLAB, "&ikey:block.cucumbery.mossy_cobblestone_slab_vertical|이끼 낀 조약돌 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  SMOOTH_STONE_SLAB_VERTICAL(Material.SMOOTH_STONE_SLAB, "&ikey:block.cucumbery.smooth_cobblestone_slab_vertical|매끄러운 돌 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  STONE_BRICK_SLAB_VERTICAL(Material.STONE_BRICK_SLAB, "&ikey:block.cucumbery.stone_brick_slab_vertical|석재 벽돌 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  MOSSY_STONE_BRICK_SLAB_VERTICAL(Material.MOSSY_STONE_BRICK_SLAB, "&ikey:block.cucumbery.mossy_stone_brick_slab_vertical|이끼 낀 석재 벽돌 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  GRANITE_SLAB_VERTICAL(Material.GRANITE_SLAB, "&ikey:block.cucumbery.granite_slab_vertical|화강암 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  POLISHED_GRANITE_SLAB_VERTICAL(Material.POLISHED_GRANITE_SLAB, "&ikey:block.cucumbery.polished_granite_slab_vertical|윤나는 화강암 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  DIORITE_SLAB_VERTICAL(Material.DIORITE_SLAB, "&ikey:block.cucumbery.diorite_slab_vertical|섬록암 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  POLISHED_DIORITE_SLAB_VERTICAL(Material.POLISHED_DIORITE_SLAB, "&ikey:block.cucumbery.polished_diorite_slab_vertical|윤나는 섬록암 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  ANDESITE_SLAB_VERTICAL(Material.ANDESITE_SLAB, "&ikey:block.cucumbery.andesite_slab_vertical|안산암 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  POLISHED_ANDESITE_SLAB_VERTICAL(Material.POLISHED_ANDESITE_SLAB, "&ikey:block.cucumbery.polished_andesite_slab_vertical|윤나는 안산암 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  COBBLED_DEEPSLATE_SLAB_VERTICAL(Material.COBBLED_DEEPSLATE_SLAB, "&ikey:block.cucumbery.cobbled_deepslate_slab_vertical|심층암 조약돌 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  POLISHED_DEEPSLATE_SLAB_VERTICAL(Material.POLISHED_DEEPSLATE_SLAB, "&ikey:block.cucumbery.polished_deepslate_slab_vertical|윤나는 심층암 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  DEEPSLATE_BRICK_SLAB_VERTICAL(Material.DEEPSLATE_BRICK_SLAB, "&ikey:block.cucumbery.deepslate_brick_slab_vertical|심층암 벽돌 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  DEEPSLATE_TILE_SLAB_VERTICAL(Material.DEEPSLATE_TILE_SLAB, "&ikey:block.cucumbery.deepslate_tile_slab_vertical|심층암 타일 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  BRICK_SLAB_VERTICAL(Material.BRICK_SLAB, "&ikey:block.cucumbery.brick_slab_vertical|벽돌 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  MUD_BRICK_SLAB_VERTICAL(Material.MUD_BRICK_SLAB, "&ikey:block.cucumbery.mud_slab_vertical|진흙 벽돌 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  SANDSTONE_SLAB_VERTICAL(Material.SANDSTONE_SLAB, "&ikey:block.cucumbery.sandstone_slab_vertical|사암 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  SMOOTH_SANDSTONE_SLAB_VERTICAL(Material.SMOOTH_SANDSTONE_SLAB, "&ikey:block.cucumbery.smooth_sandstone_slab_vertical|매끄러운 사암 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  CUT_SANDSTONE_SLAB_VERTICAL(Material.CUT_SANDSTONE_SLAB, "&ikey:block.cucumbery.cut_sandstone_slab_vertical|깎인 사암 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  RED_SANDSTONE_SLAB_VERTICAL(Material.RED_SANDSTONE_SLAB, "&ikey:block.cucumbery.red_sandstone_slab_vertical|붉은 사암 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  SMOOTH_RED_SANDSTONE_SLAB_VERTICAL(Material.SMOOTH_RED_SANDSTONE_SLAB, "&ikey:block.cucumbery.smooth_red_sandstone_slab_vertical|매끄러운 붉은 사암 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  CUT_RED_SANDSTONE_SLAB_VERTICAL(Material.CUT_RED_SANDSTONE_SLAB, "&ikey:block.cucumbery.cut_red_sandstone_slab_vertical|깎인 붉은 사암 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  PRISMARINE_SLAB_VERTICAL(Material.PRISMARINE_SLAB, "&ikey:block.cucumbery.prismarine_slab_vertical|프리즈머린 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  PRISMARINE_BRICK_SLAB_VERTICAL(Material.PRISMARINE_BRICK_SLAB, "&ikey:block.cucumbery.prismarine_brick_slab_vertical|프리즈머린 벽돌 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  DARK_PRISMARINE_SLAB_VERTICAL(Material.DARK_PRISMARINE_SLAB, "&ikey:block.cucumbery.dark_prismarine_slab_vertical|짙은 프리즈머린 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  NETHER_BRICK_SLAB_VERTICAL(Material.NETHER_BRICK_SLAB, "&ikey:block.cucumbery.nether_brick_slab_vertical|네더 벽돌 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  RED_NETHER_BRICK_SLAB_VERTICAL(Material.RED_NETHER_BRICK_SLAB, "&ikey:block.cucumbery.red_nether_brick_slab_vertical|붉은 네더 벽돌 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  BLACKSTONE_SLAB_VERTICAL(Material.BLACKSTONE_SLAB, "&ikey:block.cucumbery.blackstone_slab_vertical|흑암 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  POLISHED_BLACKSTONE_SLAB_VERTICAL(Material.POLISHED_BLACKSTONE_SLAB, "&ikey:block.cucumbery.polished_blackstone_slab_vertical|윤나는 흑암 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  POLISHED_BLACKSTONE_BRICK_SLAB_VERTICAL(Material.POLISHED_BLACKSTONE_BRICK_SLAB, "&ikey:block.cucumbery.polished_blackstone_brick_slab_vertical|윤나는 흑암 벽돌 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  END_STONE_BRICK_SLAB_VERTICAL(Material.END_STONE_BRICK_SLAB, "&ikey:block.cucumbery.end_stone_brick_slab_vertical|엔드 석재 벽돌 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  PURPUR_SLAB_VERTICAL(Material.PURPUR_SLAB, "&ikey:block.cucumbery.purpur_slab_vertical|퍼퍼 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  QUARTZ_SLAB_VERTICAL(Material.QUARTZ_SLAB, "&ikey:block.cucumbery.quartz_slab_vertical|석영 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  SMOOTH_QUARTZ_SLAB_VERTICAL(Material.SMOOTH_QUARTZ_SLAB, "&ikey:block.cucumbery.smooth_quartz_slab_vertical|매끄러운 석영 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  CUT_COPPER_SLAB_VERTICAL(Material.CUT_COPPER_SLAB, "&ikey:block.cucumbery.cut_copper_slab_vertical|깎인 구리 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  EXPOSED_CUT_COPPER_SLAB_VERTICAL(Material.EXPOSED_CUT_COPPER_SLAB, "&ikey:block.cucumbery.exposed_cut_copper_slab_vertical|약간 녹슨 깎인 구리 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  WEATHERED_CUT_COPPER_SLAB_VERTICAL(Material.WEATHERED_CUT_COPPER_SLAB, "&ikey:block.cucumbery.weathered_cut_copper_slab_vertical|녹슨 깎인 구리 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  OXIDIZED_CUT_COPPER_SLAB_VERTICAL(Material.OXIDIZED_CUT_COPPER_SLAB, "&ikey:block.cucumbery.oxidized_cut_copper_slab_vertical|산화된 깎인 구리 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  WAXED_CUT_COPPER_SLAB_VERTICAL(Material.WAXED_CUT_COPPER_SLAB, "&ikey:block.cucumbery.waxed_cut_copper_slab_vertical|밀랍칠한 깎인 구리 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  WAXED_EXPOSED_CUT_COPPER_SLAB_VERTICAL(Material.WAXED_EXPOSED_CUT_COPPER_SLAB, "&ikey:block.cucumbery.waxed_exposed_cut_copper_slab_vertical|밀랍칠한 약간 녹슨 깎인 구리 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  WAXED_WEATHERED_CUT_COPPER_SLAB_VERTICAL(Material.WAXED_WEATHERED_CUT_COPPER_SLAB, "&ikey:block.cucumbery.waxed_weathered_cut_copper_slab_vertical|밀랍칠한 녹슨 깎인 구리 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+  WAXED_OXIDIZED_CUT_COPPER_SLAB_VERTICAL(Material.WAXED_OXIDIZED_CUT_COPPER_SLAB, "&ikey:block.cucumbery.waxed_oxidized_cut_copper_slab_vertical|밀랍칠한 산화된 깎인 구리 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+
   ;
 
   private final Material displayMaterial;
@@ -536,6 +593,11 @@ public enum CustomMaterial implements Translatable
   public boolean isUntradeable()
   {
     return this.toString().endsWith("UNTRADEABLE");
+  }
+
+  public boolean isVerticalSlab()
+  {
+    return this.toString().endsWith("_SLAB_VERTICAL");
   }
 
   @Nullable

@@ -1,5 +1,6 @@
 package com.jho5245.cucumbery.custom.customeffect.custom_mining;
 
+import com.google.errorprone.annotations.Var;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.children.group.LocationCustomEffect;
@@ -376,6 +377,12 @@ public class MiningScheduler
 				MiningManager.quitCustomMining(player);
 				return;
 			}
+			// 블록 채굴 대기시간 동안 채굴 불가
+			if (Variable.customMiningBlockBreakCooldown.contains(uuid))
+			{
+				MiningManager.quitCustomMining(player);
+				return;
+			}
 			List<ItemStack> drops = miningResult.drops();
 			CustomMaterial customMaterial = drops.isEmpty() ? null : CustomMaterial.itemStackOf(drops.get(0));
 			// sus
@@ -398,7 +405,8 @@ public class MiningScheduler
 			double origin = Variable.customMiningProgress.getOrDefault(uuid, 0d);
 			double damage = miningResult.miningSpeed() / 20f / miningResult.blockHardness();
 			float tps = (float) Math.max(1, Math.min(20, TPSMeter.getTPS()));
-			float lagMultiplier = 25f / tps;
+			float serverTickRate = Bukkit.getServerTickManager().getTickRate();
+			float lagMultiplier = 20f / tps * (serverTickRate / 20f);
 			Variable.customMiningProgress.put(uuid, origin + damage * (tps > 16f ? 1 : lagMultiplier));
 			double progress = Variable.customMiningProgress.getOrDefault(uuid, 0d);
 			progress = Math.max(0f, Math.min(1f, progress));
@@ -876,6 +884,12 @@ public class MiningScheduler
 				if (isSUS)
 				{
 					location.clone().getWorld().spawnParticle(Particle.EXPLOSION_LARGE, location.clone().add(0.5, 0.5, 0.5), 1);
+				}
+				// 즉시 부서지는 블록이 아닐 경우 다음 블록을 부수기까지 짧은 쿨타임 추가
+				if (miningResult.miningSpeed() < miningResult.blockHardness() * 20d)
+				{
+					Variable.customMiningBlockBreakCooldown.add(uuid);
+					Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> Variable.customMiningBlockBreakCooldown.remove(uuid), 6L);
 				}
 				return;
 			}

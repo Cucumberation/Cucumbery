@@ -30,7 +30,7 @@ public class PlayerArmSwing implements Listener
 		Player player = event.getPlayer();
 		CustomEffectManager.addEffect(player, CustomEffectType.ARM_SWING);
 		UUID uuid = player.getUniqueId();
-		if (CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE))
+		if (!Variable.customMiningBlockBreakCooldown.contains(uuid) && CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE))
 		{
 			// 블록을 때리는 위치가 저장되었으나 삭제되지 못해 현재 때리는 위치랑 다를 경우 위치 정보 갱신
 			if (Variable.customMiningFallbackLocation.containsKey(uuid))

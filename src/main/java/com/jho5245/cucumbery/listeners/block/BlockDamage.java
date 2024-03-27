@@ -34,7 +34,7 @@ public class BlockDamage implements Listener
     }
     Block block = event.getBlock();
     final Location location = block.getLocation();
-    if (CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE))
+    if (!Variable.customMiningBlockBreakCooldown.contains(player.getUniqueId()) && CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE))
     {
       if (player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR)
       {

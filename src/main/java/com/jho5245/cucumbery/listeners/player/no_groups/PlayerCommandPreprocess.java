@@ -4,6 +4,7 @@ import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffect;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.children.group.ItemStackCustomEffect;
+import com.jho5245.cucumbery.custom.customeffect.custom_mining.MiningScheduler;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.events.entity.EntityCustomEffectRemoveEvent.RemoveReason;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
@@ -123,6 +124,24 @@ public class PlayerCommandPreprocess implements Listener
 				Bukkit.dispatchCommand(player, "cgive @s " + itemName);
 				this.playSoundOnPerformCommand(event, playSound);
 				return;
+			}
+		}
+
+		// TODO: will be removed from 1.20.5
+		if ("playsound".equals(label))
+		{
+			switch (split.length)
+			{
+				case 2 ->
+				{
+					message += " master @s";
+					event.setMessage(message);
+				}
+				case 3 ->
+				{
+					message += " @s";
+					event.setMessage(message);
+				}
 			}
 		}
 

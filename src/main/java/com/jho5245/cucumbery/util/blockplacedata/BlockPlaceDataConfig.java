@@ -354,8 +354,8 @@ public class BlockPlaceDataConfig extends ChunkConfig
 			scaleZ *= 1.0005f;
 		}
 
-		scaleX *= -1f;
-		scaleZ *= -1f;
+	//	scaleX *= -1f;
+	//	scaleZ *= -1f;
 
 		// TODO: NO serializer for 4d packet yet
 		//    NBTList<Float> leftRotation = transformation.getFloatList("left_rotation");
@@ -434,8 +434,10 @@ public class BlockPlaceDataConfig extends ChunkConfig
 				//            )),
 				new WrappedDataValue(15, Registry.get(Byte.class), billBoard),
 				new WrappedDataValue(17, Registry.get(Float.class), viewRange * ("player_heads".equals(type) ? 0.5f : 1f)),
-				new WrappedDataValue(18, Registry.get(Float.class), shadowRadius), new WrappedDataValue(19, Registry.get(Float.class), shadowStrength),
-				new WrappedDataValue(20, Registry.get(Float.class), width), new WrappedDataValue(21, Registry.get(Float.class), height),
+				new WrappedDataValue(18, Registry.get(Float.class), shadowRadius),
+				new WrappedDataValue(19, Registry.get(Float.class), shadowStrength),
+				new WrappedDataValue(20, Registry.get(Float.class), width),
+				new WrappedDataValue(21, Registry.get(Float.class), height),
 				new WrappedDataValue(22, Registry.get(Integer.class), glowColorOverride));
 		if (glowing != null)
 		{

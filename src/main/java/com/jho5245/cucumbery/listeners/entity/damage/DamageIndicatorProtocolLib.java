@@ -112,7 +112,7 @@ public class DamageIndicatorProtocolLib
         StructureModifier<List<WrappedDataValue>> watchableAccessor2 = edit2.getDataValueCollectionModifier();
         List<WrappedDataValue> values2 = Lists.newArrayList(
                 new WrappedDataValue(8, Registry.get(Integer.class), -1), // interpolation delay
-                new WrappedDataValue(9, Registry.get(Integer.class), 10), // position/roation interpolation duration
+                new WrappedDataValue(9, Registry.get(Integer.class), 10), // position/rotation interpolation duration
                 new WrappedDataValue(11, Registry.get(Vector3f.class), new Vector3f(0f, 0.4f * sizeModifier, 0f)) // translation
         );
         watchableAccessor2.write(0, values2);
@@ -126,7 +126,7 @@ public class DamageIndicatorProtocolLib
         StructureModifier<List<WrappedDataValue>> watchableAccessor2 = edit2.getDataValueCollectionModifier();
         List<WrappedDataValue> values2 = Lists.newArrayList(
                 new WrappedDataValue(8, Registry.get(Integer.class), -1), // interpolation delay
-                new WrappedDataValue(9, Registry.get(Integer.class), 5), // position/roation interpolation duration
+                new WrappedDataValue(9, Registry.get(Integer.class), 5), // position/rotation interpolation duration
                 new WrappedDataValue(11, Registry.get(Vector3f.class), new Vector3f(0f, 0.5f * sizeModifier, 0f)), // translation
                 new WrappedDataValue(26, Registry.get(Byte.class), (byte) -127) // text opacity
         );
@@ -153,7 +153,7 @@ public class DamageIndicatorProtocolLib
         StructureModifier<List<WrappedDataValue>> watchableAccessor2 = edit2.getDataValueCollectionModifier();
         List<WrappedDataValue> values2 = Lists.newArrayList(
                 new WrappedDataValue(8, Registry.get(Integer.class), -1), // interpolation delay
-                new WrappedDataValue(9, Registry.get(Integer.class), 5), // position/roation interpolation duration
+                new WrappedDataValue(9, Registry.get(Integer.class), 5), // position/rotation interpolation duration
                 new WrappedDataValue(11, Registry.get(Vector3f.class), new Vector3f(0f, 0.6f * sizeModifier, 0f)), // translation
                 new WrappedDataValue(26, Registry.get(Byte.class), (byte) 5) // text opacity
         );
