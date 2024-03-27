@@ -936,6 +936,7 @@ public class Cucumbery extends JavaPlugin
 		// listener.player
 		Initializer.registerEvent(new PlayerAdvancementDone());
 		Initializer.registerEvent(new PlayerArmorChange());
+		Initializer.registerEvent(new PlayerArmSwing());
 		Initializer.registerEvent(new PlayerChangeBeaconEffect());
 		Initializer.registerEvent(new PlayerChangedWorld());
 		Initializer.registerEvent(new PlayerChat());

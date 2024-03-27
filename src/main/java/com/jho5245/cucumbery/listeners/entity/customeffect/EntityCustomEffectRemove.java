@@ -30,6 +30,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockDamageAbortEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
@@ -337,6 +338,15 @@ public class EntityCustomEffectRemove implements Listener
 			catch (Exception ignored)
 			{
 
+			}
+		}
+
+		if (customEffectType == CustomEffectType.ARM_SWING && entity instanceof Player player)
+		{
+			if (Variable.customMiningFallbackLocation.containsKey(uuid))
+			{
+				BlockDamageAbortEvent blockDamageAbortEvent = new BlockDamageAbortEvent(player, Variable.customMiningFallbackLocation.remove(uuid).getBlock(), player.getInventory().getItemInMainHand());
+				Bukkit.getPluginManager().callEvent(blockDamageAbortEvent);
 			}
 		}
 

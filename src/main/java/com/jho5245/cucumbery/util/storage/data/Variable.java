@@ -242,4 +242,12 @@ public class Variable
 
   public static HashMap<UUID, String> entityShootBowConsumableMap = new HashMap<>();
   public static final HashMap<UUID, Double> DAMAGE_SPREAD_MAP = new HashMap<>();
+
+  /**
+   * BlockDamageEvent가 호출되지 않은 상태로 커스텀 채광을 시작할 때
+   * PlayerInteractEvent에서 상호작용한 블록으 위치를 저장함.
+   * 이후 PlayerArmSwing이벤트를 이용하여 플레이어가 팔을 휘두르는 이벤트가 더 이상 호출되지 않을 때(팔을 멈춤 - 채광 중지)
+   * 해당 위치에 대해 채광을 중지하도록 함(BlockDamageAbortEvent)
+   */
+  public static final HashMap<UUID, Location> customMiningFallbackLocation = new HashMap<>();
 }

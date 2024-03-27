@@ -289,6 +289,8 @@ public class CustomEffectType implements Translatable, EnumHideable
 
   THE_CHAOS_INVENTORY = new CustomEffectType("the_chaos_inventory", "key:effect.cucumbery.the_chaos_inventory|혼벤토리", builder().negative().keepOnDeath()),
 
+  ARM_SWING = new CustomEffectType("arm_swing", "", builder().hidden().defaultDuration(2)),
+
   /**/ NOTHING = new CustomEffectType("nothing", "아무것도 아님"),
 
   /**/ TEST = new CustomEffectType(new NamespacedKey("test", "test"), "key:effect.cucumbery.test|테스트뭐", builder());
@@ -365,7 +367,7 @@ public class CustomEffectType implements Translatable, EnumHideable
             DAMAGE_INDICATOR, FREEZING, NO_CUCUMBERY_ITEM_USAGE_ATTACK, GLIDING, NOTIFY_NO_TRADE_ITEM_DROP, DYNAMIC_LIGHT,
             CUSTOM_DEATH_MESSAGE,
             REMOVE_NO_DAMAGE_TICKS, MASTER_OF_FISHING, MASTER_OF_FISHING_D, ASSASSINATION, ALARM, GAESANS, SUPERIOR_LEVITATION,
-            THE_CHAOS_INVENTORY,
+            THE_CHAOS_INVENTORY, ARM_SWING,
 
 
 

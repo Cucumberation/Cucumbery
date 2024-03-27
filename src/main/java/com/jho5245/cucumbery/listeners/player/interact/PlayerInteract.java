@@ -42,6 +42,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -1137,33 +1138,17 @@ public class PlayerInteract implements Listener
 
 	private void customMining(PlayerInteractEvent event)
 	{
-		if (true)
-			return;
 		Player player = event.getPlayer();
 		Block block = event.getClickedBlock();
+		int playerBlockInteractionRange = 6; // TODO: use AttributeInstance after 1.20.5
+		Block targetBlock = player.getTargetBlockExact(playerBlockInteractionRange, FluidCollisionMode.NEVER);
 		Action action = event.getAction();
-		MessageUtil.broadcastDebug("action:" + action);
-		MessageUtil.broadcastDebug("block:", block != null ? block.getType() : "null");
-		if (block == null && action == Action.LEFT_CLICK_AIR)
+		if (action == Action.LEFT_CLICK_AIR && block == null && targetBlock != null)
 		{
-			block = player.getTargetBlockExact(4);
-			if (block != null)
-			{
-				action = Action.LEFT_CLICK_BLOCK;
-			}
+			Variable.customMiningFallbackLocation.put(player.getUniqueId(), targetBlock.getLocation().clone());
+			BlockDamageEvent blockDamageEvent = new BlockDamageEvent(player, targetBlock, event.getBlockFace(), player.getInventory().getItemInMainHand(), false);
+			Bukkit.getPluginManager().callEvent(blockDamageEvent);
 		}
-		if (action == Action.LEFT_CLICK_BLOCK && block != null && CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE))
-		{
-			MessageUtil.broadcastDebug("here");
-			Location location = block.getLocation();
-			if (!Variable.customMiningCooldown.containsKey(location) || Variable.customMiningExtraBlocks.containsKey(location))
-			{
-				MessageUtil.broadcastDebug("here2");
-				CustomEffectManager.addEffect(player, new LocationCustomEffectImple(CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PROGRESS, location));
-				count++;
-			}
-		}
-		MessageUtil.broadcastDebug("-------------------count:" + count);
 	}
 
 	private boolean itemUsage(PlayerInteractEvent event, Player player, ItemStack item, boolean mainHand, boolean rightClick, boolean isSneaking)
