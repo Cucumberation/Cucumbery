@@ -1,6 +1,7 @@
 package com.jho5245.cucumbery.util.storage.component;
 
 import com.comphenix.protocol.PacketType.Play.Server;
+import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.util.addons.ProtocolLibManager;
 import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
@@ -150,7 +151,7 @@ public class ItemStackComponent
 			}
 			bundleMeta.lore(tooltip);
 		}
-		bundleMeta.addItem(viewer != null ? ProtocolLibManager.setItemLore(Server.WINDOW_ITEMS, itemStack, viewer) : itemStack);
+		bundleMeta.addItem(Cucumbery.using_ProtocolLib && viewer != null ? ProtocolLibManager.setItemLore(Server.WINDOW_ITEMS, itemStack, viewer) : itemStack);
 		bundleMeta.addItemFlags(ItemFlag.values());
 		bundleMeta.displayName(ItemNameUtil.itemName(itemStack));
 		hover.setItemMeta(bundleMeta);
