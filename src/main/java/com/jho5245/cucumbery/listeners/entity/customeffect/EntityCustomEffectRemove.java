@@ -341,6 +341,7 @@ public class EntityCustomEffectRemove implements Listener
 			}
 		}
 
+		// 커스텀 채광 FALLBACK - 플레이어가 팔 흔들기를 멈추었을 때 저장된 위치에 대한 커스텀 채광 중지 처리
 		if (customEffectType == CustomEffectType.ARM_SWING && entity instanceof Player player)
 		{
 			if (Variable.customMiningFallbackLocation.containsKey(uuid))
