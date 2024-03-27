@@ -378,23 +378,6 @@ public class ProtocolLibManager
 				}
 			}
 		});
-
-		protocolManager.addPacketListener(new PacketAdapter(
-				Cucumbery.getPlugin(),
-				ListenerPriority.NORMAL,
-				PacketType.Play.Client.CHAT
-		) {
-			@Override
-			public void onPacketReceiving(PacketEvent event) {
-				PacketContainer packet = event.getPacket();
-				String message = packet.getStrings().read(0);
-
-				if (message.contains("a")) {
-					event.setCancelled(true);
-					event.getPlayer().sendMessage("Bad manners!");
-				}
-			}
-		});
 	}
 
 	private static List<ItemStack> setItemLore(PacketType packetType, List<ItemStack> itemStacks, Player player)
