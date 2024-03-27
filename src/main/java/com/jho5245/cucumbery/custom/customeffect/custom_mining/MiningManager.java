@@ -100,6 +100,7 @@ public class MiningManager
     {
       return null;
     }
+    // 월드가드 보호 여부 확인
     if (Cucumbery.using_WorldGuard)
     {
       LocalPlayer localPlayer = WorldGuardPlugin.inst().wrapPlayer(player);
@@ -112,6 +113,11 @@ public class MiningManager
       }
     }
 
+    // 스폰 보호 구역일 경우 채광 불가
+    if (!player.hasPermission("asdf") && Method.isSpawnProtectionLocattion(blockLocation))
+    {
+      return null;
+    }
     ItemStack itemStack = player.getInventory().getItemInMainHand().clone();
     if (NBTAPI.isRestricted(player, itemStack, RestrictionType.NO_BREAK))
     {
@@ -864,8 +870,8 @@ public class MiningManager
       return null;
     }
     // 커스텀 아이템 id
-    CustomMaterial toolId = ItemStackUtil.itemExists(itemStack) ? Method2.valueOf(new NBTItem(itemStack).getString(CustomMaterial.IDENDIFER), CustomMaterial.class) : null,
-            blockId = !drops.isEmpty() && ItemStackUtil.itemExists(drops.get(0)) ? Method2.valueOf(new NBTItem(drops.get(0)).getString(CustomMaterial.IDENDIFER), CustomMaterial.class) : null;
+    CustomMaterial toolId = CustomMaterial.itemStackOf(itemStack),
+            blockId = !drops.isEmpty() ? CustomMaterial.itemStackOf(drops.get(0)) : null;
     if (toolId == CustomMaterial.FLINT_SHOVEL && blockId == null && blockType == Material.GRAVEL)
     {
       drops.forEach(item ->

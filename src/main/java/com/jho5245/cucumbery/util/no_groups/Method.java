@@ -2090,6 +2090,25 @@ public class Method extends SoundPlay
 	}
 
 	/**
+	 * 입력한 {@link org.bukkit.Location}이 스폰 보호 구역에 포함되는지 확인합니다. 월드와 상관없이 좌표 차이로만 계산됩니다.
+	 * @param location 스폰 보호 구역에 포함되는지 확인할 {@link org.bukkit.Location} 인스턴스
+	 * @return 포함되면 true 아닐 경우 false
+	 */
+	public static boolean isSpawnProtectionLocattion(@NotNull Location location)
+	{
+		int spawnRadius = Bukkit.getSpawnRadius();
+		if (spawnRadius > 0)
+		{
+			Location spawnLocation = Bukkit.getWorlds().get(0).getSpawnLocation();
+			int blockX = location.getBlockX(), spawnX = spawnLocation.getBlockX();
+			int blockY = location.getBlockY(), spawnY = spawnLocation.getBlockY();
+			int blockZ = location.getBlockZ(), spawnZ = spawnLocation.getBlockZ();
+			return Math.abs(blockX - spawnX) <= spawnRadius && Math.abs(blockY - spawnY) <= spawnRadius && Math.abs(blockZ - spawnZ) <= spawnRadius;
+		}
+		return false;
+	}
+
+	/**
 	 * 해당 부울의 배열의 모든 값이 true인지 확인합니다.
 	 *
 	 * @param array

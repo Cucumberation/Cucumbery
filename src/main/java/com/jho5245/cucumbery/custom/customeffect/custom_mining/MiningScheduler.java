@@ -544,7 +544,7 @@ public class MiningScheduler
 										{
 											for (int c = 0; c < 4; c++)
 											{
-												online.spawnParticle(particle, location.clone().add(minX + diffX * a, minY + diffY * b, minZ + diffZ * c), 1, 0, 0, 0, 0.1, data);
+												online.spawnParticle(particle, location.clone().add(minX + diffX * a, minY + diffY * b, minZ + diffZ * c), 1, 0, 0, 0, 0.2, data);
 											}
 										}
 									}

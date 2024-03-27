@@ -22,6 +22,7 @@ import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
@@ -44,10 +45,13 @@ public class BlockPlace implements Listener
 		}
 		Player player = event.getPlayer();
 		Block block = event.getBlock();
-
 		UUID uuid = player.getUniqueId();
 		ItemStack item = event.getItemInHand();
 		Location location = block.getLocation();
+		if (!player.hasPermission("asdf") && Method.isSpawnProtectionLocattion(location))
+		{
+			return;
+		}
 		// 블록 설치 데이터 보존 처리 여부
 		boolean special = false;
 		if (event.isCancelled())
@@ -375,6 +379,11 @@ public class BlockPlace implements Listener
 							nbtItem.hasTag("change_material") && nbtItem.getType("change_material") == NBTType.NBTTagString ? nbtItem.getString("change_material") : "";
 					Material material = Method2.valueOf(materialString, Material.class);
 					block.setType(material != null ? material : Material.WHITE_STAINED_GLASS);
+					if (event.getBlockReplacedState().getType() == Material.WATER && block.getBlockData() instanceof Waterlogged waterlogged)
+					{
+						waterlogged.setWaterlogged(true);
+						block.setBlockData(waterlogged);
+					}
 				}
 			}
 			else
