@@ -37,6 +37,7 @@ import org.bukkit.block.data.type.NoteBlock;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
+import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -70,6 +71,7 @@ public class PlayerInteract implements Listener
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
 		Player player = event.getPlayer();
+		this.customMining(event);
 		if (CustomEffectManager.hasEffect(player, CustomEffectType.INVINCIBLE_RESPAWN))
 		{
 			CustomEffectManager.removeEffect(player, CustomEffectType.INVINCIBLE_RESPAWN);
@@ -1121,7 +1123,6 @@ public class PlayerInteract implements Listener
 
 		this.noteBlock(event, itemExists);
 		this.customItem(event, itemExists);
-		this.customMining(event);
 	}
 
 	private void customMining(PlayerInteractEvent event)
@@ -1677,7 +1678,8 @@ public class PlayerInteract implements Listener
 									victim.damage(damage, player);
 									if (ignoreInvincible && health == victim.getHealth())
 									{
-										EntityDamageByEntityEvent damageEvent = new EntityDamageByEntityEvent(player, victim, DamageCause.PROJECTILE, org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.GENERIC).build(), damage);
+										EntityDamageByEntityEvent damageEvent = new EntityDamageByEntityEvent(player, victim, DamageCause.PROJECTILE,
+												org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.GENERIC).build(), damage);
 										victim.setHealth(Math.max(0, victim.getHealth() - damage));
 										victim.setLastDamageCause(damageEvent);
 										victim.setLastDamage(damage);
@@ -1687,7 +1689,8 @@ public class PlayerInteract implements Listener
 								{
 									try
 									{
-										EntityDamageByEntityEvent damageEvent = new EntityDamageByEntityEvent(player, victim, DamageCause.PROJECTILE, org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.GENERIC).build(), damage);
+										EntityDamageByEntityEvent damageEvent = new EntityDamageByEntityEvent(player, victim, DamageCause.PROJECTILE,
+												org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.GENERIC).build(), damage);
 										victim.setHealth(Math.max(0, victim.getHealth() - damage));
 										victim.setLastDamageCause(damageEvent);
 										victim.setLastDamage(damage);

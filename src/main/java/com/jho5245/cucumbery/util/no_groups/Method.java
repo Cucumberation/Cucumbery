@@ -1567,8 +1567,7 @@ public class Method extends SoundPlay
 		}
 		if (notice)
 		{
-			sender.sendMessage(ComponentUtil.translate("command.unknown.command", NamedTextColor.RED));
-			sender.sendMessage(ComponentUtil.translate("command.context.here", NamedTextColor.RED).decoration(TextDecoration.ITALIC, State.TRUE));
+			Bukkit.dispatchCommand(sender, "cucumberyunknowncommand");
 			MessageUtil.consoleSendMessage(Prefix.INFO_WARN, sender, "translate:이(가) 권한이 부족하여 명령어 사용에 실패했습니다");
 		}
 		return false;
