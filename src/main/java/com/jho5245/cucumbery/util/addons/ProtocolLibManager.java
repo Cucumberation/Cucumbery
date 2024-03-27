@@ -223,6 +223,7 @@ public class ProtocolLibManager
 				}
 			}
 		});
+
 		protocolManager.addPacketListener(new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.NORMAL, Server.BLOCK_CHANGE)
 		{
 			@Override

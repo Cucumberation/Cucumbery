@@ -4,7 +4,6 @@ import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.commands.debug.CommandWhatIs;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffect;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
-import com.jho5245.cucumbery.custom.customeffect.children.group.LocationCustomEffectImple;
 import com.jho5245.cucumbery.custom.customeffect.children.group.PlayerCustomEffect;
 import com.jho5245.cucumbery.custom.customeffect.children.group.StringCustomEffect;
 import com.jho5245.cucumbery.custom.customeffect.children.group.StringCustomEffectImple;
@@ -15,7 +14,6 @@ import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeRune;
 import com.jho5245.cucumbery.custom.customrecipe.recipeinventory.RecipeInventoryMainMenu;
 import com.jho5245.cucumbery.listeners.block.NotePlay;
 import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
-import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
@@ -53,7 +51,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionType;
-import org.bukkit.projectiles.ProjectileSource;
+import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
@@ -342,13 +340,13 @@ public class PlayerInteract implements Listener
 				if (player.isSneaking())
 				{
 					itemUsageRightClick = this.itemUsage(event, player, item, hand == EquipmentSlot.HAND, true, true) || itemUsageRightClick;
-					Variable.itemUseCooldown.add(uuid);
-					Bukkit.getServer().getScheduler()
-							.runTaskLater(Cucumbery.getPlugin(), () -> Variable.itemUseCooldown.remove(uuid), UserData.ITEM_USE_DELAY.getInt(uuid));
 				}
 
 				if (itemUsageRightClick)
 				{
+					Variable.itemUseCooldown.add(uuid);
+					Bukkit.getServer().getScheduler()
+							.runTaskLater(Cucumbery.getPlugin(), () -> Variable.itemUseCooldown.remove(uuid), UserData.ITEM_USE_DELAY.getInt(uuid));
 					event.setCancelled(true);
 					return;
 				}
@@ -897,6 +895,7 @@ public class PlayerInteract implements Listener
 				}
 			}
 		}
+
 		// 손에 아이템 없음
 		//		else
 		//		{
@@ -1013,19 +1012,12 @@ public class PlayerInteract implements Listener
 								if (!Permission.EVENT_ERROR_HIDE.has(player) && !Variable.playerInteractAlertCooldown.contains(uuid))
 								{
 									Variable.playerInteractAlertCooldown.add(uuid);
-									MessageUtil.sendTitle(player, "&c사용 불가!", "자석석에 사용할 수 없는  아이템입니다", 5, 80, 15);
+									MessageUtil.sendTitle(player, "&c사용 불가!", "자석석에 사용할 수 없는 아이템입니다", 5, 80, 15);
 									SoundPlay.playSound(player, Constant.ERROR_SOUND);
 									Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> Variable.playerInteractAlertCooldown.remove(uuid), 100L);
 								}
 							}
 							return;
-						}
-					}
-					case BLACK_BED, BLUE_BED, BROWN_BED, LIGHT_BLUE_BED, LIGHT_GRAY_BED, GRAY_BED, GREEN_BED, CYAN_BED, LIME_BED, MAGENTA_BED, ORANGE_BED, PINK_BED, PURPLE_BED, RED_BED ->
-					{
-						if (player.getInventory().contains(Material.RECOVERY_COMPASS))
-						{
-
 						}
 					}
 				}
@@ -1134,20 +1126,13 @@ public class PlayerInteract implements Listener
 		this.customMining(event);
 	}
 
-	int count = 0;
-
 	private void customMining(PlayerInteractEvent event)
 	{
 		Player player = event.getPlayer();
-		Block block = event.getClickedBlock();
-		int playerBlockInteractionRange = 6; // TODO: use AttributeInstance after 1.20.5
-		Block targetBlock = player.getTargetBlockExact(playerBlockInteractionRange, FluidCollisionMode.NEVER);
 		Action action = event.getAction();
-		if (action == Action.LEFT_CLICK_AIR && block == null && targetBlock != null)
+		if (action.isRightClick())
 		{
-			Variable.customMiningFallbackLocation.put(player.getUniqueId(), targetBlock.getLocation().clone());
-			BlockDamageEvent blockDamageEvent = new BlockDamageEvent(player, targetBlock, event.getBlockFace(), player.getInventory().getItemInMainHand(), false);
-			Bukkit.getPluginManager().callEvent(blockDamageEvent);
+			CustomEffectManager.addEffect(player, CustomEffectType.PLAYER_INTERACT_RIGHT_CLICK);
 		}
 	}
 
@@ -1287,6 +1272,7 @@ public class PlayerInteract implements Listener
 			{
 				return;
 			}
+			MessageUtil.broadcastDebug("am I here?");
 			event.setCancelled(true);
 			player.incrementStatistic(Statistic.NOTEBLOCK_TUNED);
 			NoteBlock noteBlock = (NoteBlock) block.getBlockData();
