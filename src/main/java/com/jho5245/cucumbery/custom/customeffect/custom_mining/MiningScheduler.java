@@ -137,7 +137,7 @@ public class MiningScheduler
 		{
 			if (map.containsKey(location))
 			{
-				long value = map.get(location);
+				long value = map.getOrDefault(location, 0L);
 				map.put(location, value - 1);
 			}
 		}
@@ -493,7 +493,6 @@ public class MiningScheduler
 						}
 						VoxelShape voxelShape = block.getCollisionShape();
 						Collection<BoundingBox> boundingBoxes = voxelShape.getBoundingBoxes();
-						int overridenSize = -1;
 						if (boundingBoxes.isEmpty())
 						{
 							switch (blockType)
@@ -508,15 +507,12 @@ public class MiningScheduler
 							if (Tag.FLOWERS.isTagged(blockType))
 							{
 								boundingBoxes.add(new BoundingBox(0.3d, 0.3d, 0.3d, 1d, 0.0625d, 1d));
-								overridenSize = 1;
 							}
 							if (boundingBoxes.isEmpty())
 							{
 								boundingBoxes.add(block.getBoundingBox());
 							}
 						}
-						int size = boundingBoxes.size();
-						int count = overridenSize != -1 ? overridenSize : (int) (5d / size);
 						for (Player online : Bukkit.getOnlinePlayers())
 						{
 							if (UserData.SHOW_BLOCK_BREAK_PARTICLE_ON_CUSTOM_MINING.getBoolean(online) && online.getWorld().getName().equals(player.getWorld().getName()))
@@ -526,40 +522,23 @@ public class MiningScheduler
 									double minX = boundingBox.getMinX(), maxX = boundingBox.getMaxX();
 									double minY = boundingBox.getMinY(), maxY = Math.min(1d, boundingBox.getMaxY());
 									double minZ = boundingBox.getMinZ(), maxZ = boundingBox.getMaxZ();
-									double diffX = maxX - minX, diffY = maxY - minY, diffZ = maxZ - minZ;
-									minX += 0.2 * diffX;
-									maxX -= 0.2 * diffX;
-									minY += 0.2 * diffY;
-									maxY -= 0.2 * diffY;
-									minZ += 0.2 * diffZ;
-									maxZ -= 0.2 * diffZ;
-									if (blockData == null)
+									double diffX = (maxX - minX) * 8d / 30d, diffY = (maxY - minY) * 8d / 30d, diffZ = (maxZ - minZ) * 8d / 30d;
+									minX += diffX * 0.1;
+									minY += diffY * 0.1;
+									minZ += diffZ * 0.1;
+
+									Particle particle = blockData == null ? Particle.ITEM_CRACK : Particle.BLOCK_CRACK;
+									Object data = blockData == null ? breakParticleItem : blockData;
+
+									for (int a = 0; a < 4; a++)
 									{
-										online.spawnParticle(Particle.ITEM_CRACK, location.clone().add(minX, minY, minZ), count, 0, 0, 0, 0.05, breakParticleItem);
-
-										online.spawnParticle(Particle.ITEM_CRACK, location.clone().add(maxX, minY, minZ), count, 0, 0, 0, 0.05, breakParticleItem);
-										online.spawnParticle(Particle.ITEM_CRACK, location.clone().add(minX, maxY, minZ), count, 0, 0, 0, 0.05, breakParticleItem);
-										online.spawnParticle(Particle.ITEM_CRACK, location.clone().add(minX, minY, maxZ), count, 0, 0, 0, 0.05, breakParticleItem);
-
-										online.spawnParticle(Particle.ITEM_CRACK, location.clone().add(maxX, maxY, minZ), count, 0, 0, 0, 0.05, breakParticleItem);
-										online.spawnParticle(Particle.ITEM_CRACK, location.clone().add(maxX, minY, maxZ), count, 0, 0, 0, 0.05, breakParticleItem);
-										online.spawnParticle(Particle.ITEM_CRACK, location.clone().add(minX, maxY, maxZ), count, 0, 0, 0, 0.05, breakParticleItem);
-
-										online.spawnParticle(Particle.ITEM_CRACK, location.clone().add(maxX, maxY, maxZ), count, 0, 0, 0, 0.05, breakParticleItem);
-									}
-									else
-									{
-										online.spawnParticle(Particle.BLOCK_CRACK, location.clone().add(minX, minY, minZ), count, 0, 0, 0, 0, blockData);
-
-										online.spawnParticle(Particle.BLOCK_CRACK, location.clone().add(maxX, minY, minZ), count, 0, 0, 0, 0, blockData);
-										online.spawnParticle(Particle.BLOCK_CRACK, location.clone().add(minX, maxY, minZ), count, 0, 0, 0, 0, blockData);
-										online.spawnParticle(Particle.BLOCK_CRACK, location.clone().add(minX, minY, maxZ), count, 0, 0, 0, 0, blockData);
-
-										online.spawnParticle(Particle.BLOCK_CRACK, location.clone().add(maxX, maxY, minZ), count, 0, 0, 0, 0, blockData);
-										online.spawnParticle(Particle.BLOCK_CRACK, location.clone().add(maxX, minY, maxZ), count, 0, 0, 0, 0, blockData);
-										online.spawnParticle(Particle.BLOCK_CRACK, location.clone().add(minX, maxY, maxZ), count, 0, 0, 0, 0, blockData);
-
-										online.spawnParticle(Particle.BLOCK_CRACK, location.clone().add(maxX, maxY, maxZ), count, 0, 0, 0, 0, blockData);
+										for (int b = 0; b < 4; b++)
+										{
+											for (int c = 0; c < 4; c++)
+											{
+												online.spawnParticle(particle, location.clone().add(minX + diffX * a, minY + diffY * b, minZ + diffZ * c), 1, 0, 0, 0, 0.1, data);
+											}
+										}
 									}
 								}
 							}
