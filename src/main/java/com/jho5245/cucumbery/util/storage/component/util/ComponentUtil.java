@@ -330,7 +330,7 @@ public class ComponentUtil
 					}
 					itemMeta.lore(lore);
 					icon.setItemMeta(itemMeta);
-					concat = concat.hoverEvent(icon.asHoverEvent()).clickEvent(concat.clickEvent());
+					concat = concat.hoverEvent(create(player, icon).hoverEvent()).clickEvent(concat.clickEvent());
 				}
 				else
 				{
@@ -412,7 +412,7 @@ public class ComponentUtil
 					}
 					itemMeta.lore(lore);
 					icon.setItemMeta(itemMeta);
-					concat = concat.hoverEvent(icon.asHoverEvent()).clickEvent(concat.clickEvent());
+					concat = concat.hoverEvent(create(player, icon).hoverEvent()).clickEvent(concat.clickEvent());
 				}
 				else
 				{

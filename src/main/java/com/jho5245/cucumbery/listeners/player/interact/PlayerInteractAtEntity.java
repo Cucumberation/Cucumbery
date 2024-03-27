@@ -2,6 +2,7 @@ package com.jho5245.cucumbery.listeners.player.interact;
 
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
+import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCustomMining;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
@@ -36,6 +37,7 @@ public class PlayerInteractAtEntity implements Listener
 
     Player player = event.getPlayer();
     UUID uuid = player.getUniqueId();
+    CustomEffectManager.addEffect(player, CustomEffectType.IGNORE_ARM_SWING);
     // 아이템 섭취 사용에서 사라지지 않을 경우 아이템 소실 방지를 위한 쿨타임
     if (Variable.playerItemConsumeCauseSwapCooldown.contains(uuid))
     {

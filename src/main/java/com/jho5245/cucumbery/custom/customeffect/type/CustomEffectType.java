@@ -292,12 +292,12 @@ public class CustomEffectType implements Translatable, EnumHideable
   /**
    * PlayerArmSwingEvent가 멈췄을때(플레이어가 팔을 흔드는 것을 멈췄을때)를 감지하기 위한 효과
    */
-  ARM_SWING = new CustomEffectType("arm_swing", "", builder().hidden().defaultDuration(2)),
+  ARM_SWING = new CustomEffectType("arm_swing", "", builder().hidden().defaultDuration(3)),
 
   /**
-   * PlayerArmSwingEvent에서 우클릭(블록 설치) 감지용
+   * 플레이어가 마우스 좌클릭을 하여 팔을 흔드는 것을 제외한 나머지 팔 휘두르기 확인용
    */
-  PLAYER_INTERACT_RIGHT_CLICK = new CustomEffectType("player_interact_right_click", "", builder().hidden().defaultDuration(2).skipEvent()),
+  IGNORE_ARM_SWING = new CustomEffectType("ignore_arm_swing", "", builder().hidden().defaultDuration(2).skipEvent()),
 
   /**/ NOTHING = new CustomEffectType("nothing", "아무것도 아님"),
 
@@ -375,7 +375,7 @@ public class CustomEffectType implements Translatable, EnumHideable
             DAMAGE_INDICATOR, FREEZING, NO_CUCUMBERY_ITEM_USAGE_ATTACK, GLIDING, NOTIFY_NO_TRADE_ITEM_DROP, DYNAMIC_LIGHT,
             CUSTOM_DEATH_MESSAGE,
             REMOVE_NO_DAMAGE_TICKS, MASTER_OF_FISHING, MASTER_OF_FISHING_D, ASSASSINATION, ALARM, GAESANS, SUPERIOR_LEVITATION,
-            THE_CHAOS_INVENTORY, ARM_SWING, PLAYER_INTERACT_RIGHT_CLICK,
+            THE_CHAOS_INVENTORY, ARM_SWING, IGNORE_ARM_SWING,
 
 
 

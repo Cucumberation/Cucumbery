@@ -53,7 +53,7 @@ public class PlayerDropItem implements Listener
     }
     Player player = event.getPlayer();
     UUID uuid = player.getUniqueId();
-
+    CustomEffectManager.addEffect(player, CustomEffectType.IGNORE_ARM_SWING);
     // 굳검 이벤트 예외 토글 아이템
     Item item = event.getItemDrop();
     ItemStack itemStack = item.getItemStack();

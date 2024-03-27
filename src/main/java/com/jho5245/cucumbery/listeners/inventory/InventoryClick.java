@@ -467,6 +467,10 @@ public class InventoryClick implements Listener
 		String openInventoryTitle = openInventory.getTitle();
 		SlotType slotType = event.getSlotType();
 		ClickType clickType = event.getClick();
+		if (clickType == ClickType.DROP)
+		{
+			CustomEffectManager.addEffect(player, CustomEffectType.ARM_SWING);
+		}
 		ItemStack current = event.getCurrentItem(), cursor = event.getCursor();
 		Inventory inventory = event.getInventory();
 		Location inventoryLocation = inventory.getLocation();

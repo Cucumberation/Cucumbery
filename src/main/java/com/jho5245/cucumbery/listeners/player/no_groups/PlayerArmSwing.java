@@ -1,9 +1,7 @@
 package com.jho5245.cucumbery.listeners.player.no_groups;
 
-import com.google.errorprone.annotations.Var;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffect;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
-import com.jho5245.cucumbery.custom.customeffect.children.group.LocationCustomEffect;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCustomMining;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
@@ -28,7 +26,11 @@ public class PlayerArmSwing implements Listener
 	public void onPlayerArmSwing(PlayerArmSwingEvent event)
 	{
 		Player player = event.getPlayer();
-		CustomEffectManager.addEffect(player, CustomEffectType.ARM_SWING);
+		if (!CustomEffectManager.hasEffect(player, CustomEffectType.ARM_SWING) || CustomEffectManager.getEffect(player, CustomEffectType.ARM_SWING).getDuration() <= 1)
+		{
+			CustomEffectManager.addEffect(player, CustomEffectType.ARM_SWING);
+			return;
+		}
 		UUID uuid = player.getUniqueId();
 		if (!Variable.customMiningBlockBreakCooldown.contains(uuid) && CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE))
 		{
@@ -63,7 +65,7 @@ public class PlayerArmSwing implements Listener
 				}
 			}
 			if (!CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PROGRESS)
-					&& !CustomEffectManager.hasEffect(player, CustomEffectType.PLAYER_INTERACT_RIGHT_CLICK)
+					&& !CustomEffectManager.hasEffect(player, CustomEffectType.IGNORE_ARM_SWING)
 					&& !Variable.customMiningFallbackLocation.containsKey(uuid))
 			{
 				double playerBlockInteractionRange = 4.5; // TODO: use AttributeInstance after 1.20.5

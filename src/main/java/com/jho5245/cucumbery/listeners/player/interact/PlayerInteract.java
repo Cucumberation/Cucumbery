@@ -40,7 +40,6 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -51,7 +50,6 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionType;
-import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.Nullable;
 
@@ -1132,7 +1130,7 @@ public class PlayerInteract implements Listener
 		Action action = event.getAction();
 		if (action.isRightClick())
 		{
-			CustomEffectManager.addEffect(player, CustomEffectType.PLAYER_INTERACT_RIGHT_CLICK);
+			CustomEffectManager.addEffect(player, CustomEffectType.IGNORE_ARM_SWING);
 		}
 	}
 
@@ -1272,7 +1270,6 @@ public class PlayerInteract implements Listener
 			{
 				return;
 			}
-			MessageUtil.broadcastDebug("am I here?");
 			event.setCancelled(true);
 			player.incrementStatistic(Statistic.NOTEBLOCK_TUNED);
 			NoteBlock noteBlock = (NoteBlock) block.getBlockData();

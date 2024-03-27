@@ -120,7 +120,7 @@ public class ItemStackComponent
 				if (tooltip1.color() != null && tooltip1.decoration(TextDecoration.ITALIC) == State.NOT_SET)
 					tooltip.set(i, tooltip1.decoration(TextDecoration.ITALIC, State.FALSE));
 			}
-			if (viewer.hasPermission("asdf"))
+			if (viewer.hasPermission("asdf") && !nbtItem.hasTag("VirtualItem"))
 			{
 				tooltip.add(Component.empty());
 				tooltip.add(ComponentUtil.translate("&7클릭하여 /give 명령어로 복사"));
