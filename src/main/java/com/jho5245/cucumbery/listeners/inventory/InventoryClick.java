@@ -469,7 +469,7 @@ public class InventoryClick implements Listener
 		ClickType clickType = event.getClick();
 		if (clickType == ClickType.DROP)
 		{
-			CustomEffectManager.addEffect(player, CustomEffectType.ARM_SWING);
+			CustomEffectManager.addEffect(player, CustomEffectType.IGNORE_ARM_SWING);
 		}
 		ItemStack current = event.getCurrentItem(), cursor = event.getCursor();
 		Inventory inventory = event.getInventory();

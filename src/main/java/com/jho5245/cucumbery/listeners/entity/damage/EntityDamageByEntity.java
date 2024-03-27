@@ -204,6 +204,7 @@ public class EntityDamageByEntity implements Listener
     if (damager instanceof Player player)
     {
       UUID uuid = player.getUniqueId();
+      CustomEffectManager.addEffect(player, CustomEffectType.IGNORE_ARM_SWING);
       if (!Cucumbery.config.getBoolean("grant-default-permission-to-players") && !Permission.EVENT_HURT_ENTITY.has(player))
       {
         event.setCancelled(true);

@@ -17,6 +17,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDamageEvent;
 
+import java.util.UUID;
+
 public class BlockDamage implements Listener
 {
   @EventHandler
@@ -27,6 +29,7 @@ public class BlockDamage implements Listener
       return;
     }
     Player player = event.getPlayer();
+    UUID uuid = player.getUniqueId();
     if (CustomEffectManager.hasEffect(player, CustomEffectType.CURSE_OF_CREATIVITY) || CustomEffectManager.hasEffect(player, CustomEffectType.CURSE_OF_CREATIVITY_BREAK))
     {
       event.setCancelled(true);
@@ -34,7 +37,7 @@ public class BlockDamage implements Listener
     }
     Block block = event.getBlock();
     final Location location = block.getLocation();
-    if (!Variable.customMiningBlockBreakCooldown.contains(player.getUniqueId()) && CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE))
+    if (!Variable.customMiningBlockBreakCooldown.contains(uuid) && CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE))
     {
       if (player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR)
       {
