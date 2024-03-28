@@ -400,6 +400,11 @@ Cucumbery.getPlugin().getLogger().warning(        e.getMessage());
     {
       hover = hover.append(Component.text("\n"));
       hover = hover.append(ComponentUtil.translate("크기 : %s", Constant.THE_COLOR_HEX + phantom.getSize()));
+      if (!phantom.shouldBurnInDay())
+      {
+        hover = hover.append(Component.text("\n"));
+        hover = hover.append(ComponentUtil.translate("ㄷㄷ 얘 낮에 불에 안탐 안언데드인듯"));
+      }
       UUID spawningEntityUUID = phantom.getSpawningEntity();
       if (spawningEntityUUID != null)
       {
