@@ -253,7 +253,7 @@
                             </mainClass>
                         </manifest>
                     </archive>
-                    <outputDirectory>C:\Users\samsung\Desktop\test_server_1.20.4\plugins</outputDirectory>
+                    <outputDirectory>G:\CucumberyAutoUpdater</outputDirectory>
                 </configuration>
             </plugin>
             <plugin>
