@@ -797,15 +797,8 @@ public class ItemStackUtil
 	@NotNull
 	public static List<Component> getItemInfoAsComponents(@NotNull ItemStack itemStack, @Nullable Object param, @Nullable Component tag, boolean separator)
 	{
-		return getItemInfoAsComponents(itemStack, param, tag, separator, true);
-	}
-
-	@NotNull
-	public static List<Component> getItemInfoAsComponents(@NotNull ItemStack itemStack, @Nullable Object param, @Nullable Component tag, boolean separator,
-			boolean withLore)
-	{
 		itemStack = itemStack.clone();
-		if (withLore)
+		if (true || param instanceof ItemLoreView view && UserData.SHOW_ITEM_LORE.getBoolean(view.getPlayer()))
 		{
 			ItemLore.setItemLore(itemStack, false, param);
 		}
