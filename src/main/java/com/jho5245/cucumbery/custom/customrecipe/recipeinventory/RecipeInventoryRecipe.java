@@ -345,7 +345,7 @@ public class RecipeInventoryRecipe
 						ingredient.setType(Material.ENDER_PEARL);
 						itemMeta.displayName(ItemNameUtil.itemName(type));
 					}
-					else
+					else if (!new NBTItem(ingredient).hasTag(ItemStackUtil.INVALID_ITEM_TAG))
 					{
 						itemMeta.displayName(null);
 						ingredient.setItemMeta(itemMeta);
@@ -399,12 +399,15 @@ public class RecipeInventoryRecipe
 						tooltip.set(j, component.decoration(TextDecoration.ITALIC, State.FALSE));
 					}
 				}
-				ItemMeta ingredientMeta = ingredient.getItemMeta();
-				ingredientMeta.addItemFlags(ItemFlag.values());
-				ingredientMeta.lore(tooltip);
-				ingredient.setItemMeta(ingredientMeta);
 
-				itemMeta = ingredient.getItemMeta();
+				if (!new NBTItem(ingredient).hasTag(ItemStackUtil.INVALID_ITEM_TAG))
+				{
+					ItemMeta ingredientMeta = ingredient.getItemMeta();
+					ingredientMeta.addItemFlags(ItemFlag.values());
+					ingredientMeta.lore(tooltip);
+					ingredient.setItemMeta(ingredientMeta);
+					itemMeta = ingredient.getItemMeta();
+				}
 				lore = itemMeta.lore();
 
 				if (lore == null)

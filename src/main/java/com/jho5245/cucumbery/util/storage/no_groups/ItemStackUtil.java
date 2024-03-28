@@ -49,6 +49,8 @@ public class ItemStackUtil
 
 	public static final ItemStack HIDDEN_ITEM, INVALID_ITEM;
 
+	public static final String INVALID_ITEM_TAG = "INVALID_ITEM";
+
 	static
 	{
 		HIDDEN_ITEM = new ItemStack(Material.TRIAL_SPAWNER);
@@ -60,9 +62,11 @@ public class ItemStackUtil
 
 		INVALID_ITEM = new ItemStack(Material.BARRIER);
 		itemMeta = INVALID_ITEM.getItemMeta();
-		itemMeta.displayName(ComponentUtil.translate("&c&okey:item.cucumbery.invalid_item|{오류 아이템}"));
+		itemMeta.displayName(ComponentUtil.translate("&c&qkey:item.cucumbery.invalid_item|{오류 아이템}"));
 		itemMeta.lore(List.of(ComponentUtil.translate("&7key:item.cucumbery.invalid.description|오류가 발생하여 생성된 아이템입니다!"),
 				ComponentUtil.translate("&7key:item.cucumbery.invalid.description_2|관리자에게 문의해주세요!")));
+		INVALID_ITEM.setItemMeta(itemMeta);
+		new NBTItem(INVALID_ITEM, true).setBoolean(INVALID_ITEM_TAG, true);
 	}
 
 	/**

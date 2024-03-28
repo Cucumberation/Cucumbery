@@ -209,7 +209,6 @@ public class ItemLore2BlockState
 							}
 							if (itemStackList.size() == 1)
 							{
-								Bukkit.broadcastMessage("why");
 								lore.addAll(ItemStackUtil.getItemInfoAsComponents(itemStackList.get(0), params, customNameLore, true));
 							}
 							else

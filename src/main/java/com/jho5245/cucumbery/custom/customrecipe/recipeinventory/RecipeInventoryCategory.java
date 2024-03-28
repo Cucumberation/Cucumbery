@@ -237,9 +237,9 @@ public class RecipeInventoryCategory
 				if (merge != null)
 				{
 					ItemStack ingredient = ingredients.get(0).clone();
-					String ingredientString = config.getString("recipes." + recipe + ".ingredients.1.item") + "";
+					String ingredientString = config.getString("recipes." + recipe + ".ingredients.1.item");
 					boolean isPredicate = ingredientString.startsWith("predicate:");
-					if (isPredicate)
+					if (isPredicate && !new NBTItem(ingredient).hasTag(ItemStackUtil.INVALID_ITEM_TAG))
 					{
 						// predicate일 경우, 아이템의 이름 삭제
 						{
