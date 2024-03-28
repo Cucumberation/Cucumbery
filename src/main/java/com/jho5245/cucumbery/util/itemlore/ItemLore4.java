@@ -16,27 +16,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-@Deprecated
 public class ItemLore4
 {
-  protected static void setItemLore(@NotNull ItemStack itemStack, @NotNull List<Component> lore)
+  public static void setItemLore(@NotNull ItemStack itemStack)
   {
-    if (true)
-    {
-      return;
-    }
     NBTItem nbtItem = new NBTItem(itemStack);
-    ItemMeta itemMeta = itemStack.getItemMeta();
     NBTCompound nbtCompound = nbtItem.getCompound(CucumberyTag.KEY_TMI);
     if (nbtCompound == null)
     {
       nbtCompound = nbtItem.addCompound(CucumberyTag.KEY_TMI);
-    }
-    if (itemMeta != null)
-    {
-      // Legacy Support
-      nbtItem.removeKey("Rarity");
-      nbtCompound.setInteger("Rarity", ItemCategory.Rarity.getRarityFromValue(ItemLoreUtil.getItemRarityValue(lore)).getRarityNumber());
     }
     nbtCompound.removeKey(CucumberyTag.TMI_VANILLA_TAGS);
     NBTCompound customTags = nbtCompound.getCompound(CucumberyTag.TMI_CUSTOM_TAGS);
@@ -62,7 +50,7 @@ public class ItemLore4
     }
     NBTCompound vanillaTags = nbtCompound.addCompound(CucumberyTag.TMI_VANILLA_TAGS);
     Material type = itemStack.getType();
-    String customType = nbtItem.getString(CustomMaterial.IDENDIFER) + "";
+    String customType = nbtItem.getString(CustomMaterial.IDENDIFER);
     try
     {
       type = Material.valueOf(customType.toUpperCase());

@@ -10,6 +10,7 @@ import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.util.itemlore.ItemLore;
+import com.jho5245.cucumbery.util.itemlore.ItemLore4;
 import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
@@ -730,6 +731,7 @@ public class ItemStackUtil
 		try
 		{
 			itemStack = itemStack.clone();
+			ItemLore4.setItemLore(itemStack);
 			NBTContainer nbtContainer = new NBTContainer(nbt);
 			NBTItem nbtItem = new NBTItem(itemStack);
 			nbtItem.mergeCompound(nbtContainer);

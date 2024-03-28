@@ -233,7 +233,6 @@ public class ItemLore
 		ItemLore3.setItemLore(params instanceof ItemLoreView view ? view.getPlayer() : null, itemStack, defaultLore);
 		itemMeta = itemStack.getItemMeta();
 		itemStack.setItemMeta(itemMeta);
-		ItemLore4.setItemLore(itemStack, defaultLore);
 		ItemLoreUtil.removeInventoryItemLore(itemStack);
 		itemMeta = itemStack.getItemMeta();
 		// 그리고 만약 (+NBT) 설명만 추가되어 있는 아이템이였다면 최하단에 [NBT 태그 복사됨] 설명 추가
