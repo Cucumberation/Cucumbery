@@ -963,6 +963,16 @@ public class ItemStackUtil
 					NBTCompound vanillaTags = tmi.getCompound(CucumberyTag.TMI_VANILLA_TAGS), customTags = tmi.getCompound(CucumberyTag.TMI_CUSTOM_TAGS);
 					if (vanillaTags != null)
 					{
+						List<Material> matches = new ArrayList<>();
+						for (Tag<Material> tag : Bukkit.getTags(Tag.REGISTRY_ITEMS, Material.class))
+						{
+							if (vanillaTags.getBoolean(tag.getKey().toString()))
+							{
+								display = ComponentUtil.translate(tag.getKey().toString());
+								itemStack.setType(getAnimatedMaterial(tag.getValues()));
+							}
+						}
+
 						boolean containerEmpty = vanillaTags.getBoolean("container_empty");
 						if (vanillaTags.getBoolean("minecraft:planks"))
 						{
