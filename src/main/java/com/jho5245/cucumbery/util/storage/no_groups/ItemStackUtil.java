@@ -807,7 +807,7 @@ public class ItemStackUtil
 		itemStack = itemStack.clone();
 		if (withLore)
 		{
-			ItemLore.setItemLore(itemStack, false);
+			ItemLore.setItemLore(itemStack, false, param);
 		}
 		ItemMeta itemMeta = itemStack.getItemMeta();
 		if (itemMeta instanceof FireworkMeta fireworkMeta)

@@ -42,6 +42,11 @@ public class ItemStackComponent
 	{
 		return itemStackComponent(itemStack, itemStack.getAmount(), NamedTextColor.GRAY, true);
 	}
+	@NotNull
+	public static Component itemStackComponent(@NotNull ItemStack itemStack, @Nullable Player viewer)
+	{
+		return itemStackComponent(itemStack, itemStack.getAmount(), NamedTextColor.GRAY, true, viewer);
+	}
 
 	@NotNull
 	@SuppressWarnings("unused")
