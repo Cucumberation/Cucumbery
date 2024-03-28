@@ -9,7 +9,9 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Tag;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
@@ -73,6 +75,10 @@ public class ItemLore4
         vanillaTags.setBoolean(t.getKey().toString(), true);
       }
     });
+    if (itemStack.getItemMeta() instanceof BlockStateMeta blockStateMeta && blockStateMeta.getBlockState() instanceof InventoryHolder inventoryHolder && inventoryHolder.getInventory().isEmpty())
+    {
+      vanillaTags.setBoolean("container_empty", true);
+    }
     vanillaTags.setBoolean("material_" + type.toString().toLowerCase(), true);
     if (vanillaTags.getKeys().isEmpty())
     {

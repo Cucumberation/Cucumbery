@@ -43,12 +43,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-@SuppressWarnings("all")
 public class ItemStackUtil
 {
 	public static final ItemStack AIR = new ItemStack(Material.AIR);
 
-	public static final ItemStack HIDDEN_ITEM;
+	public static final ItemStack HIDDEN_ITEM, INVALID_ITEM;
 
 	static
 	{
@@ -58,6 +57,12 @@ public class ItemStackUtil
 		itemMeta.lore(Collections.singletonList(ComponentUtil.translate("&7key:item.cucumbery.hidden_item.description|아이템의 정보가 숨겨져 있습니다!")));
 		itemMeta.addItemFlags(ItemFlag.values());
 		HIDDEN_ITEM.setItemMeta(itemMeta);
+
+		INVALID_ITEM = new ItemStack(Material.BARRIER);
+		itemMeta = INVALID_ITEM.getItemMeta();
+		itemMeta.displayName(ComponentUtil.translate("&c&okey:item.cucumbery.invalid_item|{오류 아이템}"));
+		itemMeta.lore(List.of(ComponentUtil.translate("&7key:item.cucumbery.invalid.description|오류가 발생하여 생성된 아이템입니다!"),
+				ComponentUtil.translate("&7key:item.cucumbery.invalid.description_2|관리자에게 문의해주세요!")));
 	}
 
 	/**
@@ -796,7 +801,8 @@ public class ItemStackUtil
 	}
 
 	@NotNull
-	public static List<Component> getItemInfoAsComponents(@NotNull ItemStack itemStack, @Nullable Object param, @Nullable Component tag, boolean separator, boolean withLore)
+	public static List<Component> getItemInfoAsComponents(@NotNull ItemStack itemStack, @Nullable Object param, @Nullable Component tag, boolean separator,
+			boolean withLore)
 	{
 		itemStack = itemStack.clone();
 		if (withLore)
@@ -963,100 +969,96 @@ public class ItemStackUtil
 					NBTCompound vanillaTags = tmi.getCompound(CucumberyTag.TMI_VANILLA_TAGS), customTags = tmi.getCompound(CucumberyTag.TMI_CUSTOM_TAGS);
 					if (vanillaTags != null)
 					{
-						List<Material> matches = new ArrayList<>();
-						for (Tag<Material> tag : Bukkit.getTags(Tag.REGISTRY_ITEMS, Material.class))
+						boolean containerEmpty = vanillaTags.getBoolean("container_empty");
+						StringBuilder displayKey = new StringBuilder();
+						List<Component> displayArgs = new ArrayList<>();
+						Set<Material> matches = new HashSet<>();
 						{
-							if (vanillaTags.getBoolean(tag.getKey().toString()))
+							for (Tag<Material> tag : Bukkit.getTags(Tag.REGISTRY_ITEMS, Material.class))
 							{
-								display = ComponentUtil.translate(tag.getKey().toString());
-								itemStack.setType(getAnimatedMaterial(tag.getValues()));
+								if (vanillaTags.getBoolean(tag.getKey().toString()))
+								{
+									boolean isInventoryHolder = false;
+									if (containerEmpty)
+									{
+										for (Material material : tag.getValues())
+										{
+											ItemStack i = new ItemStack(material);
+											if (i.getItemMeta() instanceof BlockStateMeta blockStateMeta && blockStateMeta.getBlockState() instanceof InventoryHolder)
+											{
+												isInventoryHolder = true;
+												break;
+											}
+										}
+									}
+									displayKey.append("%s, ");
+									Component arg = ComponentUtil.create(Cucumbery.config.getString("tag-translation." + tag.getKey(), tag.getKey().toString()));
+									if (isInventoryHolder)
+									{
+										arg = arg.append(Component.translatable("cucumbery.container_empty", "(아이템이 들어있지 않아야함)"));
+									}
+									displayArgs.add(arg);
+									matches.addAll(tag.getValues());
+								}
+							}
+							if (matches.isEmpty())
+							{
+								for (Tag<Material> tag : Bukkit.getTags(Tag.REGISTRY_BLOCKS, Material.class))
+								{
+									if (vanillaTags.getBoolean(tag.getKey().toString()))
+									{
+										boolean isInventoryHolder = false;
+										if (containerEmpty)
+										{
+											for (Material material : tag.getValues())
+											{
+												ItemStack i = new ItemStack(material);
+												if (i.getItemMeta() instanceof BlockStateMeta blockStateMeta && blockStateMeta.getBlockState() instanceof InventoryHolder)
+												{
+													isInventoryHolder = true;
+													break;
+												}
+											}
+										}
+										displayKey.append("%s, ");
+										Component arg = ComponentUtil.create(Cucumbery.config.getString("tag-translation." + tag.getKey(), tag.getKey().toString()));
+										if (isInventoryHolder)
+										{
+											arg = arg.append(Component.translatable("cucumbery.container_empty", "(아이템이 들어있지 않아야함)"));
+										}
+										displayArgs.add(arg);
+										matches.addAll(tag.getValues());
+									}
+								}
+							}
+						}
+						for (String tag : vanillaTags.getKeys())
+						{
+							if (tag.startsWith("material_"))
+							{
+								Material material = Method2.valueOf(tag.substring("material_".length()), Material.class);
+								if (material != null)
+								{
+									displayKey.append("%s, ");
+									displayArgs.add(ComponentUtil.translate("아무 %s", ItemNameUtil.itemName(material)));
+									matches.add(material);
+								}
+								break;
 							}
 						}
 
-						boolean containerEmpty = vanillaTags.getBoolean("container_empty");
-						if (vanillaTags.getBoolean("minecraft:planks"))
+						if (!matches.isEmpty())
 						{
-							display = ComponentUtil.translate("아무 종류의 나무 판자");
-							itemStack.setType(getAnimatedMaterial(Tag.PLANKS.getValues()));
+							if (displayKey.length() > 2)
+								displayKey = new StringBuilder(displayKey.substring(0, displayKey.length() - 2));
+							display = ComponentUtil.translate(displayKey.toString()).arguments(displayArgs);
+							itemStack.setType(getAnimatedMaterial(matches));
 						}
-						else if (vanillaTags.getBoolean("minecraft:mineable/pickaxe"))
+						else
 						{
-							display = ComponentUtil.translate("곡괭이로 채광할 수 있는 아무 종류의 블록");
-							itemStack.setType(getAnimatedMaterial(Tag.MINEABLE_PICKAXE.getValues()));
-						}
-						else if (vanillaTags.getBoolean("minecraft:mineable/hoe"))
-						{
-							display = ComponentUtil.translate("괭이로 수확할 수 있는 아무 종류의 블록");
-							itemStack.setType(getAnimatedMaterial(Tag.MINEABLE_HOE.getValues()));
-						}
-						else if (vanillaTags.getBoolean("minecraft:mineable/hoe"))
-						{
-							display = ComponentUtil.translate("도끼로 벌목할 수 있는 아무 종류의 블록");
-							itemStack.setType(getAnimatedMaterial(Tag.MINEABLE_AXE.getValues()));
-						}
-						else if (vanillaTags.getBoolean("minecraft:mineable/hoe"))
-						{
-							display = ComponentUtil.translate("삽으로 굴착할 수 있는 아무 종류의 블록");
-							itemStack.setType(getAnimatedMaterial(Tag.MINEABLE_SHOVEL.getValues()));
-						}
-						else if (vanillaTags.getBoolean("minecraft:stone_tool_materials"))
-						{
-							display = ComponentUtil.translate("아무 종류의 돌 도구 재료");
-							itemStack.setType(getAnimatedMaterial(Tag.ITEMS_STONE_TOOL_MATERIALS.getValues()));
-						}
-						else if (vanillaTags.getBoolean("minecraft:wool"))
-						{
-							display = ComponentUtil.translate("아무 종류의 양털");
-							itemStack.setType(getAnimatedMaterial(Tag.WOOL.getValues()));
-						}
-						else if (vanillaTags.getBoolean("minecraft:flowers"))
-						{
-							display = ComponentUtil.translate("아무 종류의 꽃");
-							itemStack.setType(getAnimatedMaterial(Constant.FLOWERS));
-						}
-						else if (vanillaTags.getBoolean("minecraft:small_flowers"))
-						{
-							display = ComponentUtil.translate("아무 종류의 작은 크기의 꽃");
-							itemStack.setType(getAnimatedMaterial(Constant.SMALL_FLOWERS));
-						}
-						else if (vanillaTags.getBoolean("minecraft:tall_flowers"))
-						{
-							display = ComponentUtil.translate("아무 종류의 큰 크기의 꽃");
-							itemStack.setType(getAnimatedMaterial(Constant.TALL_FLOWERS));
-						}
-						else if (vanillaTags.getBoolean("minecraft:wither_immune"))
-						{
-							display = ComponentUtil.translate("위더가 부술 수 없는 블록");
-							itemStack.setType(getAnimatedMaterial(Constant.WITHER_IMMUNE));
-						}
-						else if (vanillaTags.getBoolean("minecraft:beacon_base_blocks"))
-						{
-							display = ComponentUtil.translate("신호기를 작동시킬 수 있는 블록");
-							itemStack.setType(getAnimatedMaterial(Constant.BEACON_BASE_BLOCKS));
-						}
-						else if (vanillaTags.getBoolean("minecraft:dyes"))
-						{
-							display = ComponentUtil.translate("아무 염료");
-							itemStack.setType(getAnimatedMaterial(Constant.DYES));
-						}
-						else if (vanillaTags.getBoolean("minecraft:coals"))
-						{
-							display = ComponentUtil.translate("석탄 또는 숯");
-							itemStack.setType(getAnimatedMaterial(Tag.ITEMS_COALS.getValues()));
-						}
-						else if (vanillaTags.getBoolean("minecraft:shulker_boxes"))
-						{
-							display = ComponentUtil.translate(containerEmpty ? "아이템이 들어있지 않은 아무 셜커 상자" : "아무 셜커 상자");
-							itemStack.setType(getAnimatedMaterial(Constant.SHULKER_BOXES));
-						}
-						for (Material material : Material.values())
-						{
-							if (vanillaTags.getBoolean("material_" + material.toString().toLowerCase()))
-							{
-								display = ComponentUtil.translate("&o아무 %s", ItemNameUtil.itemName(material));
-								itemStack.setType(material);
-								break;
-							}
+							itemStack = INVALID_ITEM.clone();
+							itemMeta = itemStack.getItemMeta();
+							display = itemMeta.displayName();
 						}
 					}
 					else if (customTags != null)
@@ -1338,8 +1340,7 @@ public class ItemStackUtil
 			PacketContainer packet = protocolManager.createPacket(Play.Server.WINDOW_ITEMS);
 			InventoryView inventoryView = player.getOpenInventory();
 			Inventory top = inventoryView.getTopInventory(), bottom = inventoryView.getBottomInventory();
-			List<ItemStack> itemStackList = new ArrayList<>();
-			itemStackList.addAll(Arrays.asList(top.getContents()));
+			List<ItemStack> itemStackList = new ArrayList<>(Arrays.asList(top.getContents()));
 			EntityEquipment entityEquipment = player.getEquipment();
 			itemStackList.add(entityEquipment.getHelmet());
 			itemStackList.add(entityEquipment.getChestplate());

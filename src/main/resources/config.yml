@@ -32,7 +32,7 @@
 # 이상으로 설정 파일 기본 설명은 끝입니다. 나머지는 해당 설정 상단의 설명을 참조하여 설정을 편집하면 됩니다.
 
 # 콘픽 버전. 버전업 시에만 변경하기 바람
-config-version: 46
+config-version: 47
 
 # 자동 업데이트 기능 설정
 auto-updater:
@@ -865,3 +865,21 @@ use-damage-spread-feature: true
 
 # 랙걸려서 일단 만드는 임시 옵션. 스케줄러 다 꺼버리기. 반드시 서버를 재시작해야 적용됨!
 disable-lagggggg: false
+
+# 태그 번역 key
+tag-translation:
+  "minecraft:wool": "translate:key:tag.minecraft.wool|아무 양털"
+  "minecraft:planks": "translate:key:tag.minecraft.planks|아무 나무 판자"
+  "minecraft:mineable/axe": "translate:key:tag.minecraft.mineable/axe|도끼로 벌목할 수 있는 블록"
+  "minecraft:mineable/pickaxe": "translate:key:tag.minecraft.mineable/pickaxe|곡괭이로 벌목할 수 있는 블록"
+  "minecraft:mineable/hoe": "translate:key:tag.minecraft.mineable/hoe|괭이로 벌목할 수 있는 블록"
+  "minecraft:mineable/shovel": "translate:key:tag.minecraft.mineable/shovel|삽으로 벌목할 수 있는 블록"
+  "minecraft:stone_tool_materials": "translate:key:tag.minecraft.stone_tool_materials|아무 돌 도구 재료"
+  "minecraft:flowers": "translate:key:tag.minecraft.flowers|아무 꽃"
+  "minecraft:small_flowers": "translate:key:tag.minecraft.small_flowers|아무 작은 꽃"
+  "minecraft:tall_flowers": "translate:key:tag.minecraft.tall_flowers|아무 큰 꽃"
+  "minecraft:wither_immune": "translate:key:tag.minecraft.wither_immune|위더 면역 블록"
+  "minecraft:beacon_base_blocks": "translate:key:tag.minecraft.beacon_base_blocks|신호기 기반 블록"
+  "minecraft:dyes": "translate:key:tag.minecraft.dyes|아무 염료"
+  "minecraft:coals": "translate:key:tag.minecraft.coals|석탄 또는 숯"
+  "minecraft:shulker_boxes": "translate:key:tag.minecraft.shulker_boxes|아무 셜커 상자"

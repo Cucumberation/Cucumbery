@@ -46,10 +46,10 @@ public class ServerCommand implements Listener
     }
     if (command.contains("--cucumbery"))
     {
-      if (event.getSender() instanceof BlockCommandSender)
+      if (event.getSender() instanceof BlockCommandSender blockCommandSender)
       {
         List<String> blackListWorlds = Cucumbery.config.getStringList("disable-command-block-worlds");
-        if (Method.configContainsLocation(((BlockCommandSender) event.getSender()).getBlock().getLocation(), blackListWorlds))
+        if (Method.configContainsLocation(blockCommandSender.getBlock().getLocation(), blackListWorlds))
         {
           event.setCancelled(true);
           return;
@@ -91,34 +91,8 @@ public class ServerCommand implements Listener
     if (debuggerExists)
     {
       CommandSender sender = event.getSender();
-      if (event.getSender() instanceof BlockCommandSender)
+      if (event.getSender() instanceof BlockCommandSender blockCommandSender)
       {
-        Block block = ((BlockCommandSender) sender).getBlock();
-        CommandBlock commandBlock = (CommandBlock) block.getBlockData();
-
-        String extraInfo = "";
-        if (commandBlock.isConditional())
-        {
-          extraInfo += "(조건적)";
-        }
-
-        Location loc = block.getLocation();
-        World world = loc.getWorld();
-        String worldDisplayName = Method.getWorldDisplayName(world);
-        String worldName = world.getName();
-        Component blockName = SenderComponentUtil.senderComponent(sender);
-        String blockOriginName = switch (block.getType())
-                {
-                  case COMMAND_BLOCK -> "rgb215,180,157;&l반응형 명령 블록";
-                  case REPEATING_COMMAND_BLOCK -> "rgb169,153,214;&l반복형 명령 블록";
-                  case CHAIN_COMMAND_BLOCK -> "rgb168,209,191;&l연쇄형 명령 블록";
-                  default -> null;
-                };
-        blockName = blockName.append(ComponentUtil.create("&r(" + blockOriginName + "&r)"));
-        int x = loc.getBlockX(), y = loc.getBlockY(), z = loc.getBlockZ();
-        String xDis = Constant.Jeongsu.format(x);
-        String yDis = Constant.Jeongsu.format(y);
-        String zDis = Constant.Jeongsu.format(z);
         if (command.length() > 100)
         {
           command = command.substring(0, 99) + " ...";
@@ -128,10 +102,7 @@ public class ServerCommand implements Listener
           UUID uuid = player.getUniqueId();
           if (UserData.SHOW_COMMAND_BLOCK_EXECUTION_LOCATION.getBoolean(uuid))
           {
-            Component msg = ComponentUtil.create(Prefix.INFO, blockName, "&r(rg255,204;" + worldDisplayName + "&r : rg255,204;" + xDis + "&r : rg255,204;" + yDis + "&r : rg255,204;" + zDis + "&r)" + extraInfo + " 명령어 : rg255,204;" + command);
-            String quickTpCommand = "/atp @s " + worldName + " " + (x + 0.5) + " " + (y + 1) + " " + (z + 0.5) + " ~ 90 false false true";
-            String hoverText = "클릭하여 즉시 이동";
-            MessageUtil.sendMessage(player, msg.hoverEvent(HoverEvent.showText(ComponentUtil.create(hoverText))).clickEvent(ClickEvent.runCommand(quickTpCommand)));
+            MessageUtil.info(player, "%s(%s) - %s", sender, blockCommandSender.getBlock().getLocation(), command);
           }
         }
       }
