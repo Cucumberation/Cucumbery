@@ -20,8 +20,8 @@ public class TypeBuilder
   private boolean isKeepOnDeath;
   private boolean isKeepOnMilk = true;
   private boolean isKeepOnQuit = true;
-  private boolean isRealDuration;
   private boolean isRemoveable = true;
+  private boolean isRealDuration;
   private boolean isNegative;
   private boolean isInstant;
   private boolean isToggle;
@@ -249,6 +249,7 @@ public class TypeBuilder
   {
     return isKeepOnDeath;
   }
+
   public boolean isKeepOnMilk()
   {
     return isKeepOnMilk;

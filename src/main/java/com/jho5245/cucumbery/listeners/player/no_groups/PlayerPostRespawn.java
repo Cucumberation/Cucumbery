@@ -30,7 +30,7 @@ public class PlayerPostRespawn implements Listener
     UUID uuid = player.getUniqueId();
     if (Variable.buffFreezerEffects.containsKey(uuid))
     {
-      MessageUtil.sendMessage(player, Prefix.INFO_CUSTOM_EFFECT, "%s 효과로 버프를 보호했습니다",
+      MessageUtil.sendMessage(player, Prefix.INFO_CUSTOM_EFFECT, "%s 효과로 효과를 보호했습니다",
               CustomEffectManager.hasEffect(player, CustomEffectType.BUFF_FREEZE_D) ? CustomEffectType.BUFF_FREEZE_D : CustomEffectType.BUFF_FREEZE);
       player.addPotionEffects(Variable.buffFreezerEffects.get(uuid));
       Variable.buffFreezerEffects.remove(uuid);

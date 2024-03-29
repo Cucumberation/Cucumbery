@@ -5,12 +5,16 @@ import com.comphenix.protocol.PacketType.Play.Client;
 import com.comphenix.protocol.PacketType.Play.Server;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
-import com.comphenix.protocol.events.*;
+import com.comphenix.protocol.events.ListenerPriority;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.utility.MinecraftReflection;
-import com.comphenix.protocol.wrappers.*;
 import com.comphenix.protocol.wrappers.EnumWrappers.PlayerDigType;
-import com.comphenix.protocol.wrappers.EnumWrappers.PlayerInfoAction;
+import com.comphenix.protocol.wrappers.WrappedDataValue;
+import com.comphenix.protocol.wrappers.WrappedDataWatcher;
+import com.comphenix.protocol.wrappers.WrappedParticle;
 import com.google.common.collect.Lists;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
@@ -23,7 +27,6 @@ import com.jho5245.cucumbery.util.itemlore.ItemLore.RemoveFlag;
 import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
-import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method2;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
@@ -270,7 +273,7 @@ public class ProtocolLibManager
 			}
 		});
 
-		protocolManager.addPacketListener(new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.NORMAL, Client.BLOCK_DIG)
+/*		protocolManager.addPacketListener(new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.NORMAL, Client.BLOCK_DIG)
 		{
 			@Override
 			public void onPacketReceiving(PacketEvent event)
@@ -313,7 +316,7 @@ public class ProtocolLibManager
 					}
 				}
 			}
-		});
+		});*/
 
 		protocolManager.addPacketListener(
 				new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.NORMAL, Server.WINDOW_ITEMS, Server.OPEN_WINDOW_MERCHANT, Server.SET_SLOT)

@@ -10,6 +10,7 @@ import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.util.itemlore.ItemLore;
+import com.jho5245.cucumbery.util.itemlore.ItemLore.RemoveFlag;
 import com.jho5245.cucumbery.util.itemlore.ItemLore4;
 import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
@@ -1309,7 +1310,7 @@ public class ItemStackUtil
 			{
 				ItemLore.setItemLore(item, ItemLoreView.of(player));
 			}
-			ItemLore.removeItemLore(item, false, true);
+			ItemLore.removeItemLore(item, RemoveFlag.create().removeItemFlags());
 		}
 		inventory = openInventory.getTopInventory();
 		for (int i = 0; i < inventory.getSize(); i++)
@@ -1323,13 +1324,13 @@ public class ItemStackUtil
 			{
 				ItemLore.setItemLore(item, ItemLoreView.of(player));
 			}
-			ItemLore.removeItemLore(item, false, true);
+			ItemLore.removeItemLore(item, RemoveFlag.create().removeItemFlags());
 		}
 		if (CustomMaterial.itemStackOf(player.getItemOnCursor()) != null)
 		{
 			player.setItemOnCursor(ItemLore.setItemLore(player.getItemOnCursor(), ItemLoreView.of(player)));
 		}
-		player.setItemOnCursor(ItemLore.removeItemLore(player.getItemOnCursor()));
+		player.setItemOnCursor(ItemLore.removeItemLore(player.getItemOnCursor(), RemoveFlag.create().removeItemFlags()));
 		if (resendPacket && Cucumbery.using_ProtocolLib)
 		{
 			ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();

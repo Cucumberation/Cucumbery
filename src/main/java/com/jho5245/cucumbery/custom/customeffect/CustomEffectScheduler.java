@@ -80,7 +80,7 @@ public class CustomEffectScheduler
 						if (namespacedKey.getNamespace().equals("minecraft") && namespacedKey.getKey().contains("__"))
 						{
 							namespacedKey = new NamespacedKey(namespacedKey.getNamespace(), namespacedKey.getKey().split("__")[0]);
-							PotionEffectType potionEffectType = PotionEffectType.getByKey(namespacedKey);
+							PotionEffectType potionEffectType = Registry.POTION_EFFECT_TYPE.get(namespacedKey);
 							if (potionEffectType == null)
 							{
 								throw new NullPointerException("Invalid Potion Effect Type: " + namespacedKey.getKey());
@@ -228,7 +228,7 @@ public class CustomEffectScheduler
 				int duration = customEffect.getDuration();
 				totalTick += (initDuration == -1 || customEffect.isTimeHidden() ? 0 : initDuration);
 				currentTick += (duration == -1 || customEffect.isTimeHidden() ? 0 : duration);
-				if (customEffect.getType().isNegative())
+				if (customEffect.isNegative())
 				{
 					allIsPositive = false;
 				}

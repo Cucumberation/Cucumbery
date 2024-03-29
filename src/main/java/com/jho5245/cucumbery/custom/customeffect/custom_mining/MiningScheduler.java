@@ -1,13 +1,10 @@
 package com.jho5245.cucumbery.custom.customeffect.custom_mining;
 
-import com.google.errorprone.annotations.Var;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.children.group.LocationCustomEffect;
-import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCustomMining;
 import com.jho5245.cucumbery.events.block.CustomBlockBreakEvent;
-import com.jho5245.cucumbery.util.additemmanager.AddItemUtil;
 import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
 import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
@@ -16,7 +13,6 @@ import com.jho5245.cucumbery.util.no_groups.TPSMeter;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.Variable;
-import com.jho5245.cucumbery.util.storage.data.custom_enchant.CustomEnchant;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
@@ -563,14 +559,14 @@ public class MiningScheduler
 				}
 				// 블록 드롭 처리(염력 인챈트나 효과가 있으면 인벤토리에 지급 혹은 블록 위치에 아이템 떨굼
 				{
-					boolean hasTelekinesis =
-							CustomEnchant.isEnabled() && itemMeta != null && itemMeta.getEnchantLevel(CustomEnchant.TELEKINESIS) > 0 || CustomEffectManager.hasEffect(player,
-									CustomEffectType.TELEKINESIS);
-					if (hasTelekinesis)
-					{
-						AddItemUtil.addItem(player, drops);
-					}
-					else
+//					boolean hasTelekinesis =
+//							CustomEnchant.isEnabled() && itemMeta != null && itemMeta.getEnchantLevel(CustomEnchant.TELEKINESIS) > 0 || CustomEffectManager.hasEffect(player,
+//									CustomEffectType.TELEKINESIS);
+//					if (hasTelekinesis)
+//					{
+//						AddItemUtil.addItem(player, drops);
+//					}
+//					else
 					{
 						for (ItemStack item : drops)
 						{
@@ -592,11 +588,11 @@ public class MiningScheduler
 						{
 							if (ItemStackUtil.itemExists(content))
 							{
-								if (hasTelekinesis)
-								{
-									AddItemUtil.addItem(player, content);
-								}
-								else
+//								if (hasTelekinesis)
+//								{
+//									AddItemUtil.addItem(player, content);
+//								}
+//								else
 								{
 									player.getWorld().dropItemNaturally(location, content);
 								}

@@ -1,10 +1,19 @@
 package com.jho5245.cucumbery.custom.customeffect.type;
 
+import com.jho5245.cucumbery.custom.customeffect.TypeBuilder;
 import org.bukkit.NamespacedKey;
 import org.bukkit.potion.PotionEffectType;
 
 public class CustomEffectTypeMinecraft extends CustomEffectType
 {
+  private static final TypeBuilder
+      K = builder().removeOnMilk().keepOnDeath().maxAmplifier(255),
+      M = builder().maxAmplifier(255),
+      N = builder().removeOnMilk().nonRemovable().maxAmplifier(255),
+      Q = builder().removeOnMilk().removeOnQuit().maxAmplifier(255),
+      R = builder().removeOnMilk().realDuration().maxAmplifier(255)
+          ;
+
   public static final CustomEffectType
           SPEED = new CustomEffectType(NamespacedKey.minecraft("speed"), PotionEffectType.SPEED.translationKey(), builder().removeOnMilk().maxAmplifier(255)),
           SLOWNESS = new CustomEffectType(NamespacedKey.minecraft("slowness"), PotionEffectType.SLOW.translationKey(), builder().removeOnMilk().negative().maxAmplifier(255)),
@@ -39,10 +48,55 @@ public class CustomEffectTypeMinecraft extends CustomEffectType
           BAD_OMEN = new CustomEffectType(NamespacedKey.minecraft("bad_omen"), PotionEffectType.BAD_OMEN.translationKey(), builder().removeOnMilk().negative().maxAmplifier(255)),
           HERO_OF_THE_VILLAGE = new CustomEffectType(NamespacedKey.minecraft("hero_of_the_village"), PotionEffectType.HERO_OF_THE_VILLAGE.translationKey(), builder().removeOnMilk().maxAmplifier(255)),
           DARKNESS = new CustomEffectType(NamespacedKey.minecraft("darkness"), PotionEffectType.DARKNESS.translationKey(), builder().removeOnMilk().negative().maxAmplifier(255)),
+
+          SPEED__K = new CustomEffectType(NamespacedKey.minecraft("speed__m"), PotionEffectType.SPEED.translationKey(), builder().removeOnMilk().keepOnDeath().maxAmplifier(255)),
           SPEED__M = new CustomEffectType(NamespacedKey.minecraft("speed__m"), PotionEffectType.SPEED.translationKey(), builder().maxAmplifier(255)),
+          SPEED__N = new CustomEffectType(NamespacedKey.minecraft("speed__m"), PotionEffectType.SPEED.translationKey(), builder().removeOnMilk().nonRemovable().maxAmplifier(255)),
+          SPEED__Q = new CustomEffectType(NamespacedKey.minecraft("speed__m"), PotionEffectType.SPEED.translationKey(), builder().removeOnMilk().removeOnQuit().maxAmplifier(255)),
+          SPEED__R = new CustomEffectType(NamespacedKey.minecraft("speed__m"), PotionEffectType.SPEED.translationKey(), builder().removeOnMilk().realDuration().maxAmplifier(255)),
+          SPEED__KM = new CustomEffectType(NamespacedKey.minecraft("speed__mr"), PotionEffectType.SPEED.translationKey(), builder().keepOnDeath().maxAmplifier(255)),
+          SPEED__KN = new CustomEffectType(NamespacedKey.minecraft("speed__mr"), PotionEffectType.SPEED.translationKey(), builder().removeOnMilk().keepOnDeath().nonRemovable().maxAmplifier(255)),
+          SPEED__KQ = new CustomEffectType(NamespacedKey.minecraft("speed__mr"), PotionEffectType.SPEED.translationKey(), builder().removeOnMilk().keepOnDeath().removeOnQuit().maxAmplifier(255)),
+          SPEED__KR = new CustomEffectType(NamespacedKey.minecraft("speed__mr"), PotionEffectType.SPEED.translationKey(), builder().removeOnMilk().keepOnDeath().realDuration().maxAmplifier(255)),
+          SPEED__MN = new CustomEffectType(NamespacedKey.minecraft("speed__mr"), PotionEffectType.SPEED.translationKey(), builder().nonRemovable().maxAmplifier(255)),
+          SPEED__MQ = new CustomEffectType(NamespacedKey.minecraft("speed__mr"), PotionEffectType.SPEED.translationKey(), builder().nonRemovable().removeOnQuit().maxAmplifier(255)),
           SPEED__MR = new CustomEffectType(NamespacedKey.minecraft("speed__mr"), PotionEffectType.SPEED.translationKey(), builder().realDuration().maxAmplifier(255)),
+          SPEED__NQ = new CustomEffectType(NamespacedKey.minecraft("speed__mr"), PotionEffectType.SPEED.translationKey(), builder().removeOnMilk().nonRemovable().removeOnQuit().maxAmplifier(255)),
+          SPEED__NR = new CustomEffectType(NamespacedKey.minecraft("speed__mr"), PotionEffectType.SPEED.translationKey(), builder().removeOnMilk().nonRemovable().realDuration().maxAmplifier(255)),
+          SPEED__QR = new CustomEffectType(NamespacedKey.minecraft("speed__mr"), PotionEffectType.SPEED.translationKey(), builder().removeOnMilk().removeOnQuit().realDuration().maxAmplifier(255)),
+
           SLOWNESS__M = new CustomEffectType(NamespacedKey.minecraft("slowness__m"), PotionEffectType.SLOW.translationKey(), builder().negative().maxAmplifier(255)),
-          POISON__M = new CustomEffectType(NamespacedKey.minecraft("poison__m"), PotionEffectType.POISON.translationKey(), builder().negative().maxAmplifier(255))
+          HASTE__M = new CustomEffectType(NamespacedKey.minecraft("haste__m"), PotionEffectType.FAST_DIGGING.translationKey(), builder().maxAmplifier(255)),
+          MINING_FATIGUE__M = new CustomEffectType(NamespacedKey.minecraft("mining_fatigue__m"), PotionEffectType.SLOW.translationKey(), builder().negative().maxAmplifier(255)),
+          STRENGTH__M = new CustomEffectType(NamespacedKey.minecraft("strength__m"), PotionEffectType.INCREASE_DAMAGE.translationKey(), builder().maxAmplifier(255)),
+          INSTANT_HEALTH__M = new CustomEffectType(NamespacedKey.minecraft("instant_health__m"), PotionEffectType.HEAL.translationKey(), builder().maxAmplifier(255)),
+          INSTANT_DAMAGE__M = new CustomEffectType(NamespacedKey.minecraft("instant_damage__m"), PotionEffectType.HARM.translationKey(), builder().negative().maxAmplifier(255)),
+          JUMP_BOOST__M = new CustomEffectType(NamespacedKey.minecraft("jump_boost__m"), PotionEffectType.JUMP.translationKey(), builder().maxAmplifier(255)),
+          NAUSEA__M = new CustomEffectType(NamespacedKey.minecraft("nausea__m"), PotionEffectType.CONFUSION.translationKey(), builder().negative().maxAmplifier(255)),
+          REGENERATION__M = new CustomEffectType(NamespacedKey.minecraft("regeneration__m"), PotionEffectType.REGENERATION.translationKey(), builder().maxAmplifier(255)),
+          RESISTANCE__M = new CustomEffectType(NamespacedKey.minecraft("resistance__m"), PotionEffectType.DAMAGE_RESISTANCE.translationKey(), builder().maxAmplifier(255)),
+          FIRE_RESISTANCE__M = new CustomEffectType(NamespacedKey.minecraft("fire_resistance__m"), PotionEffectType.FIRE_RESISTANCE.translationKey(), builder().maxAmplifier(255)),
+          WATER_BREATHING__M = new CustomEffectType(NamespacedKey.minecraft("water_breathing__m"), PotionEffectType.WATER_BREATHING.translationKey(), builder().maxAmplifier(255)),
+          INVISIBILITY__M = new CustomEffectType(NamespacedKey.minecraft("invisibility__m"), PotionEffectType.INVISIBILITY.translationKey(), builder().maxAmplifier(255)),
+          BLINDNESS__M = new CustomEffectType(NamespacedKey.minecraft("blindness__m"), PotionEffectType.BLINDNESS.translationKey(), builder().negative().maxAmplifier(255)),
+          NIGHT_VISION__M = new CustomEffectType(NamespacedKey.minecraft("night_vision__m"), PotionEffectType.NIGHT_VISION.translationKey(), builder().maxAmplifier(255)),
+          HUNGER__M = new CustomEffectType(NamespacedKey.minecraft("hunge__mr"), PotionEffectType.HUNGER.translationKey(), builder().negative().maxAmplifier(255)),
+          WEAKNESS__M = new CustomEffectType(NamespacedKey.minecraft("weakness__m"), PotionEffectType.WEAKNESS.translationKey(), builder().negative().maxAmplifier(255)),
+          POISON__M = new CustomEffectType(NamespacedKey.minecraft("poison__m"), PotionEffectType.POISON.translationKey(), builder().negative().maxAmplifier(255)),
+          WITHER__M = new CustomEffectType(NamespacedKey.minecraft("wither__m"), PotionEffectType.WITHER.translationKey(), builder().negative().maxAmplifier(255)),
+          HEALTH_BOOST__M = new CustomEffectType(NamespacedKey.minecraft("health_boost__m"), PotionEffectType.HEALTH_BOOST.translationKey(), builder().maxAmplifier(255)),
+          ABSORPTION__M = new CustomEffectType(NamespacedKey.minecraft("absorption__m"), PotionEffectType.ABSORPTION.translationKey(), builder().maxAmplifier(255)),
+          SATURATION__M = new CustomEffectType(NamespacedKey.minecraft("saturation__m"), PotionEffectType.SATURATION.translationKey(), builder().maxAmplifier(255)),
+          GLOWING__M = new CustomEffectType(NamespacedKey.minecraft("glowing__m"), PotionEffectType.GLOWING.translationKey(), builder().negative().maxAmplifier(255)),
+          LEVITATION__M = new CustomEffectType(NamespacedKey.minecraft("levitation__m"), PotionEffectType.LEVITATION.translationKey(), builder().negative().maxAmplifier(255)),
+          LUCK__M = new CustomEffectType(NamespacedKey.minecraft("luck__m"), PotionEffectType.LUCK.translationKey(), builder().maxAmplifier(255)),
+          UNLUCK__M = new CustomEffectType(NamespacedKey.minecraft("unluck__m"), PotionEffectType.UNLUCK.translationKey(), builder().negative().maxAmplifier(255)),
+          SLOW_FALLING__M = new CustomEffectType(NamespacedKey.minecraft("slow_falling__m"), PotionEffectType.SLOW_FALLING.translationKey(), builder().maxAmplifier(255)),
+          CONDUIT_POWER__M = new CustomEffectType(NamespacedKey.minecraft("conduit_power__m"), PotionEffectType.CONDUIT_POWER.translationKey(), builder().maxAmplifier(255)),
+          DOLPHINS_GRACE__M = new CustomEffectType(NamespacedKey.minecraft("dolphins_grace__m"), PotionEffectType.DOLPHINS_GRACE.translationKey(), builder().maxAmplifier(255)),
+          BAD_OMEN__M = new CustomEffectType(NamespacedKey.minecraft("bad_omen__m"), PotionEffectType.BAD_OMEN.translationKey(), builder().negative().maxAmplifier(255)),
+          HERO_OF_THE_VILLAGE__M = new CustomEffectType(NamespacedKey.minecraft("hero_of_the_village__m"), PotionEffectType.HERO_OF_THE_VILLAGE.translationKey(), builder().maxAmplifier(255)),
+          DARKNESS__M = new CustomEffectType(NamespacedKey.minecraft("darkness__m"), PotionEffectType.DARKNESS.translationKey(), builder().negative().maxAmplifier(255))
               ;
 
   protected static void registerEffect()
@@ -51,8 +105,40 @@ public class CustomEffectTypeMinecraft extends CustomEffectType
             SPEED, SLOWNESS, HASTE, MINING_FATIGUE, STRENGTH, INSTANT_HEALTH, INSTANT_DAMAGE, JUMP_BOOST, NAUSEA, REGENERATION,
             RESISTANCE, FIRE_RESISTANCE, WATER_BREATHING, INVISIBILITY, BLINDNESS, NIGHT_VISION, HUNGER, WEAKNESS, POISON, WITHER,
             HEALTH_BOOST, ABSORPTION, SATURATION, GLOWING, LEVITATION, LUCK, UNLUCK, SLOW_FALLING, CONDUIT_POWER, DOLPHINS_GRACE,
-            BAD_OMEN, HERO_OF_THE_VILLAGE, DARKNESS,
-            SPEED__M, SPEED__MR, SLOWNESS__M, POISON__M
+            BAD_OMEN, HERO_OF_THE_VILLAGE, DARKNESS/*,
+            SPEED__M, SPEED__MR,
+            SLOWNESS__M,
+            HASTE__M,
+            MINING_FATIGUE__M,
+            STRENGTH__M,
+            INSTANT_HEALTH__M,
+            INSTANT_DAMAGE__M,
+            JUMP_BOOST__M,
+            NAUSEA__M,
+            REGENERATION__M,
+            RESISTANCE__M,
+            FIRE_RESISTANCE__M,
+            WATER_BREATHING__M,
+            INVISIBILITY__M,
+            BLINDNESS__M,
+            NIGHT_VISION__M,
+            HUNGER__M,
+            WEAKNESS__M,
+            POISON__M,
+            WITHER__M,
+            HEALTH_BOOST__M,
+            ABSORPTION__M,
+            SATURATION__M,
+            GLOWING__M,
+            LEVITATION__M,
+            LUCK__M,
+            UNLUCK__M,
+            SLOW_FALLING__M,
+            CONDUIT_POWER__M,
+            DOLPHINS_GRACE__M,
+            BAD_OMEN__M,
+            HERO_OF_THE_VILLAGE__M,
+            DARKNESS__M*/
     );
   }
 }

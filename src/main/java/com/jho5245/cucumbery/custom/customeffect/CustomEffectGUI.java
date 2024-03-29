@@ -145,7 +145,7 @@ public class CustomEffectGUI
 					}
 				}
 				itemStack.setItemMeta(itemMeta);
-				if (effectType.isRemoveable())
+				if (customEffect.isRemoveable())
 				{
 					NBTItem nbtItem = new NBTItem(itemStack, true);
 					nbtItem.setString("removeEffect", "custom:" + effectType.getNamespacedKey());
@@ -259,7 +259,7 @@ public class CustomEffectGUI
 		{
 			lore.add(ComponentUtil.translate("&f농도 레벨 : %s단계", amplifier + 1));
 		}
-		if (effectType.isRemoveable())
+		if (customEffect.isRemoveable())
 		{
 			lore.add(Component.empty());
 			if (CustomEffectManager.hasEffect(player, CustomEffectType.NO_BUFF_REMOVE))

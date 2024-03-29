@@ -13,6 +13,8 @@ import com.jho5245.cucumbery.util.additemmanager.AddItemUtil;
 import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
 import com.jho5245.cucumbery.util.gui.GUIManager;
 import com.jho5245.cucumbery.util.gui.GUIManager.GUIType;
+import com.jho5245.cucumbery.util.itemlore.ItemLore;
+import com.jho5245.cucumbery.util.itemlore.ItemLore.RemoveFlag;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
 import com.jho5245.cucumbery.util.no_groups.ItemSerializer;
@@ -54,6 +56,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.RayTraceResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -1444,8 +1447,18 @@ public class InventoryClick implements Listener
 			{
 				return;
 			}
+			// 크리에이티브 nbt 트롤링 - 주기적으로 제거해주기
 			ItemStack current = player.getInventory().getItemInMainHand();
 			ItemStack cursor = Objects.requireNonNull(event.getCursor()).clone();
+			//			MessageUtil.broadcastDebug(event.getClick());
+			//			MessageUtil.broadcastDebug(event.getAction());
+			//			MessageUtil.broadcastDebug("cursor:", ItemStackUtil.itemExists(event.getCursor()) ? event.getCursor() : "null", ", current:",
+			//					ItemStackUtil.itemExists(event.getCurrentItem()) ? event.getCurrentItem() : "null", ", mainHand:",
+			//					ItemStackUtil.itemExists(current) ? current : "null");
+			if (ItemStackUtil.itemExists(cursor) && !ItemStackUtil.itemExists(event.getCurrentItem()))
+				Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
+			//MessageUtil.broadcastDebug("current: ", ItemStackUtil.itemExists(current) ? current : "null", ", cursor: ",
+			//		ItemStackUtil.itemExists(cursor) ? cursor : "null");
 			boolean barHasEmptySlot = false;
 			ItemStack[] hotBars = new ItemStack[9];
 			List<Material> types = new ArrayList<>();
@@ -1464,9 +1477,129 @@ public class InventoryClick implements Listener
 					barHasEmptySlot = true;
 				}
 			}
+			double playerBlockInteractionRange = 6.5d; // TODO: use Attribute when 1.20.5
+			RayTraceResult rayTraceResult = player.rayTraceBlocks(playerBlockInteractionRange, FluidCollisionMode.NEVER);
+			Block targetBlock = rayTraceResult != null ? rayTraceResult.getHitBlock() : null;
+			ItemStack blockplaceDataItemStack = targetBlock != null ? BlockPlaceDataConfig.getItem(targetBlock.getLocation(), player) : null;
+			boolean BPDItemExists = blockplaceDataItemStack != null;
+			if (BPDItemExists)
+			{
+				boolean currentExists = ItemStackUtil.itemExists(current), cursorExists = ItemStackUtil.itemExists(cursor);
+				NBTItem nbtItem = new NBTItem(blockplaceDataItemStack, true);
+				if (nbtItem.hasTag("displays") && (nbtItem.hasTag("perspectiveYaw") || nbtItem.hasTag("perspectivePitch") || nbtItem.hasTag("perspectiveGrid")
+						|| nbtItem.hasTag("additionalYaw") || nbtItem.hasTag("additionalPitch")))
+				{
+					NBTCompound displays = nbtItem.getCompound("displays");
+					Objects.requireNonNull(displays).removeKey("rotation");
+					if (displays.getKeys().isEmpty())
+					{
+						nbtItem.removeKey("displays");
+					}
+				}
 
+				// 손에 아이템을 안들고 픽블록
+				if (!currentExists && cursorExists && cursor.getType() == targetBlock.getType())
+				{
+					// 핫바에 이미 같은 아이템이 있는 지 확인
+					int equalsSlot = -1;
+					for (int i = 0; i < hotBars.length; i++)
+					{
+						ItemStack hotBar = hotBars[i].clone();
+						RemoveFlag removeFlag = RemoveFlag.create().removeItemFlags().removeSkullMeta().removeUUID();
+						if (ItemLore.removeItemLore(hotBar, removeFlag).isSimilar(ItemLore.removeItemLore(blockplaceDataItemStack, removeFlag)))
+						{
+							equalsSlot = i;
+							break;
+						}
+					}
+					// 핫바에 같은 아이템이 있을 경우
+					if (equalsSlot != -1)
+					{
+						int finalEqualsSlot = equalsSlot;
+						check.add(player);
+						Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+						{
+							player.getInventory().setItem(event.getSlot(), null);
+							player.getInventory().setHeldItemSlot(finalEqualsSlot);
+							Method.heldItemSound(player, current);
+							check.remove(player);
+						}, 2L);
+					}
+					// 핫바에 같은 아이템이 없을 경우
+					else
+					{
+						Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> player.getInventory().setItemInMainHand(blockplaceDataItemStack), 0L);
+						Method.heldItemSound(player, current);
+					}
+					return;
+				}
+
+				// 손에 아이템을 들고 픽블록
+				if (currentExists && cursorExists && cursor.getType() == targetBlock.getType())
+				{
+					// 손에 들고 있느 아이템이랑 픽블록 아이템이랑 다를 경우
+					if (!current.isSimilar(blockplaceDataItemStack))
+					{
+						// 핫바에 이미 같은 아이템이 있는 지 확인
+						int equalsSlot = -1;
+						for (int i = 0; i < hotBars.length; i++)
+						{
+							ItemStack hotBar = hotBars[i].clone();
+							RemoveFlag removeFlag = RemoveFlag.create().removeItemFlags().removeSkullMeta().removeUUID();
+							if (ItemLore.removeItemLore(hotBar, removeFlag).isSimilar(ItemLore.removeItemLore(blockplaceDataItemStack, removeFlag)))
+							{
+								equalsSlot = i;
+								break;
+							}
+						}
+						// 핫바에 같은 아이템이 있을 경우
+						if (equalsSlot != -1)
+						{
+							ItemStack restore = barHasEmptySlot
+									? null
+									: (ItemStackUtil.itemExists(player.getInventory().getItem(event.getSlot())) ? Objects.requireNonNull(
+											player.getInventory().getItem(event.getSlot())).clone() : null);
+							check.add(player);
+							int finalEqualsSlot = equalsSlot;
+							Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+							{
+								player.getInventory().setItem(event.getSlot(), restore != null ? restore.clone() : null);
+								player.getInventory().setHeldItemSlot(finalEqualsSlot);
+								check.remove(player);
+							}, 2L);
+							return;
+						}
+						// 핫바에 같은 아이템이 없을 경우
+						else
+						{
+							Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> player.getInventory().setItem(event.getSlot(), blockplaceDataItemStack), 0L);
+						}
+						return;
+					}
+					// 손에 들고 있느 아이템이랑 픽블록 아이템이랑 같을 경우
+					else
+					{
+						int originSlot = player.getInventory().getHeldItemSlot();
+						int newSlot = event.getSlot();
+						ItemStack restore = barHasEmptySlot
+								? null
+								: (ItemStackUtil.itemExists(player.getInventory().getItem(newSlot))
+										? Objects.requireNonNull(player.getInventory().getItem(newSlot)).clone()
+										: null);
+						check.add(player);
+						Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+						{
+							player.getInventory().setItem(newSlot, restore);
+							player.getInventory().setHeldItemSlot(originSlot);
+							check.remove(player);
+						}, 2L);
+						return;
+					}
+				}
+			}
 			// 픽블록으로 꺼낸 블록이 핫바에 존재하지 않는 블록일 때
-			if (event.getSlot() >= 0 && event.getSlot() <= 8 && !types.contains(cursor.getType()))
+			if (event.getSlot() >= 0 && event.getSlot() <= 8 && ((!BPDItemExists && !types.contains(cursor.getType())) || (BPDItemExists && !types.contains(
+					blockplaceDataItemStack.getType()))))
 			{
 				int firstEmpty = player.getInventory().firstEmpty();
 				if (firstEmpty != -1)
@@ -1474,7 +1607,6 @@ public class InventoryClick implements Listener
 					player.getInventory().setItem(firstEmpty, new ItemStack(Material.AIR));
 				}
 			}
-
 			else if (current.getType() == Material.AIR) // 손에 아무것도 안들고 있을때 아이템을 픽븍록 할 때
 			{
 				if (event.getSlot() == player.getInventory().getHeldItemSlot()) // 픽블록 한 슬롯과 플레이어가 들고 있는 슬롯이 같은지 확인
@@ -1483,8 +1615,8 @@ public class InventoryClick implements Listener
 					{
 						ItemStack hotBar = hotBars[i].clone();
 						hotBar.setAmount(1);
-						if (ItemStackUtil.isPickBlockable(cursor.getType()) && hotBar.equals(cursor) && cursor.equals(new ItemStack(cursor.getType()))
-								&& i != event.getSlot())
+						if (ItemStackUtil.isPickBlockable(cursor.getType()) && (!BPDItemExists && hotBar.equals(cursor) || BPDItemExists && hotBar.equals(
+								blockplaceDataItemStack)) && cursor.equals(new ItemStack(cursor.getType())) && i != event.getSlot())
 						{
 							if (!check.contains(player))
 							{
@@ -1508,7 +1640,8 @@ public class InventoryClick implements Listener
 				{
 					ItemStack hotBar = hotBars[i].clone();
 					hotBar.setAmount(1);
-					if (ItemStackUtil.isPickBlockable(cursor.getType()) && hotBar.equals(cursor))
+					if (ItemStackUtil.isPickBlockable(cursor.getType()) && (!BPDItemExists && hotBar.equals(cursor) || BPDItemExists && hotBar.equals(
+							blockplaceDataItemStack)))
 					{
 						ItemStack currentClone = current.clone();
 						currentClone.setAmount(1);
@@ -1537,9 +1670,10 @@ public class InventoryClick implements Listener
 								{
 									player.getInventory().setItem(firstEmpty, new ItemStack(Material.AIR));
 								}
+								ItemStack finalCurrent = current;
 								Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
 								{
-									player.getInventory().setItem(event.getSlot(), current);
+									player.getInventory().setItem(event.getSlot(), finalCurrent);
 									player.getInventory().setHeldItemSlot(j);
 									check.remove(player);
 								}, 2L);

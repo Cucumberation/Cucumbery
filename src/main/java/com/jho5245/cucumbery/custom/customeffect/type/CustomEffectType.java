@@ -11,12 +11,12 @@ import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.EnumHideable;
 import com.jho5245.cucumbery.util.storage.data.TranslatableKeyParser;
-import com.jho5245.cucumbery.util.storage.data.custom_enchant.CustomEnchant;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.translation.Translatable;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -845,7 +845,7 @@ public class CustomEffectType implements Translatable, EnumHideable
     {
       ItemStack itemStack = new ItemStack(Material.POTION);
       PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
-      PotionEffectType effectType = PotionEffectType.getByKey(namespacedKey);
+      PotionEffectType effectType = Registry.POTION_EFFECT_TYPE.get(namespacedKey);
       if (effectType != null)
       {
         potionMeta.setColor(effectType.getColor());
@@ -892,10 +892,7 @@ public class CustomEffectType implements Translatable, EnumHideable
       case "FROST_WALKER" ->
       {
         itemStack = new ItemStack(Material.DIAMOND_BOOTS);
-        if (CustomEnchant.isEnabled())
-        {
-          itemMeta.addEnchant(CustomEnchant.GLOW, 1, true);
-        }
+        itemMeta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
       }
       case "GAESANS" -> itemStack = new ItemStack(Material.POTION);
       case "HEALTH_INCREASE" -> itemStack = new ItemStack(Material.RED_DYE);
@@ -1262,45 +1259,44 @@ public class CustomEffectType implements Translatable, EnumHideable
   @NotNull
   public Component getPropertyDescription()
   {
-    Component description = Component.empty();
-    boolean isNegative = this.isNegative();
+    Component propertyDescription = Component.empty();
     boolean keepOnDeath = this.isKeepOnDeath(), keepOnQuit = this.isKeepOnQuit(), keepOnMilk = this.isKeepOnMilk(), buffFreezable = this.isBuffFreezable();
     boolean isRealDuration = isRealDuration();
 
     if (!this.getDescription().equals(Component.empty()) && (keepOnDeath || !keepOnQuit || keepOnMilk || !buffFreezable || isRealDuration))
     {
-      description = description.append(Component.text("\n"));
+      propertyDescription = propertyDescription.append(Component.text("\n"));
     }
     if (keepOnDeath)
     {
-      description = description.append(Component.text("\n")).append(ComponentUtil.translate("&e사망해도 효과가 사라지지 않습니다"));
+      propertyDescription = propertyDescription.append(Component.text("\n")).append(ComponentUtil.translate("&e사망해도 효과가 사라지지 않습니다"));
     }
     if (!keepOnQuit)
     {
-      description = description.append(Component.text("\n")).append(ComponentUtil.translate("&e접속을 종료하거나 서버를 이동하면 효과가 사라집니다"));
+      propertyDescription = propertyDescription.append(Component.text("\n")).append(ComponentUtil.translate("&e접속을 종료하거나 서버를 이동하면 효과가 사라집니다"));
     }
     if (keepOnMilk)
     {
-      description = description.append(Component.text("\n")).append(ComponentUtil.translate("&e우유를 마셔도 효과가 사라지지 않습니다"));
+      propertyDescription = propertyDescription.append(Component.text("\n")).append(ComponentUtil.translate("&e우유를 마셔도 효과가 사라지지 않습니다"));
     }
     if (!buffFreezable)
     {
-      description = description.append(Component.text("\n")).append(ComponentUtil.translate("&e%s의 영향을 받지 않습니다", ComponentUtil.translate(CustomEffectType.BUFF_FREEZE.translationKey())));
+      propertyDescription = propertyDescription.append(Component.text("\n")).append(ComponentUtil.translate("&e%s의 영향을 받지 않습니다", ComponentUtil.translate(CustomEffectType.BUFF_FREEZE.translationKey())));
     }
     if (isRealDuration)
     {
-      description = description.append(Component.text("\n")).append(
+      propertyDescription = propertyDescription.append(Component.text("\n")).append(
               ComponentUtil.translate("&e접속을 종료해도 시간이 흐르는 효과입니다"));
     }
     if (isToggle())
     {
-      description = description.append(Component.text("\n"));
-      description = description.append(Component.text("\n"));
-      description = description.append(ComponentUtil.translate("&6온오프 효과입니다 - 효과의 지속 시간이 무제한이고"));
-      description = description.append(Component.text("\n"));
-      description = description.append(ComponentUtil.translate("&6효과가 있을 때 효과를 적용받으면 사라지는 효과"));
+      propertyDescription = propertyDescription.append(Component.text("\n"));
+      propertyDescription = propertyDescription.append(Component.text("\n"));
+      propertyDescription = propertyDescription.append(ComponentUtil.translate("&6온오프 효과입니다 - 효과의 지속 시간이 무제한이고"));
+      propertyDescription = propertyDescription.append(Component.text("\n"));
+      propertyDescription = propertyDescription.append(ComponentUtil.translate("&6효과가 있을 때 효과를 적용받으면 사라지는 효과"));
     }
-    return description;
+    return propertyDescription;
   }
 
   @NotNull

@@ -169,7 +169,8 @@ public class PlayerMove implements Listener
 
       }
     }
-    if (event.hasChangedBlock() && CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE))
+    if (event.hasChangedBlock() && CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE) &&
+        !CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_2_NO_RESTORE))
     {
       Location playerLocation = player.getLocation();
       CustomEffect customEffect = CustomEffectManager.getEffectNullable(player, CustomEffectTypeCustomMining.MOVEMENT_CHECK);

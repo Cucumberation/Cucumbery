@@ -119,7 +119,7 @@ public class CustomEffectManager
 			}
 		}
 		effect = effect.copy();
-		if (callEvent && effect.getType().doesCallEvent())
+		if (callEvent && effect.doesCallEvent())
 		{
 			EntityCustomEffectPreApplyEvent preApplyEvent = new EntityCustomEffectPreApplyEvent(entity, effect, reason);
 			Cucumbery.getPlugin().getPluginManager().callEvent(preApplyEvent);
@@ -214,12 +214,12 @@ public class CustomEffectManager
 			nbtEntity.mergeCompound(new NBTContainer("{abilities:{instabuild:0b,invulnerable:0b}}"));
 			player.setAllowFlight(false);
 		}
-		if (effectType.isRealDuration() && effect.getDuration() != -1)
+		if (effect.isRealDuration() && effect.getDuration() != -1)
 		{
 			effect = new RealDurationCustomEffectImple(effectType, initDura, initAmple, displayType, System.currentTimeMillis(),
 					System.currentTimeMillis() + initDura * 50L);
 		}
-		if (callEvent && effect.getType().doesCallEvent())
+		if (callEvent && effect.doesCallEvent())
 		{
 			EntityCustomEffectApplyEvent applyEvent = new EntityCustomEffectApplyEvent(entity, effect, reason);
 			Cucumbery.getPlugin().getPluginManager().callEvent(applyEvent);
@@ -230,7 +230,7 @@ public class CustomEffectManager
 		}
 		customEffects.add(effect);
 		effectMap.put(entity.getUniqueId(), customEffects);
-		if (callEvent && effect.getType().doesCallEvent())
+		if (callEvent && effect.doesCallEvent())
 		{
 			EntityCustomEffectPostApplyEvent postApplyEvent = new EntityCustomEffectPostApplyEvent(entity, effect, reason);
 			Cucumbery.getPlugin().getPluginManager().callEvent(postApplyEvent);
@@ -276,7 +276,7 @@ public class CustomEffectManager
 		{
 			if (effect.getType() == effectType)
 			{
-				if (callEvent && effect.getType().doesCallEvent())
+				if (callEvent && effect.doesCallEvent())
 				{
 					EntityCustomEffectPreRemoveEvent event = new EntityCustomEffectPreRemoveEvent(entity, effect, reason);
 					try
@@ -303,7 +303,7 @@ public class CustomEffectManager
 		{
 			for (CustomEffect effect : removed)
 			{
-				if (callEvent && effect.getType().doesCallEvent())
+				if (callEvent && effect.doesCallEvent())
 				{
 					EntityCustomEffectRemoveEvent event = new EntityCustomEffectRemoveEvent(entity, effect, reason);
 					try
@@ -350,7 +350,7 @@ public class CustomEffectManager
 		{
 			if (effect.getType() == effectType && effect.getAmplifier() == amplifier)
 			{
-				if (callEvent && effect.getType().doesCallEvent())
+				if (callEvent && effect.doesCallEvent())
 				{
 					EntityCustomEffectPreRemoveEvent event = new EntityCustomEffectPreRemoveEvent(entity, effect, reason);
 					try
@@ -377,7 +377,7 @@ public class CustomEffectManager
 		{
 			for (CustomEffect effect : removed)
 			{
-				if (callEvent && effect.getType().doesCallEvent())
+				if (callEvent && effect.doesCallEvent())
 				{
 					EntityCustomEffectRemoveEvent event = new EntityCustomEffectRemoveEvent(entity, effect, reason);
 					try
@@ -410,7 +410,7 @@ public class CustomEffectManager
 		{
 			for (CustomEffect effect : customEffects)
 			{
-				if (effect.getType().doesCallEvent())
+				if (effect.doesCallEvent())
 				{
 					EntityCustomEffectPreRemoveEvent event = new EntityCustomEffectPreRemoveEvent(entity, effect);
 					Cucumbery.getPlugin().getPluginManager().callEvent(event);
@@ -422,7 +422,7 @@ public class CustomEffectManager
 		{
 			for (CustomEffect effect : customEffects)
 			{
-				if (effect.getType().doesCallEvent())
+				if (effect.doesCallEvent())
 				{
 					EntityCustomEffectRemoveEvent event = new EntityCustomEffectRemoveEvent(entity, effect);
 					Cucumbery.getPlugin().getPluginManager().callEvent(event);
