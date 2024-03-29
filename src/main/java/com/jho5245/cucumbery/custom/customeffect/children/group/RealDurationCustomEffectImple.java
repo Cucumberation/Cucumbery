@@ -3,6 +3,7 @@ package com.jho5245.cucumbery.custom.customeffect.children.group;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffect;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class RealDurationCustomEffectImple extends CustomEffect implements RealDurationCustomEffect
 {
@@ -36,6 +37,13 @@ public class RealDurationCustomEffectImple extends CustomEffect implements RealD
     this.endTime = endTime;
   }
 
+  public RealDurationCustomEffectImple(CustomEffectType effectType, int duration, int amplifier, @NotNull DisplayType displayType, long startTime, long endTime, @Nullable OverridePropertyBuilder builder)
+  {
+    super(effectType, duration, amplifier, displayType, builder);
+    this.startTime = startTime;
+    this.endTime = endTime;
+  }
+
   @Override
   public long getStartTimeInMillis()
   {
@@ -52,6 +60,6 @@ public class RealDurationCustomEffectImple extends CustomEffect implements RealD
   @NotNull
   protected RealDurationCustomEffectImple copy()
   {
-    return new RealDurationCustomEffectImple(this.getType(), this.getDuration(), this.getAmplifier(), this.getDisplayType(), this.getStartTimeInMillis(), this.getEndTimeInMillis());
+    return new RealDurationCustomEffectImple(this.getType(), this.getDuration(), this.getAmplifier(), this.getDisplayType(), this.getStartTimeInMillis(), this.getEndTimeInMillis(), builder);
   }
 }

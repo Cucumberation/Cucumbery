@@ -38,7 +38,7 @@ public class CustomEffect
 	final boolean buffFreezable, keepOnDeath, keepOnMilk, keepOnQuit, removeable, realDuration;
 
 	@Nullable
-	final OverridePropertyBuilder builder;
+	protected final OverridePropertyBuilder builder;
 
 	public CustomEffect(@NotNull CustomEffectType effectType)
 	{

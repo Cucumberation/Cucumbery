@@ -218,7 +218,7 @@ public class CustomEffectManager
 		if (effect.isRealDuration() && effect.getDuration() != -1)
 		{
 			effect = new RealDurationCustomEffectImple(effectType, initDura, initAmple, displayType, System.currentTimeMillis(),
-					System.currentTimeMillis() + initDura * 50L);
+					System.currentTimeMillis() + initDura * 50L, effect.builder);
 		}
 		if (callEvent && effect.doesCallEvent())
 		{
@@ -801,57 +801,58 @@ public class CustomEffectManager
 							}
 						}
 					}
+					OverridePropertyBuilder builder = new OverridePropertyBuilder();
+					if (root.isBoolean(typeString + ".modifier.buff-freezable"))
+					{
+						if (root.getBoolean(typeString + ".modifier.buff-freezable"))
+							builder.buffFreezeable();
+						else
+							builder.nonBuffFreezeable();
+					}
+					if (root.isBoolean(typeString + ".modifier.keep-on-death"))
+					{
+						if (root.getBoolean(typeString + ".modifier.keep-on-death"))
+							builder.keepOnDeath();
+						else
+							builder.removeOnDeath();
+					}
+					if (root.isBoolean(typeString + ".modifier.keep-on-milk"))
+					{
+						if (root.getBoolean(typeString + ".modifier.keep-on-milk"))
+							builder.keepOnMilk();
+						else
+							builder.removeOnMilk();
+					}
+					if (root.isBoolean(typeString + ".modifier.keep-on-quit"))
+					{
+						if (root.getBoolean(typeString + ".modifier.keep-on-quit"))
+							builder.keepOnQuit();
+						else
+							builder.removeOnQuit();
+					}
+					if (root.isBoolean(typeString + ".modifier.removeable"))
+					{
+						if (root.getBoolean(typeString + ".modifier.removeable"))
+							builder.removeable();
+						else
+							builder.nonRemoveable();
+					}
+					if (root.isBoolean(typeString + ".modifier.real-duration"))
+					{
+						if (root.getBoolean(typeString + ".modifier.real-duration"))
+							builder.realDuration();
+						else
+							builder.nonRealDuration();
+					}
 					if (customEffect == null)
 					{
-						OverridePropertyBuilder builder = new OverridePropertyBuilder();
-						if (config.isBoolean(typeString + ".modifier.buff-freezable"))
-						{
-							if (config.getBoolean(typeString + ".modifier.buff-freezable"))
-								builder.buffFreezeable();
-							else
-								builder.nonBuffFreezeable();
-						}
-						if (config.isBoolean(typeString + ".modifier.keep-on-death"))
-						{
-							if (config.getBoolean(typeString + ".modifier.keep-on-death"))
-								builder.keepOnDeath();
-							else
-								builder.removeOnDeath();
-						}
-						if (config.isBoolean(typeString + ".modifier.keep-on-milk"))
-						{
-							if (config.getBoolean(typeString + ".modifier.keep-on-milk"))
-								builder.keepOnMilk();
-							else
-								builder.removeOnMilk();
-						}
-						if (config.isBoolean(typeString + ".modifier.keep-on-quit"))
-						{
-							if (config.getBoolean(typeString + ".modifier.keep-on-quit"))
-								builder.keepOnQuit();
-							else
-								builder.removeOnQuit();
-						}
-						if (config.isBoolean(typeString + ".modifier.removeable"))
-						{
-							if (config.getBoolean(typeString + ".modifier.removeable"))
-								builder.removeable();
-							else
-								builder.nonRemoveable();
-						}
-						if (config.isBoolean(typeString + ".modifier.real-duration"))
-						{
-							if (config.getBoolean(typeString + ".modifier.real-duration"))
-								builder.realDuration();
-							else
-								builder.nonRealDuration();
-						}
 						customEffect = new CustomEffect(customEffectType, initDuration, initAmplifier, displayType, builder);
 					}
 					if (root.isLong(typeString + ".start-time") && root.isLong(typeString + ".end-time"))
 					{
+						MessageUtil.broadcastDebug("foo");
 						long startTime = root.getLong(typeString + ".start-time"), endTime = root.getLong(typeString + ".end-time");
-						customEffect = new RealDurationCustomEffectImple(customEffectType, initDuration, initAmplifier, displayType, startTime, endTime);
+						customEffect = new RealDurationCustomEffectImple(customEffectType, initDuration, initAmplifier, displayType, startTime, endTime, builder);
 					}
 					String itemStackString = root.getString(typeString + ".item");
 					if (itemStackString != null)
