@@ -254,8 +254,8 @@ public class CommandCustomEffect implements CucumberyCommandExecutor
 								ComponentUtil.create(sender instanceof Player player ? player : null, CustomEffectType.BUFF_FREEZE)));
 						MessageUtil.info(sender, "k : 사망하면 효과가 사라집니다");
 						MessageUtil.info(sender, "K : 사망해도 효과가 사라지지 않습니다");
-						MessageUtil.info(sender, "m : 우유를 마셔도 효과가 사라집니다");
-						MessageUtil.info(sender, "M : 우유를 마시면 효과가 사라지지 않습니다");
+						MessageUtil.info(sender, "m : 우유를 마시면 효과가 사라집니다");
+						MessageUtil.info(sender, "M : 우유를 마셔도 효과가 사라지지 않습니다");
 						MessageUtil.info(sender, "q : 접속을 종료하거나 다른 서버로 이동하면 효과가 사라집니다");
 						MessageUtil.info(sender, "Q : 접속을 종료하거나 다른 서버로 이동해도 효과가 사라지지 않습니다");
 						MessageUtil.info(sender, "r : 효과 목록 GUI에서 우클릭으로 효과를 해제할 수 있게 됩니다");
@@ -404,7 +404,9 @@ public class CommandCustomEffect implements CucumberyCommandExecutor
 				{
 					args[2] = args[2].substring(0, args[2].length() - 7);
 				}
-				args[2] = args[2].split("__")[0];
+				boolean useModifier = args[2].endsWith("__");
+				String[] split= args[2].split("__");
+				args[2] = split[0];
 				String effect = args[2];
 				if (length == 3)
 				{
@@ -419,8 +421,28 @@ public class CommandCustomEffect implements CucumberyCommandExecutor
 						else
 						{
 							List<Completion> list = new ArrayList<>(CommandTabUtil.tabCompleterList(args, CustomEffectType.getEffectTypeMap(), "<효과>"));
-							list.add(Completion.completion(args[2] + "--force",
+							list.add(Completion.completion(args[2] + (split.length > 1 ? ("__" + split[split.length - 1]) : "") + "--force",
 									ComponentUtil.translate("%s 효과를 강제로 적용합니다", ComponentUtil.translate(customEffectType.translationKey()))));
+							if (useModifier)
+							{
+
+								list.add(Completion.completion(args[2] + "__b", ComponentUtil.translate("%s 효과의 영향을 받게 됩니다", CustomEffectType.BUFF_FREEZE)));
+								list.add(Completion.completion(args[2] + "__B", ComponentUtil.translate("%s 효과의 영향을 받지 않게 됩니다", CustomEffectType.BUFF_FREEZE)));
+								list.add(Completion.completion(args[2] + "__k", ComponentUtil.translate("사망하면 효과가 사라집니다")));
+								list.add(Completion.completion(args[2] + "__K", ComponentUtil.translate("사망해도 효과가 사라지지 않습니다")));
+								list.add(Completion.completion(args[2] + "__m", ComponentUtil.translate("우유를 마시면 효과가 사라집니다")));
+								list.add(Completion.completion(args[2] + "__M", ComponentUtil.translate("우유를 마셔도 효과가 사라지지 않습니다")));
+								list.add(Completion.completion(args[2] + "__q", ComponentUtil.translate("접속을 종료하거나 다른 서버로 이동하면 효과가 사라집니다")));
+								list.add(Completion.completion(args[2] + "__Q", ComponentUtil.translate("접속을 종료하거나 다른 서버로 이동해도 효과가 사라지지 않습니다")));
+								list.add(Completion.completion(args[2] + "__r", ComponentUtil.translate("효과 목록 GUI에서 우클릭으로 효과를 헤제할 수 있게 됩니다")));
+								list.add(Completion.completion(args[2] + "__R", ComponentUtil.translate("효과 목록 GUI에서 우클릭으로 효과를 헤제할 수 없게 됩니다")));
+								list.add(Completion.completion(args[2] + "__d", ComponentUtil.translate("효과의 지속시간이 접속을 종료해도 흐릅니다")));
+								list.add(Completion.completion(args[2] + "__D", ComponentUtil.translate("효과의 지속시간이 접속을 종료해도 흐르지 않습니다")));
+							}
+							else
+							{
+								list.add(Completion.completion(args[2] + "__", ComponentUtil.translate("효과 편집자를 사용합니다")));
+							}
 							return list;
 						}
 					}

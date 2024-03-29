@@ -3,6 +3,7 @@ package com.jho5245.cucumbery.util.no_groups;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.util.no_groups.ColorUtil.Type;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
+import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
@@ -580,7 +581,7 @@ public class PlaceHolderUtil
           count++;
           if (count == random)
           {
-            cmd = cmd.replace("%fixed_random_player%", player.getName());
+            cmd = cmd.replace("%fixed_random_player%", Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName()));
           }
         }
       }
@@ -594,7 +595,7 @@ public class PlaceHolderUtil
           count++;
           if (count == random)
           {
-            cmd = cmd.replaceFirst("%random_player%", player.getName());
+            cmd = cmd.replaceFirst("%random_player%", Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName()));
           }
         }
       }

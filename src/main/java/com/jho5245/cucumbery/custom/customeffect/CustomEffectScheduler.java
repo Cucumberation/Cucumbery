@@ -444,7 +444,7 @@ public class CustomEffectScheduler
 				NamespacedKey namespacedKey = customEffectType.getNamespacedKey();
 				if (namespacedKey.getKey().contains("__"))
 					namespacedKey = new NamespacedKey(namespacedKey.getNamespace(), namespacedKey.getKey().split("__")[0]);
-				PotionEffectType potionEffectType = PotionEffectType.getByKey(namespacedKey);
+				PotionEffectType potionEffectType = Registry.POTION_EFFECT_TYPE.get(namespacedKey);
 				if (potionEffectType == null)
 				{
 					throw new NullPointerException("Invalid Potion Effect Type: " + customEffectType.getIdString());

@@ -11,6 +11,7 @@ import com.jho5245.cucumbery.util.storage.component.ItemStackComponent;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
+import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import net.kyori.adventure.text.Component;
@@ -169,7 +170,7 @@ public class EntityComponentUtil
 		Component hover = Component.empty().append(nameComponent);
 		if (entity instanceof Player player)
 		{
-			String name = player.getName();
+			String name = Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName());
 			GameMode gameMode = player.getGameMode();
 			hover = hover.append(Component.text("\n")).append(ComponentUtil.translate("ID : %s", Constant.THE_COLOR_HEX + name));
 			if (tmiMode || Cucumbery.config.getBoolean("use-hover-event-for-entities.uuid"))
@@ -867,7 +868,7 @@ public class EntityComponentUtil
 				hover = hover.append(Component.text("\n")).append(ComponentUtil.translate("#52ee52;관리자입니다"));
 			}
 			hover = hover.append(Component.text("\n")).append(ComponentUtil.create(Constant.SEPARATOR)).append(Component.text("\n"))
-					.append(ComponentUtil.translate("클릭하여 소셜 메뉴 열기 : %s", "&7/socialmenu " + player.getName()));
+					.append(ComponentUtil.translate("클릭하여 소셜 메뉴 열기 : %s", "&7/socialmenu " + Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName())));
 			nameComponent = nameComponent.clickEvent(ClickEvent.runCommand(click));
 		}
 		else

@@ -407,7 +407,7 @@ public class DeathManager
 					key = "kill";
 					if (entity instanceof Player player)
 					{
-						extraArgs.add(Component.text(player.getName()));
+						extraArgs.add(Component.text(Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName())));
 					}
 					else
 					{

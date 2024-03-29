@@ -2,6 +2,7 @@ package com.jho5245.cucumbery.custom.customeffect;
 
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffect.DisplayType;
+import com.jho5245.cucumbery.custom.customeffect.CustomEffect.OverridePropertyBuilder;
 import com.jho5245.cucumbery.custom.customeffect.children.group.*;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCustomMining;
@@ -250,7 +251,7 @@ public class CustomEffectManager
 
 	public static boolean removeEffect(@NotNull Entity entity, @NotNull CustomEffectType effectType)
 	{
-		return removeEffect(entity, effectType, RemoveReason.PLUGIN, false);
+		return removeEffect(entity, effectType, RemoveReason.PLUGIN, true);
 	}
 
 	public static boolean removeEffect(@NotNull Entity entity, @NotNull CustomEffectType effectType, boolean callEvent)
@@ -258,13 +259,13 @@ public class CustomEffectManager
 		return removeEffect(entity, effectType, RemoveReason.PLUGIN, callEvent);
 	}
 
-
 	public static boolean removeEffect(@NotNull Entity entity, @NotNull CustomEffectType effectType, @NotNull EntityCustomEffectRemoveEvent.RemoveReason reason)
 	{
 		return removeEffect(entity, effectType, reason, true);
 	}
 
-	public static boolean removeEffect(@NotNull Entity entity, @NotNull CustomEffectType effectType, @NotNull EntityCustomEffectRemoveEvent.RemoveReason reason, boolean callEvent)
+	public static boolean removeEffect(@NotNull Entity entity, @NotNull CustomEffectType effectType, @NotNull EntityCustomEffectRemoveEvent.RemoveReason reason,
+			boolean callEvent)
 	{
 		if (!hasEffect(entity, effectType))
 		{
@@ -326,16 +327,16 @@ public class CustomEffectManager
 		removeEffect(entity, effectType, amplifier, RemoveReason.PLUGIN);
 	}
 
-  public static void removeEffect(@NotNull Entity entity, @NotNull CustomEffectType effectType, int amplifier, boolean callEvent)
-  {
-    removeEffect(entity, effectType, amplifier, RemoveReason.PLUGIN, callEvent);
-  }
+	public static void removeEffect(@NotNull Entity entity, @NotNull CustomEffectType effectType, int amplifier, boolean callEvent)
+	{
+		removeEffect(entity, effectType, amplifier, RemoveReason.PLUGIN, callEvent);
+	}
 
-  public static void removeEffect(@NotNull Entity entity, @NotNull CustomEffectType effectType, int amplifier,
-      @NotNull EntityCustomEffectRemoveEvent.RemoveReason reason)
-  {
-    removeEffect(entity, effectType, amplifier, reason, true);
-  }
+	public static void removeEffect(@NotNull Entity entity, @NotNull CustomEffectType effectType, int amplifier,
+			@NotNull EntityCustomEffectRemoveEvent.RemoveReason reason)
+	{
+		removeEffect(entity, effectType, amplifier, reason, true);
+	}
 
 	public static void removeEffect(@NotNull Entity entity, @NotNull CustomEffectType effectType, int amplifier,
 			@NotNull EntityCustomEffectRemoveEvent.RemoveReason reason, boolean callEvent)
@@ -642,6 +643,16 @@ public class CustomEffectManager
 			config.set("effects." + i + ".duration", duration);
 			config.set("effects." + i + ".amplifier", amplifier);
 			config.set("effects." + i + ".display-type", customEffect.getDisplayType().toString());
+			OverridePropertyBuilder builder = customEffect.builder;
+			if (builder != null)
+			{
+				config.set("effects." + i + ".modifier.buff-freezable", builder.buffFreezable);
+				config.set("effects." + i + ".modifier.keep-on-death", builder.keepOnDeath);
+				config.set("effects." + i + ".modifier.keep-on-milk", builder.keepOnMilk);
+				config.set("effects." + i + ".modifier.keep-on-quit", builder.keepOnQuit);
+				config.set("effects." + i + ".modifier.removeable", builder.removeable);
+				config.set("effects." + i + ".modifier.real-duration", builder.realDuration);
+			}
 			if (customEffect instanceof PlayerCustomEffect playerCustomEffect)
 			{
 				config.set("effects." + i + ".player", playerCustomEffect.getPlayer().getUniqueId().toString());
@@ -792,7 +803,50 @@ public class CustomEffectManager
 					}
 					if (customEffect == null)
 					{
-						customEffect = new CustomEffect(customEffectType, initDuration, initAmplifier, displayType);
+						OverridePropertyBuilder builder = new OverridePropertyBuilder();
+						if (config.isBoolean(typeString + ".modifier.buff-freezable"))
+						{
+							if (config.getBoolean(typeString + ".modifier.buff-freezable"))
+								builder.buffFreezeable();
+							else
+								builder.nonBuffFreezeable();
+						}
+						if (config.isBoolean(typeString + ".modifier.keep-on-death"))
+						{
+							if (config.getBoolean(typeString + ".modifier.keep-on-death"))
+								builder.keepOnDeath();
+							else
+								builder.removeOnDeath();
+						}
+						if (config.isBoolean(typeString + ".modifier.keep-on-milk"))
+						{
+							if (config.getBoolean(typeString + ".modifier.keep-on-milk"))
+								builder.keepOnMilk();
+							else
+								builder.removeOnMilk();
+						}
+						if (config.isBoolean(typeString + ".modifier.keep-on-quit"))
+						{
+							if (config.getBoolean(typeString + ".modifier.keep-on-quit"))
+								builder.keepOnQuit();
+							else
+								builder.removeOnQuit();
+						}
+						if (config.isBoolean(typeString + ".modifier.removeable"))
+						{
+							if (config.getBoolean(typeString + ".modifier.removeable"))
+								builder.removeable();
+							else
+								builder.nonRemoveable();
+						}
+						if (config.isBoolean(typeString + ".modifier.real-duration"))
+						{
+							if (config.getBoolean(typeString + ".modifier.real-duration"))
+								builder.realDuration();
+							else
+								builder.nonRealDuration();
+						}
+						customEffect = new CustomEffect(customEffectType, initDuration, initAmplifier, displayType, builder);
 					}
 					if (root.isLong(typeString + ".start-time") && root.isLong(typeString + ".end-time"))
 					{
@@ -883,7 +937,7 @@ public class CustomEffectManager
 				NamespacedKey namespacedKey = customEffectType.getNamespacedKey();
 				if (namespacedKey.getKey().contains("__"))
 					namespacedKey = new NamespacedKey(namespacedKey.getNamespace(), namespacedKey.getKey().split("__")[0]);
-				PotionEffectType potionEffectType = PotionEffectType.getByKey(namespacedKey);
+				PotionEffectType potionEffectType = Registry.POTION_EFFECT_TYPE.get(namespacedKey);
 				if (potionEffectType == null)
 				{
 					throw new NullPointerException("Invalid Potion Effect Type: " + customEffectType.getIdString());

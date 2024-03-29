@@ -4,8 +4,11 @@ import com.comphenix.protocol.PacketType.Play.Server;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.reflect.FuzzyReflection;
 import com.comphenix.protocol.reflect.StructureModifier;
+import com.comphenix.protocol.reflect.fuzzy.FuzzyMethodContract;
 import com.comphenix.protocol.utility.MinecraftReflection;
+import com.comphenix.protocol.wrappers.WrappedBlockData;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedDataValue;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher.Registry;
@@ -19,6 +22,7 @@ import de.tr7zw.changeme.nbtapi.*;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import io.papermc.paper.event.packet.PlayerChunkUnloadEvent;
 import org.bukkit.*;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -33,6 +37,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
+import java.lang.reflect.Modifier;
 import java.util.*;
 
 public class BlockPlaceDataConfig extends ChunkConfig
@@ -452,18 +457,19 @@ public class BlockPlaceDataConfig extends ChunkConfig
 			// TODO: WIP
 			case "block" ->
 			{
-				Material material;
-				try
+				//packet.getIntegers().write(4, getBlockStateId(Bukkit.createBlockData(value)));
+/*				int id = getBlockStateId(Bukkit.createBlockData(value));
+				MessageUtil.broadcastDebug(id);
+				for (int i = 0; i < 10000; i++)
 				{
-					material = Material.valueOf(value);
-				}
-				catch (IllegalArgumentException e)
-				{
-					MessageUtil.sendWarn(Bukkit.getConsoleSender(), "잘못된 블록 데이터가 있습니다: " + value);
-					material = Material.AIR;
-				}
-				packet.getIntegers().write(4, 1);
-				//values.add(new WrappedDataValue(23, Registry.get(Integer.class), material.getId() + (material.getData().getModifiers() << 0xC)));
+					values.add(new WrappedDataValue(23, Registry.get(Integer.class), i));
+					watchableAccessor.write(0, values);
+					edit.getIntegers().write(0, Method.random(1, Integer.MAX_VALUE));
+					for (Player player : players)
+						protocolManager.sendServerPacket(player, edit);
+					if (i == 999) return;
+				}*/
+				values.add(new WrappedDataValue(23, Registry.get(Integer.class), getBlockStateId(Bukkit.createBlockData(value))));
 			}
 			case "player_head", "player_heads" ->
 			{
@@ -558,6 +564,32 @@ public class BlockPlaceDataConfig extends ChunkConfig
 		{
 			protocolManager.sendServerPacket(player, packet);
 			protocolManager.sendServerPacket(player, edit);
+		}
+	}
+
+	private static java.lang.reflect.Method craftBlockData_getState = null;
+	private static java.lang.reflect.Method nmsBlock_getId = null;
+
+	public static int getBlockStateId(BlockData data) {
+		try {
+			if (craftBlockData_getState == null || nmsBlock_getId == null) {
+				Class<?> craftBlockDataClazz = MinecraftReflection.getCraftBukkitClass("block.data.CraftBlockData");
+				craftBlockData_getState = craftBlockDataClazz.getMethod("getState");
+				craftBlockData_getState.setAccessible(true);
+				FuzzyReflection blockReflector = FuzzyReflection.fromClass(MinecraftReflection.getBlockClass());
+				nmsBlock_getId = blockReflector.getMethod(FuzzyMethodContract.newBuilder()
+						.banModifier(Modifier.PRIVATE)
+						.banModifier(Modifier.PROTECTED)
+						.requireModifier(Modifier.STATIC)
+						.parameterExactArray(MinecraftReflection.getIBlockDataClass())
+						.returnTypeExact(int.class)
+						.build());
+			}
+
+			Object nmsState = craftBlockData_getState.invoke(data);
+			return (int) nmsBlock_getId.invoke(null, nmsState);
+		} catch (ReflectiveOperationException e) {
+			throw new RuntimeException(e);
 		}
 	}
 

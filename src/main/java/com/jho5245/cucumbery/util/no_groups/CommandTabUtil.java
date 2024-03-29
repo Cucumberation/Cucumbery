@@ -318,7 +318,7 @@ public class CommandTabUtil
     for (Player online : Bukkit.getServer().getOnlinePlayers())
     {
       Component hover = SenderComponentUtil.senderComponent(online, Constant.THE_COLOR, true);
-      list.add(Completion.completion(online.getName(), hover));
+      list.add(Completion.completion(Variable.ORIGINAL_NAME.getOrDefault(online.getUniqueId(), online.getName()), hover));
       String displayName = MessageUtil.stripColor(ComponentUtil.serialize(online.displayName()));
       String playerListName = MessageUtil.stripColor(ComponentUtil.serialize(online.playerListName()));
       list.add(Completion.completion(displayName, hover));

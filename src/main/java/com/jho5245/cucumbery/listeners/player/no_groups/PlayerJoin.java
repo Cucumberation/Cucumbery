@@ -54,7 +54,7 @@ public class PlayerJoin implements Listener
       BlockPlaceDataConfig.display(player, player.getLocation());
     }
     Initializer.setNickName(player);
-    String name = player.getName();
+    String name = Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName());
     YamlConfiguration cfg = Cucumbery.config;
     Location location = player.getLocation();
     List<String> noTellrawWorlds = cfg.getStringList("no-tellraw-feature-on-join-worlds"), noActionbarWorlds = cfg.getStringList("no-actionbar-feature-on-join-worlds");

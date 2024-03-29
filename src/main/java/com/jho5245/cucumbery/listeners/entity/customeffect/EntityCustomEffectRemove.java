@@ -350,7 +350,6 @@ public class EntityCustomEffectRemove implements Listener
 				Bukkit.getPluginManager().callEvent(blockDamageAbortEvent);
 			}
 		}
-
 		if (customEffectType.getNamespacedKey().getNamespace().equals("minecraft") && entity instanceof LivingEntity livingEntity)
 		{
 			// 특수 바닐라 효과 (예: 우유를 마셔도 사라지지 않는 효과) 처리용 key parsing

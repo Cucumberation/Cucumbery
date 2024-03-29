@@ -1,6 +1,7 @@
 package com.jho5245.cucumbery;
 
 import com.comphenix.protocol.ProtocolLib;
+import com.destroystokyo.paper.profile.PlayerProfile;
 import com.jho5245.cucumbery.commands.addon.CommandQuickShopAddon;
 import com.jho5245.cucumbery.commands.air.CommandAirPoint;
 import com.jho5245.cucumbery.commands.brigadier.*;
@@ -372,6 +373,13 @@ public class Cucumbery extends JavaPlugin
 					if (e.getVehicle() == null || e.getPassengers().isEmpty())
 						e.remove();
 				}
+			}
+			String name = Variable.ORIGINAL_NAME.get(player.getUniqueId());
+			if (name != null)
+			{
+				PlayerProfile playerProfile = player.getPlayerProfile();
+				playerProfile.setName(name);
+				player.setPlayerProfile(playerProfile);
 			}
 		}
 		if (using_ProtocolLib)

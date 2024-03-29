@@ -7,6 +7,7 @@ import com.jho5245.cucumbery.util.no_groups.SelectorUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
+import com.jho5245.cucumbery.util.storage.data.Variable;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -34,7 +35,7 @@ public class CommandSocialMenu implements CommandExecutor, TabCompleter
     {
       if (args.length == 0)
       {
-        player.performCommand("socialmenu " + player.getName());
+        player.performCommand("socialmenu " + Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName()));
         return true;
       }
       MessageUtil.longArg(player, 1, args);

@@ -613,12 +613,16 @@ public class Initializer
 	private static void loadUserDataConfig(Player player)
 	{
 		UUID uuid = player.getUniqueId();
+		if (!Variable.ORIGINAL_NAME.containsKey(uuid))
+		{
+			Variable.ORIGINAL_NAME.put(uuid, player.getName());
+		}
 		CustomConfig customConfig = CustomConfig.getPlayerConfig(player.getUniqueId());
 		YamlConfiguration userCfg = customConfig.getConfig();
 		Variable.userData.put(uuid, userCfg);
 		Variable.userDataUUIDs.add(uuid.toString());
-		Variable.nickNames.add(player.getName());
-		Variable.cachedUUIDs.put(player.getName(), uuid);
+		Variable.nickNames.add(Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName()));
+		Variable.cachedUUIDs.put(Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName()), uuid);
 		String displayname = UserData.DISPLAY_NAME.getString(player.getUniqueId());
 		String playerListName = UserData.PLAYER_LIST_NAME.getString(player.getUniqueId());
 		if (displayname != null)
@@ -690,7 +694,7 @@ public class Initializer
 		Component senderComponent = SenderComponentUtil.senderComponent(player, player, null);
 		if (displayname == null)
 		{
-			displayname = player.getName();
+			displayname = Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName());
 		}
 		Component finalDislay = ComponentUtil.create(displayname).hoverEvent(senderComponent.hoverEvent()).clickEvent(senderComponent.clickEvent());
 		player.displayName(finalDislay);
@@ -698,7 +702,7 @@ public class Initializer
 		player.displayName(senderComponent);
 		if (playerListName == null)
 		{
-			playerListName = player.getName();
+			playerListName = Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName());
 		}
 		finalDislay = ComponentUtil.create(playerListName);
 		final Component originalDisplayName = player.displayName();
@@ -727,11 +731,11 @@ public class Initializer
 		String displayName = UserData.DISPLAY_NAME.getString(player), listName = UserData.PLAYER_LIST_NAME.getString(player);
 		if (displayName == null)
 		{
-			displayName = player.getName();
+			displayName = Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName());
 		}
 		if (listName == null)
 		{
-			listName = player.getName();
+			listName = Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName());
 		}
 		Component display = ComponentUtil.create(displayName);
 		player.displayName(display);

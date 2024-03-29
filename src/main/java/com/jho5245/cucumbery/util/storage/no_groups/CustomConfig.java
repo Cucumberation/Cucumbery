@@ -92,9 +92,9 @@ public class CustomConfig
 			needToUpdate = true;
 		}
 		String configId = config.getString(UserData.ID.getKey());
-		if (configId == null || !configId.equals(player.getName()))
+		if (configId == null || !configId.equals(Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName())))
 		{
-			config.set(UserData.ID.getKey(), player.getName());
+			config.set(UserData.ID.getKey(), Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName()));
 			needToUpdate = true;
 		}
 		String displayName = config.getString(UserData.DISPLAY_NAME.getKey());

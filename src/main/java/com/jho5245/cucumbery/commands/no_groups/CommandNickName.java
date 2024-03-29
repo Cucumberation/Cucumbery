@@ -87,7 +87,7 @@ public class CommandNickName implements CommandExecutor, TabCompleter
 				}
 
 				boolean off = args.length == 2 && args[1].equalsIgnoreCase("--off");
-				Component finalNickname = off ? Component.text(player.getName()) : nickName;
+				Component finalNickname = off ? Component.text(Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName())) : nickName;
 				Component senderComponent = SenderComponentUtil.senderComponent(player, player, null);
 				finalNickname = finalNickname.hoverEvent(senderComponent.hoverEvent()).clickEvent(senderComponent.clickEvent());
 				String serialNickname = off ? null : ComponentUtil.serializeAsJson(nickName);
@@ -102,7 +102,7 @@ public class CommandNickName implements CommandExecutor, TabCompleter
 					UserData.DISPLAY_NAME.set(uuid, serialNickname);
 					UserData.PLAYER_LIST_NAME.set(uuid, serialNickname);
 					PlayerProfile profile = player.getPlayerProfile();
-					String name = off ? player.getName() : ComponentUtil.serialize(nickName);
+					String name = off ? Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName()) : ComponentUtil.serialize(nickName);
 					if (name.length() > 16)
 						name = name.substring(0, 16);
 					profile.setName(name);
@@ -147,10 +147,10 @@ public class CommandNickName implements CommandExecutor, TabCompleter
 				Variable.cachedUUIDs.remove(originDisplay);
 				Variable.cachedUUIDs.remove(originList);
 				Variable.nickNames.add(uuid.toString());
-				Variable.nickNames.add(player.getName());
+				Variable.nickNames.add(Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName()));
 				Variable.nickNames.add(MessageUtil.stripColor(ComponentUtil.serialize(player.displayName())));
 				Variable.nickNames.add(MessageUtil.stripColor(ComponentUtil.serialize(player.playerListName())));
-				Variable.cachedUUIDs.put(player.getName(), uuid);
+				Variable.cachedUUIDs.put(Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName()), uuid);
 				Variable.cachedUUIDs.put(MessageUtil.stripColor(ComponentUtil.serialize(player.displayName())), uuid);
 				Variable.cachedUUIDs.put(MessageUtil.stripColor(ComponentUtil.serialize(player.playerListName())), uuid);
 				File nickNamesFile = new File(Cucumbery.getPlugin().getDataFolder() + "/data/Nicknames.yml");

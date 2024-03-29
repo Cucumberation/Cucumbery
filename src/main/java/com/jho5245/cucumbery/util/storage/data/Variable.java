@@ -255,4 +255,6 @@ public class Variable
    * 블록을 부수고 나서 다음 블록을 부수기까지 대기시간(바닐라 채광/즉시 부수는 블록은 제외)
    */
   public static final Set<UUID> customMiningBlockBreakCooldown = new HashSet<>();
+
+  public static final HashMap<UUID, String> ORIGINAL_NAME = new HashMap<>();
 }

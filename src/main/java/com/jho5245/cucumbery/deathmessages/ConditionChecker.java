@@ -143,14 +143,14 @@ public class ConditionChecker
             case ENTITY_UUID -> check[i] = pattern.matcher(victimUUIDString).find();
             case ENTITY_TYPE -> check[i] = pattern.matcher(victimTypeString).find();
             case ENTITY_DISPLAY_NAME -> check[i] = victimCustomName != null && pattern.matcher(ComponentUtil.serialize(victimCustomName)).find();
-            case PLAYER_NAME -> check[i] = victim instanceof Player player && pattern.matcher(player.getName()).find();
+            case PLAYER_NAME -> check[i] = victim instanceof Player player && pattern.matcher(Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName())).find();
             case PLAYER_DISPLAY_NAME -> check[i] = victim instanceof Player && pattern.matcher(ComponentUtil.serialize(((Player) victim).displayName())).find();
             case PLAYER_PERMISSION -> check[i] = victim.hasPermission(value);
             case WORLD_NAME -> check[i] = pattern.matcher(victimLocation.getWorld().getName()).find();
             case BIOME_TYPE -> check[i] = pattern.matcher(victimLocation.getBlock().getBiome().toString()).find();
             case ATTACKER_ENTITY_TYPE -> check[i] = damagerIsEntity && pattern.matcher(((Entity) objectDamager).getType().toString()).find();
             case ATTACKER_ENTITY_DISPLAY_NAME -> check[i] = damagerCustomName != null && pattern.matcher(ComponentUtil.serialize(damagerCustomName)).find();
-            case ATTACKER_PLAYER_NAME -> check[i] = livingDamager instanceof Player player && pattern.matcher(player.getName()).find();
+            case ATTACKER_PLAYER_NAME -> check[i] = livingDamager instanceof Player player && pattern.matcher(Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName())).find();
             case ATTACKER_PLAYER_DISPLAY_NAME -> check[i] = livingDamager instanceof Player player && pattern.matcher(ComponentUtil.serialize(player.displayName())).find();
             case ATTACKER_PLAYER_PERMISSION -> check[i] = damagerIsEntity && ((Entity) objectDamager).hasPermission(value);
             case WEAPON_TYPE -> check[i] = weaponExists && pattern.matcher(weapon.getType().toString()).find();

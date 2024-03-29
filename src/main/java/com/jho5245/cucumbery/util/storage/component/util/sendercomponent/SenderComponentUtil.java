@@ -7,6 +7,7 @@ import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
+import com.jho5245.cucumbery.util.storage.data.Variable;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -146,9 +147,9 @@ public class SenderComponentUtil
     }
     if (location != null)
     {
-      if (object instanceof Player player && !player.getName().equals(MessageUtil.stripColor(ComponentUtil.serialize(player.displayName()))))
+      if (object instanceof Player player && !Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName()).equals(MessageUtil.stripColor(ComponentUtil.serialize(player.displayName()))))
       {
-        component = ComponentUtil.translate("&7%s@%s [%s]", component, location, player.getName());
+        component = ComponentUtil.translate("&7%s@%s [%s]", component, location, Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName()));
       }
       else
       {

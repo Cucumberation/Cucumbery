@@ -1382,7 +1382,7 @@ public class Method extends SoundPlay
 	{
 		try
 		{
-			String name = player.getName();
+			String name = Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName());
 			Player online = player.getPlayer();
 			if (player.isOnline() && online != null)
 			{
@@ -1415,7 +1415,7 @@ public class Method extends SoundPlay
 		{
 			return Objects.requireNonNull(player.getPlayer()).getName();
 		}
-		String name = player.getName();
+		String name = Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName());
 		if (name == null)
 		{
 			File file = new File(Cucumbery.getPlugin().getDataFolder() + "/data/UserData/" + player.getUniqueId() + ".yml");

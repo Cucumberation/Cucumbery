@@ -12,6 +12,7 @@ import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.storage.component.util.sendercomponent.SenderComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
+import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
 import net.kyori.adventure.text.Component;
@@ -33,7 +34,7 @@ public class PlayerQuit implements Listener
   {
     Player player = event.getPlayer();
     boolean isSpectator = UserData.SPECTATOR_MODE.getBoolean(player);
-    String name = player.getName();
+    String name = Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName());
     FileConfiguration cfg = Cucumbery.config;
     Component displayName = SenderComponentUtil.senderComponent(player);
     if (Cucumbery.using_ProtocolLib)

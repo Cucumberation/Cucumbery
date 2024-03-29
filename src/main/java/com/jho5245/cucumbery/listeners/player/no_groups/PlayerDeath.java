@@ -21,6 +21,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -79,8 +80,7 @@ public class PlayerDeath implements Listener
 				CustomEffectManager.hasEffect(player, CustomEffectType.BUFF_FREEZE) || CustomEffectManager.hasEffect(player, CustomEffectType.BUFF_FREEZE_D);
 		if (hasBuffFreeze)
 		{
-			Collection<PotionEffect> potionEffects = new ArrayList<>(player.getActivePotionEffects());
-			potionEffects.removeIf(e -> CustomEffectManager.isVanillaNegative(e.getType()));
+			Collection<PotionEffect> potionEffects = getPotionEffects(player);
 			Variable.buffFreezerEffects.put(player.getUniqueId(), potionEffects);
 			if (!CustomEffectManager.getEffect(player, CustomEffectType.BUFF_FREEZE).isKeepOnDeath())
 				CustomEffectManager.removeEffect(player, CustomEffectType.BUFF_FREEZE);
@@ -105,5 +105,21 @@ public class PlayerDeath implements Listener
 			Location location = player.getLocation();
 			MessageUtil.info(player, "죽은 위치 : %s", location);
 		}
+	}
+
+	private static @NotNull Collection<PotionEffect> getPotionEffects(Player player)
+	{
+		Collection<PotionEffect> potionEffects = new ArrayList<>(player.getActivePotionEffects());
+		potionEffects.removeIf(e -> {
+			if (CustomEffectManager.isVanillaNegative(e.getType())) return true;
+			CustomEffectType customEffectType = CustomEffectType.getByKey(e.getType().getKey());
+			if (customEffectType != null && CustomEffectManager.hasEffect(player, customEffectType))
+			{
+				CustomEffect customEffect = CustomEffectManager.getEffect(player, customEffectType);
+				return !customEffect.isBuffFreezable();
+			}
+			return false;
+		});
+		return potionEffects;
 	}
 }

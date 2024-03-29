@@ -1601,7 +1601,7 @@ public class ComponentUtil
 					key.append("%s, ");
 					if (entity instanceof Player player)
 					{
-						args.add(Component.text(player.getName()));
+						args.add(Component.text(Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName())));
 					}
 					else
 					{

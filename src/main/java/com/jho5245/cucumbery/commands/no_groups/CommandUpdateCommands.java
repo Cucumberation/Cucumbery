@@ -6,6 +6,7 @@ import com.jho5245.cucumbery.util.no_groups.SelectorUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Permission;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
+import com.jho5245.cucumbery.util.storage.data.Variable;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +31,7 @@ public class CommandUpdateCommands implements CommandExecutor, TabCompleter
 		{
 			if (sender instanceof Player player)
 			{
-				player.performCommand(label + " " + player.getName());
+				player.performCommand(label + " " + Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName()));
 			}
 			else
 			{

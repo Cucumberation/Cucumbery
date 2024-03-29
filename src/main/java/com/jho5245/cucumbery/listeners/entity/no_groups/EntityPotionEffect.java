@@ -6,6 +6,7 @@ import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCustomMining;
 import com.jho5245.cucumbery.events.entity.EntityCustomEffectAbstractApplyEvent.ApplyReason;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
+import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import org.bukkit.NamespacedKey;
@@ -76,7 +77,7 @@ public class EntityPotionEffect implements Listener
 						}
 					}
 					if (!hasSimilar)
-						CustomEffectManager.addEffect(entity, new CustomEffect(customEffectType, duration, newEffect.getAmplifier()),  ApplyReason.PLUGIN,false, false);
+						CustomEffectManager.addEffect(entity, new CustomEffect(customEffectType, duration, newEffect.getAmplifier()), ApplyReason.PLUGIN, false, false);
 				}
 			}
 		}
@@ -89,10 +90,11 @@ public class EntityPotionEffect implements Listener
 			if (customEffectType != null && CustomEffectManager.hasEffect(entity, customEffectType))
 			{
 				CustomEffect customEffect = CustomEffectManager.getEffect(entity, customEffectType);
-				// MessageUtil.broadcastDebug(ComponentUtil.translate("CED: %s, PED: %s, CEA: %s, PEA: %s", customEffect.getDuration(), oldEffect.getDuration(), customEffect.getAmplifier(), oldEffect.getAmplifier()));
+				// MessageUtil.broadcast(ComponentUtil.translate("CED: %s, PED: %s, CEA: %s, PEA: %s", customEffect.getDuration(), oldEffect.getDuration(), customEffect.getAmplifier(), oldEffect.getAmplifier()));
 				if (Math.abs(customEffect.getDuration() - oldEffect.getDuration()) <= 1 && customEffect.getAmplifier() == oldEffect.getAmplifier())
 				{
-					CustomEffectManager.removeEffect(entity, customEffectType, oldEffect.getAmplifier(), false);
+					if (!(cause == Cause.MILK && customEffect.isKeepOnMilk() || cause == Cause.DEATH && customEffect.isKeepOnDeath()))
+						CustomEffectManager.removeEffect(entity, customEffectType, oldEffect.getAmplifier(), false);
 					if (cause == Cause.COMMAND)
 					{
 						CustomEffectManager.removeEffect(entity, customEffectType, false);

@@ -926,7 +926,7 @@ Cucumbery.getPlugin().getLogger().warning(              e.getMessage());
             if (args.length < 4)
             {
               MessageUtil.shortArg(sender, 4, args);
-              MessageUtil.commandInfo(sender, label, player.getName() + " play <명령어 출력 숨김 여부> <노래 파일 이름>");
+              MessageUtil.commandInfo(sender, label, Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName()) + " play <명령어 출력 숨김 여부> <노래 파일 이름>");
               return true;
             }
             if (!MessageUtil.isBoolean(sender, args, 3, true))
@@ -1038,7 +1038,7 @@ Cucumbery.getPlugin().getLogger().warning(              e.getMessage());
             if (args.length > 3)
             {
               MessageUtil.longArg(sender, 3, args);
-              MessageUtil.commandInfo(sender, label, player.getName() + " stop [명령어 출력 숨김 여부]");
+              MessageUtil.commandInfo(sender, label, Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName()) + " stop [명령어 출력 숨김 여부]");
               return true;
             }
             boolean hideOutput = false;
