@@ -7,11 +7,90 @@ import org.bukkit.potion.PotionEffectType;
 public class CustomEffectTypeMinecraft extends CustomEffectType
 {
   private static final TypeBuilder
+      B = builder().removeOnMilk().nonBuffFreezable(),
+      D = builder().removeOnMilk().realDuration().maxAmplifier(255),
       K = builder().removeOnMilk().keepOnDeath().maxAmplifier(255),
       M = builder().maxAmplifier(255),
-      N = builder().removeOnMilk().nonRemovable().maxAmplifier(255),
       Q = builder().removeOnMilk().removeOnQuit().maxAmplifier(255),
-      R = builder().removeOnMilk().realDuration().maxAmplifier(255)
+      R = builder().removeOnMilk().nonRemovable().maxAmplifier(255),
+
+
+
+      BD = builder().maxAmplifier(255),
+      BK = builder().maxAmplifier(255),
+      BM = builder().maxAmplifier(255),
+      BQ = builder().maxAmplifier(255),
+      BR = builder().maxAmplifier(255),
+
+      DK = builder().maxAmplifier(255),
+      DM = builder().maxAmplifier(255),
+      DQ = builder().maxAmplifier(255),
+      DR = builder().maxAmplifier(255),
+
+      KM = builder().maxAmplifier(255),
+      KQ = builder().maxAmplifier(255),
+      KR = builder().maxAmplifier(255),
+
+      MQ = builder().maxAmplifier(255),
+      MR = builder().maxAmplifier(255),
+
+      QR = builder().maxAmplifier(255),
+
+
+
+      BDK = builder().maxAmplifier(255),
+      BDM = builder().maxAmplifier(255),
+      BDQ = builder().maxAmplifier(255),
+      BDR = builder().maxAmplifier(255),
+      BKM = builder().maxAmplifier(255),
+      BKQ = builder().maxAmplifier(255),
+      BKR = builder().maxAmplifier(255),
+      BMQ = builder().maxAmplifier(255),
+      BMR = builder().maxAmplifier(255),
+      BQR = builder().maxAmplifier(255),
+
+      DKM = builder().maxAmplifier(255),
+      DKQ = builder().maxAmplifier(255),
+      DKR = builder().maxAmplifier(255),
+      DMQ = builder().maxAmplifier(255),
+      DMR = builder().maxAmplifier(255),
+      DRQ = builder().maxAmplifier(255),
+
+      KMQ = builder().maxAmplifier(255),
+      KMR = builder().maxAmplifier(255),
+      KQR = builder().maxAmplifier(255),
+
+      MQR = builder().maxAmplifier(255),
+
+
+
+      BDKM = builder().maxAmplifier(255),
+      BDKQ = builder().maxAmplifier(255),
+      BDKR = builder().maxAmplifier(255),
+      BKMQ = builder().maxAmplifier(255),
+      BKMR = builder().maxAmplifier(255),
+      BKQR = builder().maxAmplifier(255),
+
+      DKMQ = builder().maxAmplifier(255),
+      DKMR = builder().maxAmplifier(255),
+      DKQR = builder().maxAmplifier(255),
+      DMQR = builder().maxAmplifier(255),
+
+      KMQR = builder().maxAmplifier(255),
+
+
+
+      BDKMQ = builder().maxAmplifier(255),
+      BDKMR = builder().maxAmplifier(255),
+      BDKQR = builder().maxAmplifier(255),
+      BDMQR = builder().maxAmplifier(255),
+      BKMQR = builder().maxAmplifier(255),
+
+      DKMQR = builder().maxAmplifier(255),
+
+
+
+      BDKMQR = builder().nonBuffFreezable().realDuration().keepOnDeath().removeOnQuit().nonRemovable().maxAmplifier(255)
           ;
 
   public static final CustomEffectType
@@ -105,7 +184,7 @@ public class CustomEffectTypeMinecraft extends CustomEffectType
             SPEED, SLOWNESS, HASTE, MINING_FATIGUE, STRENGTH, INSTANT_HEALTH, INSTANT_DAMAGE, JUMP_BOOST, NAUSEA, REGENERATION,
             RESISTANCE, FIRE_RESISTANCE, WATER_BREATHING, INVISIBILITY, BLINDNESS, NIGHT_VISION, HUNGER, WEAKNESS, POISON, WITHER,
             HEALTH_BOOST, ABSORPTION, SATURATION, GLOWING, LEVITATION, LUCK, UNLUCK, SLOW_FALLING, CONDUIT_POWER, DOLPHINS_GRACE,
-            BAD_OMEN, HERO_OF_THE_VILLAGE, DARKNESS/*,
+            BAD_OMEN, HERO_OF_THE_VILLAGE, DARKNESS,
             SPEED__M, SPEED__MR,
             SLOWNESS__M,
             HASTE__M,
@@ -138,7 +217,7 @@ public class CustomEffectTypeMinecraft extends CustomEffectType
             DOLPHINS_GRACE__M,
             BAD_OMEN__M,
             HERO_OF_THE_VILLAGE__M,
-            DARKNESS__M*/
+            DARKNESS__M
     );
   }
 }

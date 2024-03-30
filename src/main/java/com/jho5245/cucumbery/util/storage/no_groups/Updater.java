@@ -61,6 +61,11 @@ public class Updater
       @Override
       public void run()
       {
+        if (Bukkit.isStopping())
+        {
+          onDisable();
+          return;
+        }
         if (Cucumbery.config.getBoolean("auto-updater.enable"))
         {
           automation();

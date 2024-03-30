@@ -123,6 +123,14 @@ public class CustomEffectScheduler
 	public static void display(@NotNull Player player)
 	{
 		UUID uuid = player.getUniqueId();
+		if (Bukkit.isStopping())
+		{
+			if (Variable.customEffectBossBarMap.containsKey(uuid))
+			{
+				player.hideBossBar(Variable.customEffectBossBarMap.get(uuid));
+			}
+			return;
+		}
 		List<CustomEffect> customEffects = new ArrayList<>(CustomEffectManager.getEffects(player, DisplayType.ACTION_BAR));
 		if (!customEffects.isEmpty())
 		{

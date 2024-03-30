@@ -119,7 +119,7 @@ public class CustomEffectGUI
 				ItemMeta itemMeta = itemStack.getItemMeta();
 				if (customEffect.getIcon() == null && itemStack.getType() == Material.POTION)
 				{
-					ColorUtil colorUtil = new ColorUtil(Type.HSL, "" + ((i * 30) % 255) + ",100,50;");
+					ColorUtil colorUtil = new ColorUtil(Type.HSL, ((i * 30) % 255) + ",100,50;");
 					PotionMeta potionMeta = (PotionMeta) itemMeta;
 					potionMeta.setColor(Color.fromRGB(colorUtil.getRed(), colorUtil.getGreen(), colorUtil.getBlue()));
 					itemStack.setItemMeta(potionMeta);
@@ -164,7 +164,7 @@ public class CustomEffectGUI
 				PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
 				potionMeta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ENCHANTS);
 				String effectKey = TranslatableKeyParser.getKey(effectType);
-				@SuppressWarnings("deprecation") int id = potionEffect.getType().getId() + 15200;
+				int id = potionEffect.getType().getId() + 15200;
 				potionMeta.setCustomModelData(id);
 				potionMeta.displayName(ComponentUtil.translate((CustomEffectManager.isVanillaNegative(effectType) ? "&c" : "&a") + effectKey));
 				potionMeta.setColor(effectType.getColor());
@@ -286,6 +286,10 @@ public class CustomEffectGUI
 		{
 			lore.add(Component.empty());
 			lore.add(ComponentUtil.translate("rg255,204;좌클릭하여 즉시 저장된 위치로 이동"));
+		}
+		if (player.hasPermission("asdf"))
+		{
+			lore.add(Component.text(customEffect.getType().getNamespacedKey().toString(), NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, State.FALSE));
 		}
 		return lore;
 	}

@@ -24,7 +24,6 @@ import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.NBTList;
 import io.papermc.paper.advancement.AdvancementDisplay;
 import io.papermc.paper.advancement.AdvancementDisplay.Frame;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.*;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -41,7 +40,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -220,6 +218,7 @@ public class ComponentUtil
 			{
 				String effectKey = TranslatableKeyParser.getKey(potionEffectType);
 				String id = effectKey.substring(17);
+				NamespacedKey namespacedKey = potionEffectType.getKey();
 				Component concat = ComponentUtil.translate(effectKey,
 						CustomEffectManager.isVanillaNegative(potionEffectType) ? NamedTextColor.RED : NamedTextColor.GREEN);
 				Component hover = ComponentUtil.translate(effectKey);
@@ -229,7 +228,9 @@ public class ComponentUtil
 					hover = hover.append(Component.text("\n"));
 					hover = hover.append(Component.text("\n"));
 					hover = hover.append(ComponentUtil.translate("&7클릭하여 효과를 자신에게 부여"));
-					concat = concat.clickEvent(ClickEvent.suggestCommand(Cucumbery.using_CommandAPI ? "/ceffect @s minecraft:" + id : "/effect give @s minecraft:" + id));
+					hover = hover.append(Component.text("\n"));
+					hover = hover.append(Component.text(namespacedKey.toString(), NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, State.FALSE));
+					concat = concat.clickEvent(ClickEvent.suggestCommand("/effect3 give @s " + namespacedKey));
 				}
 				concat = concat.hoverEvent(hover);
 				component = component.append(concat);
@@ -239,6 +240,7 @@ public class ComponentUtil
 				PotionEffectType potionEffectType = potionEffect.getType();
 				String effectKey = TranslatableKeyParser.getKey(potionEffectType);
 				String id = effectKey.substring(17);
+				NamespacedKey namespacedKey = potionEffectType.getKey();
 				int duration = potionEffect.getDuration(), amplifier = potionEffect.getAmplifier();
 				boolean hasParticles = potionEffect.hasParticles(), hasIcon = potionEffect.hasIcon(), isAmbient = potionEffect.isAmbient();
 				Component concat = ComponentUtil.translate(effectKey,
@@ -274,17 +276,20 @@ public class ComponentUtil
 					hover = hover.append(Component.text("\n"));
 					hover = hover.append(Component.text("\n"));
 					hover = hover.append(ComponentUtil.translate("&7클릭하여 효과를 자신에게 부여"));
+					hover = hover.append(Component.text("\n"));
+					hover = hover.append(Component.text(namespacedKey.toString(), NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, State.FALSE));
 					concat = concat.clickEvent(ClickEvent.suggestCommand(
-							"/ceffect @s minecraft:" + id + " " + duration + " " + amplifier + " " + !hasParticles + " " + !hasIcon + " " + !isAmbient));
+							"/ceffect @s " + namespacedKey + " " + duration + " " + amplifier + " " + !hasParticles + " " + !hasIcon + " " + !isAmbient));
 				}
 				concat = concat.hoverEvent(hover);
 				component = component.append(concat);
 			}
 			else if (object instanceof CustomEffectType effectType)
 			{
-				String key = effectType.translationKey();
-				Component concat = ComponentUtil.translate(key).color(effectType.isNegative() ? NamedTextColor.RED : NamedTextColor.GREEN);
-				Component hover = ComponentUtil.translate(key);
+				String translationKey = effectType.translationKey();
+				NamespacedKey namespacedKey = effectType.getNamespacedKey();
+				Component concat = ComponentUtil.translate(translationKey).color(effectType.isNegative() ? NamedTextColor.RED : NamedTextColor.GREEN);
+				Component hover = ComponentUtil.translate(translationKey);
 				hover = hover.append(Component.text("\n"));
 				hover = hover.append(effectType.getDescription());
 				Component propertyDescription = effectType.getPropertyDescription();
@@ -297,6 +302,8 @@ public class ComponentUtil
 					hover = hover.append(Component.text("\n"));
 					hover = hover.append(Component.text("\n"));
 					hover = hover.append(ComponentUtil.translate("&7클릭하여 효과를 자신에게 부여"));
+					hover = hover.append(Component.text("\n"));
+					hover = hover.append(Component.text(namespacedKey.toString(), NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, State.FALSE));
 					String click = "/customeffect give @s " + effectType.toString().toLowerCase();
 					concat = concat.clickEvent(ClickEvent.suggestCommand(click));
 				}
@@ -341,11 +348,12 @@ public class ComponentUtil
 			else if (object instanceof CustomEffect customEffect)
 			{
 				CustomEffectType effectType = customEffect.getType();
-				String key = effectType.translationKey();
+				String translationKey = effectType.translationKey();
+				NamespacedKey namespacedKey = effectType.getNamespacedKey();
 				int duration = customEffect.getInitDuration();
 				int amplifier = customEffect.getInitAmplifier();
-				Component concat = ComponentUtil.translate(key).color(effectType.isNegative() ? NamedTextColor.RED : NamedTextColor.GREEN);
-				Component hover = ComponentUtil.translate(key);
+				Component concat = ComponentUtil.translate(translationKey).color(effectType.isNegative() ? NamedTextColor.RED : NamedTextColor.GREEN);
+				Component hover = ComponentUtil.translate(translationKey);
 				Component description = customEffect.getDescription(player);
 				boolean isFinite = duration != -1, isAmplifiable = effectType.getMaxAmplifier() > 0;
 				if (!description.equals(Component.empty()))
@@ -377,6 +385,8 @@ public class ComponentUtil
 					hover = hover.append(Component.text("\n"));
 					hover = hover.append(Component.text("\n"));
 					hover = hover.append(ComponentUtil.translate("&7클릭하여 효과를 자신에게 부여"));
+					hover = hover.append(Component.text("\n"));
+					hover = hover.append(Component.text(namespacedKey.toString(), NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC, State.FALSE));
 					DisplayType displayType = customEffect.getDisplayType();
 					String click =
 							"/customeffect give @s " + effectType.toString().toLowerCase() + " " + (duration != -1 ? duration / 20d : "infinite") + " " + amplifier + " "
