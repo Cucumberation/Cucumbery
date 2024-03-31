@@ -312,7 +312,7 @@ public class CustomEffectType implements Translatable, EnumHideable
   private static final HashMap<NamespacedKey, CustomEffectType> effects = new HashMap<>();
 
   public static void register()
-  {//
+  {
     register(AWKWARD, THICK, BACKWARDS_CHAT, MUNDANE, UNCRAFTABLE,
 
             DAMAGE_SPREAD,
