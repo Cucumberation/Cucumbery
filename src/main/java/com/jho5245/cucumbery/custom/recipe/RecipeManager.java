@@ -1,6 +1,7 @@
 package com.jho5245.cucumbery.custom.recipe;
 
 import com.jho5245.cucumbery.Cucumbery;
+import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import io.papermc.paper.potion.PotionMix;
 import org.bukkit.Bukkit;
@@ -11,6 +12,7 @@ import org.bukkit.inventory.*;
 import org.bukkit.inventory.RecipeChoice.ExactChoice;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.inventory.recipe.CraftingBookCategory;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,6 +43,8 @@ public class RecipeManager
     register(new FurnaceRecipe(of("tnt_from_furnace"), new ItemStack(Material.TNT), new ExactChoice(CustomMaterial.WNYNYA_ORE.create()), 2f, 100));
     register(new BlastingRecipe(of("tnt_from_blast_furnace"), new ItemStack(Material.TNT), new ExactChoice(CustomMaterial.WNYNYA_ORE.create()), 2f, 50));
 
+    registerVerticalSlabs();
+
     register(new PotionMix(of("test_jade_to_tnt"), new ItemStack(Material.TNT), INPUT_WATER_BOTTLE,
         PotionMix.createPredicateChoice(itemStack -> isAdminOnline() && CustomMaterial.itemStackOf(itemStack) == CustomMaterial.JADE)));
 
@@ -54,6 +58,278 @@ public class RecipeManager
         PotionMix.createPredicateChoice(itemStack -> isAdminOnline() && CustomMaterial.itemStackOf(itemStack) == CustomMaterial.AMBER && Bukkit.getOnlinePlayers().size() > 1)));
   }
 
+  private static void registerVerticalSlabs()
+  {
+    ShapelessRecipe oak_slab_from_oak_slab_vertical = new ShapelessRecipe(of("oak_slab_from_oak_slab_vertical"), new ItemStack(Material.OAK_SLAB)).addIngredient(new ExactChoice(CustomMaterial.OAK_SLAB_VERTICAL.create()));
+    oak_slab_from_oak_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    oak_slab_from_oak_slab_vertical.setGroup("slab_from_slab_vertical");
+    register(oak_slab_from_oak_slab_vertical);
+
+    ShapelessRecipe oak_slab_vertical_from_oak_slab = new ShapelessRecipe(of("oak_slab_vertical_from_oak_slab"), CustomMaterial.OAK_SLAB_VERTICAL.create()).addIngredient(new ExactChoice(new ItemStack(Material.OAK_SLAB)));
+    oak_slab_vertical_from_oak_slab.setCategory(CraftingBookCategory.BUILDING);
+    oak_slab_vertical_from_oak_slab.setGroup("slab_vertical");
+    register(oak_slab_vertical_from_oak_slab);
+
+    ShapedRecipe oak_slab_vertical = new ShapedRecipe(of("oak_slab_vertical"), CustomMaterial.OAK_SLAB_VERTICAL.create(6)).shape("o", "o", "o").setIngredient('o', Material.OAK_PLANKS);
+    oak_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    oak_slab_vertical.setGroup("slab_vertical");
+    register(oak_slab_vertical);
+
+
+
+    ShapelessRecipe spruce_slab_from_spruce_slab_vertical = new ShapelessRecipe(of("spruce_slab_from_spruce_slab_vertical"), new ItemStack(Material.SPRUCE_SLAB)).addIngredient(new ExactChoice(CustomMaterial.SPRUCE_SLAB_VERTICAL.create()));
+    spruce_slab_from_spruce_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    spruce_slab_from_spruce_slab_vertical.setGroup("slab_from_slab_vertical");
+    register(spruce_slab_from_spruce_slab_vertical);
+
+    ShapelessRecipe spruce_slab_vertical_from_spruce_slab = new ShapelessRecipe(of("spruce_slab_vertical_from_spruce_slab"), CustomMaterial.SPRUCE_SLAB_VERTICAL.create()).addIngredient(new ExactChoice(new ItemStack(Material.SPRUCE_SLAB)));
+    spruce_slab_vertical_from_spruce_slab.setCategory(CraftingBookCategory.BUILDING);
+    spruce_slab_vertical_from_spruce_slab.setGroup("slab_vertical");
+    register(spruce_slab_vertical_from_spruce_slab);
+
+    ShapedRecipe spruce_slab_vertical = new ShapedRecipe(of("spruce_slab_vertical"), CustomMaterial.SPRUCE_SLAB_VERTICAL.create(6)).shape("o", "o", "o").setIngredient('o', Material.SPRUCE_PLANKS);
+    spruce_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    spruce_slab_vertical.setGroup("slab_vertical");
+    register(spruce_slab_vertical);
+
+
+
+    ShapelessRecipe birch_slab_from_birch_slab_vertical = new ShapelessRecipe(of("birch_slab_from_birch_slab_vertical"), new ItemStack(Material.BIRCH_SLAB)).addIngredient(new ExactChoice(CustomMaterial.BIRCH_SLAB_VERTICAL.create()));
+    birch_slab_from_birch_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    birch_slab_from_birch_slab_vertical.setGroup("slab_from_slab_vertical");
+    register(birch_slab_from_birch_slab_vertical);
+
+    ShapelessRecipe birch_slab_vertical_from_birch_slab = new ShapelessRecipe(of("birch_slab_vertical_from_birch_slab"), CustomMaterial.BIRCH_SLAB_VERTICAL.create()).addIngredient(new ExactChoice(new ItemStack(Material.BIRCH_SLAB)));
+    birch_slab_vertical_from_birch_slab.setCategory(CraftingBookCategory.BUILDING);
+    birch_slab_vertical_from_birch_slab.setGroup("slab_vertical");
+    register(birch_slab_vertical_from_birch_slab);
+
+    ShapedRecipe birch_slab_vertical = new ShapedRecipe(of("birch_slab_vertical"), CustomMaterial.BIRCH_SLAB_VERTICAL.create(6)).shape("o", "o", "o").setIngredient('o', Material.BIRCH_PLANKS);
+    birch_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    birch_slab_vertical.setGroup("slab_vertical");
+    register(birch_slab_vertical);
+
+
+
+    ShapelessRecipe jungle_slab_from_jungle_slab_vertical = new ShapelessRecipe(of("jungle_slab_from_jungle_slab_vertical"), new ItemStack(Material.JUNGLE_SLAB)).addIngredient(new ExactChoice(CustomMaterial.JUNGLE_SLAB_VERTICAL.create()));
+    jungle_slab_from_jungle_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    jungle_slab_from_jungle_slab_vertical.setGroup("slab_from_slab_vertical");
+    register(jungle_slab_from_jungle_slab_vertical);
+
+    ShapelessRecipe jungle_slab_vertical_from_jungle_slab = new ShapelessRecipe(of("jungle_slab_vertical_from_jungle_slab"), CustomMaterial.JUNGLE_SLAB_VERTICAL.create()).addIngredient(new ExactChoice(new ItemStack(Material.JUNGLE_SLAB)));
+    jungle_slab_vertical_from_jungle_slab.setCategory(CraftingBookCategory.BUILDING);
+    jungle_slab_vertical_from_jungle_slab.setGroup("slab_vertical");
+    register(jungle_slab_vertical_from_jungle_slab);
+
+    ShapedRecipe jungle_slab_vertical = new ShapedRecipe(of("jungle_slab_vertical"), CustomMaterial.JUNGLE_SLAB_VERTICAL.create(6)).shape("o", "o", "o").setIngredient('o', Material.JUNGLE_PLANKS);
+    jungle_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    jungle_slab_vertical.setGroup("slab_vertical");
+    register(jungle_slab_vertical);
+
+
+
+    ShapelessRecipe dark_oak_slab_from_dark_oak_slab_vertical = new ShapelessRecipe(of("dark_oak_slab_from_dark_oak_slab_vertical"), new ItemStack(Material.DARK_OAK_SLAB)).addIngredient(new ExactChoice(CustomMaterial.DARK_OAK_SLAB_VERTICAL.create()));
+    dark_oak_slab_from_dark_oak_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    dark_oak_slab_from_dark_oak_slab_vertical.setGroup("slab_from_slab_vertical");
+    register(dark_oak_slab_from_dark_oak_slab_vertical);
+
+    ShapelessRecipe dark_oak_slab_vertical_from_dark_oak_slab = new ShapelessRecipe(of("dark_oak_slab_vertical_from_dark_oak_slab"), CustomMaterial.DARK_OAK_SLAB_VERTICAL.create()).addIngredient(new ExactChoice(new ItemStack(Material.DARK_OAK_SLAB)));
+    dark_oak_slab_vertical_from_dark_oak_slab.setCategory(CraftingBookCategory.BUILDING);
+    dark_oak_slab_vertical_from_dark_oak_slab.setGroup("slab_vertical");
+    register(dark_oak_slab_vertical_from_dark_oak_slab);
+
+    ShapedRecipe dark_oak_slab_vertical = new ShapedRecipe(of("dark_oak_slab_vertical"), CustomMaterial.DARK_OAK_SLAB_VERTICAL.create(6)).shape("o", "o", "o").setIngredient('o', Material.DARK_OAK_PLANKS);
+    dark_oak_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    dark_oak_slab_vertical.setGroup("slab_vertical");
+    register(dark_oak_slab_vertical);
+
+
+
+    ShapelessRecipe acacia_slab_from_acacia_slab_vertical = new ShapelessRecipe(of("acacia_slab_from_acacia_slab_vertical"), new ItemStack(Material.ACACIA_SLAB)).addIngredient(new ExactChoice(CustomMaterial.ACACIA_SLAB_VERTICAL.create()));
+    acacia_slab_from_acacia_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    acacia_slab_from_acacia_slab_vertical.setGroup("slab_from_slab_vertical");
+    register(acacia_slab_from_acacia_slab_vertical);
+
+    ShapelessRecipe acacia_slab_vertical_from_acacia_slab = new ShapelessRecipe(of("acacia_slab_vertical_from_acacia_slab"), CustomMaterial.ACACIA_SLAB_VERTICAL.create()).addIngredient(new ExactChoice(new ItemStack(Material.ACACIA_SLAB)));
+    acacia_slab_vertical_from_acacia_slab.setCategory(CraftingBookCategory.BUILDING);
+    acacia_slab_vertical_from_acacia_slab.setGroup("slab_vertical");
+    register(acacia_slab_vertical_from_acacia_slab);
+
+    ShapedRecipe acacia_slab_vertical = new ShapedRecipe(of("acacia_slab_vertical"), CustomMaterial.ACACIA_SLAB_VERTICAL.create(6)).shape("o", "o", "o").setIngredient('o', Material.ACACIA_PLANKS);
+    acacia_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    acacia_slab_vertical.setGroup("slab_vertical");
+    register(acacia_slab_vertical);
+
+
+
+    ShapelessRecipe mangrove_slab_from_mangrove_slab_vertical = new ShapelessRecipe(of("mangrove_slab_from_mangrove_slab_vertical"), new ItemStack(Material.MANGROVE_SLAB)).addIngredient(new ExactChoice(CustomMaterial.MANGROVE_SLAB_VERTICAL.create()));
+    mangrove_slab_from_mangrove_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    mangrove_slab_from_mangrove_slab_vertical.setGroup("slab_from_slab_vertical");
+    register(mangrove_slab_from_mangrove_slab_vertical);
+
+    ShapelessRecipe mangrove_slab_vertical_from_mangrove_slab = new ShapelessRecipe(of("mangrove_slab_vertical_from_mangrove_slab"), CustomMaterial.MANGROVE_SLAB_VERTICAL.create()).addIngredient(new ExactChoice(new ItemStack(Material.MANGROVE_SLAB)));
+    mangrove_slab_vertical_from_mangrove_slab.setCategory(CraftingBookCategory.BUILDING);
+    mangrove_slab_vertical_from_mangrove_slab.setGroup("slab_vertical");
+    register(mangrove_slab_vertical_from_mangrove_slab);
+
+    ShapedRecipe mangrove_slab_vertical = new ShapedRecipe(of("mangrove_slab_vertical"), CustomMaterial.MANGROVE_SLAB_VERTICAL.create(6)).shape("o", "o", "o").setIngredient('o', Material.MANGROVE_PLANKS);
+    mangrove_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    mangrove_slab_vertical.setGroup("slab_vertical");
+    register(mangrove_slab_vertical);
+
+
+
+    ShapelessRecipe cherry_slab_from_cherry_slab_vertical = new ShapelessRecipe(of("cherry_slab_from_cherry_slab_vertical"), new ItemStack(Material.CHERRY_SLAB)).addIngredient(new ExactChoice(CustomMaterial.CHERRY_SLAB_VERTICAL.create()));
+    cherry_slab_from_cherry_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    cherry_slab_from_cherry_slab_vertical.setGroup("slab_from_slab_vertical");
+    register(cherry_slab_from_cherry_slab_vertical);
+
+    ShapelessRecipe cherry_slab_vertical_from_cherry_slab = new ShapelessRecipe(of("cherry_slab_vertical_from_cherry_slab"), CustomMaterial.CHERRY_SLAB_VERTICAL.create()).addIngredient(new ExactChoice(new ItemStack(Material.CHERRY_SLAB)));
+    cherry_slab_vertical_from_cherry_slab.setCategory(CraftingBookCategory.BUILDING);
+    cherry_slab_vertical_from_cherry_slab.setGroup("slab_vertical");
+    register(cherry_slab_vertical_from_cherry_slab);
+
+    ShapedRecipe cherry_slab_vertical = new ShapedRecipe(of("cherry_slab_vertical"), CustomMaterial.CHERRY_SLAB_VERTICAL.create(6)).shape("o", "o", "o").setIngredient('o', Material.CHERRY_PLANKS);
+    cherry_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    cherry_slab_vertical.setGroup("slab_vertical");
+    register(cherry_slab_vertical);
+
+
+
+    ShapelessRecipe bamboo_slab_from_bamboo_slab_vertical = new ShapelessRecipe(of("bamboo_slab_from_bamboo_slab_vertical"), new ItemStack(Material.BAMBOO_SLAB)).addIngredient(new ExactChoice(CustomMaterial.BAMBOO_SLAB_VERTICAL.create()));
+    bamboo_slab_from_bamboo_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    bamboo_slab_from_bamboo_slab_vertical.setGroup("slab_from_slab_vertical");
+    register(bamboo_slab_from_bamboo_slab_vertical);
+
+    ShapelessRecipe bamboo_slab_vertical_from_bamboo_slab = new ShapelessRecipe(of("bamboo_slab_vertical_from_bamboo_slab"), CustomMaterial.BAMBOO_SLAB_VERTICAL.create()).addIngredient(new ExactChoice(new ItemStack(Material.BAMBOO_SLAB)));
+    bamboo_slab_vertical_from_bamboo_slab.setCategory(CraftingBookCategory.BUILDING);
+    bamboo_slab_vertical_from_bamboo_slab.setGroup("slab_vertical");
+    register(bamboo_slab_vertical_from_bamboo_slab);
+
+    ShapedRecipe bamboo_slab_vertical = new ShapedRecipe(of("bamboo_slab_vertical"), CustomMaterial.BAMBOO_SLAB_VERTICAL.create(6)).shape("o", "o", "o").setIngredient('o', Material.BAMBOO_PLANKS);
+    bamboo_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    bamboo_slab_vertical.setGroup("slab_vertical");
+    register(bamboo_slab_vertical);
+
+
+
+    ShapelessRecipe bamboo_mosaic_slab_from_bamboo_mosaic_slab_vertical = new ShapelessRecipe(of("bamboo_mosaic_slab_from_bamboo_mosaic_slab_vertical"), new ItemStack(Material.BAMBOO_MOSAIC_SLAB)).addIngredient(new ExactChoice(CustomMaterial.BAMBOO_MOSAIC_SLAB_VERTICAL.create()));
+    bamboo_mosaic_slab_from_bamboo_mosaic_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    bamboo_mosaic_slab_from_bamboo_mosaic_slab_vertical.setGroup("slab_from_slab_vertical");
+    register(bamboo_mosaic_slab_from_bamboo_mosaic_slab_vertical);
+
+    ShapelessRecipe bamboo_mosaic_slab_vertical_from_bamboo_mosaic_slab = new ShapelessRecipe(of("bamboo_mosaic_slab_vertical_from_bamboo_mosaic_slab"), CustomMaterial.BAMBOO_MOSAIC_SLAB_VERTICAL.create()).addIngredient(new ExactChoice(new ItemStack(Material.BAMBOO_MOSAIC_SLAB)));
+    bamboo_mosaic_slab_vertical_from_bamboo_mosaic_slab.setCategory(CraftingBookCategory.BUILDING);
+    bamboo_mosaic_slab_vertical_from_bamboo_mosaic_slab.setGroup("slab_vertical");
+    register(bamboo_mosaic_slab_vertical_from_bamboo_mosaic_slab);
+
+    ShapedRecipe bamboo_mosaic_slab_vertical = new ShapedRecipe(of("bamboo_mosaic_slab_vertical"), CustomMaterial.BAMBOO_MOSAIC_SLAB_VERTICAL.create(6)).shape("o", "o", "o").setIngredient('o', Material.BAMBOO_MOSAIC);
+    bamboo_mosaic_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    bamboo_mosaic_slab_vertical.setGroup("slab_vertical");
+    register(bamboo_mosaic_slab_vertical);
+
+
+
+    ShapelessRecipe crimson_slab_from_crimson_slab_vertical = new ShapelessRecipe(of("crimson_slab_from_crimson_slab_vertical"), new ItemStack(Material.CRIMSON_SLAB)).addIngredient(new ExactChoice(CustomMaterial.CRIMSON_SLAB_VERTICAL.create()));
+    crimson_slab_from_crimson_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    crimson_slab_from_crimson_slab_vertical.setGroup("slab_from_slab_vertical");
+    register(crimson_slab_from_crimson_slab_vertical);
+
+    ShapelessRecipe crimson_slab_vertical_from_crimson_slab = new ShapelessRecipe(of("crimson_slab_vertical_from_crimson_slab"), CustomMaterial.CRIMSON_SLAB_VERTICAL.create()).addIngredient(new ExactChoice(new ItemStack(Material.CRIMSON_SLAB)));
+    crimson_slab_vertical_from_crimson_slab.setCategory(CraftingBookCategory.BUILDING);
+    crimson_slab_vertical_from_crimson_slab.setGroup("slab_vertical");
+    register(crimson_slab_vertical_from_crimson_slab);
+
+    ShapedRecipe crimson_slab_vertical = new ShapedRecipe(of("crimson_slab_vertical"), CustomMaterial.CRIMSON_SLAB_VERTICAL.create(6)).shape("o", "o", "o").setIngredient('o', Material.CRIMSON_PLANKS);
+    crimson_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    crimson_slab_vertical.setGroup("slab_vertical");
+    register(crimson_slab_vertical);
+
+
+
+    ShapelessRecipe warped_slab_from_warped_slab_vertical = new ShapelessRecipe(of("warped_slab_from_warped_slab_vertical"), new ItemStack(Material.WARPED_SLAB)).addIngredient(new ExactChoice(CustomMaterial.WARPED_SLAB_VERTICAL.create()));
+    warped_slab_from_warped_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    warped_slab_from_warped_slab_vertical.setGroup("slab_from_slab_vertical");
+    register(warped_slab_from_warped_slab_vertical);
+
+    ShapelessRecipe warped_slab_vertical_from_warped_slab = new ShapelessRecipe(of("warped_slab_vertical_from_warped_slab"), CustomMaterial.WARPED_SLAB_VERTICAL.create()).addIngredient(new ExactChoice(new ItemStack(Material.WARPED_SLAB)));
+    warped_slab_vertical_from_warped_slab.setCategory(CraftingBookCategory.BUILDING);
+    warped_slab_vertical_from_warped_slab.setGroup("slab_vertical");
+    register(warped_slab_vertical_from_warped_slab);
+
+    ShapedRecipe warped_slab_vertical = new ShapedRecipe(of("warped_slab_vertical"), CustomMaterial.WARPED_SLAB_VERTICAL.create(6)).shape("o", "o", "o").setIngredient('o', Material.WARPED_PLANKS);
+    warped_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    warped_slab_vertical.setGroup("slab_vertical");
+    register(warped_slab_vertical);
+
+
+
+    ShapelessRecipe stone_slab_from_stone_slab_vertical = new ShapelessRecipe(of("stone_slab_from_stone_slab_vertical"), new ItemStack(Material.STONE_SLAB)).addIngredient(new ExactChoice(CustomMaterial.STONE_SLAB_VERTICAL.create()));
+    stone_slab_from_stone_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    stone_slab_from_stone_slab_vertical.setGroup("slab_from_slab_vertical");
+    register(stone_slab_from_stone_slab_vertical);
+
+    ShapelessRecipe stone_slab_vertical_from_stone_slab = new ShapelessRecipe(of("stone_slab_vertical_from_stone_slab"), CustomMaterial.STONE_SLAB_VERTICAL.create()).addIngredient(new ExactChoice(new ItemStack(Material.STONE_SLAB)));
+    stone_slab_vertical_from_stone_slab.setCategory(CraftingBookCategory.BUILDING);
+    stone_slab_vertical_from_stone_slab.setGroup("slab_vertical");
+    register(stone_slab_vertical_from_stone_slab);
+
+    ShapedRecipe stone_slab_vertical = new ShapedRecipe(of("stone_slab_vertical"), CustomMaterial.STONE_SLAB_VERTICAL.create(6)).shape("o", "o", "o").setIngredient('o', Material.STONE);
+    stone_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    stone_slab_vertical.setGroup("slab_vertical");
+    register(stone_slab_vertical);
+
+
+
+    ShapelessRecipe cobblestone_slab_from_cobblestone_slab_vertical = new ShapelessRecipe(of("cobblestone_slab_from_cobblestone_slab_vertical"), new ItemStack(Material.COBBLESTONE_SLAB)).addIngredient(new ExactChoice(CustomMaterial.COBBLESTONE_SLAB_VERTICAL.create()));
+    cobblestone_slab_from_cobblestone_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    cobblestone_slab_from_cobblestone_slab_vertical.setGroup("slab_from_slab_vertical");
+    register(cobblestone_slab_from_cobblestone_slab_vertical);
+
+    ShapelessRecipe cobblestone_slab_vertical_from_cobblestone_slab = new ShapelessRecipe(of("cobblestone_slab_vertical_from_cobblestone_slab"), CustomMaterial.COBBLESTONE_SLAB_VERTICAL.create()).addIngredient(new ExactChoice(new ItemStack(Material.COBBLESTONE_SLAB)));
+    cobblestone_slab_vertical_from_cobblestone_slab.setCategory(CraftingBookCategory.BUILDING);
+    cobblestone_slab_vertical_from_cobblestone_slab.setGroup("slab_vertical");
+    register(cobblestone_slab_vertical_from_cobblestone_slab);
+
+    ShapedRecipe cobblestone_slab_vertical = new ShapedRecipe(of("cobblestone_slab_vertical"), CustomMaterial.COBBLESTONE_SLAB_VERTICAL.create(6)).shape("o", "o", "o").setIngredient('o', Material.COBBLESTONE);
+    cobblestone_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    cobblestone_slab_vertical.setGroup("slab_vertical");
+    register(cobblestone_slab_vertical);
+
+
+
+    ShapelessRecipe mossy_cobblestone_slab_from_mossy_cobblestone_slab_vertical = new ShapelessRecipe(of("mossy_cobblestone_slab_from_mossy_cobblestone_slab_vertical"), new ItemStack(Material.MOSSY_COBBLESTONE_SLAB)).addIngredient(new ExactChoice(CustomMaterial.MOSSY_COBBLESTONE_SLAB_VERTICAL.create()));
+    mossy_cobblestone_slab_from_mossy_cobblestone_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    mossy_cobblestone_slab_from_mossy_cobblestone_slab_vertical.setGroup("slab_from_slab_vertical");
+    register(mossy_cobblestone_slab_from_mossy_cobblestone_slab_vertical);
+
+    ShapelessRecipe mossy_cobblestone_slab_vertical_from_mossy_cobblestone_slab = new ShapelessRecipe(of("mossy_cobblestone_slab_vertical_from_mossy_cobblestone_slab"), CustomMaterial.MOSSY_COBBLESTONE_SLAB_VERTICAL.create()).addIngredient(new ExactChoice(new ItemStack(Material.MOSSY_COBBLESTONE_SLAB)));
+    mossy_cobblestone_slab_vertical_from_mossy_cobblestone_slab.setCategory(CraftingBookCategory.BUILDING);
+    mossy_cobblestone_slab_vertical_from_mossy_cobblestone_slab.setGroup("slab_vertical");
+    register(mossy_cobblestone_slab_vertical_from_mossy_cobblestone_slab);
+
+    ShapedRecipe mossy_cobblestone_slab_vertical = new ShapedRecipe(of("mossy_cobblestone_slab_vertical"), CustomMaterial.MOSSY_COBBLESTONE_SLAB_VERTICAL.create(6)).shape("o", "o", "o").setIngredient('o', Material.MOSSY_COBBLESTONE);
+    mossy_cobblestone_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    mossy_cobblestone_slab_vertical.setGroup("slab_vertical");
+    register(mossy_cobblestone_slab_vertical);
+
+
+
+    ShapelessRecipe smooth_stone_slab_from_smooth_stone_slab_vertical = new ShapelessRecipe(of("smooth_stone_slab_from_smooth_stone_slab_vertical"), new ItemStack(Material.SMOOTH_STONE_SLAB)).addIngredient(new ExactChoice(CustomMaterial.SMOOTH_STONE_SLAB_VERTICAL.create()));
+    smooth_stone_slab_from_smooth_stone_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    smooth_stone_slab_from_smooth_stone_slab_vertical.setGroup("slab_from_slab_vertical");
+    register(smooth_stone_slab_from_smooth_stone_slab_vertical);
+
+    ShapelessRecipe smooth_stone_slab_vertical_from_smooth_stone_slab = new ShapelessRecipe(of("smooth_stone_slab_vertical_from_smooth_stone_slab"), CustomMaterial.SMOOTH_STONE_SLAB_VERTICAL.create()).addIngredient(new ExactChoice(new ItemStack(Material.SMOOTH_STONE_SLAB)));
+    smooth_stone_slab_vertical_from_smooth_stone_slab.setCategory(CraftingBookCategory.BUILDING);
+    smooth_stone_slab_vertical_from_smooth_stone_slab.setGroup("slab_vertical");
+    register(smooth_stone_slab_vertical_from_smooth_stone_slab);
+
+    ShapedRecipe smooth_stone_slab_vertical = new ShapedRecipe(of("smooth_stone_slab_vertical"), CustomMaterial.SMOOTH_STONE_SLAB_VERTICAL.create(6)).shape("o", "o", "o").setIngredient('o', Material.SMOOTH_STONE);
+    smooth_stone_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    smooth_stone_slab_vertical.setGroup("slab_vertical");
+    register(smooth_stone_slab_vertical);
+  }
 
   private static boolean isAdminOnline()
   {

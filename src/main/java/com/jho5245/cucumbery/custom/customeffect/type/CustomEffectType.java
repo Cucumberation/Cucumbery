@@ -302,7 +302,8 @@ public class CustomEffectType implements Translatable, EnumHideable
    */
   IGNORE_ARM_SWING = new CustomEffectType("ignore_arm_swing", "", builder().hidden().defaultDuration(2).skipEvent()),
 
-  BLANKET_LOVER = new CustomEffectType("blanket_lover", "우와 이불 \uD83D\uDE01 너무 조아", builder().removeOnMilk().description("이불 너무 조아... 안 일어날 거야..").icon(new ItemStack(Material.RED_BED)).defaultDuration(20 * 10)),
+  BLANKET_LOVER = new CustomEffectType("blanket_lover", "우와 이불 \uD83D\uDE01 너무 조아", builder().removeOnMilk().description("이불 너무 조아... 안 일어날 거야..")
+      .icon(new ItemStack(Material.RED_BED)).defaultDuration(20 * 10).targetFilter(e -> e instanceof Player)),
 
   /**/ NOTHING = new CustomEffectType("nothing", "아무것도 아님"),
 

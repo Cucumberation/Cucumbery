@@ -739,6 +739,10 @@ public class ItemLoreCustomItem
 		}
 		// 커스텀 모델 데이터 설정
 		{
+			if (customMaterial.isVerticalSlab())
+			{
+				itemMeta.setCustomModelData(25201);
+			}
 			switch (customMaterial)
 			{
 				case STONK, MINDAS_DRILL, CORE_GEMSTONE, CUTE_SUGAR, BOO, MITHRIL_INGOT, ENCHANTED_MITHRIL_INGOT, TITANIUM_ORE, EXPERIENCE_BOTTLE_GRAND,

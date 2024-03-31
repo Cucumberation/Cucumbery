@@ -1447,18 +1447,51 @@ public class InventoryClick implements Listener
 			{
 				return;
 			}
+/*			MessageUtil.broadcastDebug("&m                                                             ");
+			//MessageUtil.broadcastDebug("result:", event.getResult());
+			MessageUtil.broadcastDebug("action:", event.getAction());
+			MessageUtil.broadcastDebug("slottype:", event.getSlotType());
+			MessageUtil.broadcastDebug("clicktype:", event.getClick());
+			MessageUtil.broadcastDebug("rawSlot:" + event.getRawSlot());
+			MessageUtil.broadcastDebug("slot:" + event.getSlot());
+			MessageUtil.broadcastDebug("heldItemslot:" + player.getInventory().getHeldItemSlot());
+			MessageUtil.broadcastDebug("firstempty:" + player.getInventory().firstEmpty());
+			MessageUtil.broadcastDebug("hotbarbutton:", event.getHotbarButton());
+			MessageUtil.broadcastDebug("item-at-slot:", ItemStackUtil.itemExists(player.getInventory().getItem(event.getSlot())) ? player.getInventory().getItem(event.getSlot()) : "null");
+			MessageUtil.broadcastDebug("event-cursor:", ItemStackUtil.itemExists(event.getCursor()) ? event.getCursor() : "null", ", current:",
+					ItemStackUtil.itemExists(event.getCurrentItem()) ? event.getCurrentItem() : "null", ", mainHand:",
+					ItemStackUtil.itemExists(player.getInventory().getItemInMainHand()) ? player.getInventory().getItemInMainHand() : "null", ", cursor:",
+					ItemStackUtil.itemExists(player.getItemOnCursor()) ? player.getItemOnCursor() : "null");*/
+			// 핫바가 아닌 슬롯에 대한 이벤트는 처리하지 않음
+			if (player.getInventory().firstEmpty() >= 9 && player.getInventory().firstEmpty() == event.getSlot() &&
+					event.getRawSlot() == event.getSlot() && event.getSlot() != player.getInventory().getHeldItemSlot() && event.getSlotType() != SlotType.QUICKBAR)
+			{
+				//MessageUtil.broadcastDebug("&4here");
+				Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+				{
+					//MessageUtil.broadcastDebug("after1tick item-at-slot:", ItemStackUtil.itemExists(player.getInventory().getItem(event.getSlot())) ? player.getInventory().getItem(event.getSlot()) : "null");
+					//MessageUtil.broadcastDebug("aafter-1tick-event-cursor:", ItemStackUtil.itemExists(event.getCursor()) ? event.getCursor() : "null", ", current:",
+							//ItemStackUtil.itemExists(event.getCurrentItem()) ? event.getCurrentItem() : "null", ", mainHand:",
+						//	ItemStackUtil.itemExists(player.getInventory().getItemInMainHand()) ? player.getInventory().getItemInMainHand() : "null", ", cursor:",
+							//ItemStackUtil.itemExists(player.getItemOnCursor()) ? player.getItemOnCursor() : "null");
+					player.getInventory().setItem(event.getSlot(), null);
+					//MessageUtil.broadcastDebug("&4deleted");
+				}, 0L);
+				return;
+			}
+			if (!ItemStackUtil.itemExists(event.getCursor()))
+			{
+				return;
+			}
+			if (event.getSlot() > 8)
+			{
+				return;
+			}
 			// 크리에이티브 nbt 트롤링 - 주기적으로 제거해주기
 			ItemStack current = player.getInventory().getItemInMainHand();
 			ItemStack cursor = Objects.requireNonNull(event.getCursor()).clone();
-			//			MessageUtil.broadcastDebug(event.getClick());
-			//			MessageUtil.broadcastDebug(event.getAction());
-			//			MessageUtil.broadcastDebug("cursor:", ItemStackUtil.itemExists(event.getCursor()) ? event.getCursor() : "null", ", current:",
-			//					ItemStackUtil.itemExists(event.getCurrentItem()) ? event.getCurrentItem() : "null", ", mainHand:",
-			//					ItemStackUtil.itemExists(current) ? current : "null");
 			if (ItemStackUtil.itemExists(cursor) && !ItemStackUtil.itemExists(event.getCurrentItem()))
 				Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
-			//MessageUtil.broadcastDebug("current: ", ItemStackUtil.itemExists(current) ? current : "null", ", cursor: ",
-			//		ItemStackUtil.itemExists(cursor) ? cursor : "null");
 			boolean barHasEmptySlot = false;
 			ItemStack[] hotBars = new ItemStack[9];
 			List<Material> types = new ArrayList<>();

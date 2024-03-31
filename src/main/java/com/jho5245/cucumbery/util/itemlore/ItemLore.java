@@ -395,7 +395,7 @@ public class ItemLore
 			ItemMeta originMeta = origin.getItemMeta();
 			Set<ItemFlag> itemFlagSet = originMeta.getItemFlags();
 			List<Component> lore = originMeta.lore();
-			itemMeta.displayName(originMeta.displayName());
+			// itemMeta.displayName(originMeta.displayName());
 			itemMeta.lore(lore);
 			itemMeta.removeItemFlags(ItemFlag.values());
 			itemMeta.addItemFlags(itemFlagSet.toArray(new ItemFlag[itemFlagSet.size()]));
@@ -442,11 +442,11 @@ public class ItemLore
 		if (nbtItem.hasTag(CustomMaterial.IDENDIFER))
 		{
 			itemMeta = itemStack.getItemMeta();
-			CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
+/*			CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
 			if (customMaterial != null && customMaterial.getDisplayName().equals(itemMeta.displayName()))
 			{
 				itemMeta.displayName(null);
-			}
+			}*/
 			itemStack.setItemMeta(itemMeta);
 			if (removeFlag.removeSkullMeta && itemMeta instanceof SkullMeta skullMeta)
 			{

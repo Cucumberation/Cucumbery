@@ -1,6 +1,7 @@
 package com.jho5245.cucumbery.custom.customeffect;
 
 import com.jho5245.cucumbery.custom.customeffect.CustomEffect.DisplayType;
+import com.jho5245.cucumbery.events.entity.EntityCustomEffectPreApplyEvent;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Entity;
@@ -174,14 +175,20 @@ public class TypeBuilder
     this.defaultDuration = defaultDuration;
     return this;
   }
-
+  
+  /**
+   * 효과 아이콘에 사용할 커스텀 모델 데이터
+   */
   @NotNull
   public TypeBuilder customModelData(int customModelData)
   {
     this.customModelData = customModelData;
     return this;
   }
-
+  
+  /**
+   * 효과 설명 지정
+   */
   @NotNull
   public TypeBuilder description(@NotNull Component description)
   {
@@ -189,6 +196,10 @@ public class TypeBuilder
     return this;
   }
 
+
+  /**
+   * 효과 설명 지정
+   */
   @NotNull
   public TypeBuilder description(@NotNull String description)
   {
@@ -196,6 +207,9 @@ public class TypeBuilder
     return this;
   }
 
+  /**
+   * 효과 설명 지정
+   */
   @NotNull
   public TypeBuilder description(@NotNull String description, @NotNull Object... args)
   {
@@ -203,13 +217,19 @@ public class TypeBuilder
     return this;
   }
 
+  /**
+   * 효과 아이콘 지정
+   */
   @NotNull
   public TypeBuilder icon(@Nullable ItemStack icon)
   {
     this.icon = icon;
     return this;
   }
-
+  
+  /**
+   * 효과 아이콘 지정
+   */
   @NotNull
   public TypeBuilder icon(@NotNull Supplier<ItemStack> supplier)
   {
@@ -217,6 +237,11 @@ public class TypeBuilder
     return this;
   }
 
+  /**
+   * 기본 표시 유형 지정, 지정하지 않을 경우 {@link DisplayType#BOSS_BAR} 사용
+   * @param defaultDisplayType
+   * @return
+   */
   @NotNull
   public TypeBuilder defaultDisplayType(@NotNull DisplayType defaultDisplayType)
   {
@@ -224,6 +249,10 @@ public class TypeBuilder
     return this;
   }
 
+  /**
+   * 보스바에 효과가 너무 많아서 짧게 표시할 때 사용할 문자열
+   * @param s 보스바에 효과가 너무 많아서 짧게 표시할 때 사용할 문자열
+   */
   @NotNull
   public TypeBuilder shortenTransltionKey(@NotNull String s)
   {
@@ -231,6 +260,9 @@ public class TypeBuilder
     return this;
   }
 
+  /**
+   * 효과가 적용되거나 사라질 때 이벤트를 호출하지 않습니다
+   */
   @NotNull
   public TypeBuilder skipEvent()
   {
@@ -357,6 +389,10 @@ public class TypeBuilder
     return this.callEvent;
   }
 
+  /**
+   * 해당 필터에 만족하는 개체만 효과를 적용받을 수 있음. 아닐 경우 {@link EntityCustomEffectPreApplyEvent} 이벤트 호출 시 cancel됨
+   * @return this
+   */
   @Nullable
   public Predicate<Entity> getTargetFilter()
   {

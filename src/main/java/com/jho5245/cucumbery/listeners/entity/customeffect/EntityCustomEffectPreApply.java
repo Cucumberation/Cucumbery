@@ -33,6 +33,7 @@ public class EntityCustomEffectPreApply implements Listener
     Predicate<Entity> targetFilter = customEffectType.getTargetFilter();
     if (targetFilter != null && !targetFilter.test(entity))
     {
+      event.setCancelled(true);
       return;
     }
     if (customEffectType == CustomEffectType.RESURRECTION && CustomEffectManager.hasEffect(entity, CustomEffectType.RESURRECTION_COOLDOWN))
