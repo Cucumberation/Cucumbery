@@ -17,7 +17,7 @@ import java.util.UUID;
 
 public class PlayerBedLeave implements Listener
 {
-	private Set<UUID> blanketLoverNotificationCooldown = new HashSet<>();
+	private final Set<UUID> blanketLoverNotificationCooldown = new HashSet<>();
 
 	@EventHandler
 	public void onPlayerBedLeave(PlayerBedLeaveEvent event)
