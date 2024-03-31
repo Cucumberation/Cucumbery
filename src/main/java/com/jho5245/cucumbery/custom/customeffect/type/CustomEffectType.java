@@ -6,6 +6,7 @@ import com.jho5245.cucumbery.custom.customeffect.CustomEffect.DisplayType;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.TypeBuilder;
 import com.jho5245.cucumbery.custom.customeffect.VanillaEffectDescription;
+import com.jho5245.cucumbery.listeners.entity.customeffect.EntityCustomEffectPreApply;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
@@ -18,6 +19,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -33,6 +35,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * The type of {@link CustomEffect}
@@ -299,6 +302,8 @@ public class CustomEffectType implements Translatable, EnumHideable
    */
   IGNORE_ARM_SWING = new CustomEffectType("ignore_arm_swing", "", builder().hidden().defaultDuration(2).skipEvent()),
 
+  BLANKET_LOVER = new CustomEffectType("blanket_lover", "우와 이불 \uD83D\uDE01 너무 조아", builder().removeOnMilk().description("이불 너무 조아... 안 일어날 거야..").icon(new ItemStack(Material.RED_BED)).defaultDuration(20 * 10)),
+
   /**/ NOTHING = new CustomEffectType("nothing", "아무것도 아님"),
 
   /**/ TEST = new CustomEffectType(new NamespacedKey("test", "test"), "key:effect.cucumbery.test|테스트뭐", builder());
@@ -375,7 +380,7 @@ public class CustomEffectType implements Translatable, EnumHideable
             DAMAGE_INDICATOR, FREEZING, NO_CUCUMBERY_ITEM_USAGE_ATTACK, GLIDING, NOTIFY_NO_TRADE_ITEM_DROP, DYNAMIC_LIGHT,
             CUSTOM_DEATH_MESSAGE,
             REMOVE_NO_DAMAGE_TICKS, MASTER_OF_FISHING, MASTER_OF_FISHING_D, ASSASSINATION, ALARM, GAESANS, SUPERIOR_LEVITATION,
-            THE_CHAOS_INVENTORY, ARM_SWING, IGNORE_ARM_SWING,
+            THE_CHAOS_INVENTORY, ARM_SWING, IGNORE_ARM_SWING, BLANKET_LOVER,
 
 
 
@@ -407,6 +412,9 @@ public class CustomEffectType implements Translatable, EnumHideable
   private final Component description;
   private final ItemStack icon;
   private final DisplayType defaultDisplayType;
+
+  @Nullable
+  private final Predicate<Entity> targetFilter;
 
   protected CustomEffectType()
   {
@@ -459,6 +467,7 @@ public class CustomEffectType implements Translatable, EnumHideable
     this.defaultDisplayType = builder.getDefaultDisplayType();
 
     this.callEvent = builder.doesCallEvent();
+    this.targetFilter = builder.getTargetFilter();
   }
 
   public CustomEffectType(@NotNull NamespacedKey namespacedKey, @NotNull String translationKey, @NotNull TypeBuilder builder)
@@ -492,6 +501,7 @@ public class CustomEffectType implements Translatable, EnumHideable
     this.defaultDisplayType = builder.getDefaultDisplayType();
 
     this.callEvent = builder.doesCallEvent();
+    this.targetFilter = builder.getTargetFilter();
   }
 
   public static void register(@NotNull CustomEffectType... CustomEffectTypes)
@@ -1303,5 +1313,21 @@ public class CustomEffectType implements Translatable, EnumHideable
   public String toString()
   {
     return this.getNamespacedKey().toString();
+  }
+
+  /**
+   * 이 효과 유형에 대한 개체 필터를 반환합니다. 해당 개체 필터 조건에 만족하는 개체에게만 효과를 지급할 수 있습니다.
+   * <p>조건을 만족하지 않는 경우, {@link EntityCustomEffectPreApply} 이벤트가 cancel됩니다.</p>
+   * @return 효과 유형에 대한 개체 필터
+   */
+  @Nullable
+  public Predicate<Entity> getTargetFilter()
+  {
+    return this.targetFilter;
+  }
+
+  public boolean hasTargetFilter()
+  {
+    return this.targetFilter != null;
   }
 }

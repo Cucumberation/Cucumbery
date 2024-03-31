@@ -5,14 +5,12 @@ import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.custom_mining.MiningManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCustomMining;
 import com.jho5245.cucumbery.listeners.inventory.InventoryClick;
+import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
-import com.jho5245.cucumbery.util.storage.data.Constant;
+import com.jho5245.cucumbery.util.storage.data.*;
 import com.jho5245.cucumbery.util.storage.data.Constant.AllPlayer;
-import com.jho5245.cucumbery.util.storage.data.Permission;
-import com.jho5245.cucumbery.util.storage.data.Prefix;
-import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
@@ -22,6 +20,7 @@ import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -141,6 +140,7 @@ public class PlayerItemHeld implements Listener
 		if (!Objects.equals(player.getInventory().getItem(event.getPreviousSlot()), player.getInventory().getItem(event.getNewSlot()))
 				&& CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PROGRESS))
 		{
+			player.stopSound("custom_sus_breaking", SoundCategory.BLOCKS);
 			MiningManager.quitCustomMining(player);
 		}
 		this.removeActionbarCooldown(player);

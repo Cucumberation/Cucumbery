@@ -3,10 +3,12 @@ package com.jho5245.cucumbery.custom.customeffect;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffect.DisplayType;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import net.kyori.adventure.text.Component;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
@@ -38,6 +40,8 @@ public class TypeBuilder
   private @Nullable ItemStack icon;
 
   private DisplayType defaultDisplayType = DisplayType.BOSS_BAR;
+
+  private Predicate<Entity> targetFilter;
   
   @NotNull
   public TypeBuilder nonBuffFreezable()
@@ -234,6 +238,13 @@ public class TypeBuilder
     return this;
   }
 
+  @NotNull
+  public TypeBuilder targetFilter(@NotNull Predicate<Entity> predicate)
+  {
+    this.targetFilter = predicate;
+    return this;
+  }
+
   @Nullable
   public String getShortenTranslationKey()
   {
@@ -344,5 +355,11 @@ public class TypeBuilder
   public boolean doesCallEvent()
   {
     return this.callEvent;
+  }
+
+  @Nullable
+  public Predicate<Entity> getTargetFilter()
+  {
+    return this.targetFilter;
   }
 }

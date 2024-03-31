@@ -15,6 +15,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import java.util.Collections;
+import java.util.Objects;
+import java.util.function.Predicate;
 
 public class EntityCustomEffectPreApply implements Listener
 {
@@ -28,6 +30,11 @@ public class EntityCustomEffectPreApply implements Listener
     Entity entity = event.getEntity();
     CustomEffect customEffect = event.getCustomEffect();
     CustomEffectType customEffectType = customEffect.getType();
+    Predicate<Entity> targetFilter = customEffectType.getTargetFilter();
+    if (targetFilter != null && !targetFilter.test(entity))
+    {
+      return;
+    }
     if (customEffectType == CustomEffectType.RESURRECTION && CustomEffectManager.hasEffect(entity, CustomEffectType.RESURRECTION_COOLDOWN))
     {
       event.setCancelled(true);
