@@ -5,6 +5,7 @@ import com.destroystokyo.paper.profile.PlayerProfile;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
+import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
 import io.papermc.paper.inventory.tooltip.TooltipContext;
 import net.kyori.adventure.text.Component;
@@ -112,6 +113,14 @@ public class TestCommand implements CucumberyCommandExecutor
 					}
 				}
 				return true;
+			}
+			if (args[0].equals("drop-all-custom-materials"))
+			{
+				for (CustomMaterial customMaterial : CustomMaterial.values())
+				{
+					if (customMaterial.isVerticalSlab())
+						((Player) sender).getWorld().dropItemNaturally(((Player) sender).getLocation(), customMaterial.create());
+				}
 			}
 			if (args[0].equals("tooltip"))
 			{

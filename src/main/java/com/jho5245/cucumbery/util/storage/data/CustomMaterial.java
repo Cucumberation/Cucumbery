@@ -512,6 +512,7 @@ public enum CustomMaterial implements Translatable
 			"&ikey:block.cucumbery.waxed_weathered_cut_copper_slab_vertical|밀랍칠한 녹슨 깎인 구리 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
 	WAXED_OXIDIZED_CUT_COPPER_SLAB_VERTICAL(Material.WAXED_OXIDIZED_CUT_COPPER_SLAB,
 			"&ikey:block.cucumbery.waxed_oxidized_cut_copper_slab_vertical|밀랍칠한 산화된 깎인 구리 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+	PETRIFIED_OAK_SLAB_VERTICAL(Material.PETRIFIED_OAK_SLAB, "&ikey:block.cucumbery.petrified_oak_slab_vertical|규화한 참나무 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
 
 	;
 

@@ -329,6 +329,142 @@ public class RecipeManager
     smooth_stone_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
     smooth_stone_slab_vertical.setGroup("slab_vertical");
     register(smooth_stone_slab_vertical);
+
+
+
+    ShapelessRecipe stone_brick_slab_from_stone_brick_slab_vertical = new ShapelessRecipe(of("stone_brick_slab_from_stone_brick_slab_vertical"), new ItemStack(Material.STONE_BRICK_SLAB)).addIngredient(new ExactChoice(CustomMaterial.STONE_BRICK_SLAB_VERTICAL.create()));
+    stone_brick_slab_from_stone_brick_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    stone_brick_slab_from_stone_brick_slab_vertical.setGroup("slab_from_slab_vertical");
+    register(stone_brick_slab_from_stone_brick_slab_vertical);
+
+    ShapelessRecipe stone_brick_slab_vertical_from_stone_brick_slab = new ShapelessRecipe(of("stone_brick_slab_vertical_from_stone_brick_slab"), CustomMaterial.STONE_BRICK_SLAB_VERTICAL.create()).addIngredient(new ExactChoice(new ItemStack(Material.STONE_BRICK_SLAB)));
+    stone_brick_slab_vertical_from_stone_brick_slab.setCategory(CraftingBookCategory.BUILDING);
+    stone_brick_slab_vertical_from_stone_brick_slab.setGroup("slab_vertical");
+    register(stone_brick_slab_vertical_from_stone_brick_slab);
+
+    ShapedRecipe stone_brick_slab_vertical = new ShapedRecipe(of("stone_brick_slab_vertical"), CustomMaterial.STONE_BRICK_SLAB_VERTICAL.create(6)).shape("o", "o", "o").setIngredient('o', Material.STONE_BRICKS);
+    stone_brick_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    stone_brick_slab_vertical.setGroup("slab_vertical");
+    register(stone_brick_slab_vertical);
+
+
+
+    ShapelessRecipe mossy_stone_brick_slab_from_mossy_stone_brick_slab_vertical = new ShapelessRecipe(of("mossy_stone_brick_slab_from_mossy_stone_brick_slab_vertical"), new ItemStack(Material.MOSSY_STONE_BRICK_SLAB)).addIngredient(new ExactChoice(CustomMaterial.MOSSY_STONE_BRICK_SLAB_VERTICAL.create()));
+    mossy_stone_brick_slab_from_mossy_stone_brick_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    mossy_stone_brick_slab_from_mossy_stone_brick_slab_vertical.setGroup("slab_from_slab_vertical");
+    register(mossy_stone_brick_slab_from_mossy_stone_brick_slab_vertical);
+
+    ShapelessRecipe mossy_stone_brick_slab_vertical_from_mossy_stone_brick_slab = new ShapelessRecipe(of("mossy_stone_brick_slab_vertical_from_mossy_stone_brick_slab"), CustomMaterial.MOSSY_STONE_BRICK_SLAB_VERTICAL.create()).addIngredient(new ExactChoice(new ItemStack(Material.MOSSY_STONE_BRICK_SLAB)));
+    mossy_stone_brick_slab_vertical_from_mossy_stone_brick_slab.setCategory(CraftingBookCategory.BUILDING);
+    mossy_stone_brick_slab_vertical_from_mossy_stone_brick_slab.setGroup("slab_vertical");
+    register(mossy_stone_brick_slab_vertical_from_mossy_stone_brick_slab);
+
+    ShapedRecipe mossy_stone_brick_slab_vertical = new ShapedRecipe(of("mossy_stone_brick_slab_vertical"), CustomMaterial.MOSSY_STONE_BRICK_SLAB_VERTICAL.create(6)).shape("o", "o", "o").setIngredient('o', Material.MOSSY_STONE_BRICKS);
+    mossy_stone_brick_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    mossy_stone_brick_slab_vertical.setGroup("slab_vertical");
+    register(mossy_stone_brick_slab_vertical);
+
+
+
+    ShapelessRecipe granite_slab_from_granite_slab_vertical = new ShapelessRecipe(of("granite_slab_from_granite_slab_vertical"), new ItemStack(Material.GRANITE_SLAB)).addIngredient(new ExactChoice(CustomMaterial.GRANITE_SLAB_VERTICAL.create()));
+    granite_slab_from_granite_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    granite_slab_from_granite_slab_vertical.setGroup("slab_from_slab_vertical");
+    register(granite_slab_from_granite_slab_vertical);
+
+    ShapelessRecipe granite_slab_vertical_from_granite_slab = new ShapelessRecipe(of("granite_slab_vertical_from_granite_slab"), CustomMaterial.GRANITE_SLAB_VERTICAL.create()).addIngredient(new ExactChoice(new ItemStack(Material.GRANITE_SLAB)));
+    granite_slab_vertical_from_granite_slab.setCategory(CraftingBookCategory.BUILDING);
+    granite_slab_vertical_from_granite_slab.setGroup("slab_vertical");
+    register(granite_slab_vertical_from_granite_slab);
+
+    ShapedRecipe granite_slab_vertical = new ShapedRecipe(of("granite_slab_vertical"), CustomMaterial.GRANITE_SLAB_VERTICAL.create(6)).shape("o", "o", "o").setIngredient('o', Material.GRANITE);
+    granite_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    granite_slab_vertical.setGroup("slab_vertical");
+    register(granite_slab_vertical);
+
+
+
+    ShapelessRecipe polished_granite_slab_from_polished_granite_slab_vertical = new ShapelessRecipe(of("polished_granite_slab_from_polished_granite_slab_vertical"), new ItemStack(Material.POLISHED_GRANITE_SLAB)).addIngredient(new ExactChoice(CustomMaterial.POLISHED_GRANITE_SLAB_VERTICAL.create()));
+    polished_granite_slab_from_polished_granite_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    polished_granite_slab_from_polished_granite_slab_vertical.setGroup("slab_from_slab_vertical");
+    register(polished_granite_slab_from_polished_granite_slab_vertical);
+
+    ShapelessRecipe polished_granite_slab_vertical_from_polished_granite_slab = new ShapelessRecipe(of("polished_granite_slab_vertical_from_polished_granite_slab"), CustomMaterial.POLISHED_GRANITE_SLAB_VERTICAL.create()).addIngredient(new ExactChoice(new ItemStack(Material.POLISHED_GRANITE_SLAB)));
+    polished_granite_slab_vertical_from_polished_granite_slab.setCategory(CraftingBookCategory.BUILDING);
+    polished_granite_slab_vertical_from_polished_granite_slab.setGroup("slab_vertical");
+    register(polished_granite_slab_vertical_from_polished_granite_slab);
+
+    ShapedRecipe polished_granite_slab_vertical = new ShapedRecipe(of("polished_granite_slab_vertical"), CustomMaterial.POLISHED_GRANITE_SLAB_VERTICAL.create(6)).shape("o", "o", "o").setIngredient('o', Material.POLISHED_GRANITE);
+    polished_granite_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    polished_granite_slab_vertical.setGroup("slab_vertical");
+    register(polished_granite_slab_vertical);
+
+
+
+    ShapelessRecipe diorite_slab_from_diorite_slab_vertical = new ShapelessRecipe(of("diorite_slab_from_diorite_slab_vertical"), new ItemStack(Material.DIORITE_SLAB)).addIngredient(new ExactChoice(CustomMaterial.DIORITE_SLAB_VERTICAL.create()));
+    diorite_slab_from_diorite_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    diorite_slab_from_diorite_slab_vertical.setGroup("slab_from_slab_vertical");
+    register(diorite_slab_from_diorite_slab_vertical);
+
+    ShapelessRecipe diorite_slab_vertical_from_diorite_slab = new ShapelessRecipe(of("diorite_slab_vertical_from_diorite_slab"), CustomMaterial.DIORITE_SLAB_VERTICAL.create()).addIngredient(new ExactChoice(new ItemStack(Material.DIORITE_SLAB)));
+    diorite_slab_vertical_from_diorite_slab.setCategory(CraftingBookCategory.BUILDING);
+    diorite_slab_vertical_from_diorite_slab.setGroup("slab_vertical");
+    register(diorite_slab_vertical_from_diorite_slab);
+
+    ShapedRecipe diorite_slab_vertical = new ShapedRecipe(of("diorite_slab_vertical"), CustomMaterial.DIORITE_SLAB_VERTICAL.create(6)).shape("o", "o", "o").setIngredient('o', Material.DIORITE);
+    diorite_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    diorite_slab_vertical.setGroup("slab_vertical");
+    register(diorite_slab_vertical);
+
+
+
+    ShapelessRecipe polished_diorite_slab_from_polished_diorite_slab_vertical = new ShapelessRecipe(of("polished_diorite_slab_from_polished_diorite_slab_vertical"), new ItemStack(Material.POLISHED_DIORITE_SLAB)).addIngredient(new ExactChoice(CustomMaterial.POLISHED_DIORITE_SLAB_VERTICAL.create()));
+    polished_diorite_slab_from_polished_diorite_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    polished_diorite_slab_from_polished_diorite_slab_vertical.setGroup("slab_from_slab_vertical");
+    register(polished_diorite_slab_from_polished_diorite_slab_vertical);
+
+    ShapelessRecipe polished_diorite_slab_vertical_from_polished_diorite_slab = new ShapelessRecipe(of("polished_diorite_slab_vertical_from_polished_diorite_slab"), CustomMaterial.POLISHED_DIORITE_SLAB_VERTICAL.create()).addIngredient(new ExactChoice(new ItemStack(Material.POLISHED_DIORITE_SLAB)));
+    polished_diorite_slab_vertical_from_polished_diorite_slab.setCategory(CraftingBookCategory.BUILDING);
+    polished_diorite_slab_vertical_from_polished_diorite_slab.setGroup("slab_vertical");
+    register(polished_diorite_slab_vertical_from_polished_diorite_slab);
+
+    ShapedRecipe polished_diorite_slab_vertical = new ShapedRecipe(of("polished_diorite_slab_vertical"), CustomMaterial.POLISHED_DIORITE_SLAB_VERTICAL.create(6)).shape("o", "o", "o").setIngredient('o', Material.POLISHED_DIORITE);
+    polished_diorite_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    polished_diorite_slab_vertical.setGroup("slab_vertical");
+    register(polished_diorite_slab_vertical);
+
+
+
+    ShapelessRecipe andesite_slab_from_andesite_slab_vertical = new ShapelessRecipe(of("andesite_slab_from_andesite_slab_vertical"), new ItemStack(Material.ANDESITE_SLAB)).addIngredient(new ExactChoice(CustomMaterial.ANDESITE_SLAB_VERTICAL.create()));
+    andesite_slab_from_andesite_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    andesite_slab_from_andesite_slab_vertical.setGroup("slab_from_slab_vertical");
+    register(andesite_slab_from_andesite_slab_vertical);
+
+    ShapelessRecipe andesite_slab_vertical_from_andesite_slab = new ShapelessRecipe(of("andesite_slab_vertical_from_andesite_slab"), CustomMaterial.ANDESITE_SLAB_VERTICAL.create()).addIngredient(new ExactChoice(new ItemStack(Material.ANDESITE_SLAB)));
+    andesite_slab_vertical_from_andesite_slab.setCategory(CraftingBookCategory.BUILDING);
+    andesite_slab_vertical_from_andesite_slab.setGroup("slab_vertical");
+    register(andesite_slab_vertical_from_andesite_slab);
+
+    ShapedRecipe andesite_slab_vertical = new ShapedRecipe(of("andesite_slab_vertical"), CustomMaterial.ANDESITE_SLAB_VERTICAL.create(6)).shape("o", "o", "o").setIngredient('o', Material.ANDESITE);
+    andesite_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    andesite_slab_vertical.setGroup("slab_vertical");
+    register(andesite_slab_vertical);
+
+
+
+    ShapelessRecipe polished_andesite_slab_from_polished_andesite_slab_vertical = new ShapelessRecipe(of("polished_andesite_slab_from_polished_andesite_slab_vertical"), new ItemStack(Material.POLISHED_ANDESITE_SLAB)).addIngredient(new ExactChoice(CustomMaterial.POLISHED_ANDESITE_SLAB_VERTICAL.create()));
+    polished_andesite_slab_from_polished_andesite_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    polished_andesite_slab_from_polished_andesite_slab_vertical.setGroup("slab_from_slab_vertical");
+    register(polished_andesite_slab_from_polished_andesite_slab_vertical);
+
+    ShapelessRecipe polished_andesite_slab_vertical_from_polished_andesite_slab = new ShapelessRecipe(of("polished_andesite_slab_vertical_from_polished_andesite_slab"), CustomMaterial.POLISHED_ANDESITE_SLAB_VERTICAL.create()).addIngredient(new ExactChoice(new ItemStack(Material.POLISHED_ANDESITE_SLAB)));
+    polished_andesite_slab_vertical_from_polished_andesite_slab.setCategory(CraftingBookCategory.BUILDING);
+    polished_andesite_slab_vertical_from_polished_andesite_slab.setGroup("slab_vertical");
+    register(polished_andesite_slab_vertical_from_polished_andesite_slab);
+
+    ShapedRecipe polished_andesite_slab_vertical = new ShapedRecipe(of("polished_andesite_slab_vertical"), CustomMaterial.POLISHED_ANDESITE_SLAB_VERTICAL.create(6)).shape("o", "o", "o").setIngredient('o', Material.POLISHED_ANDESITE);
+    polished_andesite_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
+    polished_andesite_slab_vertical.setGroup("slab_vertical");
+    register(polished_andesite_slab_vertical);
   }
 
   private static boolean isAdminOnline()
