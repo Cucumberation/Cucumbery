@@ -67,6 +67,8 @@ import java.util.stream.Stream;
 
 public class ProtocolLibManager
 {
+	private static boolean firstJoin = true;
+
 	public static List RECIPE_HOLDER = null;
 
 	public static List<Integer> RECIPE_HOLDER_INTEGERS = null;
@@ -407,6 +409,11 @@ public class ProtocolLibManager
 						StructureModifier<Object> modifier = packet.getModifier();
 						if (packet.getType() == Server.RECIPE_UPDATE)
 						{
+							if (ProtocolLibManager.firstJoin)
+							{
+								ProtocolLibManager.firstJoin = false;
+								return;
+							}
 							try
 							{
 								Class<?> recipeHolderClass = Class.forName("net.minecraft.world.item.crafting.RecipeHolder");
@@ -457,15 +464,15 @@ public class ProtocolLibManager
 								{
 									MessageUtil.broadcast(method);
 								}*/
-								List recipeHolders = (List) modifier.read(0);
-								if (RECIPE_HOLDER == null && !recipeHolders.isEmpty())
-								{
-									RECIPE_HOLDER = new ArrayList(recipeHolders);
-								}
-								if (RECIPE_HOLDER_INTEGERS == null)
-								{
-									RECIPE_HOLDER_INTEGERS = new ArrayList<>(packet.getIntLists().read(0));
-								}
+								List recipeHolders = new ArrayList<>((List) modifier.read(0));
+//								if (RECIPE_HOLDER == null && !recipeHolders.isEmpty())
+//								{
+//									RECIPE_HOLDER = new ArrayList(recipeHolders);
+//								}
+//								if (RECIPE_HOLDER_INTEGERS == null)
+//								{
+//									RECIPE_HOLDER_INTEGERS = new ArrayList<>(packet.getIntLists().read(0));
+//								}
 								for (int i = 0; i < recipeHolders.size(); i++)
 								{
 									Object recipeHolderObject = recipeHolders.get(i);
@@ -506,7 +513,7 @@ public class ProtocolLibManager
 											Object shapelessRecipes = shaplessRecipesConstructor.newInstance(getStringFromShapelessRecipes.invoke(iRecipe),
 													getCraftingBookCategoryFromShapelessRecipes.invoke(iRecipe), MinecraftReflection.getMinecraftItemStack(
 															setItemLore(Server.WINDOW_ITEMS, ((ShapelessRecipe) toBukkitRecipeFromShaplessRecipes.invoke(iRecipe,
-																	NamespacedKey.fromString("temp_recipe", Cucumbery.getPlugin()))).getResult(), event.getPlayer())), nonNullList);
+																	NamespacedKey.fromString("temp_recipe", Cucumbery.getPlugin()))).getResult().clone(), event.getPlayer())), nonNullList);
 											Object newRecipeHolderObject = recipeHolderConstructor.newInstance(getMinecraftKeyFromRecipeHolder.invoke(recipeHolderObject),
 													shapelessRecipes);
 											recipeHolders.set(i, newRecipeHolderObject);
@@ -541,7 +548,7 @@ public class ProtocolLibManager
 											ShapedRecipe shapedRecipe = (ShapedRecipe) toBukkitRecipeFromShapedRecipes.invoke(iRecipe, NamespacedKey.fromString("temp_recipe", Cucumbery.getPlugin()));
 											Object shapedRecipePattern = shapedRecipePatternConstructor.newInstance(shapedRecipe.getShape()[0].length(), shapedRecipe.getShape().length, nonNullList, Optional.empty());
 											Object shapedRecipes = shapedRecipeConstructor.newInstance(shapedRecipe.getGroup(), getCraftingBookCategoryFromShapedRecipes.invoke(iRecipe), shapedRecipePattern,
-													MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, shapedRecipe.getResult(), event.getPlayer())), false);
+													MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, shapedRecipe.getResult().clone(), event.getPlayer())), false);
 											Object newRecipeHolderObject = recipeHolderConstructor.newInstance(getMinecraftKeyFromRecipeHolder.invoke(recipeHolderObject), shapedRecipes);
 											recipeHolders.set(i, newRecipeHolderObject);
 										}
@@ -569,7 +576,7 @@ public class ProtocolLibManager
 													furnaceRecipe.getGroup(),
 													getCraftingBookCategoryFromCookingRecipeClass.invoke(iRecipe),
 													recipeItemStack,
-													MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, furnaceRecipe.getResult(), event.getPlayer())),
+													MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, furnaceRecipe.getResult().clone(), event.getPlayer())),
 													furnaceRecipe.getExperience(), furnaceRecipe.getCookingTime());
 											Object newRecipeHolderObject = recipeHolderConstructor.newInstance(getMinecraftKeyFromRecipeHolder.invoke(recipeHolderObject), furnaceRecipeObject);
 											recipeHolders.set(i, newRecipeHolderObject);
@@ -598,7 +605,7 @@ public class ProtocolLibManager
 													blastingRecipe.getGroup(),
 													getCraftingBookCategoryFromCookingRecipeClass.invoke(iRecipe),
 													recipeItemStack,
-													MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, blastingRecipe.getResult(), event.getPlayer())),
+													MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, blastingRecipe.getResult().clone(), event.getPlayer())),
 													blastingRecipe.getExperience(), blastingRecipe.getCookingTime());
 											Object newRecipeHolderObject = recipeHolderConstructor.newInstance(getMinecraftKeyFromRecipeHolder.invoke(recipeHolderObject), blastingRecipeObject);
 											recipeHolders.set(i, newRecipeHolderObject);
@@ -627,7 +634,7 @@ public class ProtocolLibManager
 													smokingRecipe.getGroup(),
 													getCraftingBookCategoryFromCookingRecipeClass.invoke(iRecipe),
 													recipeItemStack,
-													MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, smokingRecipe.getResult(), event.getPlayer())),
+													MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, smokingRecipe.getResult().clone(), event.getPlayer())),
 													smokingRecipe.getExperience(), smokingRecipe.getCookingTime());
 											Object newRecipeHolderObject = recipeHolderConstructor.newInstance(getMinecraftKeyFromRecipeHolder.invoke(recipeHolderObject), smokingRecipeObject);
 											recipeHolders.set(i, newRecipeHolderObject);
@@ -655,7 +662,7 @@ public class ProtocolLibManager
 											Object stonecuttingRecipeObject = stoneCuttingRecipeConstructor.newInstance(
 													stonecuttingRecipe.getGroup(),
 													recipeItemStack,
-													MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, stonecuttingRecipe.getResult(), event.getPlayer())));
+													MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, stonecuttingRecipe.getResult().clone(), event.getPlayer())));
 											Object newRecipeHolderObject = recipeHolderConstructor.newInstance(getMinecraftKeyFromRecipeHolder.invoke(recipeHolderObject), stonecuttingRecipeObject);
 											recipeHolders.set(i, newRecipeHolderObject);
 										}
@@ -664,9 +671,9 @@ public class ProtocolLibManager
 								modifier.write(0, recipeHolders);
 								event.setPacket(packet);
 							}
-							catch (ReflectiveOperationException t)
+							catch (Throwable ignored)
 							{
-								t.getCause().printStackTrace();
+
 							}
 						}
 						for (int i = 0; i < modifier.size(); i++)

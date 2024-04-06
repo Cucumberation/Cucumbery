@@ -8,6 +8,7 @@ import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
+import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
@@ -87,6 +88,7 @@ public class PrepareItemCraft implements Listener
         }
       }
       Recipe recipe = event.getRecipe();
+      MessageUtil.broadcastDebug("recipe:" + (recipe instanceof Keyed keyed ? keyed.getKey() : "null"));
       boolean except = false;
       if (recipe instanceof Keyed keyed)
       {

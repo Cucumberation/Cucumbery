@@ -469,6 +469,14 @@ public class Cucumbery extends JavaPlugin
 		try
 		{
 			RecipeChecker.setRecipes();
+			RecipeManager.registerRecipe();
+		}
+		catch (Throwable t)
+		{
+			Cucumbery.getPlugin().getLogger().warning(t.getMessage());
+		}
+		try
+		{
 			this.checkUsingAddons();
 			this.registerCustomConfig();
 		}
@@ -542,14 +550,6 @@ public class Cucumbery extends JavaPlugin
 		catch (Throwable e)
 		{
 			Cucumbery.getPlugin().getLogger().warning(e.getMessage());
-		}
-		try
-		{
-			RecipeManager.registerRecipe();
-		}
-		catch (Throwable t)
-		{
-			Cucumbery.getPlugin().getLogger().warning(t.getMessage());
 		}
 	}
 

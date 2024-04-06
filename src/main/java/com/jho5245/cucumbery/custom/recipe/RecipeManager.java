@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.RecipeChoice.ExactChoice;
+import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.recipe.CraftingBookCategory;
@@ -65,7 +66,7 @@ public class RecipeManager
     oak_slab_from_oak_slab_vertical.setGroup("slab_from_slab_vertical");
     register(oak_slab_from_oak_slab_vertical);
 
-    ShapelessRecipe oak_slab_vertical_from_oak_slab = new ShapelessRecipe(of("oak_slab_vertical_from_oak_slab"), CustomMaterial.OAK_SLAB_VERTICAL.create()).addIngredient(new ExactChoice(new ItemStack(Material.OAK_SLAB)));
+    ShapelessRecipe oak_slab_vertical_from_oak_slab = new ShapelessRecipe(of("oak_slab_vertical_from_oak_slab"), CustomMaterial.OAK_SLAB_VERTICAL.create()).addIngredient(new MaterialChoice(Material.OAK_SLAB));
     oak_slab_vertical_from_oak_slab.setCategory(CraftingBookCategory.BUILDING);
     oak_slab_vertical_from_oak_slab.setGroup("slab_vertical");
     register(oak_slab_vertical_from_oak_slab);
