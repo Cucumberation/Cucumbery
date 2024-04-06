@@ -6,6 +6,7 @@ import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.storage.data.Constant.RestrictionType;
 import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -62,6 +63,6 @@ public class ItemMerge implements Listener
 				}
 			}
 		}
-		Method.updateItem(target, item1.getAmount());
+		Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> Method.updateItem(target, item1.getAmount()), 0L);
 	}
 }

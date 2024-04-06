@@ -858,19 +858,6 @@ public class MiningScheduler
 						}
 					}
 				}
-				ItemStack mainHand = player.getInventory().getItemInMainHand();
-				if (!dropDura && !mode2 && !mode3 && ItemStackUtil.itemExists(mainHand) && MiningManager.getToolTier(mainHand) > 0)
-				{
-					NBTItem nbtItem = new NBTItem(mainHand, true);
-					if (nbtItem.hasTag("CustomMiningUpdater"))
-					{
-						nbtItem.removeKey("CustomMiningUpdater");
-					}
-					else
-					{
-						nbtItem.setBoolean("CustomMiningUpdater", true);
-					}
-				}
 				// 채굴에 사용된 도구 통계 처리
 				if (ItemStackUtil.itemExists(toolItemStack))
 				{

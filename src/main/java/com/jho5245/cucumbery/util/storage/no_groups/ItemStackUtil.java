@@ -9,6 +9,7 @@ import com.destroystokyo.paper.profile.ProfileProperty;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
+import com.jho5245.cucumbery.util.addons.ProtocolLibManager;
 import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.itemlore.ItemLore.RemoveFlag;
 import com.jho5245.cucumbery.util.itemlore.ItemLore4;
@@ -1375,6 +1376,14 @@ public class ItemStackUtil
 			packet.getItemListModifier().write(0, itemStackList);
 			packet.getIntegers().write(0, 0);
 			protocolManager.sendServerPacket(player, packet);
+/*			if (ProtocolLibManager.RECIPE_HOLDER != null && ProtocolLibManager.RECIPE_HOLDER_INTEGERS != null)
+			{
+				packet = protocolManager.createPacket(Play.Server.RECIPE_UPDATE);
+				packet.getIntLists().write(0, ProtocolLibManager.RECIPE_HOLDER_INTEGERS);
+				packet.getModifier().write(0, ProtocolLibManager.RECIPE_HOLDER);
+				protocolManager.sendServerPacket(player, packet);
+			}*/
+
 		}
 		if (callAPI)
 		{

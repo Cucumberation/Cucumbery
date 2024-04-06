@@ -7,6 +7,8 @@ import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
+import com.jho5245.cucumbery.util.no_groups.ItemSerializer;
+import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant.CucumberyHideFlag;
@@ -97,7 +99,7 @@ public class ItemStackComponent
 					!(hideFlagsTagExists && NBTAPI.arrayContainsValue(hideFlags, CucumberyHideFlag.ENCHANTS)) && !cloneMeta.hasItemFlag(ItemFlag.HIDE_ENCHANTS);
 			if (showItemLore) // 아이템 설명을 사용할 경우 큐컴버리의 setItemLore의 설명만 사용하고 모든 ItemFlag 추가
 			{
-				ItemLore.setItemLore(clone, false, ItemLoreView.of(viewer));
+				clone = Cucumbery.using_ProtocolLib ? ProtocolLibManager.setItemLore(Server.ABILITIES, clone, viewer) : ItemLore.setItemLore(itemStack, false, ItemLoreView.of(viewer));
 				cloneMeta = clone.getItemMeta();
 				cloneMeta.addItemFlags(ItemFlag.values());
 			}
@@ -156,7 +158,7 @@ public class ItemStackComponent
 			}
 			bundleMeta.lore(tooltip);
 		}
-		bundleMeta.addItem(Cucumbery.using_ProtocolLib && viewer != null ? ProtocolLibManager.setItemLore(Server.WINDOW_ITEMS, itemStack, viewer) : itemStack);
+		bundleMeta.addItem(Cucumbery.using_ProtocolLib && viewer != null ? ProtocolLibManager.setItemLore(Server.ABILITIES, itemStack, viewer) : itemStack);
 		bundleMeta.addItemFlags(ItemFlag.values());
 		bundleMeta.displayName(ItemNameUtil.itemName(itemStack));
 		hover.setItemMeta(bundleMeta);

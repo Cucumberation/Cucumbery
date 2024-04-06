@@ -4,7 +4,6 @@ import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
-import com.jho5245.cucumbery.util.no_groups.ItemSerializer;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
@@ -15,6 +14,7 @@ import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemCategory;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemCategory.Rarity;
+import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import de.tr7zw.changeme.nbtapi.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
@@ -24,6 +24,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.CreativeCategory;
+import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -95,7 +96,6 @@ public class ItemLore
 		}
 		Material type = itemStack.getType();
 		NBTItem nbtItem = new NBTItem(itemStack, true);
-		nbtItem.removeKey("CustomMiningUpdater");
 		String customType = nbtItem.getString(CustomMaterial.IDENDIFER);
 		CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
 		{
@@ -410,13 +410,11 @@ public class ItemLore
 		return removeItemLore(itemStack, false, false);
 	}
 
-
 	@NotNull
 	public static ItemStack removeItemLore(@NotNull ItemStack itemStack, boolean removeUUID)
 	{
 		return removeItemLore(itemStack, removeUUID, false);
 	}
-
 
 	@NotNull
 	public static ItemStack removeItemLore(@NotNull ItemStack itemStack, boolean removeUUID, boolean removeItemFlags)
@@ -462,10 +460,13 @@ public class ItemLore
 		return itemStack;
 	}
 
-	public static class RemoveFlag {
+	public static class RemoveFlag
+	{
 		private boolean removeUUID, removeItemFlags, removeSkullMeta;
 
-		protected RemoveFlag() {}
+		protected RemoveFlag()
+		{
+		}
 
 		public static RemoveFlag create()
 		{

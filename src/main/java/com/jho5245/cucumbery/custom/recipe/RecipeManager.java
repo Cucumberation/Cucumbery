@@ -399,7 +399,6 @@ public class RecipeManager
     register(polished_granite_slab_vertical);
 
 
-
     ShapelessRecipe diorite_slab_from_diorite_slab_vertical = new ShapelessRecipe(of("diorite_slab_from_diorite_slab_vertical"), new ItemStack(Material.DIORITE_SLAB)).addIngredient(new ExactChoice(CustomMaterial.DIORITE_SLAB_VERTICAL.create()));
     diorite_slab_from_diorite_slab_vertical.setCategory(CraftingBookCategory.BUILDING);
     diorite_slab_from_diorite_slab_vertical.setGroup("slab_from_slab_vertical");
