@@ -88,7 +88,6 @@ public class PrepareItemCraft implements Listener
         }
       }
       Recipe recipe = event.getRecipe();
-      MessageUtil.broadcastDebug("recipe:" + (recipe instanceof Keyed keyed ? keyed.getKey() : "null"));
       boolean except = false;
       if (recipe instanceof Keyed keyed)
       {
