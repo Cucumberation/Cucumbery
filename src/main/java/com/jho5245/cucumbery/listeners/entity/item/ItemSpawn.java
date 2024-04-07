@@ -29,6 +29,7 @@ public class ItemSpawn implements Listener
       return;
     }
     Item entity = event.getEntity();
+    if (!Cucumbery.using_ProtocolLib)
     {
       Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
               Method.updateItem(entity), 0L);

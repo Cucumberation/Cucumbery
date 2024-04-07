@@ -63,6 +63,7 @@ public class ItemMerge implements Listener
 				}
 			}
 		}
-		Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> Method.updateItem(target, item1.getAmount()), 0L);
+		if (!Cucumbery.using_ProtocolLib)
+			Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> Method.updateItem(target, item1.getAmount()), 0L);
 	}
 }

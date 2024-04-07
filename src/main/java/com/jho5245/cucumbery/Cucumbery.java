@@ -313,6 +313,16 @@ public class Cucumbery extends JavaPlugin
 			{
 				Bukkit.getScheduler().runTaskLaterAsynchronously(cucumbery, () -> BlockPlaceDataConfig.display(player, player.getLocation()), 0L);
 			}
+			String displayName = UserData.DISPLAY_NAME.getString(player);
+			if (displayName != null)
+			{
+				PlayerProfile playerProfile = player.getPlayerProfile();
+				String name = MessageUtil.stripColor(ComponentUtil.serialize(ComponentUtil.create(displayName)));
+				if (name.length() > 16)
+					name = name.substring(0, 16);
+				playerProfile.setName(name);
+				player.setPlayerProfile(playerProfile);
+			}
 			ItemStackUtil.updateInventory(player);
 		}
 		for (World world : Bukkit.getWorlds())

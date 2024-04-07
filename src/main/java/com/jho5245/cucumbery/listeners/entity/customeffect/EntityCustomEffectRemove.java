@@ -7,13 +7,13 @@ import com.jho5245.cucumbery.custom.customeffect.CustomEffect.DisplayType;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectScheduler;
 import com.jho5245.cucumbery.custom.customeffect.children.group.*;
-import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
-import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCustomMining;
-import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeReinforce;
-import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeRune;
+import com.jho5245.cucumbery.custom.customeffect.type.*;
 import com.jho5245.cucumbery.events.entity.EntityCustomEffectRemoveEvent;
 import com.jho5245.cucumbery.events.entity.EntityCustomEffectRemoveEvent.RemoveReason;
+import com.jho5245.cucumbery.util.gui.GUIManager;
+import com.jho5245.cucumbery.util.gui.GUIManager.GUIType;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
+import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
@@ -364,6 +364,13 @@ public class EntityCustomEffectRemove implements Listener
 			PotionEffect potionEffect = livingEntity.getPotionEffect(potionEffectType);
 			if (potionEffect != null && potionEffect.getAmplifier() == amplifier && Math.abs(customEffect.getDuration() - potionEffect.getDuration()) <= 1)
 				livingEntity.removePotionEffect(potionEffectType);
+		}
+		
+		// 바닥에 떨어진 아이템 이름 표시 기능 전환 쿨타임 만료시 GUI 다시 열어주기
+		if (customEffectType == CustomEffectTypeCooldown.COOLDOWN_GUI_BUTTON_LONGER && entity instanceof Player player && player.getOpenInventory().getTitle().equals(
+				Constant.CANCEL_STRING + Constant.SERVER_SETTINGS))
+		{
+			GUIManager.openGUI(player, GUIType.SERVER_SETTINGS);
 		}
 	}
 }

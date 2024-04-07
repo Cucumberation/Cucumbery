@@ -5,6 +5,7 @@ import com.jho5245.cucumbery.listeners.block.piston.BlockPistonExtend;
 import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
 import com.jho5245.cucumbery.util.no_groups.ItemSerializer;
+import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
@@ -28,11 +29,6 @@ public class BlockPhysics implements Listener
     Block block = event.getBlock();//, sourceBlock = event.getSourceBlock();
     Boolean gameRuleValue = block.getWorld().getGameRuleValue(GameRule.DO_TILE_DROPS);
     boolean drop = gameRuleValue != null && gameRuleValue;
-    BlockPlaceDataConfig blockPlaceDataConfig = BlockPlaceDataConfig.getInstance(block.getChunk());
-    if (blockPlaceDataConfig == null)
-    {
-      return;
-    }
     Material blockType = block.getType();
     if (blockType.isAir())
     {
@@ -66,12 +62,11 @@ public class BlockPhysics implements Listener
         break;
     }
     Location bLoc = block.getLocation();
-    String dataString = blockPlaceDataConfig.getRawData(bLoc);
-    if (dataString == null)
+    ItemStack dataItem = BlockPlaceDataConfig.getItem(bLoc);
+    if (!ItemStackUtil.itemExists(dataItem))
     {
       return;
     }
-    ItemStack dataItem = ItemSerializer.deserialize(dataString);
     Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
     {
       Material afterBlockType = block.getType();
@@ -98,7 +93,7 @@ public class BlockPhysics implements Listener
                 if (!itemStack.hasItemMeta() && item.getPickupDelay() != 0)
                 {
                   bLoc.getWorld().dropItemNaturally(bLoc.add(-0.5d, -0.5d, -0.5d), dataItem);
-                  blockPlaceDataConfig.set(bLoc, null);
+                  BlockPlaceDataConfig.removeData(bLoc);
                   item.remove();
                 }
               }

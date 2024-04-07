@@ -10,6 +10,7 @@ import com.jho5245.cucumbery.events.entity.EntityCustomEffectRemoveEvent.RemoveR
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.no_groups.PlaceHolderUtil;
+import com.jho5245.cucumbery.util.no_groups.SelectorUtil;
 import com.jho5245.cucumbery.util.storage.component.ItemStackComponent;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
@@ -129,7 +130,7 @@ public class PlayerCommandPreprocess implements Listener
 		}
 
 		// cucumberify
-		if (Cucumbery.using_CommandAPI && message.startsWith("/give "))
+		if (message.startsWith("/give "))
 		{
 			message = "/cgive " + message.substring(6);
 			event.setMessage(message);
@@ -141,6 +142,23 @@ public class PlayerCommandPreprocess implements Listener
 			{
 				message = split2[0] + " @s " + split2[1];
 				event.setMessage(message);
+			}
+		}
+
+		// 구검버리 커스텀 닉네임 트롤링 개선
+		if (message.startsWith("/tp") && split.length >= 2)
+		{
+			String firstArg = split[1], secondArg = split.length >= 3 ? split[2] : null;
+			Player firstPlayer = SelectorUtil.getPlayer(player, firstArg, false);
+			Player secondPlayer = secondArg != null ? SelectorUtil.getPlayer(player, secondArg, false) : null;
+			boolean isValid = firstPlayer != null;
+			isValid = (secondArg == null || secondPlayer != null) && isValid;
+			if (isValid)
+			{
+				split[1] = Variable.ORIGINAL_NAME.getOrDefault(firstPlayer.getUniqueId(), firstPlayer.getName());
+				if (secondPlayer != null)
+					split[2] = Variable.ORIGINAL_NAME.getOrDefault(secondPlayer.getUniqueId(), secondPlayer.getName());
+				event.setMessage(MessageUtil.listToString(" ", split));
 			}
 		}
 		if (Variable.scrollReinforcing.contains(uuid) && !message.equalsIgnoreCase("/강화 quit") && !message.equalsIgnoreCase("/강화 realstart")

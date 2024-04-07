@@ -396,4 +396,10 @@ public abstract class CustomEnchant extends Enchantment
 			Cucumbery.getPlugin().getLogger().warning(e.getMessage());
 		}
 	}
+
+	@Override
+	public String getTranslationKey()
+	{
+		return this.toString();
+	}
 }

@@ -8,13 +8,11 @@ import com.comphenix.protocol.reflect.FuzzyReflection;
 import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.reflect.fuzzy.FuzzyMethodContract;
 import com.comphenix.protocol.utility.MinecraftReflection;
-import com.comphenix.protocol.wrappers.WrappedBlockData;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedDataValue;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher.Registry;
 import com.google.common.collect.Lists;
 import com.jho5245.cucumbery.Cucumbery;
-import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.no_groups.*;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
@@ -359,8 +357,8 @@ public class BlockPlaceDataConfig extends ChunkConfig
 			scaleZ *= 1.0005f;
 		}
 
-	//	scaleX *= -1f;
-	//	scaleZ *= -1f;
+		//	scaleX *= -1f;
+		//	scaleZ *= -1f;
 
 		// TODO: NO serializer for 4d packet yet
 		//    NBTList<Float> leftRotation = transformation.getFloatList("left_rotation");
@@ -439,10 +437,8 @@ public class BlockPlaceDataConfig extends ChunkConfig
 				//            )),
 				new WrappedDataValue(15, Registry.get(Byte.class), billBoard),
 				new WrappedDataValue(17, Registry.get(Float.class), viewRange * ("player_heads".equals(type) ? 0.5f : 1f)),
-				new WrappedDataValue(18, Registry.get(Float.class), shadowRadius),
-				new WrappedDataValue(19, Registry.get(Float.class), shadowStrength),
-				new WrappedDataValue(20, Registry.get(Float.class), width),
-				new WrappedDataValue(21, Registry.get(Float.class), height),
+				new WrappedDataValue(18, Registry.get(Float.class), shadowRadius), new WrappedDataValue(19, Registry.get(Float.class), shadowStrength),
+				new WrappedDataValue(20, Registry.get(Float.class), width), new WrappedDataValue(21, Registry.get(Float.class), height),
 				new WrappedDataValue(22, Registry.get(Integer.class), glowColorOverride));
 		if (glowing != null)
 		{
@@ -568,27 +564,29 @@ public class BlockPlaceDataConfig extends ChunkConfig
 	}
 
 	private static java.lang.reflect.Method craftBlockData_getState = null;
+
 	private static java.lang.reflect.Method nmsBlock_getId = null;
 
-	public static int getBlockStateId(BlockData data) {
-		try {
-			if (craftBlockData_getState == null || nmsBlock_getId == null) {
+	public static int getBlockStateId(BlockData data)
+	{
+		try
+		{
+			if (craftBlockData_getState == null || nmsBlock_getId == null)
+			{
 				Class<?> craftBlockDataClazz = MinecraftReflection.getCraftBukkitClass("block.data.CraftBlockData");
 				craftBlockData_getState = craftBlockDataClazz.getMethod("getState");
 				craftBlockData_getState.setAccessible(true);
 				FuzzyReflection blockReflector = FuzzyReflection.fromClass(MinecraftReflection.getBlockClass());
-				nmsBlock_getId = blockReflector.getMethod(FuzzyMethodContract.newBuilder()
-						.banModifier(Modifier.PRIVATE)
-						.banModifier(Modifier.PROTECTED)
-						.requireModifier(Modifier.STATIC)
-						.parameterExactArray(MinecraftReflection.getIBlockDataClass())
-						.returnTypeExact(int.class)
-						.build());
+				nmsBlock_getId = blockReflector.getMethod(
+						FuzzyMethodContract.newBuilder().banModifier(Modifier.PRIVATE).banModifier(Modifier.PROTECTED).requireModifier(Modifier.STATIC)
+								.parameterExactArray(MinecraftReflection.getIBlockDataClass()).returnTypeExact(int.class).build());
 			}
 
 			Object nmsState = craftBlockData_getState.invoke(data);
 			return (int) nmsBlock_getId.invoke(null, nmsState);
-		} catch (ReflectiveOperationException e) {
+		}
+		catch (ReflectiveOperationException e)
+		{
 			throw new RuntimeException(e);
 		}
 	}

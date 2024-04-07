@@ -1926,6 +1926,7 @@ public class Method extends SoundPlay
 		}
 		if (Cucumbery.using_ProtocolLib)
 		{
+			if (true) return;
 			itemEntity.setCustomNameVisible(false);
 			ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 			try

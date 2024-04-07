@@ -742,7 +742,7 @@ public class Initializer
 		if (UserData.DISPLAY_NAME.getString(player) != null)
 		{
 			PlayerProfile playerProfile = player.getPlayerProfile();
-			String name = ComponentUtil.serialize(display);
+			String name = MessageUtil.stripColor(ComponentUtil.serialize(display));
 			if (name.length() > 16)
 			{
 				name = name.substring(0, 16);
