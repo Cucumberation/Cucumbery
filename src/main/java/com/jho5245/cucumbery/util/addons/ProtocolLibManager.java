@@ -25,6 +25,7 @@ import com.jho5245.cucumbery.util.itemlore.ItemLore.RemoveFlag;
 import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
+import com.jho5245.cucumbery.util.no_groups.ItemSerializer;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method2;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
@@ -349,6 +350,17 @@ public class ProtocolLibManager
 					UserData.WINDOW_ID.set(uuid, packet.getIntegers().read(0));
 					packet.getItemModifier().write(0, setItemLore(packet.getType(), packet.getItemModifier().read(0), player));
 					StructureModifier<List<ItemStack>> modifier = packet.getItemListModifier();
+/*					List<ItemStack> itemStacks = modifier.read(0);
+					List<ItemStack> modifiedItemStacks = setItemLore(packet.getType(), itemStacks, player);
+					if (player.getOpenInventory().getTopInventory().getLocation() == null)
+					{
+						List<ItemStack> itemStacksList = modifier.read(0);
+						for (int i = 0; i < player.getOpenInventory().getTopInventory().getSize(); i++)
+						{
+							modifiedItemStacks.set(i, itemStacksList.get(i));
+						}
+					}
+					modifier.write(0, modifiedItemStacks);*/
 					modifier.write(0, setItemLore(packet.getType(), modifier.read(0), player));
 				}
 				else if (packet.getType() == Server.OPEN_WINDOW_MERCHANT)
