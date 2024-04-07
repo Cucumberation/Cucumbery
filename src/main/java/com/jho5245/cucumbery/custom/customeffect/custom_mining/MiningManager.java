@@ -1328,6 +1328,11 @@ public class MiningManager
 			miningSpeed = 50f;
 		}
 
+		if (!player.getWorld().getGameRuleValue(GameRule.DO_TILE_DROPS))
+		{
+			drop.clear();
+		}
+
 		if (UserData.SHOW_PLUGIN_DEV_DEBUG_MESSAGE.getBoolean(player))
 		{
 			MessageUtil.sendActionBar(player, "IgnoreVanilla: %s, ToolSpeed: %s, MiningSpeed: %s, VanillaSpeed: %s, Hardness: %s, Fortune: %s, Progress: %s",

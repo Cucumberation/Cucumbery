@@ -387,10 +387,20 @@ public class MiningScheduler
 			{
 				if (miningResult.miningTier() > 0 && !Variable.customMiningTierAlertCooldown.contains(uuid))
 				{
-					MessageUtil.sendWarn(player, "%s을(를) 캐기 위해 더 높은 등급의 도구가 필요합니다!",
-							drops.isEmpty() || BlockPlaceDataConfig.getItem(location) == null && CustomMaterial.itemStackOf(drops.get(0)) == null
-									? block.getType()
-									: drops.get(0));
+					Object blockInfo = null;
+					if (!drops.isEmpty())
+					{
+						blockInfo = drops.get(0);
+					}
+					else if (BlockPlaceDataConfig.getItem(location) != null)
+					{
+						blockInfo = BlockPlaceDataConfig.getItem(location);
+					}
+					if (blockInfo == null)
+					{
+						blockInfo = block.getType();
+					}
+					MessageUtil.sendWarn(player, "%s을(를) 캐기 위해 더 높은 등급의 도구가 필요합니다!", blockInfo);
 					Variable.customMiningTierAlertCooldown.add(uuid);
 					Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> Variable.customMiningTierAlertCooldown.remove(uuid), 20L);
 				}
