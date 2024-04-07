@@ -96,21 +96,6 @@ public class PlayerCommandPreprocess implements Listener
 				return;
 			}
 		}
-		if ((player.isOp() || player.getGameMode() == GameMode.CREATIVE) && split.length > 1)
-		{
-			switch (label)
-			{
-				case "i", "ei", "eitem", "essentials:i", "essentials:ei", "essentials:eitem", "enchant", "enchantment", "essentials:enchant", "essentials:enchantment", "ie", "itemedit", "itemedit:ie", "itemedit:itemedit" ->
-						Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
-				case "minecraft:item", "item" -> Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-				{
-					for (Player online : Bukkit.getServer().getOnlinePlayers())
-					{
-						ItemStackUtil.updateInventory(online);
-					}
-				}, 0L);
-			}
-		}
 
 		if ("i".equals(label) && split.length == 2)
 		{

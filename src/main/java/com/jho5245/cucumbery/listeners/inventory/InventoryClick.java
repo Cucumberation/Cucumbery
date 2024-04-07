@@ -1330,7 +1330,6 @@ public class InventoryClick implements Listener
 
 	private void itemLore(InventoryClickEvent event, Player player)
 	{
-
 		// 소리 블록 설명 업데이트 감지
 		if (player.getGameMode() == GameMode.CREATIVE) // 소리 블록을 픽블록 했을 때 해당 블록의 음높이와 악기를 아이템 설명에 복사하는 기능
 		{
@@ -1722,11 +1721,6 @@ public class InventoryClick implements Listener
 				Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> check.remove(player), 2L);
 			}
 		}
-
-		if (player.getGameMode() != GameMode.CREATIVE && ItemStackUtil.itemExists(event.getCursor()))
-		{
-			Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player, true, true), 0L);
-		}
 	}
 
 	/**
@@ -2060,7 +2054,6 @@ public class InventoryClick implements Listener
 		{
 			if (CustomEffectManager.hasEffect(player, CustomEffectTypeCooldown.COOLDOWN_GUI_BUTTON))
 			{
-				//        MessageUtil.sendWarn(player, "좀 천천히 누르삼!");
 				return;
 			}
 			boolean saveConfig = false;
@@ -2160,12 +2153,30 @@ public class InventoryClick implements Listener
 					UserData.SHOW_ACTIONBAR_WHEN_ITEM_IS_COOLDOWN.setToggle(uuid);
 					saveConfig = true;
 					break;
+				case 32:
+					if (CustomEffectManager.hasEffect(player, CustomEffectTypeCooldown.COOLDOWN_GUI_BUTTON_LONGER))
+					{
+						GUIManager.openGUI(player, GUIType.SERVER_SETTINGS);
+						return;
+					}
+					CustomEffectManager.addEffect(player, CustomEffectTypeCooldown.COOLDOWN_GUI_BUTTON_LONGER);
+					UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME.setToggle(uuid);
+					saveConfig = true;
+					break;
 				case 33:
 					UserData.SHOW_DAMAGE_INDICATOR.setToggle(uuid);
 					saveConfig = true;
 					break;
 				case 37:
 					UserData.SHOW_DEATH_PVP_MESSAGE.setToggle(uuid);
+					saveConfig = true;
+					break;
+				case 38:
+					UserData.SHOW_ITEM_LORE.setToggle(uuid);
+					saveConfig = true;
+					break;
+				case 47:
+					UserData.SHOW_ENCHANTED_ITEM_GLINTS.setToggle(uuid);
 					saveConfig = true;
 					break;
 				case 39:
@@ -2178,6 +2189,13 @@ public class InventoryClick implements Listener
 					if (player.getGameMode() == GameMode.CREATIVE)
 					{
 						UserData.COPY_NOTE_BLOCK_VALUE_WHEN_SNEAKING.setToggle(uuid);
+						saveConfig = true;
+					}
+					break;
+				case 8:
+					if (player.getGameMode() == GameMode.CREATIVE)
+					{
+						UserData.SHOW_ITEM_LORE_IN_CREATIVE_MODE.setToggle(uuid);
 						saveConfig = true;
 					}
 					break;

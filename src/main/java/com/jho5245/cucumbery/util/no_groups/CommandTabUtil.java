@@ -359,7 +359,7 @@ public class CommandTabUtil
         list.add(Completion.completion(uuid, hover));
       }
     }
-    if (lastArg.isEmpty())
+    if (sender.hasPermission("minecraft.command.selector") && lastArg.isEmpty())
     {
       list.add(Completion.completion("#", ComponentUtil.translate("특정 태그가 있는 개체 (예 : #foo)")));
     }
@@ -631,11 +631,11 @@ public class CommandTabUtil
     String msg = "'%s'은(는) 잘못되거나 알 수 없는 %s입니다";
     if (key2.contains("개체"))
     {
-      msg = "개체를 찾을 수 없습니다 (%s)";
+      msg = "개체를 찾을 수 없습니다: %s";
     }
     if (key2.contains("플레이어") || key2.contains("관전자"))
     {
-      msg = "플레이어를 찾을 수 없습니다 (%s)";
+      msg = "플레이어를 찾을 수 없습니다: %s";
     }
     switch (key2)
     {

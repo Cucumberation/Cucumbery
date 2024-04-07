@@ -31,10 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -451,6 +448,14 @@ public class MessageUtil
 	 */
 	public static void sendMessage(@NotNull Object audience, @Nullable Prefix prefix, @NotNull String key, @NotNull Object... args)
 	{
+		if (audience instanceof Iterable<?> iterable)
+		{
+			for (Object o : iterable)
+			{
+				sendMessage(o, prefix, key, args);
+			}
+			return;
+		}
 		Audience a = of(audience);
 		Component message = ComponentUtil.translate(a instanceof Player player ? player : null, key, args);
 		if (prefix != null)

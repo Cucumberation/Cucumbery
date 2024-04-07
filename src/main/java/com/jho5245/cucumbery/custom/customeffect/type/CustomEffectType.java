@@ -295,7 +295,7 @@ public class CustomEffectType implements Translatable, EnumHideable
   /**
    * PlayerArmSwingEvent가 멈췄을때(플레이어가 팔을 흔드는 것을 멈췄을때)를 감지하기 위한 효과
    */
-  ARM_SWING = new CustomEffectType("arm_swing", "", builder().hidden().defaultDuration(2)),
+  ARM_SWING = new CustomEffectType("arm_swing", "", builder().hidden().defaultDuration(3)),
 
   /**
    * 플레이어가 마우스 좌클릭을 하여 팔을 흔드는 것을 제외한 나머지 팔 휘두르기 확인용

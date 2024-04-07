@@ -5,6 +5,7 @@ import com.jho5245.cucumbery.commands.sound.CommandSong;
 import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.no_groups.Method2;
 import com.jho5245.cucumbery.util.storage.data.Constant.AllPlayer;
+import com.jho5245.cucumbery.util.storage.data.EnumHideable;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import org.bukkit.*;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -265,8 +266,9 @@ public class CustomConfig
 		return file;
 	}
 
-	public enum UserData
+	public enum UserData implements EnumHideable
 	{
+		WINDOW_ID("internal-window-id", 1),
 		GSIT_EXEMPT("GSit-예외-모드", false),
 		ANNOUNCE_ADVANCEMENTS("발전-과제-달성-메시지-띄움", true),
 		COPY_BLOCK_DATA("픽블록으로-블록-데이터-복사", false),
@@ -550,7 +552,7 @@ public class CustomConfig
 			{
 				switch (this)
 				{
-					case EVENT_EXCEPTION_ACCESS, SHOW_ENCHANTMENT_TMI_DESCRIPTION, SHOW_ITEM_LORE, SHOW_ENCHANTED_ITEM_GLINTS -> ItemStackUtil.updateInventory(player);
+					case EVENT_EXCEPTION_ACCESS, SHOW_ENCHANTMENT_TMI_DESCRIPTION, SHOW_ITEM_LORE, SHOW_ENCHANTED_ITEM_GLINTS, SHOW_ITEM_LORE_IN_CREATIVE_MODE -> ItemStackUtil.updateInventory(player);
 					case ENTITY_AGGRO, SPECTATOR_MODE ->
 					{
 						if (!UserData.ENTITY_AGGRO.getBoolean(uuid) || UserData.SPECTATOR_MODE.getBoolean(uuid))
@@ -679,6 +681,12 @@ public class CustomConfig
 		public void setToggle(OfflinePlayer player)
 		{
 			this.setToggle(player.getUniqueId());
+		}
+
+		@Override
+		public boolean isHiddenEnum()
+		{
+			return this == WINDOW_ID;
 		}
 	}
 

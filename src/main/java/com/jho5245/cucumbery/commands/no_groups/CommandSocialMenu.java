@@ -1,9 +1,8 @@
 package com.jho5245.cucumbery.commands.no_groups;
 
+import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent.Completion;
 import com.jho5245.cucumbery.Cucumbery;
-import com.jho5245.cucumbery.util.no_groups.MessageUtil;
-import com.jho5245.cucumbery.util.no_groups.Method;
-import com.jho5245.cucumbery.util.no_groups.SelectorUtil;
+import com.jho5245.cucumbery.util.no_groups.*;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
@@ -11,14 +10,16 @@ import com.jho5245.cucumbery.util.storage.data.Variable;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
-import org.bukkit.command.*;
+import org.bukkit.Location;
+import org.bukkit.command.BlockCommandSender;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
 import java.util.List;
 
-public class CommandSocialMenu implements CommandExecutor, TabCompleter
+public class CommandSocialMenu implements CucumberyCommandExecutor
 {
   public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args)
   {
@@ -150,20 +151,15 @@ public class CommandSocialMenu implements CommandExecutor, TabCompleter
     return true;
   }
 
-  public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args)
+  @Override
+  public @NotNull List<Completion> completion(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args,
+      @NotNull Location location)
   {
-    if (!MessageUtil.checkQuoteIsValidInArgs(sender, args = MessageUtil.wrapWithQuote(true, args), true))
+    if (args.length == 1)
     {
-      return Collections.singletonList(args[0]);
+      return CommandTabUtil.tabCompleterPlayer(sender, args, "<플레이어>");
     }
-    int length = args.length;
-
-    if (length == 1)
-    {
-      return Method.tabCompleterPlayer(sender, args);
-    }
-
-    return Collections.singletonList(Prefix.ARGS_LONG.toString());
+    return CommandTabUtil.ARGS_LONG;
   }
 }
 

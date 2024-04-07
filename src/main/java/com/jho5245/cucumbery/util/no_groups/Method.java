@@ -215,8 +215,8 @@ public class Method extends SoundPlay
 		{
 			switch (customMaterial)
 			{
-				case TUNGSTEN_INGOT, COBALT_INGOT, CUCUMBERITE_INGOT, MITHRIL_INGOT, SHROOMITE_INGOT, TITANIUM_INGOT, COBALT_ORE, CUCUMBERITE_ORE, MITHRIL_ORE, SHROOMITE_ORE, TITANIUM_ORE, TUNGSTEN_ORE ->
-						heldItemSound(player, new ItemStack(Material.IRON_INGOT));
+				case TUNGSTEN_INGOT, COBALT_INGOT, CUCUMBERITE_INGOT, MITHRIL_INGOT, SHROOMITE_INGOT, TITANIUM_INGOT, COBALT_ORE, CUCUMBERITE_ORE, MITHRIL_ORE,
+						 SHROOMITE_ORE, TITANIUM_ORE, TUNGSTEN_ORE -> heldItemSound(player, new ItemStack(Material.IRON_INGOT));
 			}
 		}
 		else
@@ -1918,86 +1918,61 @@ public class Method extends SoundPlay
 				itemEntity.setInvulnerable(true);
 			}
 		}
-		// 이름이 표시되지 않을 아이템이면 표시하지 않고 빠꾸
+		Boolean shouldShowCustomName = ItemStackUtil.shouldShowCustomName(item);
+		if (shouldShowCustomName != null)
 		{
-			NBTList<String> hideFlags = NBTAPI.getStringList(itemTag, CucumberyTag.HIDE_FLAGS_KEY);
-			if (NBTAPI.arrayContainsValue(hideFlags, Constant.CucumberyHideFlag.CUSTOM_NAME))
-			{
-				itemEntity.setCustomNameVisible(false);
-				return;
-			}
-		}
-		CustomMaterial customMaterial = CustomMaterial.itemStackOf(item);
-		// 일부 커스텀 아이템은 별도의 이름 표기 규칙을 가짐 (적용 후 return)
-		{
-			if (customMaterial != null)
-			{
-				switch (customMaterial)
-				{
-					case CORE_GEMSTONE, CORE_GEMSTONE_EXPERIENCE, CORE_GEMSTONE_MIRROR, CORE_GEMSTONE_MITRA ->
-					{
-						itemEntity.setCustomNameVisible(false);
-						return;
-					}
-					case RUNE_DESTRUCTION, RUNE_EARTHQUAKE ->
-					{
-						itemEntity.setCustomNameVisible(true);
-						return;
-					}
-				}
-			}
+			itemEntity.setCustomNameVisible(shouldShowCustomName);
+			return;
 		}
 		if (Cucumbery.using_ProtocolLib)
 		{
 			itemEntity.setCustomNameVisible(false);
-			Bukkit.getScheduler().runTaskLaterAsynchronously(Cucumbery.getPlugin(), () ->
+			ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
+			try
 			{
-				ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
-				try
+				for (Player player : Bukkit.getOnlinePlayers())
 				{
-					for (Player player : Bukkit.getOnlinePlayers())
+					if (!player.getWorld().getName().equals(itemEntity.getWorld().getName()))
 					{
-						if (!player.getWorld().getName().equals(itemEntity.getWorld().getName()))
-						{
-							continue;
-						}
-						if (player.getLocation().distance(itemEntity.getLocation()) > 100d)
-						{
-							continue;
-						}
-						boolean showDrop = UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player);
-						if (UserData.FORCE_HIDE_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player))
-						{
-							showDrop = false;
-						}
-						PacketContainer updateComponent = protocolManager.createPacket(Play.Server.ENTITY_METADATA);
-						StructureModifier<List<WrappedDataValue>> watchableAccessor = updateComponent.getDataValueCollectionModifier();
-						ItemStack itemStack = item.clone();
-						itemStack.setAmount(amount);
-						List<WrappedDataValue> values = Lists.newArrayList(new WrappedDataValue(3, WrappedDataWatcher.Registry.get(Boolean.class), showDrop),
-								new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false),
-										MinecraftReflection.getMinecraftItemStack(ProtocolLibManager.setItemLore(Play.Server.ENTITY_METADATA, itemStack, player))));
-						watchableAccessor.write(0, values);
-						updateComponent.getIntegers().write(0, itemEntity.getEntityId());
-						protocolManager.sendServerPacket(player, updateComponent);
-						Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> protocolManager.sendServerPacket(player, updateComponent), 0L);
+						continue;
 					}
-				}
-				catch (ConcurrentModificationException ignored)
-				{
-				}
-				catch (IllegalArgumentException e)
-				{
-					if (!e.getMessage().contains("No serializer found for class java.lang.Boolean"))
+					if (player.getLocation().distance(itemEntity.getLocation()) > 100d)
 					{
-						Cucumbery.getPlugin().getLogger().warning(e.getMessage());
+						continue;
 					}
+					boolean showDrop = UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player);
+					if (UserData.FORCE_HIDE_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player))
+					{
+						showDrop = false;
+					}
+					PacketContainer updateComponent = protocolManager.createPacket(Play.Server.ENTITY_METADATA);
+					StructureModifier<List<WrappedDataValue>> watchableAccessor = updateComponent.getDataValueCollectionModifier();
+					ItemStack itemStack = item.clone();
+					itemStack.setAmount(amount);
+					List<WrappedDataValue> values = Lists.newArrayList(new WrappedDataValue(3, WrappedDataWatcher.Registry.get(Boolean.class), showDrop),
+							new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false),
+									MinecraftReflection.getMinecraftItemStack(ProtocolLibManager.setItemLore(Play.Server.ENTITY_METADATA, itemStack, player))));
+					watchableAccessor.write(0, values);
+					updateComponent.getIntegers().write(0, itemEntity.getEntityId());
+					protocolManager.sendServerPacket(player, updateComponent);
+					Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> protocolManager.sendServerPacket(player, updateComponent), 0L);
+					Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> protocolManager.sendServerPacket(player, updateComponent), 1L);
 				}
-				catch (Exception e)
+			}
+			catch (ConcurrentModificationException ignored)
+			{
+			}
+			catch (IllegalArgumentException e)
+			{
+				if (!e.getMessage().contains("No serializer found for class java.lang.Boolean"))
 				{
 					Cucumbery.getPlugin().getLogger().warning(e.getMessage());
 				}
-			}, 0L);
+			}
+			catch (Exception e)
+			{
+				Cucumbery.getPlugin().getLogger().warning(e.getMessage());
+			}
 		}
 		// 이외의 경우에는 config 설정에 따른 전역 아이템 표시 여부 결정
 		else if (Cucumbery.config.getBoolean("name-tag-on-item-spawn"))
@@ -2090,7 +2065,9 @@ public class Method extends SoundPlay
 
 	/**
 	 * 입력한 {@link org.bukkit.Location}이 스폰 보호 구역에 포함되는지 확인합니다. 월드와 상관없이 좌표 차이로만 계산됩니다.
-	 * @param location 스폰 보호 구역에 포함되는지 확인할 {@link org.bukkit.Location} 인스턴스
+	 *
+	 * @param location
+	 * 		스폰 보호 구역에 포함되는지 확인할 {@link org.bukkit.Location} 인스턴스
 	 * @return 포함되면 true 아닐 경우 false
 	 */
 	public static boolean isSpawnProtectionLocattion(@NotNull Location location)

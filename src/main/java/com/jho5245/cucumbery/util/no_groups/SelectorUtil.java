@@ -183,7 +183,7 @@ public class SelectorUtil
 						MessageUtil.sendError(sender, ComponentUtil.translate("argument.entity.selector.not_allowed"));
 						return null;
 					}
-					MessageUtil.sendError(sender, "%s (%s)", ComponentUtil.translate("argument.player.entities"), selector);
+					MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.player.entities"), selector);
 				}
 				return null;
 			}
@@ -193,16 +193,16 @@ public class SelectorUtil
 				{
 					if (!sender.hasPermission("minecraft.command.selector"))
 					{
-						MessageUtil.sendError(sender, ComponentUtil.translate("argument.entity.selector.not_allowed"));
+						MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.entity.notfound.player"), selector);
 						return null;
 					}
-					MessageUtil.sendError(sender, "%s (%s)", ComponentUtil.translate("argument.player.toomany"), selector);
+					MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.player.toomany"), selector);
 				}
 				return null;
 			}
 			if (!sender.hasPermission("minecraft.command.selector"))
 			{
-				MessageUtil.sendError(sender, "%s (%s)", ComponentUtil.translate("argument.entity.notfound.player"), selector);
+				MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.entity.notfound.player"), selector);
 				return null;
 			}
 			return (Player) entities.get(0);
@@ -213,7 +213,7 @@ public class SelectorUtil
 			{
 				if (!sender.hasPermission("minecraft.command.selector"))
 				{
-					MessageUtil.sendError(sender, ComponentUtil.translate("argument.entity.notfound.player"));
+					MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.entity.notfound.player"), selector);
 					return null;
 				}
 				MessageUtil.sendError(sender, errorMessage(selector, e));
@@ -257,16 +257,16 @@ public class SelectorUtil
 				{
 					if (!sender.hasPermission("minecraft.command.selector"))
 					{
-						MessageUtil.sendError(sender, ComponentUtil.translate("argument.entity.selector.not_allowed"));
+						MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.entity.notfound.entity"), selector);
 						return null;
 					}
-					MessageUtil.sendError(sender, "%s (%s)", ComponentUtil.translate("argument.entity.toomany"), selector);
+					MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.entity.toomany"), selector);
 				}
 				return null;
 			}
 			if (!sender.hasPermission("minecraft.command.selector"))
 			{
-				MessageUtil.sendError(sender, ComponentUtil.translate("argument.entity.selector.not_allowed"));
+				MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.entity.notfound.entity"), selector);
 				return null;
 			}
 			return entities.get(0);
@@ -277,7 +277,7 @@ public class SelectorUtil
 			{
 				if (!sender.hasPermission("minecraft.command.selector"))
 				{
-					MessageUtil.sendError(sender, ComponentUtil.translate("argument.entity.selector.not_allowed"));
+					MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.entity.notfound.entity"), selector);
 					return null;
 				}
 				MessageUtil.sendError(sender, errorMessage(selector, e));
@@ -322,10 +322,10 @@ public class SelectorUtil
 				{
 					if (!sender.hasPermission("minecraft.command.selector"))
 					{
-						MessageUtil.sendError(sender, ComponentUtil.translate("argument.entity.selector.not_allowed"));
+						MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.entity.notfound.player"), selector);
 						return null;
 					}
-					MessageUtil.sendError(sender, "%s (%s)", ComponentUtil.translate("argument.player.entities"), selector);
+					MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.player.entities"), selector);
 				}
 				return null;
 			}
@@ -339,7 +339,7 @@ public class SelectorUtil
 			}
 			if (!sender.hasPermission("minecraft.command.selector"))
 			{
-				MessageUtil.sendError(sender, ComponentUtil.translate("argument.entity.selector.not_allowed"));
+				MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.entity.notfound.player"), selector);
 				return null;
 			}
 			return players;
@@ -350,7 +350,7 @@ public class SelectorUtil
 			{
 				if (!sender.hasPermission("minecraft.command.selector"))
 				{
-					MessageUtil.sendError(sender, ComponentUtil.translate("argument.entity.selector.not_allowed"));
+					MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.entity.notfound.player"), selector);
 					return null;
 				}
 				MessageUtil.sendError(sender, errorMessage(selector, e));
@@ -389,7 +389,7 @@ public class SelectorUtil
 			}
 			if (!sender.hasPermission("minecraft.command.selector"))
 			{
-				MessageUtil.sendError(sender, ComponentUtil.translate("argument.entity.selector.not_allowed"));
+				MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.entity.notfound.entity"), selector);
 				return null;
 			}
 			return !entities.isEmpty() ? entities : null;
@@ -400,7 +400,7 @@ public class SelectorUtil
 			{
 				if (!sender.hasPermission("minecraft.command.selector"))
 				{
-					MessageUtil.sendError(sender, ComponentUtil.translate("argument.entity.selector.not_allowed"));
+					MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.entity.notfound.entity"), selector);
 					return null;
 				}
 				MessageUtil.sendError(sender, errorMessage(selector, e));
@@ -441,12 +441,12 @@ public class SelectorUtil
 			{
 				if (!sender.hasPermission("minecraft.command.selector"))
 				{
-					MessageUtil.sendError(sender, ComponentUtil.translate("argument.entity.selector.not_allowed"));
+					MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.entity.notfound.player"), selector);
 					return null;
 				}
 				if (notice)
 				{
-					MessageUtil.sendError(sender, "%s (%s)", ComponentUtil.translate("argument.player.entities"), selector);
+					MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.player.entities"), selector);
 				}
 				return null;
 			}
@@ -460,7 +460,7 @@ public class SelectorUtil
 			}
 			if (!sender.hasPermission("minecraft.command.selector"))
 			{
-				MessageUtil.sendError(sender, ComponentUtil.translate("argument.entity.selector.not_allowed"));
+				MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.entity.notfound.player"), selector);
 				return null;
 			}
 			return players;
@@ -471,7 +471,7 @@ public class SelectorUtil
 			{
 				if (!sender.hasPermission("minecraft.command.selector"))
 				{
-					MessageUtil.sendError(sender, ComponentUtil.translate("argument.entity.selector.not_allowed"));
+					MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.entity.notfound.player"), selector);
 					return null;
 				}
 				MessageUtil.sendError(sender, errorMessage(selector, e));
@@ -518,12 +518,12 @@ public class SelectorUtil
 			{
 				if (!sender.hasPermission("minecraft.command.selector"))
 				{
-					MessageUtil.sendError(sender, ComponentUtil.translate("argument.entity.selector.not_allowed"));
+					MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.entity.notfound.player"), selector);
 					return null;
 				}
 				if (notice)
 				{
-					MessageUtil.sendError(sender, "%s (%s)", ComponentUtil.translate("argument.player.entities"), selector);
+					MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.player.entities"), selector);
 				}
 				return null;
 			}
@@ -531,12 +531,12 @@ public class SelectorUtil
 			{
 				if (!sender.hasPermission("minecraft.command.selector"))
 				{
-					MessageUtil.sendError(sender, ComponentUtil.translate("argument.entity.selector.not_allowed"));
+					MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.entity.notfound.player"), selector);
 					return null;
 				}
 				if (notice)
 				{
-					MessageUtil.sendError(sender, "%s (%s)", ComponentUtil.translate("argument.player.toomany"), selector);
+					MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.player.toomany"), selector);
 				}
 				return null;
 			}
@@ -553,7 +553,7 @@ public class SelectorUtil
 			{
 				if (!sender.hasPermission("minecraft.command.selector"))
 				{
-					MessageUtil.sendError(sender, ComponentUtil.translate("argument.entity.selector.not_allowed"));
+					MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.entity.notfound.player"), selector);
 					return null;
 				}
 				MessageUtil.sendError(sender, errorMessage(selector, e));

@@ -13,6 +13,7 @@ import com.jho5245.cucumbery.custom.customeffect.children.group.PlayerCustomEffe
 import com.jho5245.cucumbery.custom.customeffect.children.group.PlayerCustomEffectImple;
 import com.jho5245.cucumbery.custom.customeffect.custom_mining.MiningScheduler;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
+import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCooldown;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCustomMining;
 import com.jho5245.cucumbery.custom.customrecipe.recipeinventory.RecipeInventoryCategory;
 import com.jho5245.cucumbery.custom.customrecipe.recipeinventory.RecipeInventoryMainMenu;
@@ -111,8 +112,8 @@ public class Scheduler
       inventoryFullNotifyAsync();
       // 아이템 보관함 gui 업데이트
       stashGUIAsync();
-      // 레시피 메뉴 업데이트
-      updateCustomRecipeGUIAsync();
+      // gui 업데이트
+      updateGUIAsync();
       // 이름표 - 트래커
       nameTagTrackerAsync();
     }, 20L, 20L);
@@ -1240,9 +1241,9 @@ public class Scheduler
   }
 
   /**
-   * 1초마다 플레이어의 레시피 화면을 업데이트 합니다.
+   * 1초마다 플레이어의 일부 gui 화면을 업데이트 합니다.
    */
-  private static void updateCustomRecipeGUIAsync()
+  private static void updateGUIAsync()
   {
     for (Player player : Bukkit.getServer().getOnlinePlayers())
     {
@@ -1277,6 +1278,13 @@ public class Scheduler
         int mainPage = Integer.parseInt(title.split(mainSplitter)[1].split(categorySplitter)[0].replace("§", ""));
         int categoryPage = Integer.parseInt(title.split(categorySplitter)[1].replace("§", ""));
         RecipeInventoryRecipe.openRecipeInventory(player, mainPage, category, categoryPage, recipe, false);
+      }
+
+      // 개인 설정 메뉴 화면 업데이트 - 쿨타임이 있는 효과 때문에 갱신을 위함; 따라서 쿨타임 효과가 없으면 하지 않음
+      if (title.equals(Constant.CANCEL_STRING + Constant.SERVER_SETTINGS) && CustomEffectManager.hasEffect(player, CustomEffectTypeCooldown.COOLDOWN_GUI_BUTTON_LONGER))
+      {
+        Bukkit.getScheduler().runTask(Cucumbery.getPlugin(), () ->
+        GUIManager.openGUI(player, GUIType.SERVER_SETTINGS));
       }
     }
   }

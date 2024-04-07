@@ -1,11 +1,14 @@
 package com.jho5245.cucumbery.util.gui;
 
 import com.jho5245.cucumbery.commands.no_groups.CommandStash;
+import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
+import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCooldown;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Permission;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CreateItemStack;
+import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -19,9 +22,7 @@ import org.bukkit.inventory.InventoryView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @SuppressWarnings("deprecation")
 public class GUIManager
@@ -120,6 +121,13 @@ public class GUIManager
           .toggleItem(getBool(player, UserData.SHOW_DEATH_PVP_MESSAGE), "&bPvP 데스 메시지 표시",
                   Arrays.asList("&7자신이 공격하지 않은 다른 플레이어가", "&7PvP를 하여 죽을 때 데스 메시지를 표시합니다"), trueLore, falseLore));
 
+    inv.setItem(38, CreateItemStack
+          .toggleItem(getBool(player, UserData.SHOW_ITEM_LORE), "&b유용한 아이템 설명 표시", Collections.singletonList("&7아이템에 유용한 설명 추가 기능을 사용합니다"), trueLore, falseLore));
+
+    inv.setItem(47, CreateItemStack
+          .toggleItem(getBool(player, UserData.SHOW_ENCHANTED_ITEM_GLINTS), "&b마법이 부여된 아이템 반짝임 표시",
+              Arrays.asList("&7마법이 부여된 아이템의 반짝임 여부를 전환합니다", "&7기본 마인크래프트의 접근성 설정에서 조절할 수도 있습니다", "&e단, 크리에이티브 모드에서는 설정에 관계없이 켜짐으로", "&e고정되며, 표시 미사용 시 일부 아이템은 이상하게 바뀔 수 있습니다", "&e알아서 하세요."), trueLore, falseLore));
+
 
     inv.setItem(15, CreateItemStack.toggleItem(UserData.TRAMPLE_SOIL_ALERT.getBoolean(player.getUniqueId()), "&b경작지 파괴 방지 기능 타이틀 띄움",
             Arrays.asList("&7경작지 파괴 방지 기능 사용으로 인해", "&7경작지 파괴가 막혔을때 타이틀을 띄워줍니다", "&e특정한 상황에서는 해당 기능을 사용해도", "&e타이틀이 뜨지 않을 수 있습니다", "", "&6현재 설정 : &a타이틀을 봅니다", "", "&c클릭하면 타이틀을 띄우지 않습니다"),
@@ -130,6 +138,9 @@ public class GUIManager
     {
       inv.setItem(7, CreateItemStack.toggleItem(getBool(player, UserData.COPY_NOTE_BLOCK_VALUE_WHEN_SNEAKING), "&b[크리에이티브 전용] 웅크리기 상태에서만 소리 블록 값 복사",
               Arrays.asList("&7크리에이티브 모드에서 소리 블록을 픽블록으로 복사하여 ", "&7소리 블록의 악기/음높이를 복사해올 때", "&7웅크리기 상태에서만 복사를 합니다", "&7해당 기능을 사용하지 않으면 웅크리지", "&7않은 상태에서도 복사할 수 있습니다"), trueLore, falseLore));
+
+      inv.setItem(8, CreateItemStack.toggleItem(getBool(player, UserData.SHOW_ITEM_LORE_IN_CREATIVE_MODE), "&b[크리에이티브 전용] 크리에이티브에서도 유용한 아이템 설명 표시",
+              Arrays.asList("&7크리에이티브 모드에서도 아이템에 유용한 설명이 추가됩니다", "&e단, 해당 기능 사용 시 아이템의 일부 데이터가", "&e손실되거나 변형될 수 있으며 반드시", "&b유용한 아이템 설명 표시 &e기능을 사용중이어야 합니다"), trueLore, falseLore));
       inv.setItem(16, CreateItemStack
               .toggleItem(getBool(player, UserData.COPY_NOTE_BLOCK_INSTRUMENT), "&b[크리에이티브 전용] 소리 블록 악기 복사", Arrays.asList("&7크리에이티브 모드에서 소리 블록을 픽블록으로 복사할 때", "&7해당 소리 블록의 악기를 복사합니다"), trueLore,
                       falseLore));
@@ -163,18 +174,26 @@ public class GUIManager
     inv.setItem(31, CreateItemStack.toggleItem(getBool(player, UserData.SHOW_ACTIONBAR_WHEN_ITEM_IS_COOLDOWN), "&b아이템 재사용/재발동 대기시간 액션바",
             Arrays.asList("&7아이템의 남은 재사용 대기 시간 혹은 ", "&7남은 재발동 대기 시간을 액션바에 띄웁니다", "&e특정 상황에서는 해당 기능을 사용해도", "&e액션바가 뜨지 않을 수 있습니다"), trueLore, falseLore));
 
-/*    List<String> list = new ArrayList<>(Arrays.asList(
+    List<String> list = new ArrayList<>(Arrays.asList(
             "&7바닥에 떨어져 있는 아이템의 이름을 표시합니다", "&e특정 상황에서 또는 특정 아이템은 해당 기능에 관계없이", "&e이름이 표시되지 않거나 항상 표시될 수 있습니다"
     ));
+
+    if (CustomEffectManager.hasEffect(player, CustomEffectTypeCooldown.COOLDOWN_GUI_BUTTON_LONGER))
+    {
+      int duration = CustomEffectManager.getEffect(player, CustomEffectTypeCooldown.COOLDOWN_GUI_BUTTON_LONGER).getDuration();
+      list.add("");
+      list.add("&c설정 변경 대기시간 : " + ((int) (Math.ceil(duration / 20d))) + "초");
+    }
 
     if (UserData.FORCE_HIDE_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player))
     {
       list.add("");
       list.add("&c현재 바닥에 떨어진 아이템 이름을 볼 수 없는 상태입니다");
-    }*/
+    }
 
-//    inv.setItem(32, CreateItemStack.toggleItem(getBool(player, UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME), "&b바닥에 떨어진 아이템 이름 표시",
-//            list, trueLore, falseLore));
+    inv.setItem(32, CreateItemStack.toggleItem(getBool(player, UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME), "&b바닥에 떨어진 아이템 이름 표시",
+            list, trueLore, falseLore));
+
     inv.setItem(33, CreateItemStack.toggleItem(getBool(player, UserData.SHOW_DAMAGE_INDICATOR), "&b대미지 숫자 표시",
             List.of("&7몬스터 혹은 다른 플레이어가 대미지를 입을 때", "&7해당 개체의 상단에 대미지 숫자를 표시합니다"), trueLore, falseLore));
     String itemDropMode = switch (UserData.ITEM_DROP_MODE.getString(player.getUniqueId()))

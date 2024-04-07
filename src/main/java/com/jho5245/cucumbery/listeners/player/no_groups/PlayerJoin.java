@@ -53,6 +53,7 @@ public class PlayerJoin implements Listener
     {
       BlockPlaceDataConfig.display(player, player.getLocation());
     }
+    UserData.WINDOW_ID.set(uuid, 0);
     Initializer.setNickName(player);
     String name = Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName());
     YamlConfiguration cfg = Cucumbery.config;

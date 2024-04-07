@@ -1,6 +1,7 @@
 package com.jho5245.cucumbery.util.addons;
 
 import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.PacketType.Play.Client;
 import com.comphenix.protocol.PacketType.Play.Server;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -67,9 +68,11 @@ import java.util.stream.Stream;
 
 public class ProtocolLibManager
 {
-	private static boolean firstJoin = true;
+	private static Set<UUID> firstJoins = new HashSet<>();
 
 	public static List RECIPE_HOLDER = null;
+
+	private static final NamespacedKey TEMP_KEY = NamespacedKey.fromString("temp_recipe", Cucumbery.getPlugin());
 
 	public static List<Integer> RECIPE_HOLDER_INTEGERS = null;
 
@@ -340,6 +343,10 @@ public class ProtocolLibManager
 				Player player = event.getPlayer();
 				if (packet.getType() == Server.WINDOW_ITEMS)
 				{
+					UUID uuid = player.getUniqueId();
+					// MessageUtil.broadcastDebug("Window ID: " + packet.getIntegers().read(0));
+					UserData.WINDOW_ID.set(uuid, packet.getIntegers().read(0));
+					packet.getItemModifier().write(0, setItemLore(packet.getType(), packet.getItemModifier().read(0), player));
 					StructureModifier<List<ItemStack>> modifier = packet.getItemListModifier();
 					modifier.write(0, setItemLore(packet.getType(), modifier.read(0), player));
 				}
@@ -380,9 +387,10 @@ public class ProtocolLibManager
 				{
 					boolean showCustomName =
 							UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player) && !UserData.FORCE_HIDE_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player);
+					Boolean shouldShowCustomName = ItemStackUtil.shouldShowCustomName(item.getItemStack());
 					PacketContainer container = protocolManager.createPacket(Server.ENTITY_METADATA);
 					StructureModifier<List<WrappedDataValue>> structureModifier = container.getDataValueCollectionModifier();
-					List<WrappedDataValue> values = Lists.newArrayList(new WrappedDataValue(3, WrappedDataWatcher.Registry.get(Boolean.class), showCustomName),
+					List<WrappedDataValue> values = Lists.newArrayList(new WrappedDataValue(3, WrappedDataWatcher.Registry.get(Boolean.class), shouldShowCustomName != null ? shouldShowCustomName : showCustomName),
 							new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false),
 									MinecraftReflection.getMinecraftItemStack(setItemLore(event.getPacketType(), item.getItemStack(), player))));
 					structureModifier.write(0, values);
@@ -394,8 +402,7 @@ public class ProtocolLibManager
 		});
 
 		protocolManager.addPacketListener(
-				new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.HIGH, Server.RECIPE_UPDATE, Server.RECIPES, Server.COLLECT, Server.CUSTOM_CHAT_COMPLETIONS,
-						Server.HELD_ITEM_SLOT, Server.NBT_QUERY)
+				new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.HIGH, Server.RECIPE_UPDATE, Server.RECIPES)
 				{
 					@Override
 					public void onPacketSending(PacketEvent event)
@@ -405,13 +412,20 @@ public class ProtocolLibManager
 							return;
 						}
 						PacketContainer packet = event.getPacket();
-						//MessageUtil.broadcast("sending: " + packet.getType());
+						//MessageUtil.broadcast("sending:" + packet.getType());
 						StructureModifier<Object> modifier = packet.getModifier();
+/*						for (int i = 0; i < modifier.size(); i++)
+						{
+							Object o = modifier.read(i);
+							MessageUtil.broadcast(o.getClass() + " : " + o);
+						}*/
 						if (packet.getType() == Server.RECIPE_UPDATE)
 						{
-							if (ProtocolLibManager.firstJoin)
+							Player player = event.getPlayer();
+							UUID uuid  = player.getUniqueId();
+							if (!ProtocolLibManager.firstJoins.contains(uuid) && player.getDiscoveredRecipes().size() > 100)
 							{
-								ProtocolLibManager.firstJoin = false;
+								ProtocolLibManager.firstJoins.add(uuid);
 								return;
 							}
 							try
@@ -456,6 +470,7 @@ public class ProtocolLibManager
 								Constructor<?> stoneCuttingRecipeConstructor = stoneCuttingRecipeClass.getDeclaredConstructors()[0];
 								Method toBukkitRecipeFromStoneCuttingRecipe = stoneCuttingRecipeClass.getDeclaredMethod("toBukkitRecipe", NamespacedKey.class);
 
+								List recipeHolders = (List) modifier.read(0);
 /*								for (Constructor<?> constructor : cookingRecipeClass.getDeclaredConstructors())
 								{
 									MessageUtil.broadcast(constructor);
@@ -464,7 +479,6 @@ public class ProtocolLibManager
 								{
 									MessageUtil.broadcast(method);
 								}*/
-								List recipeHolders = new ArrayList<>((List) modifier.read(0));
 //								if (RECIPE_HOLDER == null && !recipeHolders.isEmpty())
 //								{
 //									RECIPE_HOLDER = new ArrayList(recipeHolders);
@@ -476,7 +490,12 @@ public class ProtocolLibManager
 								for (int i = 0; i < recipeHolders.size(); i++)
 								{
 									Object recipeHolderObject = recipeHolders.get(i);
-									if (((Recipe) toBukkitRecipeFromRecipeHolder.invoke(recipeHolderObject)).getResult().getType().isAir())
+									Recipe recipe = (Recipe) toBukkitRecipeFromRecipeHolder.invoke(recipeHolderObject);
+									if (recipe.getResult().getType().isAir())
+									{
+										continue;
+									}
+									if (recipe instanceof Keyed keyed && !player.hasDiscoveredRecipe(keyed.getKey()))
 									{
 										continue;
 									}
@@ -504,7 +523,7 @@ public class ProtocolLibManager
 													for (Object minecraftItemStack : array)
 													{
 														newList.add(MinecraftReflection.getMinecraftItemStack(
-																setItemLore(Server.WINDOW_ITEMS, MinecraftReflection.getBukkitItemStack(minecraftItemStack), event.getPlayer())));
+																setItemLore(Server.WINDOW_ITEMS, MinecraftReflection.getBukkitItemStack(minecraftItemStack), player)));
 													}
 													Object recipeItemStack = staticRecipeItemStack.invoke(null, newList.stream());
 													setFromNonNullListClass.invoke(nonNullList, j, recipeItemStack);
@@ -512,8 +531,7 @@ public class ProtocolLibManager
 											}
 											Object shapelessRecipes = shaplessRecipesConstructor.newInstance(getStringFromShapelessRecipes.invoke(iRecipe),
 													getCraftingBookCategoryFromShapelessRecipes.invoke(iRecipe), MinecraftReflection.getMinecraftItemStack(
-															setItemLore(Server.WINDOW_ITEMS, ((ShapelessRecipe) toBukkitRecipeFromShaplessRecipes.invoke(iRecipe,
-																	NamespacedKey.fromString("temp_recipe", Cucumbery.getPlugin()))).getResult().clone(), event.getPlayer())), nonNullList);
+															setItemLore(Server.WINDOW_ITEMS, ((ShapelessRecipe) toBukkitRecipeFromShaplessRecipes.invoke(iRecipe, TEMP_KEY)).getResult().clone(), player)), nonNullList);
 											Object newRecipeHolderObject = recipeHolderConstructor.newInstance(getMinecraftKeyFromRecipeHolder.invoke(recipeHolderObject),
 													shapelessRecipes);
 											recipeHolders.set(i, newRecipeHolderObject);
@@ -539,13 +557,13 @@ public class ProtocolLibManager
 													for (Object minecraftItemStack : array)
 													{
 														newList.add(MinecraftReflection.getMinecraftItemStack(
-																setItemLore(Server.WINDOW_ITEMS, MinecraftReflection.getBukkitItemStack(minecraftItemStack), event.getPlayer())));
+																setItemLore(Server.WINDOW_ITEMS, MinecraftReflection.getBukkitItemStack(minecraftItemStack), player)));
 													}
 													Object recipeItemStack = staticRecipeItemStack.invoke(null, newList.stream());
 													setFromNonNullListClass.invoke(nonNullList, j, recipeItemStack);
 												}
 											}
-											ShapedRecipe shapedRecipe = (ShapedRecipe) toBukkitRecipeFromShapedRecipes.invoke(iRecipe, NamespacedKey.fromString("temp_recipe", Cucumbery.getPlugin()));
+											ShapedRecipe shapedRecipe = (ShapedRecipe) toBukkitRecipeFromShapedRecipes.invoke(iRecipe, TEMP_KEY);
 											Object shapedRecipePattern = shapedRecipePatternConstructor.newInstance(shapedRecipe.getShape()[0].length(), shapedRecipe.getShape().length, nonNullList, Optional.empty());
 											Object shapedRecipes = shapedRecipeConstructor.newInstance(shapedRecipe.getGroup(), getCraftingBookCategoryFromShapedRecipes.invoke(iRecipe), shapedRecipePattern,
 													MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, shapedRecipe.getResult().clone(), event.getPlayer())), false);
@@ -554,21 +572,21 @@ public class ProtocolLibManager
 										}
 										case "FurnaceRecipe" ->
 										{
-											FurnaceRecipe furnaceRecipe = (FurnaceRecipe) furnaceRecipeClass.getDeclaredMethod("toBukkitRecipe", NamespacedKey.class).invoke(iRecipe, NamespacedKey.fromString("temp_recipe", Cucumbery.getPlugin()));
+											FurnaceRecipe furnaceRecipe = (FurnaceRecipe) furnaceRecipeClass.getDeclaredMethod("toBukkitRecipe", NamespacedKey.class).invoke(iRecipe, TEMP_KEY);
 											RecipeChoice recipeChoice = furnaceRecipe.getInputChoice();
 											List choices = new ArrayList<>();
 											if (recipeChoice instanceof MaterialChoice materialChoice)
 											{
 												for (Material material : materialChoice.getChoices())
 												{
-													choices.add(MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, new ItemStack(material), event.getPlayer())));
+													choices.add(MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, new ItemStack(material), player)));
 												}
 											}
 											if (recipeChoice instanceof ExactChoice exactChoice)
 											{
 												for (ItemStack itemStack : exactChoice.getChoices())
 												{
-													choices.add(MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, itemStack, event.getPlayer())));
+													choices.add(MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, itemStack, player)));
 												}
 											}
 											Object recipeItemStack = staticRecipeItemStack.invoke(null, choices.stream());
@@ -576,28 +594,28 @@ public class ProtocolLibManager
 													furnaceRecipe.getGroup(),
 													getCraftingBookCategoryFromCookingRecipeClass.invoke(iRecipe),
 													recipeItemStack,
-													MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, furnaceRecipe.getResult().clone(), event.getPlayer())),
+													MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, furnaceRecipe.getResult().clone(), player)),
 													furnaceRecipe.getExperience(), furnaceRecipe.getCookingTime());
 											Object newRecipeHolderObject = recipeHolderConstructor.newInstance(getMinecraftKeyFromRecipeHolder.invoke(recipeHolderObject), furnaceRecipeObject);
 											recipeHolders.set(i, newRecipeHolderObject);
 										}
 										case "RecipeBlasting" ->
 										{
-											BlastingRecipe blastingRecipe = (BlastingRecipe) blastingRecipeClass.getDeclaredMethod("toBukkitRecipe", NamespacedKey.class).invoke(iRecipe, NamespacedKey.fromString("temp_recipe", Cucumbery.getPlugin()));
+											BlastingRecipe blastingRecipe = (BlastingRecipe) blastingRecipeClass.getDeclaredMethod("toBukkitRecipe", NamespacedKey.class).invoke(iRecipe, TEMP_KEY);
 											RecipeChoice recipeChoice = blastingRecipe.getInputChoice();
 											List choices = new ArrayList<>();
 											if (recipeChoice instanceof MaterialChoice materialChoice)
 											{
 												for (Material material : materialChoice.getChoices())
 												{
-													choices.add(MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, new ItemStack(material), event.getPlayer())));
+													choices.add(MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, new ItemStack(material), player)));
 												}
 											}
 											if (recipeChoice instanceof ExactChoice exactChoice)
 											{
 												for (ItemStack itemStack : exactChoice.getChoices())
 												{
-													choices.add(MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, itemStack, event.getPlayer())));
+													choices.add(MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, itemStack, player)));
 												}
 											}
 											Object recipeItemStack = staticRecipeItemStack.invoke(null, choices.stream());
@@ -605,28 +623,28 @@ public class ProtocolLibManager
 													blastingRecipe.getGroup(),
 													getCraftingBookCategoryFromCookingRecipeClass.invoke(iRecipe),
 													recipeItemStack,
-													MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, blastingRecipe.getResult().clone(), event.getPlayer())),
+													MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, blastingRecipe.getResult().clone(), player)),
 													blastingRecipe.getExperience(), blastingRecipe.getCookingTime());
 											Object newRecipeHolderObject = recipeHolderConstructor.newInstance(getMinecraftKeyFromRecipeHolder.invoke(recipeHolderObject), blastingRecipeObject);
 											recipeHolders.set(i, newRecipeHolderObject);
 										}
 										case "RecipeSmoking" ->
 										{
-											SmokingRecipe smokingRecipe = (SmokingRecipe) smokingRecipeClass.getDeclaredMethod("toBukkitRecipe", NamespacedKey.class).invoke(iRecipe, NamespacedKey.fromString("temp_recipe", Cucumbery.getPlugin()));
+											SmokingRecipe smokingRecipe = (SmokingRecipe) smokingRecipeClass.getDeclaredMethod("toBukkitRecipe", NamespacedKey.class).invoke(iRecipe, TEMP_KEY);
 											RecipeChoice recipeChoice = smokingRecipe.getInputChoice();
 											List choices = new ArrayList<>();
 											if (recipeChoice instanceof MaterialChoice materialChoice)
 											{
 												for (Material material : materialChoice.getChoices())
 												{
-													choices.add(MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, new ItemStack(material), event.getPlayer())));
+													choices.add(MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, new ItemStack(material), player)));
 												}
 											}
 											if (recipeChoice instanceof ExactChoice exactChoice)
 											{
 												for (ItemStack itemStack : exactChoice.getChoices())
 												{
-													choices.add(MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, itemStack, event.getPlayer())));
+													choices.add(MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, itemStack, player)));
 												}
 											}
 											Object recipeItemStack = staticRecipeItemStack.invoke(null, choices.stream());
@@ -634,35 +652,35 @@ public class ProtocolLibManager
 													smokingRecipe.getGroup(),
 													getCraftingBookCategoryFromCookingRecipeClass.invoke(iRecipe),
 													recipeItemStack,
-													MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, smokingRecipe.getResult().clone(), event.getPlayer())),
+													MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, smokingRecipe.getResult().clone(), player)),
 													smokingRecipe.getExperience(), smokingRecipe.getCookingTime());
 											Object newRecipeHolderObject = recipeHolderConstructor.newInstance(getMinecraftKeyFromRecipeHolder.invoke(recipeHolderObject), smokingRecipeObject);
 											recipeHolders.set(i, newRecipeHolderObject);
 										}
 										case "RecipeStonecutting" ->
 										{
-											StonecuttingRecipe stonecuttingRecipe = (StonecuttingRecipe) toBukkitRecipeFromStoneCuttingRecipe.invoke(iRecipe, NamespacedKey.fromString("temp_recipe", Cucumbery.getPlugin()));
+											StonecuttingRecipe stonecuttingRecipe = (StonecuttingRecipe) toBukkitRecipeFromStoneCuttingRecipe.invoke(iRecipe, TEMP_KEY);
 											RecipeChoice recipeChoice = stonecuttingRecipe.getInputChoice();
 											List choices = new ArrayList<>();
 											if (recipeChoice instanceof MaterialChoice materialChoice)
 											{
 												for (Material material : materialChoice.getChoices())
 												{
-													choices.add(MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, new ItemStack(material), event.getPlayer())));
+													choices.add(MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, new ItemStack(material), player)));
 												}
 											}
 											if (recipeChoice instanceof ExactChoice exactChoice)
 											{
 												for (ItemStack itemStack : exactChoice.getChoices())
 												{
-													choices.add(MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, itemStack, event.getPlayer())));
+													choices.add(MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, itemStack, player)));
 												}
 											}
 											Object recipeItemStack = staticRecipeItemStack.invoke(null, choices.stream());
 											Object stonecuttingRecipeObject = stoneCuttingRecipeConstructor.newInstance(
 													stonecuttingRecipe.getGroup(),
 													recipeItemStack,
-													MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, stonecuttingRecipe.getResult().clone(), event.getPlayer())));
+													MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, stonecuttingRecipe.getResult().clone(), player)));
 											Object newRecipeHolderObject = recipeHolderConstructor.newInstance(getMinecraftKeyFromRecipeHolder.invoke(recipeHolderObject), stonecuttingRecipeObject);
 											recipeHolders.set(i, newRecipeHolderObject);
 										}
@@ -676,10 +694,9 @@ public class ProtocolLibManager
 
 							}
 						}
-						for (int i = 0; i < modifier.size(); i++)
+						if (packet.getType() == Server.RECIPES)
 						{
-							Object o = modifier.read(i);
-							//MessageUtil.broadcast(o.getClass() + " : " + (o instanceof Iterable<?> iterable ? iterable.iterator().next().getClass(): ""));
+
 						}
 						if (packet.getType() == Server.TAB_COMPLETE)
 						{
@@ -705,22 +722,6 @@ public class ProtocolLibManager
 								modifier.write(1, suggestions);
 								event.setPacket(packet);
 							}
-						}
-					}
-
-					@Override
-					public void onPacketReceiving(PacketEvent event)
-					{
-						if (!Cucumbery.using_ProtocolLib)
-						{
-							return;
-						}
-						PacketContainer packet = event.getPacket();
-						MessageUtil.broadcast("receiving: " + packet.getType());
-						StructureModifier<Object> modifier = packet.getModifier();
-						for (int i = 0; i < modifier.size(); i++)
-						{
-							MessageUtil.broadcast(modifier.read(i).getClass() + " : " + modifier.read(i));
 						}
 					}
 				});
@@ -933,6 +934,18 @@ public class ProtocolLibManager
 			new NBTItem(clone, true).mergeCompound(tempNBTItem);
 		}
 
+		if (player.getGameMode() == GameMode.CREATIVE && !showEnchantGlints)
+		{
+			if (itemMeta.hasEnchants() || List.of(Material.ENCHANTED_GOLDEN_APPLE, Material.EXPERIENCE_BOTTLE, Material.END_CRYSTAL, Material.NETHER_STAR, Material.ENCHANTED_BOOK).contains(itemStack.getType()))
+			{
+				lore.add(Component.empty());
+				lore.add(ComponentUtil.translate("&b크레이이티브 모드에서는 아이템의 반짝임이"));
+				lore.add(ComponentUtil.translate("&b설정에 관계없이 켜짐으로 설정됩니다"));
+				itemMeta.lore(lore);
+				clone.setItemMeta(itemMeta);
+			}
+		}
+
 		if (nbtItem.hasTag("override_item_stack"))
 		{
 			ItemStack overrideItemStack = null;
@@ -971,15 +984,27 @@ public class ProtocolLibManager
 				if (cloneLore == null)
 					cloneLore = new ArrayList<>();
 				cloneLore.add(Component.empty());
-				cloneLore.add(ComponentUtil.translate("#52ee52;신비한 샌즈의 힘에 의해 [%s]의 외형이 합성됨", ItemNameUtil.itemName(overrideItemStack)));
+				cloneLore.add(ComponentUtil.translate("#CCFF52;신비한 샌즈의 힘에 의해 %s의 외형이 합성됨", ItemNameUtil.itemName(overrideItemStack)));
 				if (player.getGameMode() == GameMode.CREATIVE)
 					cloneLore.add(ComponentUtil.translate("&c크리에이티브 모드여서 아이템의 유형은 변경되지 않음!"));
-				originMeta.lore(cloneLore);
-				clone.setItemMeta(originMeta);
-				if (overrideItemStack.getAmount() > 1)
+				if (nbtItem.hasTag("override_item_stack_amount") && nbtItem.getType("override_item_stack_amount") == NBTType.NBTTagInt)
+				{
+					clone.setAmount(nbtItem.getInteger("override_item_stack_amount"));
+					if (player.hasPermission("asdf"))
+					{
+						cloneLore.add(ComponentUtil.translate("&b[관리자 모드 - 아이템 개수가 %s개로 고정되게 보임]", clone.getAmount()));
+					}
+				}
+				else if (overrideItemStack.getAmount() > 1)
 				{
 					clone.setAmount(overrideItemStack.getAmount());
+					if (player.hasPermission("asdf"))
+					{
+						cloneLore.add(ComponentUtil.translate("&b[관리자 모드 - 아이템 개수가 %s개로 고정되게 보임]", clone.getAmount()));
+					}
 				}
+				originMeta.lore(cloneLore);
+				clone.setItemMeta(originMeta);
 			}
 		}
 
