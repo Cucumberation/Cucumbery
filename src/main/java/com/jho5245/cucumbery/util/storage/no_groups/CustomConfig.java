@@ -379,6 +379,7 @@ public class CustomConfig
 		SHOW_ITEM_LORE("추가-아이템-설명-표시", true),
 		SHOW_ITEM_LORE_IN_CREATIVE_MODE("크리에이티브에서-추가-아이템-설명-표시", false),
 		SHOW_ENCHANTED_ITEM_GLINTS("마법이-부여된-아이템-반짝임-표시", true),
+		SHOW_TIMESTAMP_ON_CHAT_MESSAGES("채팅-메시지에-현재-시각-표시", true),
 		;
 
 		private final String key;

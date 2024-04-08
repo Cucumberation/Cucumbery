@@ -202,7 +202,7 @@ public class PlayerChat implements Listener
 			}
 		}
 
-		if (message.contains("[i]"))
+		if (!Cucumbery.using_ProtocolLib && message.contains("[i]"))
 		{
 			ItemStack itemStack = player.getInventory().getItemInMainHand();
 			if (!ItemStackUtil.itemExists(itemStack))

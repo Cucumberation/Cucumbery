@@ -51,6 +51,7 @@ import org.json.simple.parser.JSONParser;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -139,17 +140,18 @@ public class ComponentUtil
 			}
 			else if (object instanceof Material material)
 			{
-				if (!material.isItem() || material.isAir())
-				{
-					component = component.append(ItemNameUtil.itemName(material, Constant.THE_COLOR));
-					continue;
-				}
 				Component concat = create(player, new ItemStack(material));
 				component = component.append(concat);
 			}
 			else if (object instanceof ItemStack itemStack)
 			{
-				Component concat = ItemStackComponent.itemStackComponent(itemStack, 1, Constant.THE_COLOR, false, player);
+				Material material = itemStack.getType();
+				if (!material.isItem() || material.isAir())
+				{
+					component = component.append(ItemNameUtil.itemName(material, Constant.THE_COLOR));
+					continue;
+				}
+				Component concat = Cucumbery.using_ProtocolLib ? ItemNameUtil.itemName(itemStack, Constant.THE_COLOR).hoverEvent(itemStack) : ItemStackComponent.itemStackComponent(itemStack, 1, Constant.THE_COLOR, false, player);
 				component = component.append(concat);
 			}
 			else if (object instanceof CustomMaterial customMaterial)

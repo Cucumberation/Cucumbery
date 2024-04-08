@@ -1,6 +1,7 @@
 package com.jho5245.cucumbery.util.addons;
 
 import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.PacketType.Play.Client;
 import com.comphenix.protocol.PacketType.Play.Server;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -15,6 +16,7 @@ import com.comphenix.protocol.wrappers.*;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
+import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCooldown;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCustomMining;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeMinecraft;
 import com.jho5245.cucumbery.util.itemlore.ItemLore;
@@ -22,12 +24,15 @@ import com.jho5245.cucumbery.util.itemlore.ItemLore.RemoveFlag;
 import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
+import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method2;
+import com.jho5245.cucumbery.util.storage.component.ItemStackComponent;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Constant.CucumberyHideFlag;
 import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
+import com.jho5245.cucumbery.util.storage.data.Prefix;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
@@ -38,10 +43,18 @@ import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.NBTList;
 import de.tr7zw.changeme.nbtapi.NBTType;
+import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
+import net.kyori.adventure.text.event.HoverEvent.ShowItem;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.format.TextDecoration.State;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -59,6 +72,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -68,6 +83,8 @@ public class ProtocolLibManager
 	private static final Set<UUID> firstJoins = new HashSet<>();
 
 	private static final NamespacedKey TEMP_KEY = NamespacedKey.fromString("temp_recipe", Cucumbery.getPlugin());
+
+	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("[HH:mm:ss] ");
 
 	public static void manage()
 	{
@@ -320,7 +337,8 @@ public class ProtocolLibManager
 		});
 
 		protocolManager.addPacketListener(
-				new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.HIGH, Server.RECIPE_UPDATE, Server.RECIPES, Server.ENTITY_METADATA, Server.ENTITY_EQUIPMENT)
+				new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.HIGH, Server.RECIPE_UPDATE, Server.RECIPES, Server.ENTITY_METADATA, Server.ENTITY_EQUIPMENT,
+						Server.SYSTEM_CHAT, Server.SET_ACTION_BAR_TEXT, Server.CHAT, Client.CHAT)
 				{
 					@SuppressWarnings({
 							"rawtypes",
@@ -333,12 +351,12 @@ public class ProtocolLibManager
 						{
 							return;
 						}
+						Player player = event.getPlayer();
 						PacketContainer packet = event.getPacket();
 						//MessageUtil.broadcast("sending:" + packet.getType());
 						StructureModifier<Object> modifier = packet.getModifier();
 						if (packet.getType() == Server.RECIPE_UPDATE)
 						{
-							Player player = event.getPlayer();
 							UUID uuid = player.getUniqueId();
 							if (!ProtocolLibManager.firstJoins.contains(uuid) && player.getDiscoveredRecipes().size() > 100)
 							{
@@ -604,20 +622,22 @@ public class ProtocolLibManager
 						}
 						if (packet.getType() == Server.ENTITY_METADATA)
 						{
-							Player player = event.getPlayer();
 							Entity entity = packet.getEntityModifier(player.getWorld()).read(0);
 							if (entity instanceof Item item)
 							{
-								ItemStack itemStack = item.getItemStack();
+								ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, item.getItemStack(), player);
+								Component component = itemStack.getAmount() == 1
+										? ItemNameUtil.itemName(itemStack)
+										: Component.translatable("%s (%s)").arguments(ItemNameUtil.itemName(itemStack), Component.text(itemStack.getAmount(), Constant.THE_COLOR));
 								boolean showCustomName =
 										UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player) && !UserData.FORCE_HIDE_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player);
 								Boolean shouldShowCustomName = ItemStackUtil.shouldShowCustomName(itemStack);
 								StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
 								List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
 								wrappedDataValues.add(new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false),
-										MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, item.getItemStack(), player))));
+										MinecraftReflection.getMinecraftItemStack(itemStack)));
 								wrappedDataValues.add(new WrappedDataValue(2, WrappedDataWatcher.Registry.getChatComponentSerializer(true),
-										Optional.of(WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(ItemNameUtil.itemName(itemStack))).getHandle())));
+										Optional.of(WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(component)).getHandle())));
 								wrappedDataValues.add(new WrappedDataValue(3, WrappedDataWatcher.Registry.get(Boolean.class),
 										shouldShowCustomName != null ? shouldShowCustomName : showCustomName));
 								watchableAccessor.write(0, wrappedDataValues);
@@ -625,13 +645,87 @@ public class ProtocolLibManager
 						}
 						if (packet.getType() == Server.ENTITY_EQUIPMENT)
 						{
-							Player player = event.getPlayer();
 							List<Pair<ItemSlot, ItemStack>> listStructureModifier = packet.getSlotStackPairLists().read(0);
 							for (Pair<ItemSlot, ItemStack> pair : listStructureModifier)
 							{
 								pair.setSecond(setItemLore(Server.WINDOW_ITEMS, pair.getSecond(), player));
 							}
 							packet.getSlotStackPairLists().write(0, listStructureModifier);
+						}
+						if (packet.getType() == Server.SYSTEM_CHAT)
+						{
+							WrappedChatComponent wrappedChatComponent = packet.getChatComponents().read(0);
+							final Component originComponent = GsonComponentSerializer.gson().deserialize(wrappedChatComponent.getJson());
+							Component component = parse(event.getPlayer(), GsonComponentSerializer.gson().deserialize(wrappedChatComponent.getJson()));
+							boolean isActionBar = packet.getBooleans().read(0);
+							Component prefix = null;
+							if (originComponent instanceof TranslatableComponent translatableComponent)
+							{
+								String key = translatableComponent.key();
+								switch (key)
+								{
+									case "commands.give.success.single" -> prefix = Prefix.INFO_HANDGIVE.get();
+								}
+								if (NamedTextColor.RED.equals(originComponent.color())
+										|| originComponent.color() == null && originComponent instanceof TextComponent textComponent && textComponent.content().isEmpty()
+										&& !originComponent.children().isEmpty() && NamedTextColor.RED.equals(originComponent.children().get(0).color()))
+								{
+									prefix = Prefix.INFO_ERROR.get();
+								}
+							}
+							if (isActionBar)
+								prefix = null;
+							if (prefix != null)
+							{
+								component = Component.translatable("%s%s").arguments(prefix, component);
+							}
+							if (!isActionBar && UserData.SHOW_TIMESTAMP_ON_CHAT_MESSAGES.getBoolean(event.getPlayer()))
+							{
+								component = Component.empty().append(Component.text(DATE_FORMAT.format(new Date()), NamedTextColor.GRAY)).append(component);
+							}
+							packet.getChatComponents().write(0, WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(component)));
+						}
+						if (packet.getType() == Server.SET_ACTION_BAR_TEXT)
+						{
+							Component component = (Component) modifier.read(1);
+							if (component instanceof TranslatableComponent translatableComponent && !translatableComponent.arguments().isEmpty())
+							{
+								List<Component> components = new ArrayList<>();
+								for (ComponentLike componentLike : translatableComponent.arguments())
+									components.add(componentLike.asComponent());
+								component = translatableComponent.key(ComponentUtil.translate(event.getPlayer(), translatableComponent.key(), components).key());
+							}
+							packet.getModifier().write(1, component);
+						}
+						if (packet.getType() == Server.CHAT)
+						{
+							Player sender = Bukkit.getPlayer(packet.getUUIDs().read(0));
+							WrappedChatComponent wrappedChatComponent = packet.getChatComponents().read(0);
+							final Component originComponent = GsonComponentSerializer.gson().deserialize(wrappedChatComponent.getJson());
+							ItemStack itemStack = sender != null ? sender.getInventory().getItemInMainHand() : null;
+							if (ItemStackUtil.itemExists(itemStack))
+							{
+								Component component = originComponent;
+								List<Component> newChildren = new ArrayList<>();
+								for (Component child : originComponent.children())
+								{
+									if (child instanceof TextComponent textComponent && textComponent.content().contains("[i]"))
+									{
+										newChildren.add(ComponentUtil.translate(player, textComponent.content().replace("%", "%%").replace("[i]", "%s"),
+												sender.hasPermission("asdf"),
+												ItemStackComponent.itemStackComponent(itemStack, 1, Constant.THE_COLOR, false, player)));
+									}
+								}
+								if (!newChildren.isEmpty())
+									component = component.children(newChildren);
+								packet.getChatComponents().write(0, WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(component)));
+							}
+							if (UserData.SHOW_TIMESTAMP_ON_CHAT_MESSAGES.getBoolean(player) && sender != null)
+							{
+								event.setCancelled(true);
+								Component message = ComponentUtil.translate("chat.type.text", sender, GsonComponentSerializer.gson().deserialize(packet.getChatComponents().read(0).getJson()));
+								player.sendMessage(message);
+							}
 						}
 						if (packet.getType() == Server.TAB_COMPLETE)
 						{
@@ -659,7 +753,100 @@ public class ProtocolLibManager
 							}
 						}
 					}
+
+					@Override
+					public void onPacketReceiving(PacketEvent event)
+					{
+						if (!Cucumbery.using_ProtocolLib)
+						{
+							return;
+						}
+						Player player = event.getPlayer();
+						PacketContainer packet = event.getPacket();
+						if (packet.getType() == Client.CHAT)
+						{
+							String message = packet.getStrings().read(0);
+							if (message.contains("[i]"))
+							{
+								ItemStack itemStack = player.getInventory().getItemInMainHand();
+								if (!ItemStackUtil.itemExists(itemStack))
+								{
+									MessageUtil.sendError(player, Prefix.NO_HOLDING_ITEM);
+									event.setCancelled(true);
+									return;
+								}
+								if (CustomEffectManager.hasEffect(player, CustomEffectTypeCooldown.COOLDOWN_ITEM_MEGAPHONE))
+								{
+									MessageUtil.sendWarn(player, ComponentUtil.translate("아직 아이템 확성기를 사용할 수 없습니다"));
+									event.setCancelled(true);
+									return;
+								}
+								if (!player.hasPermission("asdf"))
+								{
+									Bukkit.getScheduler()
+											.runTask(Cucumbery.getPlugin(), () -> CustomEffectManager.addEffect(player, CustomEffectTypeCooldown.COOLDOWN_ITEM_MEGAPHONE));
+								}
+							}
+						}
+					}
 				});
+	}
+
+	@NotNull
+	private static Component parse(@NotNull Player player, @NotNull Component component)
+	{
+		HoverEvent<?> hoverEvent = component.hoverEvent();
+		if (hoverEvent != null)
+		{
+			try
+			{
+				if (hoverEvent.value() instanceof ShowItem showItem)
+				{
+					BinaryTagHolder binaryTagHolder = showItem.nbt();
+					String nbt = binaryTagHolder != null ? binaryTagHolder.toString() : "";
+					ItemStack itemStack = Bukkit.getItemFactory().createItemStack(showItem.item() + nbt);
+					component = ItemStackComponent.itemStackComponent(itemStack, 1, Constant.THE_COLOR, false, player);
+				}
+				if (hoverEvent.value() instanceof ShowEntity showEntity)
+				{
+					UUID uuid = showEntity.id();
+					Entity entity = Bukkit.getEntity(uuid);
+					if (entity != null)
+					{
+						component = ComponentUtil.create(player, entity);
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				Bukkit.getConsoleSender().sendMessage("§4" + e.getMessage());
+			}
+		}
+		if (component instanceof TranslatableComponent translatableComponent)
+		{
+			String key = translatableComponent.key();
+			List<ComponentLike> translationArguments = new ArrayList<>(translatableComponent.arguments());
+			List<Component> components = new ArrayList<>();
+			for (ComponentLike componentLike : translationArguments)
+			{
+				components.add(parse(player, componentLike.asComponent()));
+			}
+			component = translatableComponent.key(ComponentUtil.translate(player, key, components).key()).arguments(components);
+/*			if ("chat.square_brackets".equals(key) && translatableComponent.hoverEvent() != null && translatableComponent.hoverEvent().value() instanceof ShowItem)
+			{
+
+			}*/
+		}
+		if (!component.children().isEmpty())
+		{
+			List<Component> newList = new ArrayList<>();
+			for (int i = 0; i < component.children().size(); i++)
+			{
+				newList.add(parse(player, component.children().get(i)));
+			}
+			component = component.children(newList);
+		}
+		return component;
 	}
 
 	private static List<ItemStack> setItemLore(PacketType packetType, List<ItemStack> itemStacks, Player player)
@@ -885,7 +1072,8 @@ public class ProtocolLibManager
 		// TODO: 커스텀 내구도가 있는 일반 아이템인데 도구가 있는 가짜 아이템으로 빙의해서 내구도 Damage 태그 갱신 - 1.20.5때 삭제
 		if (player.getGameMode() != GameMode.CREATIVE && NBTAPI.getCompound(NBTAPI.getMainCompound(clone), CucumberyTag.CUSTOM_DURABILITY_KEY) != null)
 		{
-			Long currentDurability = NBTAPI.getLong(NBTAPI.getCompound(NBTAPI.getMainCompound(clone), CucumberyTag.CUSTOM_DURABILITY_KEY), CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY);
+			Long currentDurability = NBTAPI.getLong(NBTAPI.getCompound(NBTAPI.getMainCompound(clone), CucumberyTag.CUSTOM_DURABILITY_KEY),
+					CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY);
 			if (currentDurability != null)
 			{
 				Damageable damageable = (Damageable) itemMeta;
@@ -993,7 +1181,8 @@ public class ProtocolLibManager
 			{
 				switch (key)
 				{
-					case "display", "Lore", "Enchantments", "Damage", "HideFlags", "CustomModelData", "SkullOwner", "Potion", "pages", "author", "title", "CustomPotionColor", "StoredEnchantments", "AttributeModifiers", "Unbreakable", "CanPlaceOn", "CanDestroy", "BlockEntityTag" ->
+					case "display", "Lore", "Enchantments", "Damage", "HideFlags", "CustomModelData", "SkullOwner", "Potion", "pages", "author", "title",
+							 "CustomPotionColor", "StoredEnchantments", "AttributeModifiers", "Unbreakable", "CanPlaceOn", "CanDestroy", "BlockEntityTag" ->
 					{
 					}
 					default -> nbtItem.removeKey(key);

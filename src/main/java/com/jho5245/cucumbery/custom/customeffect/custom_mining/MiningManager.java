@@ -828,7 +828,7 @@ public class MiningManager
 						dataNBTItem.getCompound(CucumberyTag.KEY_MAIN).getStringList(CucumberyTag.EXTRA_TAGS_KEY)
 								.removeIf(s -> s.equals(ExtraTag.PRESERVE_BLOCK_NBT.toString()));
 					}
-					if (dataNBTItem.hasTag("displays") && dataNBTItem.getCompound("displays").hasTag("rotation") && (dataNBTItem.hasTag("perspectiveYaw")
+					if (dataNBTItem.getCompound("displays") != null && dataNBTItem.getCompound("displays").hasTag("rotation") && (dataNBTItem.hasTag("perspectiveYaw")
 							|| dataNBTItem.hasTag("perspectivePitch") || dataNBTItem.hasTag("perspectiveGrid") || dataNBTItem.hasTag("additionalYaw") || dataNBTItem.hasTag(
 							"additionalPitch") || dataNBTItem.hasTag("reverseYaw") || dataNBTItem.hasTag("reversePitch")))
 					{
