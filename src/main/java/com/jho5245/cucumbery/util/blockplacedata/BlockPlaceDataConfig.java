@@ -325,11 +325,16 @@ public class BlockPlaceDataConfig extends ChunkConfig
 			offset = offsets[modifier + 1];
 		}
 
-		Integer interpolation_delay = nbtItem.hasTag("interpolation_delay") && nbtItem.getType("interpolation_delay") == NBTType.NBTTagInt ? nbtItem.getInteger("interpolation_delay") : null;
-		Integer transformation_interpolation_duration = nbtItem.hasTag("transformation_interpolation_duration") &&
-				nbtItem.getType("transformation_interpolation_duration") == NBTType.NBTTagInt ? nbtItem.getInteger("transformation_interpolation_duration") : null;
-		Integer position_rotation_interpolation_duration = nbtItem.hasTag("position_rotation_interpolation_duration") &&
-			nbtItem.getType("position_rotation_interpolation_duration") == NBTType.NBTTagInt ? nbtItem.getInteger("position_rotation_interpolation_duration") : null;
+		Integer interpolation_delay =
+				nbtItem.hasTag("interpolation_delay") && nbtItem.getType("interpolation_delay") == NBTType.NBTTagInt ? nbtItem.getInteger("interpolation_delay") : null;
+		Integer transformation_interpolation_duration =
+				nbtItem.hasTag("transformation_interpolation_duration") && nbtItem.getType("transformation_interpolation_duration") == NBTType.NBTTagInt
+						? nbtItem.getInteger("transformation_interpolation_duration")
+						: null;
+		Integer position_rotation_interpolation_duration =
+				nbtItem.hasTag("position_rotation_interpolation_duration") && nbtItem.getType("position_rotation_interpolation_duration") == NBTType.NBTTagInt
+						? nbtItem.getInteger("position_rotation_interpolation_duration")
+						: null;
 
 		NBTList<Float> rotation = nbtItem.getFloatList("rotation");
 		float rotationX = rotation != null && rotation.size() == 2 ? rotation.get(0) : 0f, rotationY =
@@ -353,6 +358,7 @@ public class BlockPlaceDataConfig extends ChunkConfig
 			scaleZ *= 2.0001f;
 			translationY += 0.5001f * (scaleY - 1.0002f);
 		}
+
 		if ("player_heads".equals(type))
 		{
 			scaleX *= 1.0005f;
@@ -385,8 +391,10 @@ public class BlockPlaceDataConfig extends ChunkConfig
 		}
 
 		NBTCompound brightness = nbtItem.getOrCreateCompound("brightness");
-		int brightnessBlock = brightness.hasTag("block") && brightness.getType("block") == NBTType.NBTTagInt ? brightness.getInteger("block") : -1,
-				brightnessSky = brightness.hasTag("sky") && brightness.getType("sky") == NBTType.NBTTagInt ? brightness.getInteger("sky") : -1;
+		int brightnessBlock = brightness.hasTag("block") && brightness.getType("block") == NBTType.NBTTagInt ? brightness.getInteger("block") : -1, brightnessSky =
+				brightness.hasTag("sky") && brightness.getType("sky") == NBTType.NBTTagInt
+						? brightness.getInteger("sky")
+						: -1;
 
 		float viewRange = nbtItem.hasTag("view_range") && nbtItem.getType("view_range") == NBTType.NBTTagFloat ? nbtItem.getFloat("view_range") : 0.5f;
 		float shadowRadius = nbtItem.hasTag("shadow_radius") && nbtItem.getType("shadow_radius") == NBTType.NBTTagFloat ? nbtItem.getFloat("shadow_radius") : 0f;
