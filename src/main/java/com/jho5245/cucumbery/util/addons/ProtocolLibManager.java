@@ -13,6 +13,7 @@ import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.utility.MinecraftReflection;
 import com.comphenix.protocol.wrappers.*;
 import com.comphenix.protocol.wrappers.EnumWrappers.ItemSlot;
+import com.comphenix.protocol.wrappers.WrappedDataWatcher.Serializer;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.Lists;
 import com.jho5245.cucumbery.Cucumbery;
@@ -48,6 +49,7 @@ import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.format.TextDecoration.State;
 import org.bukkit.*;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Entity;
@@ -736,9 +738,9 @@ public class ProtocolLibManager
 							{
 								StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
 								List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-								for (int i = 0; i < wrappedDataValues.size(); i++)
+								for (WrappedDataValue wrappedDataValue : wrappedDataValues)
 								{
-									MessageUtil.broadcastDebug(i + ": " + wrappedDataValues.get(i).getClass() + " - " + wrappedDataValues.get(i));
+									MessageUtil.broadcastDebug(wrappedDataValue.getHandle().getClass() + " : " + wrappedDataValue.getHandle());
 								}
 							}
 						}

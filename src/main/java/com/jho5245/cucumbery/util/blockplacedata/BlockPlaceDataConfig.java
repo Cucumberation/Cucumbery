@@ -4,11 +4,11 @@ import com.comphenix.protocol.PacketType.Play.Server;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.utility.MinecraftReflection;
 import com.comphenix.protocol.wrappers.WrappedBlockData;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedDataValue;
-import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher.Registry;
 import com.google.common.collect.Lists;
 import com.jho5245.cucumbery.Cucumbery;
@@ -17,7 +17,6 @@ import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import de.tr7zw.changeme.nbtapi.*;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
-import io.papermc.paper.event.packet.PlayerChunkUnloadEvent;
 import org.bukkit.*;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
@@ -27,14 +26,13 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-import java.lang.reflect.Modifier;
 import java.util.*;
 
 public class BlockPlaceDataConfig extends ChunkConfig
@@ -327,6 +325,12 @@ public class BlockPlaceDataConfig extends ChunkConfig
 			offset = offsets[modifier + 1];
 		}
 
+		Integer interpolation_delay = nbtItem.hasTag("interpolation_delay") && nbtItem.getType("interpolation_delay") == NBTType.NBTTagInt ? nbtItem.getInteger("interpolation_delay") : null;
+		Integer transformation_interpolation_duration = nbtItem.hasTag("transformation_interpolation_duration") &&
+				nbtItem.getType("transformation_interpolation_duration") == NBTType.NBTTagInt ? nbtItem.getInteger("transformation_interpolation_duration") : null;
+		Integer position_rotation_interpolation_duration = nbtItem.hasTag("position_rotation_interpolation_duration") &&
+			nbtItem.getType("position_rotation_interpolation_duration") == NBTType.NBTTagInt ? nbtItem.getInteger("position_rotation_interpolation_duration") : null;
+
 		NBTList<Float> rotation = nbtItem.getFloatList("rotation");
 		float rotationX = rotation != null && rotation.size() == 2 ? rotation.get(0) : 0f, rotationY =
 				rotation != null && rotation.size() == 2 ? rotation.get(1) : 0f;
@@ -356,21 +360,17 @@ public class BlockPlaceDataConfig extends ChunkConfig
 			scaleZ *= 1.0005f;
 		}
 
-		//	scaleX *= -1f;
-		//	scaleZ *= -1f;
+		NBTList<Float> leftRotation = transformation.getFloatList("left_rotation");
+		float leftRotationX = leftRotation != null && leftRotation.size() == 4 ? leftRotation.get(0) : 0f, leftRotationY =
+				leftRotation != null && leftRotation.size() == 4 ? leftRotation.get(1) : 0f, leftRotationZ =
+				leftRotation != null && leftRotation.size() == 4 ? leftRotation.get(2) : 0f, leftRotationW =
+				leftRotation != null && leftRotation.size() == 4 ? leftRotation.get(3) : 1f;
 
-		// TODO: NO serializer for 4d packet yet
-		//    NBTList<Float> leftRotation = transformation.getFloatList("left_rotation");
-		//    float leftRotationX = leftRotation != null && leftRotation.size() == 4 ? leftRotation.get(0) : 0f,
-		//            leftRotationY = leftRotation != null && leftRotation.size() == 4 ? leftRotation.get(1) : 0f,
-		//            leftRotationZ = leftRotation != null && leftRotation.size() == 4 ? leftRotation.get(2) : 0f,
-		//            leftRotationW = leftRotation != null && leftRotation.size() == 4 ? leftRotation.get(3) : 1f;
-		//
-		//    NBTList<Float> rightRotation = transformation.getFloatList("right_rotation");
-		//    float rightRotationX = rightRotation != null && rightRotation.size() == 4 ? rightRotation.get(0) : 0f,
-		//            rightRotationY = rightRotation != null && rightRotation.size() == 4 ? rightRotation.get(1) : 0f,
-		//            rightRotationZ = rightRotation != null && rightRotation.size() == 4 ? rightRotation.get(2) : 0f,
-		//            rightRotationW = rightRotation != null && rightRotation.size() == 4 ? rightRotation.get(3) : 1f;
+		NBTList<Float> rightRotation = transformation.getFloatList("right_rotation");
+		float rightRotationX = rightRotation != null && rightRotation.size() == 4 ? rightRotation.get(0) : 0f, rightRotationY =
+				rightRotation != null && rightRotation.size() == 4 ? rightRotation.get(1) : 0f, rightRotationZ =
+				rightRotation != null && rightRotation.size() == 4 ? rightRotation.get(2) : 0f, rightRotationW =
+				rightRotation != null && rightRotation.size() == 4 ? rightRotation.get(3) : 1f;
 
 		byte billBoard = 0;
 		if (nbtItem.hasTag("billboard") && nbtItem.getType("billboard") == NBTType.NBTTagString)
@@ -412,10 +412,11 @@ public class BlockPlaceDataConfig extends ChunkConfig
 		PacketContainer packet = protocolManager.createPacket(Server.SPAWN_ENTITY);
 		packet.getIntegers().write(0, entityId);
 		packet.getEntityTypeModifier().write(0, entityType);
+		double adjustLocation = "block".equals(type) ? 0d : 0.5d;
 		// Set location
-		packet.getDoubles().write(0, location.getX() + 0.5);
-		packet.getDoubles().write(1, location.getY() + 0.5);
-		packet.getDoubles().write(2, location.getZ() + 0.5);
+		packet.getDoubles().write(0, location.getX() + adjustLocation);
+		packet.getDoubles().write(1, location.getY() + adjustLocation);
+		packet.getDoubles().write(2, location.getZ() + adjustLocation);
 		// Set yaw/pitch
 		packet.getBytes().write(0, (byte) (rotationY * 256f / 360f));
 		packet.getBytes().write(1, (byte) (rotationX * 256f / 360f));
@@ -423,17 +424,13 @@ public class BlockPlaceDataConfig extends ChunkConfig
 		packet.getUUIDs().write(0, UUID.randomUUID());
 
 		PacketContainer edit = protocolManager.createPacket(Server.ENTITY_METADATA);
-		com.comphenix.protocol.reflect.StructureModifier<List<WrappedDataValue>> watchableAccessor = edit.getDataValueCollectionModifier();
+		StructureModifier<List<WrappedDataValue>> watchableAccessor = edit.getDataValueCollectionModifier();
+
 		List<WrappedDataValue> values = Lists.newArrayList(new WrappedDataValue(11, Registry.get(Vector3f.class),
 						new Vector3f(translationX + offset[0] * scaleX, translationY + offset[1] * scaleY, translationZ + offset[2] * scaleZ)),
 				new WrappedDataValue(12, Registry.get(Vector3f.class), new Vector3f(1.0001f * scaleX, 1.0001f * scaleY, 1.0001f * scaleZ)),
-				// TODO: NO serializer for 4d packet yet
-				//            new WrappedDataValue(12, Registry.get(Vector4f.class), new Vector4f(
-				//                    leftRotationX, leftRotationY, leftRotationZ, leftRotationW
-				//            )),
-				//            new WrappedDataValue(13, Registry.get(Vector4f.class), new Vector4f(
-				//                    rightRotationX, rightRotationY, rightRotationZ, rightRotationW
-				//            )),
+				new WrappedDataValue(13, Registry.get(Quaternionf.class), new Quaternionf(leftRotationX, leftRotationY, leftRotationZ, leftRotationW)),
+				new WrappedDataValue(14, Registry.get(Quaternionf.class), new Quaternionf(rightRotationX, rightRotationY, rightRotationZ, rightRotationW)),
 				new WrappedDataValue(15, Registry.get(Byte.class), billBoard),
 				new WrappedDataValue(17, Registry.get(Float.class), viewRange * ("player_heads".equals(type) ? 0.5f : 1f)),
 				new WrappedDataValue(18, Registry.get(Float.class), shadowRadius), new WrappedDataValue(19, Registry.get(Float.class), shadowStrength),
@@ -443,29 +440,38 @@ public class BlockPlaceDataConfig extends ChunkConfig
 		{
 			values.add(new WrappedDataValue(0, Registry.get(Byte.class), (byte) 0x40));
 		}
+		if (interpolation_delay != null)
+		{
+			values.add(new WrappedDataValue(8, Registry.get(Integer.class), interpolation_delay));
+		}
+		if (transformation_interpolation_duration != null)
+		{
+			values.add(new WrappedDataValue(9, Registry.get(Integer.class), transformation_interpolation_duration));
+		}
+		if (position_rotation_interpolation_duration != null)
+		{
+			values.add(new WrappedDataValue(10, Registry.get(Integer.class), position_rotation_interpolation_duration));
+		}
 		if (brightnessBlock != -1 && brightnessSky != -1)
 		{
 			values.add(new WrappedDataValue(16, Registry.get(Integer.class), brightnessBlock << 4 | brightnessSky << 20));
 		}
 		switch (type)
 		{
-			// TODO: WIP
 			case "block" ->
 			{
-				//packet.getIntegers().write(4, getBlockStateId(Bukkit.createBlockData(value)));
-/*				int id = getBlockStateId(Bukkit.createBlockData(value));
-				MessageUtil.broadcastDebug(id);
-				for (int i = 0; i < 10000; i++)
+				BlockData blockData;
+				try
 				{
-					values.add(new WrappedDataValue(23, Registry.get(Integer.class), i));
-					watchableAccessor.write(0, values);
-					edit.getIntegers().write(0, Method.random(1, Integer.MAX_VALUE));
-					for (Player player : players)
-						protocolManager.sendServerPacket(player, edit);
-					if (i == 999) return;
-				}*/
-				WrappedBlockData.createData(Bukkit.createBlockData(value)).getData();
-				values.add(new WrappedDataValue(23, Registry.get(Integer.class), getBlockStateId(Bukkit.createBlockData(value))));
+					blockData = Bukkit.createBlockData(value);
+				}
+				catch (IllegalArgumentException exception)
+				{
+					MessageUtil.broadcastDebug("잘못된 블록 데이터: " + value);
+					blockData = Material.AIR.createBlockData();
+				}
+
+				values.add(new WrappedDataValue(23, Registry.getBlockDataSerializer(false), WrappedBlockData.createData(blockData).getHandle()));
 			}
 			case "player_head", "player_heads" ->
 			{
@@ -563,44 +569,6 @@ public class BlockPlaceDataConfig extends ChunkConfig
 		}
 	}
 
-	private static java.lang.reflect.Method craftBlockData_getState = null;
-
-	private static java.lang.reflect.Method nmsBlock_getId = null;
-
-	/**
-	 * 블록 데이터의 식별자 값을 정수 형태로 반환합니다. 만약 ProtocolLib이 없을 경우 항상 0을 반환합니다
-	 * @param data 식별자 값을 참조할 블록 데이터
-	 * @return 블록 데이터 식별자 정수
-	 */
-	public static int getBlockStateId(BlockData data)
-	{
-		return 0;
-/*		if (!Cucumbery.using_ProtocolLib)
-		{
-			return 0;
-		}
-		try
-		{
-			if (craftBlockData_getState == null || nmsBlock_getId == null)
-			{
-				Class<?> craftBlockDataClazz = MinecraftReflection.getCraftBukkitClass("block.data.CraftBlockData");
-				craftBlockData_getState = craftBlockDataClazz.getMethod("getState");
-				craftBlockData_getState.setAccessible(true);
-				com.comphenix.protocol.reflect.FuzzyReflection blockReflector = com.comphenix.protocol.reflect.FuzzyReflection.fromClass(MinecraftReflection.getBlockClass());
-				nmsBlock_getId = blockReflector.getMethod(
-						com.comphenix.protocol.reflect.fuzzy.FuzzyMethodContract.newBuilder().banModifier(Modifier.PRIVATE).banModifier(Modifier.PROTECTED).requireModifier(Modifier.STATIC)
-								.parameterExactArray(MinecraftReflection.getIBlockDataClass()).returnTypeExact(int.class).build());
-			}
-
-			Object nmsState = craftBlockData_getState.invoke(data);
-			return (int) nmsBlock_getId.invoke(null, nmsState);
-		}
-		catch (ReflectiveOperationException e)
-		{
-			throw new RuntimeException(e);
-		}*/
-	}
-
 	public static void spawnItemDisplay(@NotNull Collection<Player> players, @NotNull Location location)
 	{
 		if (!Cucumbery.using_ProtocolLib)
@@ -627,9 +595,10 @@ public class BlockPlaceDataConfig extends ChunkConfig
 		{
 			return;
 		}
-		if (nbtItem.getType("displays") == NBTType.NBTTagCompound)
+		NBTCompound displays = nbtItem.getCompound("displays");
+		if (nbtItem.getType("displays") == NBTType.NBTTagCompound && displays != null)
 		{
-			_spawnItemDisplay(players, location, nbtItem.getCompound("displays"));
+			_spawnItemDisplay(players, location, displays);
 		}
 		else if (nbtItem.getType("displays") == NBTType.NBTTagList)
 		{
@@ -647,11 +616,6 @@ public class BlockPlaceDataConfig extends ChunkConfig
 	public static void despawnItemDisplay(@NotNull Location location)
 	{
 		despawnItemDisplay(new ArrayList<>(Bukkit.getOnlinePlayers()), location);
-	}
-
-	public static void despawnItemDisplay(@NotNull Player player, @NotNull Location location)
-	{
-		despawnItemDisplay(Collections.singletonList(player), location);
 	}
 
 	public static void despawnItemDisplay(@NotNull Collection<Player> players, @NotNull Location location)
@@ -756,49 +720,6 @@ public class BlockPlaceDataConfig extends ChunkConfig
 
 	public static final List<Timer> TIMERS = new ArrayList<>();
 
-/*  public static void hide(@NotNull Player player, @NotNull Location currentLocation)
-  {
-    UUID uuid = player.getUniqueId();
-    List<Chunk> map = CHUNK_MAP.getOrDefault(uuid, new ArrayList<>());
-    if (map.isEmpty())
-    {
-      return;
-    }
-    World currentWorld = currentLocation.getWorld();
-    Chunk currentChunk = currentLocation.getChunk();
-    int currentChunkX = currentChunk.getX(), currentChunkZ = currentChunk.getZ();
-    List<Chunk> farChunks = new ArrayList<>();
-    for (int x = -3; x <= 3; x++)
-    {
-      for (int z = -3; z <= 3; z++)
-      {
-        if (!(Math.abs(x) <= 2 && Math.abs(z) <= 2))
-        {
-          farChunks.add(currentWorld.getChunkAt(currentChunkX + x, currentChunkZ + z));
-        }
-      }
-    }
-    for (Chunk chunk : farChunks)
-    {
-      map.remove(chunk);
-      BlockPlaceDataConfig blockPlaceDataConfig = BlockPlaceDataConfig.getInstance(chunk);
-      YamlConfiguration cfg = blockPlaceDataConfig.getConfig();
-      ConfigurationSection root = cfg.getRoot();
-      if (root != null)
-      {
-        for (String key : root.getKeys(false))
-        {
-          Location location = ChunkConfig.stringToLocation(player.getWorld(), key);
-          if (location != null)
-          {
-            Bukkit.getScheduler().runTaskLaterAsynchronously(Cucumbery.getPlugin(), () -> despawnItemDisplay(player, location), 0);
-          }
-        }
-      }
-    }
-    CHUNK_MAP.put(uuid, map);
-  }*/
-
 	public static void onPlayerMove(PlayerMoveEvent event)
 	{
 		if (!event.hasChangedBlock())
@@ -819,112 +740,5 @@ public class BlockPlaceDataConfig extends ChunkConfig
 		Player player = event.getPlayer();
 		UUID uuid = player.getUniqueId();
 		CHUNK_MAP.remove(uuid);
-	}
-
-	public static void onPlayerTeleport(PlayerTeleportEvent event)
-	{
-		Player player = event.getPlayer();
-		Location from = event.getFrom(), to = event.getTo();
-		if (!from.getWorld().getName().equals(to.getWorld().getName()))
-		{
-			return;
-		}
-		int viewDistance = Bukkit.getViewDistance();
-		if (from.distance(to) > viewDistance * 16)
-		{
-			Chunk fromChunk = from.getChunk();
-			int chunkX = fromChunk.getX(), chunkZ = fromChunk.getZ();
-			List<Location> locations = new ArrayList<>();
-			for (int i = -viewDistance; i <= chunkX + viewDistance; i++)
-			{
-				for (int j = -viewDistance; j <= chunkZ + viewDistance; j++)
-				{
-					Chunk chunk = from.getWorld().getChunkAt(i, j);
-					BlockPlaceDataConfig blockPlaceDataConfig = BlockPlaceDataConfig.getInstance(chunk);
-					YamlConfiguration cfg = blockPlaceDataConfig.getConfig();
-					ConfigurationSection root = cfg.getRoot();
-					if (root != null)
-					{
-						for (String key : root.getKeys(false))
-						{
-							Location location = ChunkConfig.stringToLocation(player.getWorld(), key);
-							if (location != null)
-							{
-								locations.add(location);
-							}
-						}
-					}
-				}
-			}
-			if (!locations.isEmpty())
-			{
-				Timer timer = new Timer();
-				TimerTask task = new TimerTask()
-				{
-					@Override
-					public void run()
-					{
-						if (locations.isEmpty())
-						{
-							timer.cancel();
-							return;
-						}
-						despawnItemDisplay(player, locations.get(0));
-						locations.remove(0);
-					}
-				};
-				timer.schedule(task, 0, 5);
-				TIMERS.add(timer);
-			}
-		}
-	}
-
-	public static void onPlayerChunkUnload(PlayerChunkUnloadEvent event)
-	{
-/*    if (true)
-    {
-      return;
-    }
-    Player player = event.getPlayer();
-    Chunk chunk = event.getChunk();
-    UUID uuid = player.getUniqueId();
-    BlockPlaceDataConfig blockPlaceDataConfig = BlockPlaceDataConfig.getInstance(chunk);
-    YamlConfiguration cfg = blockPlaceDataConfig.getConfig();
-    ConfigurationSection root = cfg.getRoot();
-    List<Location> locations = new ArrayList<>();
-    if (root != null)
-    {
-      for (String key : root.getKeys(false))
-      {
-        Location location = ChunkConfig.stringToLocation(player.getWorld(), key);
-        if (location != null)
-        {
-          locations.add(location);
-        }
-      }
-    }
-    List<Chunk> chunks = CHUNK_MAP.get(uuid);
-    chunks.remove(chunk);
-    CHUNK_MAP.put(uuid, chunks);
-    if (!locations.isEmpty())
-    {
-      Timer timer = new Timer();
-      TimerTask task = new TimerTask()
-      {
-        @Override
-        public void run()
-        {
-          if (locations.isEmpty())
-          {
-            timer.cancel();
-            return;
-          }
-          despawnItemDisplay(player, locations.get(0));
-          locations.remove(0);
-        }
-      };
-      timer.schedule(task, 0, 5);
-      TIMERS.add(timer);
-    }*/
 	}
 }
