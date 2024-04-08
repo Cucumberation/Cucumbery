@@ -711,9 +711,7 @@ public class ProtocolLibManager
 								{
 									if (child instanceof TextComponent textComponent && textComponent.content().contains("[i]"))
 									{
-										newChildren.add(ComponentUtil.translate(player, textComponent.content().replace("%", "%%").replace("[i]", "%s"),
-												sender.hasPermission("asdf"),
-												ItemStackComponent.itemStackComponent(itemStack, 1, Constant.THE_COLOR, false, player)));
+										newChildren.add(ComponentUtil.translate(player, textComponent.content().replace("%", "%%").replace("[i]", "%s"), sender.hasPermission("asdf"), itemStack));
 									}
 								}
 								if (!newChildren.isEmpty())
@@ -825,6 +823,11 @@ public class ProtocolLibManager
 		if (component instanceof TranslatableComponent translatableComponent)
 		{
 			String key = translatableComponent.key();
+			// 타임스탬프 표시되면 채팅창 줄바꿈됨 빡침
+			if (UserData.SHOW_TIMESTAMP_ON_CHAT_MESSAGES.getBoolean(player) && key.isBlank() && key.length() >= 12)
+			{
+				key = key.substring(12);
+			}
 			List<ComponentLike> translationArguments = new ArrayList<>(translatableComponent.arguments());
 			List<Component> components = new ArrayList<>();
 			for (ComponentLike componentLike : translationArguments)
