@@ -351,7 +351,7 @@ public class BlockBreak implements Listener
 			{
 				ItemStack dataItem = ItemSerializer.deserialize(dataString);
 				NBTItem nbtItem = new NBTItem(dataItem);
-				if (nbtItem.hasTag("displays") && nbtItem.getCompound("displays").hasTag("rotation") && (nbtItem.hasTag("perspectiveYaw") || nbtItem.hasTag(
+				if (nbtItem.getCompound("displays") != null && nbtItem.getCompound("displays").hasTag("rotation") && (nbtItem.hasTag("perspectiveYaw") || nbtItem.hasTag(
 						"perspectivePitch") || nbtItem.hasTag("perspectiveGrid")))
 				{
 					nbtItem.getCompound("displays").removeKey("rotation");

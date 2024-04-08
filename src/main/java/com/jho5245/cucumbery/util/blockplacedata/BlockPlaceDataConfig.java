@@ -385,10 +385,8 @@ public class BlockPlaceDataConfig extends ChunkConfig
 		}
 
 		NBTCompound brightness = nbtItem.getOrCreateCompound("brightness");
-		int brightnessBlock = brightness.hasTag("block") && brightness.getType("block") == NBTType.NBTTagInt ? brightness.getInteger("block") : -1, brightnessSky =
-				brightness.hasTag("sky") && brightness.getType("sky") == NBTType.NBTTagInt
-						? brightness.getInteger("sky")
-						: -1;
+		int brightnessBlock = brightness.hasTag("block") && brightness.getType("block") == NBTType.NBTTagInt ? brightness.getInteger("block") : -1,
+				brightnessSky = brightness.hasTag("sky") && brightness.getType("sky") == NBTType.NBTTagInt ? brightness.getInteger("sky") : -1;
 
 		float viewRange = nbtItem.hasTag("view_range") && nbtItem.getType("view_range") == NBTType.NBTTagFloat ? nbtItem.getFloat("view_range") : 0.5f;
 		float shadowRadius = nbtItem.hasTag("shadow_radius") && nbtItem.getType("shadow_radius") == NBTType.NBTTagFloat ? nbtItem.getFloat("shadow_radius") : 0f;

@@ -1,7 +1,6 @@
 package com.jho5245.cucumbery.util.addons;
 
 import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.PacketType.Play.Client;
 import com.comphenix.protocol.PacketType.Play.Server;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -11,11 +10,8 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.utility.MinecraftReflection;
-import com.comphenix.protocol.wrappers.*;
 import com.comphenix.protocol.wrappers.EnumWrappers.ItemSlot;
-import com.comphenix.protocol.wrappers.WrappedDataWatcher.Serializer;
-import com.google.common.collect.ImmutableBiMap;
-import com.google.common.collect.Lists;
+import com.comphenix.protocol.wrappers.*;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
@@ -26,8 +22,6 @@ import com.jho5245.cucumbery.util.itemlore.ItemLore.RemoveFlag;
 import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
-import com.jho5245.cucumbery.util.no_groups.ItemSerializer;
-import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method2;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
@@ -49,9 +43,7 @@ import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.format.TextDecoration.State;
 import org.bukkit.*;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -61,7 +53,6 @@ import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
-import org.checkerframework.checker.signature.qual.IdentifierOrPrimitiveType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -73,13 +64,9 @@ import java.util.stream.Stream;
 
 public class ProtocolLibManager
 {
-	private static Set<UUID> firstJoins = new HashSet<>();
-
-	public static List RECIPE_HOLDER = null;
+	private static final Set<UUID> firstJoins = new HashSet<>();
 
 	private static final NamespacedKey TEMP_KEY = NamespacedKey.fromString("temp_recipe", Cucumbery.getPlugin());
-
-	public static List<Integer> RECIPE_HOLDER_INTEGERS = null;
 
 	public static void manage()
 	{
@@ -290,51 +277,6 @@ public class ProtocolLibManager
 			}
 		});
 
-/*		protocolManager.addPacketListener(new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.NORMAL, Client.BLOCK_DIG)
-		{
-			@Override
-			public void onPacketReceiving(PacketEvent event)
-			{
-				if (!Cucumbery.using_ProtocolLib)
-				{
-					return;
-				}
-				PacketContainer packet = event.getPacket();
-				Player player = event.getPlayer();
-				if (player.isSneaking() && CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE))
-				{
-					PlayerDigType playerDigType = packet.getPlayerDigTypes().read(0);
-					if (playerDigType == PlayerDigType.START_DESTROY_BLOCK)
-					{
-						if (CustomEffectManager.hasEffect(player, CustomEffectType.CURSE_OF_CREATIVITY) || CustomEffectManager.hasEffect(player,
-								CustomEffectType.CURSE_OF_CREATIVITY_BREAK))
-						{
-							event.setCancelled(true);
-							return;
-						}
-						int[] pos = getBlockPositionOf(packet.getModifier().read(0));
-						Location location = new Location(player.getWorld(), pos[0], pos[1], pos[2]);
-						if (!Variable.customMiningCooldown.containsKey(location) || Variable.customMiningExtraBlocks.containsKey(location))
-						{
-							// 가끔 hasEffect가 true인데 getEffect가 null을 반환함 왜?
-							try
-							{
-								CustomEffectManager.addEffect(player, new LocationCustomEffectImple(CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PROGRESS, location));
-							}
-							catch (IllegalStateException ignored)
-							{
-
-							}
-							catch (Throwable t)
-							{
-								Cucumbery.getPlugin().getLogger().warning(t.getMessage());
-							}
-						}
-					}
-				}
-			}
-		});*/
-
 		protocolManager.addPacketListener(new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.NORMAL, ITEM_TYPES)
 		{
 			@Override
@@ -353,17 +295,6 @@ public class ProtocolLibManager
 					UserData.WINDOW_ID.set(uuid, packet.getIntegers().read(0));
 					packet.getItemModifier().write(0, setItemLore(packet.getType(), packet.getItemModifier().read(0), player));
 					StructureModifier<List<ItemStack>> modifier = packet.getItemListModifier();
-/*					List<ItemStack> itemStacks = modifier.read(0);
-					List<ItemStack> modifiedItemStacks = setItemLore(packet.getType(), itemStacks, player);
-					if (player.getOpenInventory().getTopInventory().getLocation() == null)
-					{
-						List<ItemStack> itemStacksList = modifier.read(0);
-						for (int i = 0; i < player.getOpenInventory().getTopInventory().getSize(); i++)
-						{
-							modifiedItemStacks.set(i, itemStacksList.get(i));
-						}
-					}
-					modifier.write(0, modifiedItemStacks);*/
 					modifier.write(0, setItemLore(packet.getType(), modifier.read(0), player));
 				}
 				else if (packet.getType() == Server.OPEN_WINDOW_MERCHANT)
@@ -387,40 +318,13 @@ public class ProtocolLibManager
 			}
 		});
 
-		protocolManager.addPacketListener(new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.NORMAL, Server.SPAWN_ENTITY)
-		{
-			@Override
-			public void onPacketSending(PacketEvent event)
-			{
-				if (!Cucumbery.using_ProtocolLib)
-				{
-					return;
-				}
-				PacketContainer packetContainer = event.getPacket();
-				Player player = event.getPlayer();
-				Entity entity = packetContainer.getEntityModifier(player.getWorld()).read(0);
-				if (false && entity instanceof Item item)
-				{
-					boolean showCustomName =
-							UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player) && !UserData.FORCE_HIDE_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player);
-					Boolean shouldShowCustomName = ItemStackUtil.shouldShowCustomName(item.getItemStack());
-					PacketContainer container = protocolManager.createPacket(Server.ENTITY_METADATA);
-					StructureModifier<List<WrappedDataValue>> structureModifier = container.getDataValueCollectionModifier();
-					List<WrappedDataValue> values = Lists.newArrayList(
-							new WrappedDataValue(3, WrappedDataWatcher.Registry.get(Boolean.class), shouldShowCustomName != null ? shouldShowCustomName : showCustomName),
-							new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false),
-									MinecraftReflection.getMinecraftItemStack(setItemLore(event.getPacketType(), item.getItemStack(), player))));
-					structureModifier.write(0, values);
-					container.getIntegers().write(0, item.getEntityId());
-					protocolManager.sendServerPacket(player, container);
-					Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> protocolManager.sendServerPacket(player, container), 0L);
-				}
-			}
-		});
-
 		protocolManager.addPacketListener(
 				new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.HIGH, Server.RECIPE_UPDATE, Server.RECIPES, Server.ENTITY_METADATA, Server.ENTITY_EQUIPMENT)
 				{
+					@SuppressWarnings({
+							"rawtypes",
+							"unchecked"
+					})
 					@Override
 					public void onPacketSending(PacketEvent event)
 					{
@@ -483,22 +387,6 @@ public class ProtocolLibManager
 								Method toBukkitRecipeFromStoneCuttingRecipe = stoneCuttingRecipeClass.getDeclaredMethod("toBukkitRecipe", NamespacedKey.class);
 
 								List recipeHolders = (List) modifier.read(0);
-/*								for (Constructor<?> constructor : cookingRecipeClass.getDeclaredConstructors())
-								{
-									MessageUtil.broadcast(constructor);
-								}
-								for (Method method : cookingRecipeClass.getDeclaredMethods())
-								{
-									MessageUtil.broadcast(method);
-								}*/
-								//								if (RECIPE_HOLDER == null && !recipeHolders.isEmpty())
-								//								{
-								//									RECIPE_HOLDER = new ArrayList(recipeHolders);
-								//								}
-								//								if (RECIPE_HOLDER_INTEGERS == null)
-								//								{
-								//									RECIPE_HOLDER_INTEGERS = new ArrayList<>(packet.getIntLists().read(0));
-								//								}
 								for (int i = 0; i < recipeHolders.size(); i++)
 								{
 									Object recipeHolderObject = recipeHolders.get(i);
@@ -734,23 +622,9 @@ public class ProtocolLibManager
 										shouldShowCustomName != null ? shouldShowCustomName : showCustomName));
 								watchableAccessor.write(0, wrappedDataValues);
 							}
-							if (entity instanceof BlockDisplay blockDisplay)
-							{
-								StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
-								List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-								for (WrappedDataValue wrappedDataValue : wrappedDataValues)
-								{
-									MessageUtil.broadcastDebug(wrappedDataValue.getHandle().getClass() + " : " + wrappedDataValue.getHandle());
-								}
-							}
 						}
 						if (packet.getType() == Server.ENTITY_EQUIPMENT)
 						{
-/*							for (int i = 0; i < modifier.size(); i++)
-							{
-								Object o = modifier.read(i);
-								MessageUtil.broadcast(o.getClass() + " : " + o);
-							}*/
 							Player player = event.getPlayer();
 							List<Pair<ItemSlot, ItemStack>> listStructureModifier = packet.getSlotStackPairLists().read(0);
 							for (Pair<ItemSlot, ItemStack> pair : listStructureModifier)
@@ -1101,8 +975,7 @@ public class ProtocolLibManager
 			{
 				switch (key)
 				{
-					case "display", "Lore", "Enchantments", "Damage", "HideFlags", "CustomModelData", "SkullOwner", "Potion", "pages", "author", "title",
-							 "CustomPotionColor", "StoredEnchantments", "AttributeModifiers", "Unbreakable", "CanPlaceOn", "CanDestroy", "BlockEntityTag" ->
+					case "display", "Lore", "Enchantments", "Damage", "HideFlags", "CustomModelData", "SkullOwner", "Potion", "pages", "author", "title", "CustomPotionColor", "StoredEnchantments", "AttributeModifiers", "Unbreakable", "CanPlaceOn", "CanDestroy", "BlockEntityTag" ->
 					{
 					}
 					default -> nbtItem.removeKey(key);
