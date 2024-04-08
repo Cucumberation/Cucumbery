@@ -476,7 +476,6 @@ public class BlockPlaceDataConfig extends ChunkConfig
 					MessageUtil.broadcastDebug("잘못된 블록 데이터: " + value);
 					blockData = Material.AIR.createBlockData();
 				}
-
 				values.add(new WrappedDataValue(23, Registry.getBlockDataSerializer(false), WrappedBlockData.createData(blockData).getHandle()));
 			}
 			case "player_head", "player_heads" ->
@@ -513,7 +512,7 @@ public class BlockPlaceDataConfig extends ChunkConfig
 				ItemStack itemStack = ItemStackUtil.createItemStack(Bukkit.getConsoleSender(), value);
 				if (itemStack == null)
 				{
-					MessageUtil.sendWarn(Bukkit.getConsoleSender(), "잘못된 아이템 데이터가 있습니다: " + value);
+					MessageUtil.broadcastDebug("잘못된 아이템 데이터: " + value);
 					itemStack = new ItemStack(Material.AIR);
 				}
 				Object minecraftItemStack = MinecraftReflection.getMinecraftItemStack(itemStack);

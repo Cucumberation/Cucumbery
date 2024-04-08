@@ -83,7 +83,7 @@ public class ItemStackComponent
 		ItemLore.removeItemLore(itemStack);
 		final ItemStack giveItem = itemStack.clone();
 		itemStack.setAmount(Math.max(1, Math.min(64, itemStack.getAmount())));
-		Component itemName = ItemNameUtil.itemName(itemStack, defaultColor, true);
+		Component itemName = ItemNameUtil.itemName(itemStack, defaultColor, false);
 		ItemStack hover = new ItemStack(Material.BUNDLE);
 		BundleMeta bundleMeta = (BundleMeta) hover.getItemMeta();
 		if (viewer != null)

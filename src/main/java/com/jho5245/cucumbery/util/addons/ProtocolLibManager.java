@@ -50,6 +50,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.RecipeChoice.ExactChoice;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
@@ -615,7 +616,6 @@ public class ProtocolLibManager
 								List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
 								wrappedDataValues.add(new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false),
 										MinecraftReflection.getMinecraftItemStack(setItemLore(Server.WINDOW_ITEMS, item.getItemStack(), player))));
-
 								wrappedDataValues.add(new WrappedDataValue(2, WrappedDataWatcher.Registry.getChatComponentSerializer(true),
 										Optional.of(WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(ItemNameUtil.itemName(itemStack))).getHandle())));
 								wrappedDataValues.add(new WrappedDataValue(3, WrappedDataWatcher.Registry.get(Boolean.class),
@@ -882,6 +882,18 @@ public class ProtocolLibManager
 			}
 		}
 
+		// TODO: 커스텀 내구도가 있는 일반 아이템인데 도구가 있는 가짜 아이템으로 빙의해서 내구도 Damage 태그 갱신 - 1.20.5때 삭제
+		if (player.getGameMode() != GameMode.CREATIVE && NBTAPI.getCompound(NBTAPI.getMainCompound(clone), CucumberyTag.CUSTOM_DURABILITY_KEY) != null)
+		{
+			Long currentDurability = NBTAPI.getLong(NBTAPI.getCompound(NBTAPI.getMainCompound(clone), CucumberyTag.CUSTOM_DURABILITY_KEY), CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY);
+			if (currentDurability != null)
+			{
+				Damageable damageable = (Damageable) itemMeta;
+				damageable.setDamage(Math.toIntExact(currentDurability));
+				clone.setItemMeta(damageable);
+			}
+		}
+
 		if (nbtItem.hasTag("override_item_stack"))
 		{
 			ItemStack overrideItemStack = null;
@@ -919,8 +931,14 @@ public class ProtocolLibManager
 				List<Component> cloneLore = originMeta.lore();
 				if (cloneLore == null)
 					cloneLore = new ArrayList<>();
-				cloneLore.add(Component.empty());
-				cloneLore.add(ComponentUtil.translate("#CCFF52;신비한 샌즈의 힘에 의해 %s의 외형이 합성됨", ItemNameUtil.itemName(overrideItemStack)));
+				if (!nbtItem.hasTag("hide_override_item_stack"))
+				{
+					ItemMeta overrideItemMeta = overrideItemStack.getItemMeta();
+					overrideItemMeta.displayName(null);
+					overrideItemStack.setItemMeta(overrideItemMeta);
+					cloneLore.add(Component.empty());
+					cloneLore.add(ComponentUtil.translate("#CCFF52;신비한 샌즈의 힘에 의해 %s의 외형이 합성됨", ItemNameUtil.itemName(overrideItemStack)));
+				}
 				if (player.getGameMode() == GameMode.CREATIVE)
 					cloneLore.add(ComponentUtil.translate("&c크리에이티브 모드여서 아이템의 유형은 변경되지 않음!"));
 				if (overrideItemStack.getAmount() > 1)
