@@ -4,12 +4,11 @@ import com.comphenix.protocol.PacketType.Play.Server;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.reflect.FuzzyReflection;
-import com.comphenix.protocol.reflect.StructureModifier;
-import com.comphenix.protocol.reflect.fuzzy.FuzzyMethodContract;
 import com.comphenix.protocol.utility.MinecraftReflection;
+import com.comphenix.protocol.wrappers.WrappedBlockData;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedDataValue;
+import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher.Registry;
 import com.google.common.collect.Lists;
 import com.jho5245.cucumbery.Cucumbery;
@@ -424,7 +423,7 @@ public class BlockPlaceDataConfig extends ChunkConfig
 		packet.getUUIDs().write(0, UUID.randomUUID());
 
 		PacketContainer edit = protocolManager.createPacket(Server.ENTITY_METADATA);
-		StructureModifier<List<WrappedDataValue>> watchableAccessor = edit.getDataValueCollectionModifier();
+		com.comphenix.protocol.reflect.StructureModifier<List<WrappedDataValue>> watchableAccessor = edit.getDataValueCollectionModifier();
 		List<WrappedDataValue> values = Lists.newArrayList(new WrappedDataValue(11, Registry.get(Vector3f.class),
 						new Vector3f(translationX + offset[0] * scaleX, translationY + offset[1] * scaleY, translationZ + offset[2] * scaleZ)),
 				new WrappedDataValue(12, Registry.get(Vector3f.class), new Vector3f(1.0001f * scaleX, 1.0001f * scaleY, 1.0001f * scaleZ)),
@@ -465,6 +464,7 @@ public class BlockPlaceDataConfig extends ChunkConfig
 						protocolManager.sendServerPacket(player, edit);
 					if (i == 999) return;
 				}*/
+				WrappedBlockData.createData(Bukkit.createBlockData(value)).getData();
 				values.add(new WrappedDataValue(23, Registry.get(Integer.class), getBlockStateId(Bukkit.createBlockData(value))));
 			}
 			case "player_head", "player_heads" ->
@@ -567,8 +567,18 @@ public class BlockPlaceDataConfig extends ChunkConfig
 
 	private static java.lang.reflect.Method nmsBlock_getId = null;
 
+	/**
+	 * 블록 데이터의 식별자 값을 정수 형태로 반환합니다. 만약 ProtocolLib이 없을 경우 항상 0을 반환합니다
+	 * @param data 식별자 값을 참조할 블록 데이터
+	 * @return 블록 데이터 식별자 정수
+	 */
 	public static int getBlockStateId(BlockData data)
 	{
+		return 0;
+/*		if (!Cucumbery.using_ProtocolLib)
+		{
+			return 0;
+		}
 		try
 		{
 			if (craftBlockData_getState == null || nmsBlock_getId == null)
@@ -576,9 +586,9 @@ public class BlockPlaceDataConfig extends ChunkConfig
 				Class<?> craftBlockDataClazz = MinecraftReflection.getCraftBukkitClass("block.data.CraftBlockData");
 				craftBlockData_getState = craftBlockDataClazz.getMethod("getState");
 				craftBlockData_getState.setAccessible(true);
-				FuzzyReflection blockReflector = FuzzyReflection.fromClass(MinecraftReflection.getBlockClass());
+				com.comphenix.protocol.reflect.FuzzyReflection blockReflector = com.comphenix.protocol.reflect.FuzzyReflection.fromClass(MinecraftReflection.getBlockClass());
 				nmsBlock_getId = blockReflector.getMethod(
-						FuzzyMethodContract.newBuilder().banModifier(Modifier.PRIVATE).banModifier(Modifier.PROTECTED).requireModifier(Modifier.STATIC)
+						com.comphenix.protocol.reflect.fuzzy.FuzzyMethodContract.newBuilder().banModifier(Modifier.PRIVATE).banModifier(Modifier.PROTECTED).requireModifier(Modifier.STATIC)
 								.parameterExactArray(MinecraftReflection.getIBlockDataClass()).returnTypeExact(int.class).build());
 			}
 
@@ -588,7 +598,7 @@ public class BlockPlaceDataConfig extends ChunkConfig
 		catch (ReflectiveOperationException e)
 		{
 			throw new RuntimeException(e);
-		}
+		}*/
 	}
 
 	public static void spawnItemDisplay(@NotNull Collection<Player> players, @NotNull Location location)

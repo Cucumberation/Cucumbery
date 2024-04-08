@@ -49,6 +49,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.format.TextDecoration.State;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -730,6 +731,15 @@ public class ProtocolLibManager
 								wrappedDataValues.add(new WrappedDataValue(3, WrappedDataWatcher.Registry.get(Boolean.class),
 										shouldShowCustomName != null ? shouldShowCustomName : showCustomName));
 								watchableAccessor.write(0, wrappedDataValues);
+							}
+							if (entity instanceof BlockDisplay blockDisplay)
+							{
+								StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
+								List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
+								for (int i = 0; i < wrappedDataValues.size(); i++)
+								{
+									MessageUtil.broadcastDebug(i + ": " + wrappedDataValues.get(i).getClass() + " - " + wrappedDataValues.get(i));
+								}
 							}
 						}
 						if (packet.getType() == Server.ENTITY_EQUIPMENT)
