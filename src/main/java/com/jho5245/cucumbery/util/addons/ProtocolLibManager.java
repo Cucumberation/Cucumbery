@@ -824,7 +824,7 @@ public class ProtocolLibManager
 		{
 			String key = translatableComponent.key();
 			// 타임스탬프 표시되면 채팅창 줄바꿈됨 빡침
-			if (UserData.SHOW_TIMESTAMP_ON_CHAT_MESSAGES.getBoolean(player) && key.isBlank() && key.length() >= 12)
+			if (key.isBlank() && key.length() >= 12 && UserData.SHOW_TIMESTAMP_ON_CHAT_MESSAGES.getBoolean(player))
 			{
 				key = key.substring(12);
 			}
