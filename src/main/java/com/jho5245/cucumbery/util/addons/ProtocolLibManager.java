@@ -38,6 +38,7 @@ import com.jho5245.cucumbery.util.storage.data.Prefix;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
+import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
 import com.mojang.brigadier.context.StringRange;
 import com.mojang.brigadier.suggestion.Suggestion;
 import com.mojang.brigadier.suggestion.Suggestions;
@@ -676,9 +677,12 @@ public class ProtocolLibManager
 									default -> prefix = Prefix.INFO.get();
 								}
 							}
+
+							// 에러 메시지인가?
 							if (originComponent.color() != null && originComponent.color().value() == NamedTextColor.RED.value()
 									|| !originComponent.children().isEmpty() && originComponent.children().get(0).color() != null && originComponent.children().get(0).color().value() == NamedTextColor.RED.value())
 							{
+								SoundPlay.playErrorSound(player);
 								prefix = Prefix.INFO_ERROR.get();
 								component = component.color(null);
 								if (originComponent.children().isEmpty() && originComponent.children().get(0).color() != null && originComponent.children().get(0).color().value() == NamedTextColor.RED.value())
