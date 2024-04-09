@@ -462,6 +462,23 @@ public class BlockPlaceDataConfig extends ChunkConfig
 		{
 			values.add(new WrappedDataValue(16, Registry.get(Integer.class), brightnessBlock << 4 | brightnessSky << 20));
 		}
+		int itemDisplay = 0;
+		if (nbtItem.hasTag("item_display") && nbtItem.getType("item_display") == NBTType.NBTTagString)
+		{
+			itemDisplay = switch (nbtItem.getString("item_display"))
+			{
+				case "third_person_left_hand" -> 1;
+				case "third_person_right_hand" -> 2;
+				case "first_person_left_hand" -> 3;
+				case "first_person_right_hand" -> 4;
+				case "head" -> 5;
+				case "gui" -> 6;
+				case "ground" -> 7;
+				case "fixed" -> 8;
+				default -> 0;
+			};
+		}
+
 		switch (type)
 		{
 			case "block" ->
@@ -486,22 +503,6 @@ public class BlockPlaceDataConfig extends ChunkConfig
 				itemStack.setItemMeta(skullMeta);
 				Object minecraftItemStack = MinecraftReflection.getMinecraftItemStack(itemStack);
 				values.add(new WrappedDataValue(23, Registry.getItemStackSerializer(false), minecraftItemStack));
-				int itemDisplay = 0;
-				if (nbtItem.hasTag("item_display") && nbtItem.getType("item_display") == NBTType.NBTTagString)
-				{
-					itemDisplay = switch (nbtItem.getString("item_display"))
-					{
-						case "third_person_left_hand" -> 1;
-						case "third_person_right_hand" -> 2;
-						case "first_person_left_hand" -> 3;
-						case "first_person_right_hand" -> 4;
-						case "head" -> 5;
-						case "gui" -> 6;
-						case "ground" -> 7;
-						case "fixed" -> 8;
-						default -> 0;
-					};
-				}
 				if (itemDisplay != 0)
 				{
 					values.add(new WrappedDataValue(24, Registry.get(Integer.class), itemDisplay));
@@ -517,22 +518,6 @@ public class BlockPlaceDataConfig extends ChunkConfig
 				}
 				Object minecraftItemStack = MinecraftReflection.getMinecraftItemStack(itemStack);
 				values.add(new WrappedDataValue(23, Registry.getItemStackSerializer(false), minecraftItemStack));
-				int itemDisplay = 0;
-				if (nbtItem.hasTag("item_display") && nbtItem.getType("item_display") == NBTType.NBTTagString)
-				{
-					itemDisplay = switch (nbtItem.getString("item_display"))
-					{
-						case "third_person_left_hand" -> 1;
-						case "third_person_right_hand" -> 2;
-						case "first_person_left_hand" -> 3;
-						case "first_person_right_hand" -> 4;
-						case "head" -> 5;
-						case "gui" -> 6;
-						case "ground" -> 7;
-						case "fixed" -> 8;
-						default -> 0;
-					};
-				}
 				if (itemDisplay != 0)
 				{
 					values.add(new WrappedDataValue(24, Registry.get(Integer.class), itemDisplay));
