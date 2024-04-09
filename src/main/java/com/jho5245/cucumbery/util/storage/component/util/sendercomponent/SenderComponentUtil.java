@@ -187,7 +187,7 @@ public class SenderComponentUtil
   @NotNull
   public static Component senderComponent(@Nullable Player player, @NotNull Object object, @Nullable TextColor defaultColor)
   {
-    if (Cucumbery.using_CommandAPI && object instanceof NativeProxyCommandSender sender)
+    if (object instanceof NativeProxyCommandSender sender)
     {
       CommandSender caller = sender.getCaller(), callee = sender.getCallee();
       if (caller.equals(callee))
@@ -330,6 +330,7 @@ public class SenderComponentUtil
     }
     else if (object instanceof Entity entity)
     {
+      Bukkit.getConsoleSender().sendMessage(player + "ok?");
       return EntityComponentUtil.entityComponent(player, entity, defaultColor);
     }
     else if (object instanceof OfflinePlayer offlinePlayer)

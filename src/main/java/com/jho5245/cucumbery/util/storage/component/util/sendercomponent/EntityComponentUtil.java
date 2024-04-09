@@ -194,7 +194,7 @@ public class EntityComponentUtil
 			}
 			click = "/socialmenu " + name;
 		}
-		if (!(entity instanceof Player))
+		else
 		{
 			String key = entity.getType().translationKey();
 			if (entity instanceof Creeper creeper && creeper.isPowered())
