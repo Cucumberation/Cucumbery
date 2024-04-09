@@ -29,6 +29,7 @@ import com.jho5245.cucumbery.util.no_groups.Method2;
 import com.jho5245.cucumbery.util.storage.component.ItemStackComponent;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
+import com.jho5245.cucumbery.util.storage.component.util.sendercomponent.SenderComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Constant.CucumberyHideFlag;
 import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
@@ -636,8 +637,8 @@ public class ProtocolLibManager
 								Boolean shouldShowCustomName = ItemStackUtil.shouldShowCustomName(itemStack);
 								StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
 								List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-								wrappedDataValues.add(new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false),
-										MinecraftReflection.getMinecraftItemStack(itemStack)));
+								wrappedDataValues.add(
+										new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
 								wrappedDataValues.add(new WrappedDataValue(2, WrappedDataWatcher.Registry.getChatComponentSerializer(true),
 										Optional.of(WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(component)).getHandle())));
 								wrappedDataValues.add(new WrappedDataValue(3, WrappedDataWatcher.Registry.get(Boolean.class),
@@ -667,11 +668,8 @@ public class ProtocolLibManager
 								switch (key)
 								{
 									case "commands.give.success.single" -> prefix = Prefix.INFO_HANDGIVE.get();
-									case "commands.teleport.success.entity.single",
-											"commands.teleport.success.entity.multiple",
-											"commands.teleport.success.location.single",
-											"commands.teleport.success.location.multiple"
-											-> prefix = Prefix.INFO_TELEPORT.get();
+									case "commands.teleport.success.entity.single", "commands.teleport.success.entity.multiple", "commands.teleport.success.location.single", "commands.teleport.success.location.multiple" ->
+											prefix = Prefix.INFO_TELEPORT.get();
 								}
 								if (NamedTextColor.RED.equals(originComponent.color())
 										|| originComponent.color() == null && originComponent instanceof TextComponent textComponent && textComponent.content().isEmpty()
@@ -718,7 +716,9 @@ public class ProtocolLibManager
 								{
 									if (child instanceof TextComponent textComponent && textComponent.content().contains("[i]"))
 									{
-										newChildren.add(ComponentUtil.translate(player, textComponent.content().replace("%", "%%").replace("[i]", "%s"), sender.hasPermission("asdf"), itemStack));
+										newChildren.add(
+												ComponentUtil.translate(player, textComponent.content().replace("%", "%%").replace("[i]", "%s"), sender.hasPermission("asdf"),
+														itemStack));
 									}
 								}
 								if (!newChildren.isEmpty())
@@ -728,7 +728,8 @@ public class ProtocolLibManager
 							if (UserData.SHOW_TIMESTAMP_ON_CHAT_MESSAGES.getBoolean(player) && sender != null)
 							{
 								event.setCancelled(true);
-								Component message = ComponentUtil.translate("chat.type.text", sender, GsonComponentSerializer.gson().deserialize(packet.getChatComponents().read(0).getJson()));
+								Component message = ComponentUtil.translate("chat.type.text", sender,
+										GsonComponentSerializer.gson().deserialize(packet.getChatComponents().read(0).getJson()));
 								player.sendMessage(message);
 							}
 						}
@@ -818,26 +819,25 @@ public class ProtocolLibManager
 					Entity entity = Bukkit.getEntity(uuid);
 					if (entity != null)
 					{
-						component = ComponentUtil.create(player, entity);
-					}
-				}
-				else if (hoverEvent.value() instanceof Component comp)
-				{
-					if (comp instanceof TextComponent textComponent && textComponent.color() == null)
-					{
-						String content = textComponent.content();
-						try
-						{
-							Double.parseDouble(content);
-							component = component.hoverEvent(comp.color(Constant.THE_COLOR));
-						}
-						catch (Exception ignored) {}
+						component = SenderComponentUtil.senderComponent(player, entity, null);
 					}
 				}
 			}
 			catch (Exception e)
 			{
 				Bukkit.getConsoleSender().sendMessage("§4" + e.getMessage());
+			}
+		}
+		if (component instanceof TextComponent textComponent && textComponent.color() == null)
+		{
+			String content = textComponent.content();
+			try
+			{
+				Double.parseDouble(content);
+				component = textComponent.color(Constant.THE_COLOR);
+			}
+			catch (Exception ignored)
+			{
 			}
 		}
 		if (component instanceof TranslatableComponent translatableComponent)
@@ -1204,8 +1204,7 @@ public class ProtocolLibManager
 			{
 				switch (key)
 				{
-					case "display", "Lore", "Enchantments", "Damage", "HideFlags", "CustomModelData", "SkullOwner", "Potion", "pages", "author", "title",
-							 "CustomPotionColor", "StoredEnchantments", "AttributeModifiers", "Unbreakable", "CanPlaceOn", "CanDestroy", "BlockEntityTag" ->
+					case "display", "Lore", "Enchantments", "Damage", "HideFlags", "CustomModelData", "SkullOwner", "Potion", "pages", "author", "title", "CustomPotionColor", "StoredEnchantments", "AttributeModifiers", "Unbreakable", "CanPlaceOn", "CanDestroy", "BlockEntityTag" ->
 					{
 					}
 					default -> nbtItem.removeKey(key);
