@@ -812,7 +812,7 @@ public class ProtocolLibManager
 					ItemStack itemStack = Bukkit.getItemFactory().createItemStack(showItem.item() + nbt);
 					component = ItemStackComponent.itemStackComponent(itemStack, 1, Constant.THE_COLOR, false, player);
 				}
-				if (hoverEvent.value() instanceof ShowEntity showEntity)
+				else if (hoverEvent.value() instanceof ShowEntity showEntity)
 				{
 					UUID uuid = showEntity.id();
 					Entity entity = Bukkit.getEntity(uuid);
@@ -821,7 +821,7 @@ public class ProtocolLibManager
 						component = ComponentUtil.create(player, entity);
 					}
 				}
-				if (hoverEvent.value() instanceof Component comp)
+				else if (hoverEvent.value() instanceof Component comp)
 				{
 					if (comp instanceof TextComponent textComponent && textComponent.color() == null)
 					{
