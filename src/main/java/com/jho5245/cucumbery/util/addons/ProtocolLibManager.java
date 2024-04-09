@@ -3,6 +3,7 @@ package com.jho5245.cucumbery.util.addons;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.PacketType.Play.Client;
 import com.comphenix.protocol.PacketType.Play.Server;
+import com.comphenix.protocol.PacketType.Sender;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.ListenerPriority;
@@ -54,6 +55,7 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
 import net.kyori.adventure.text.event.HoverEvent.ShowItem;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.format.TextDecoration.State;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
@@ -728,7 +730,7 @@ public class ProtocolLibManager
 							if (UserData.SHOW_TIMESTAMP_ON_CHAT_MESSAGES.getBoolean(player) && sender != null)
 							{
 								event.setCancelled(true);
-								Component message = ComponentUtil.translate("chat.type.text", sender,
+								Component message = ComponentUtil.translate("chat.type.text", SenderComponentUtil.senderComponent(player, sender, null),
 										GsonComponentSerializer.gson().deserialize(packet.getChatComponents().read(0).getJson()));
 								player.sendMessage(message);
 							}
@@ -811,7 +813,7 @@ public class ProtocolLibManager
 					BinaryTagHolder binaryTagHolder = showItem.nbt();
 					String nbt = binaryTagHolder != null ? binaryTagHolder.toString() : "";
 					ItemStack itemStack = Bukkit.getItemFactory().createItemStack(showItem.item() + nbt);
-					component = ItemStackComponent.itemStackComponent(itemStack, 1, Constant.THE_COLOR, false, player);
+					component = ItemStackComponent.itemStackComponent(itemStack, 1, component.color() == null ? Constant.THE_COLOR : null, false, player);
 				}
 				else if (hoverEvent.value() instanceof ShowEntity showEntity)
 				{
@@ -819,25 +821,13 @@ public class ProtocolLibManager
 					Entity entity = Bukkit.getEntity(uuid);
 					if (entity != null)
 					{
-						component = SenderComponentUtil.senderComponent(player, entity, null);
+						component = SenderComponentUtil.senderComponent(player, entity, component.color() == null ? Constant.THE_COLOR : null);
 					}
 				}
 			}
 			catch (Exception e)
 			{
 				Bukkit.getConsoleSender().sendMessage("§4" + e.getMessage());
-			}
-		}
-		if (component instanceof TextComponent textComponent && textComponent.color() == null)
-		{
-			String content = textComponent.content();
-			try
-			{
-				Double.parseDouble(content);
-				component = textComponent.color(Constant.THE_COLOR);
-			}
-			catch (Exception ignored)
-			{
 			}
 		}
 		if (component instanceof TranslatableComponent translatableComponent)
@@ -848,11 +838,26 @@ public class ProtocolLibManager
 			{
 				key = key.substring(12);
 			}
+
+			// 인수에 숫자가 있는데 만약 컴포넌트 색이 없으면 숫자 그  색깔화 아닐 경우 아무짓도안함
+			TextColor argumentColor = null;
+			if (component instanceof TextComponent textComponent && textComponent.color() == null)
+			{
+				String content = textComponent.content();
+				try
+				{
+					Double.parseDouble(content);
+					argumentColor = component.color() == null ? Constant.THE_COLOR : null;
+				}
+				catch (Exception ignored)
+				{
+				}
+			}
 			List<ComponentLike> translationArguments = new ArrayList<>(translatableComponent.arguments());
 			List<Component> components = new ArrayList<>();
 			for (ComponentLike componentLike : translationArguments)
 			{
-				components.add(parse(player, componentLike.asComponent()));
+				components.add(parse(player, componentLike.asComponent().color(argumentColor)));
 			}
 			component = translatableComponent.key(ComponentUtil.translate(player, key, components).key()).arguments(components);
 /*			if ("chat.square_brackets".equals(key) && translatableComponent.hoverEvent() != null && translatableComponent.hoverEvent().value() instanceof ShowItem)
