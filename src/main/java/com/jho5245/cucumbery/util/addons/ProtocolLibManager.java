@@ -43,6 +43,7 @@ import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.NBTList;
 import de.tr7zw.changeme.nbtapi.NBTType;
+import io.lumine.mythic.bukkit.utils.redis.jedis.args.ClientPauseMode;
 import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
@@ -69,6 +70,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.w3c.dom.Text;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -817,6 +819,19 @@ public class ProtocolLibManager
 					if (entity != null)
 					{
 						component = ComponentUtil.create(player, entity);
+					}
+				}
+				if (hoverEvent.value() instanceof Component comp)
+				{
+					if (comp instanceof TextComponent textComponent && textComponent.color() == null)
+					{
+						String content = textComponent.content();
+						try
+						{
+							Double.parseDouble(content);
+							component = component.hoverEvent(comp.color(Constant.THE_COLOR));
+						}
+						catch (Exception ignored) {}
 					}
 				}
 			}
