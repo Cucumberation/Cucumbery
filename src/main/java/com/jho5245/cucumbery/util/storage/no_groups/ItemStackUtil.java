@@ -840,7 +840,7 @@ public class ItemStackUtil
 	public static List<Component> getItemInfoAsComponents(@NotNull ItemStack itemStack, @Nullable Object param, @Nullable Component tag, boolean separator)
 	{
 		itemStack = itemStack.clone();
-		if (true || param instanceof ItemLoreView view && UserData.SHOW_ITEM_LORE.getBoolean(view.getPlayer()))
+		if (param instanceof ItemLoreView view && UserData.SHOW_ITEM_LORE.getBoolean(view.getPlayer()))
 		{
 			ItemLore.setItemLore(itemStack, false, param);
 		}
