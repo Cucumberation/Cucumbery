@@ -853,6 +853,10 @@ public class ProtocolLibManager
 				{
 					UUID uuid = showEntity.id();
 					Entity entity = Bukkit.getEntity(uuid);
+					if (entity == null)
+					{
+						entity = Variable.PLAYER_HASH_MAP.getOrDefault(uuid, null);
+					}
 					if (entity != null)
 					{
 						component = SenderComponentUtil.senderComponent(player, entity, Constant.THE_COLOR);

@@ -313,6 +313,7 @@ public class Cucumbery extends JavaPlugin
 			{
 				Bukkit.getScheduler().runTaskLaterAsynchronously(cucumbery, () -> BlockPlaceDataConfig.display(player, player.getLocation()), 0L);
 			}
+			Variable.PLAYER_HASH_MAP.put(player.getUniqueId(), player);
 			String displayName = UserData.DISPLAY_NAME.getString(player);
 			if (displayName != null)
 			{

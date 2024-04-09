@@ -43,6 +43,7 @@ public class PlayerJoin implements Listener
   {
     Player player = event.getPlayer();
     UUID uuid = player.getUniqueId();
+    Variable.PLAYER_HASH_MAP.put(uuid, player);
     if (!Variable.userData.containsKey(uuid))
     {
       //			Method.broadcastDebug("캐시 유저 데이터 생성 - " + uuid.toString());

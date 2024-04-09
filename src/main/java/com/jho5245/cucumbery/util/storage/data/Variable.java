@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -257,4 +258,9 @@ public class Variable
   public static final Set<UUID> customMiningBlockBreakCooldown = new HashSet<>();
 
   public static final HashMap<UUID, String> ORIGINAL_NAME = new HashMap<>();
+
+  /**
+   * uuid로 플레이어 찾을때 사용함 - 접속을 종료해도 플레이어 정보 가져오려고
+   */
+  public static final HashMap<UUID, Player> PLAYER_HASH_MAP = new HashMap<>();
 }
