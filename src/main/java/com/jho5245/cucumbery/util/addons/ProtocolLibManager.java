@@ -665,6 +665,11 @@ public class ProtocolLibManager
 								switch (key)
 								{
 									case "commands.give.success.single" -> prefix = Prefix.INFO_HANDGIVE.get();
+									case "commands.teleport.success.entity.single",
+											"commands.teleport.success.entity.multiple",
+											"commands.teleport.success.location.single",
+											"commands.teleport.success.location.multiple"
+											-> prefix = Prefix.INFO_TELEPORT.get();
 								}
 								if (NamedTextColor.RED.equals(originComponent.color())
 										|| originComponent.color() == null && originComponent instanceof TextComponent textComponent && textComponent.content().isEmpty()
