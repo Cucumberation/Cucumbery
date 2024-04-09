@@ -75,6 +75,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.w3c.dom.Text;
 
+import javax.naming.Name;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
@@ -661,7 +662,7 @@ public class ProtocolLibManager
 						{
 							WrappedChatComponent wrappedChatComponent = packet.getChatComponents().read(0);
 							final Component originComponent = GsonComponentSerializer.gson().deserialize(wrappedChatComponent.getJson());
-							Component component = parse(event.getPlayer(), GsonComponentSerializer.gson().deserialize(wrappedChatComponent.getJson()));
+							Component component = parse(event.getPlayer(), null, GsonComponentSerializer.gson().deserialize(wrappedChatComponent.getJson()));
 							boolean isActionBar = packet.getBooleans().read(0);
 							Component prefix = null;
 							if (originComponent instanceof TranslatableComponent translatableComponent)
@@ -672,12 +673,23 @@ public class ProtocolLibManager
 									case "commands.give.success.single" -> prefix = Prefix.INFO_HANDGIVE.get();
 									case "commands.teleport.success.entity.single", "commands.teleport.success.entity.multiple", "commands.teleport.success.location.single", "commands.teleport.success.location.multiple" ->
 											prefix = Prefix.INFO_TELEPORT.get();
+									default -> prefix = Prefix.INFO.get();
 								}
-								if (NamedTextColor.RED.equals(originComponent.color())
-										|| originComponent.color() == null && originComponent instanceof TextComponent textComponent && textComponent.content().isEmpty()
-										&& !originComponent.children().isEmpty() && NamedTextColor.RED.equals(originComponent.children().get(0).color()))
+							}
+							if (originComponent.color() != null && originComponent.color().value() == NamedTextColor.RED.value()
+									|| !originComponent.children().isEmpty() && originComponent.children().get(0).color() != null && originComponent.children().get(0).color().value() == NamedTextColor.RED.value())
+							{
+								prefix = Prefix.INFO_ERROR.get();
+								component = component.color(null);
+								if (originComponent.children().isEmpty() && originComponent.children().get(0).color() != null && originComponent.children().get(0).color().value() == NamedTextColor.RED.value())
 								{
-									prefix = Prefix.INFO_ERROR.get();
+									List<Component> newChildren = new ArrayList<>();
+									for (int i = 0; i < component.children().size(); i++)
+									{
+										if (i == 0) newChildren.add(component.children().get(i).color(null));
+										newChildren.add(component.children().get(i));
+									}
+									component = component.children(newChildren);
 								}
 							}
 							if (isActionBar)
@@ -801,7 +813,7 @@ public class ProtocolLibManager
 	}
 
 	@NotNull
-	private static Component parse(@NotNull Player player, @NotNull Component component)
+	private static Component parse(@NotNull Player player, @Nullable Component parent, @NotNull Component component)
 	{
 		HoverEvent<?> hoverEvent = component.hoverEvent();
 		if (hoverEvent != null)
@@ -813,7 +825,7 @@ public class ProtocolLibManager
 					BinaryTagHolder binaryTagHolder = showItem.nbt();
 					String nbt = binaryTagHolder != null ? binaryTagHolder.toString() : "";
 					ItemStack itemStack = Bukkit.getItemFactory().createItemStack(showItem.item() + nbt);
-					component = ItemStackComponent.itemStackComponent(itemStack, 1, component.color() == null ? Constant.THE_COLOR : null, false, player);
+					component = ItemStackComponent.itemStackComponent(itemStack, 1, null, false, player);
 				}
 				else if (hoverEvent.value() instanceof ShowEntity showEntity)
 				{
@@ -821,7 +833,7 @@ public class ProtocolLibManager
 					Entity entity = Bukkit.getEntity(uuid);
 					if (entity != null)
 					{
-						component = SenderComponentUtil.senderComponent(player, entity, component.color() == null ? Constant.THE_COLOR : null);
+						component = SenderComponentUtil.senderComponent(player, entity, null);
 					}
 				}
 			}
@@ -839,38 +851,53 @@ public class ProtocolLibManager
 				key = key.substring(12);
 			}
 
-			// 인수에 숫자가 있는데 만약 컴포넌트 색이 없으면 숫자 그  색깔화 아닐 경우 아무짓도안함
-			TextColor argumentColor = null;
-			if (component instanceof TextComponent textComponent && textComponent.color() == null)
-			{
-				String content = textComponent.content();
-				try
-				{
-					Double.parseDouble(content);
-					argumentColor = component.color() == null ? Constant.THE_COLOR : null;
-				}
-				catch (Exception ignored)
-				{
-				}
-			}
 			List<ComponentLike> translationArguments = new ArrayList<>(translatableComponent.arguments());
-			List<Component> components = new ArrayList<>();
+			List<Component> arguments = new ArrayList<>();
 			for (ComponentLike componentLike : translationArguments)
 			{
-				components.add(parse(player, componentLike.asComponent().color(argumentColor)));
+				Component argument = componentLike.asComponent();
+				TextColor argumentColor = argument.color();
+				// argument가 개체 또는 아이템을 보여주는데 컴포넌트 색이 없으면 argument의 색깔을 THE COLOR로 / 아닐 경우 색깔을 바꾸지 않음
+/*				Bukkit.getConsoleSender().sendMessage(component.color() + " foo ");
+				Bukkit.getConsoleSender().sendMessage(ComponentUtil.serializeAsJson(component) + " foo ");
+				if (parent != null)
+				{
+					Bukkit.getConsoleSender().sendMessage(parent.color() + " foop ");
+					Bukkit.getConsoleSender().sendMessage(ComponentUtil.serializeAsJson(parent) + " foop ");
+				}*/
+				if (argument.hoverEvent() != null && (argument.hoverEvent().value() instanceof ShowEntity || argument.hoverEvent().value() instanceof ShowItem))
+				{
+					argumentColor = (component.color() == null || component.color().value() == NamedTextColor.WHITE.value()) &&
+							(parent == null || parent.color() == null || parent.color().value() == NamedTextColor.WHITE.value()) ? Constant.THE_COLOR : argumentColor;
+				}
+				// 인수에 숫자가 있는데 만약 컴포넌트 색이 없으면 숫자의 색깔을 THE COLOR로 / 아닐 경우 색깔을 바꾸지 않음
+				if (argument instanceof TextComponent textComponent && textComponent.color() == null)
+				{
+					String content = textComponent.content();
+					try
+					{
+						Double.parseDouble(content);
+						argumentColor = component.color() == null && (parent == null || parent.color() == null) ? Constant.THE_COLOR : argumentColor;
+					}
+					catch (Exception ignored)
+					{
+					}
+				}
+				// 색상이 흰색이면 걍 없애자.
+				if (argumentColor != null && argumentColor.value() == NamedTextColor.WHITE.value())
+				{
+					argumentColor = null;
+				}
+				arguments.add(parse(player, null, argument).color(argument.color() != null && argument.color().value() != NamedTextColor.WHITE.value() ? argument.color() : Constant.THE_COLOR));
 			}
-			component = translatableComponent.key(ComponentUtil.translate(player, key, components).key()).arguments(components);
-/*			if ("chat.square_brackets".equals(key) && translatableComponent.hoverEvent() != null && translatableComponent.hoverEvent().value() instanceof ShowItem)
-			{
-
-			}*/
+			component = translatableComponent.key(ComponentUtil.translate(player, key, arguments).key()).arguments(arguments);
 		}
 		if (!component.children().isEmpty())
 		{
 			List<Component> newList = new ArrayList<>();
 			for (int i = 0; i < component.children().size(); i++)
 			{
-				newList.add(parse(player, component.children().get(i)));
+				newList.add(parse(player, component, component.children().get(i)));
 			}
 			component = component.children(newList);
 		}
