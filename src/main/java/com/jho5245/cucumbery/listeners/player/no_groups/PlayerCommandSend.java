@@ -178,6 +178,10 @@ public class PlayerCommandSend implements Listener
 		if (!Method.hasPermission(player, Permission.CMD_NICK, false))
 			commands.remove("cucumbery:nick");
 
+		// 뭔데 왜 /enchant 안사라지는데
+		if (!Method.hasPermission(player, Permission.CMD_ENCHANT, false))
+			commands.remove("enchant");
+
 		// cucumbery:heal도 안사라지네 에센셜때문이냐
 		if (!Method.hasPermission(player, Permission.CMD_HEAL, false))
 		{

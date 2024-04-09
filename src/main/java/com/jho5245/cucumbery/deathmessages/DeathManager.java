@@ -664,8 +664,7 @@ public class DeathManager
 			}
 			args.addAll(extraArgs);
 			Component prefix = Component.empty();
-			List<Component> children = new ArrayList<>();
-			final Component deathMessageComponent = ComponentUtil.translate(key, args);
+			Component deathMessageComponent = ComponentUtil.translate(key, args);
 			if (ComponentUtil.serializeAsJson(deathMessageComponent).length() > MAXIMUM_COMPONENT_SERIAL_LENGTH)
 			{
 				for (int i = 0; i < args.size(); i++)
@@ -727,7 +726,7 @@ public class DeathManager
 				if (!cancelledMessages.isEmpty())
 				{
 					String message = cancelledMessages.get(Method.random(0, cancelledMessages.size() - 1));
-					children.add(ComponentUtil.translate(message, entity));
+					deathMessageComponent = deathMessageComponent.append(ComponentUtil.translate(message, entity));
 				}
 			}
 			if (playerDeathEvent != null)
@@ -747,7 +746,7 @@ public class DeathManager
 				players.removeIf(playerPredicate);
 				for (Player player : players)
 				{
-					MessageUtil.sendMessage(player, prefix, ComponentUtil.translate(player, key, args).children(children));
+					MessageUtil.sendMessage(player, prefix, deathMessageComponent);
 				}
 				if (CustomEffectManager.hasEffect(entity, CustomEffectType.CURSE_OF_BEANS))
 				{
@@ -757,7 +756,7 @@ public class DeathManager
 						{
 							if (!CustomEffectManager.hasEffect(online, CustomEffectType.CURSE_OF_BEANS))
 							{
-								MessageUtil.sendMessage(online, prefix, ComponentUtil.translate(online, key, args).children(children));
+								MessageUtil.sendMessage(online, prefix, deathMessageComponent);
 							}
 						}
 					}
@@ -768,7 +767,7 @@ public class DeathManager
 					{
 						if (entity != online)
 						{
-							MessageUtil.sendTitle(online, prefix, deathMessageComponent.children(children), 5, 100, 15);
+							MessageUtil.sendTitle(online, prefix, deathMessageComponent, 5, 100, 15);
 						}
 					}
 				}
@@ -776,8 +775,8 @@ public class DeathManager
 				int y = location.getBlockY();
 				int z = location.getBlockZ();
 				// 콘솔에 디버그를 보내기 위함
-				children.add(ComponentUtil.create("&7 - " + worldName + ", " + x + ", " + y + ", " + z));
-				MessageUtil.consoleSendMessage(prefix, deathMessageComponent.children(children));
+				deathMessageComponent = deathMessageComponent.append(ComponentUtil.create("&7 - " + worldName + ", " + x + ", " + y + ", " + z));
+				MessageUtil.consoleSendMessage(prefix, deathMessageComponent);
 			}
 		}
 	}

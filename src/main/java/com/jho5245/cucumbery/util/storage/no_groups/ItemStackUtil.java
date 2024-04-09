@@ -717,7 +717,6 @@ public class ItemStackUtil
 		{
 			type = placedBlockType;
 		}
-
 		ItemStack itemStack = new ItemStack(type.isAir() || !type.isItem() ? Material.BARRIER : type);
 		ItemMeta itemMeta = itemStack.getItemMeta();
 		if (itemMeta == null)
@@ -730,7 +729,7 @@ public class ItemStackUtil
 		}
 		else
 		{
-			itemMeta.displayName(ItemNameUtil.itemName(type));
+			itemMeta.displayName(ItemNameUtil.itemName(block.getType()));
 		}
 		itemStack.setItemMeta(itemMeta);
 		if (itemMeta instanceof BlockStateMeta blockStateMeta)
@@ -743,28 +742,21 @@ public class ItemStackUtil
 			}
 			itemStack.setItemMeta(blockStateMeta);
 		}
-		Location location = block.getLocation();
-		ItemLore.setItemLore(itemStack, false);
 		itemMeta = itemStack.getItemMeta();
 		if (itemMeta instanceof BlockDataMeta blockDataMeta)
 		{
 			blockDataMeta.setBlockData(block.getBlockData());
 			itemStack.setItemMeta(blockDataMeta);
-			ItemLore.setItemLore(itemStack, false);
 		}
-		List<Component> lore = itemMeta.lore();
-		if (lore == null)
-		{
-			lore = new ArrayList<>();
-		}
-		if (!lore.isEmpty())
-		{
-			lore.add(ComponentUtil.create2(Constant.SEPARATOR));
-		}
-		lore.set(0, Component.translatable(" "));
-		lore.add(ComponentUtil.translate("&f좌표 : %s", location));
-		itemMeta.lore(lore);
-		itemStack.setItemMeta(itemMeta);
+		Location location = block.getLocation();
+		World world = location.getWorld();
+		int x = location.getBlockX(), y = location.getBlockY(), z = location.getBlockZ();
+		NBTItem nbtItem = new NBTItem(itemStack, true);
+		NBTCompound nbtCompound = nbtItem.addCompound("block_location_info");
+		nbtCompound.setString("world", world.getName());
+		nbtCompound.setInteger("x", x);
+		nbtCompound.setInteger("y", y);
+		nbtCompound.setInteger("z", z);
 		return itemStack;
 	}
 

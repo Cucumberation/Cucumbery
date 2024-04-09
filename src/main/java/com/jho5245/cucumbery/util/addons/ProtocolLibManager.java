@@ -60,6 +60,7 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.format.TextDecoration.State;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.royawesome.jlibnoise.module.source.Const;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -661,40 +662,48 @@ public class ProtocolLibManager
 						}
 						if (packet.getType() == Server.SYSTEM_CHAT)
 						{
+							boolean isActionBar = packet.getBooleans().read(0);
 							WrappedChatComponent wrappedChatComponent = packet.getChatComponents().read(0);
 							final Component originComponent = GsonComponentSerializer.gson().deserialize(wrappedChatComponent.getJson());
-							Component component = parse(event.getPlayer(), null, GsonComponentSerializer.gson().deserialize(wrappedChatComponent.getJson()));
-							boolean isActionBar = packet.getBooleans().read(0);
+							Component component = GsonComponentSerializer.gson().deserialize(wrappedChatComponent.getJson());
+							// 채팅창에 시각 표시 - 메시지가 여러줄될 경우 줄마다 시각 추가 표시
+							if (!isActionBar && UserData.SHOW_TIMESTAMP_ON_CHAT_MESSAGES.getBoolean(event.getPlayer()))
+							{
+								Date date = new Date();
+								List<Component> children = new ArrayList<>();
+								for (Component child : component.children())
+								{
+									if (child instanceof TextComponent textComponent && textComponent.content().contains("\n"))
+									{
+										child = textComponent.append(Component.text(DATE_FORMAT.format(date), NamedTextColor.GRAY));
+									}
+									children.add(child);
+								}
+								component = component.children(children);
+							}
+							component = parse(event.getPlayer(), originComponent instanceof TranslatableComponent translatableComponent && translatableComponent.key().equals("chat.type.admin"), component);
 							Component prefix = null;
 							if (originComponent instanceof TranslatableComponent translatableComponent)
 							{
 								String key = translatableComponent.key();
 								switch (key)
 								{
+									case "chat.type.text", "chat.type.admin" -> {}
 									case "commands.give.success.single" -> prefix = Prefix.INFO_HANDGIVE.get();
-									case "commands.teleport.success.entity.single", "commands.teleport.success.entity.multiple", "commands.teleport.success.location.single", "commands.teleport.success.location.multiple" ->
-											prefix = Prefix.INFO_TELEPORT.get();
+									case "commands.teleport.success.entity.single", "commands.teleport.success.entity.multiple", "commands.teleport.success.location.single",
+											 "commands.teleport.success.location.multiple" -> prefix = Prefix.INFO_TELEPORT.get();
 									default -> prefix = Prefix.INFO.get();
 								}
 							}
 
 							// 에러 메시지인가?
-							if (originComponent.color() != null && originComponent.color().value() == NamedTextColor.RED.value()
-									|| !originComponent.children().isEmpty() && originComponent.children().get(0).color() != null && originComponent.children().get(0).color().value() == NamedTextColor.RED.value())
+							if (originComponent instanceof TextComponent textComponent && textComponent.content().isEmpty() && originComponent.color() != null && originComponent.color().value() == NamedTextColor.RED.value()
+									&& !originComponent.children().isEmpty() && originComponent.children().get(0).color() == null)
 							{
+								// Bukkit.getConsoleSender().sendMessage(ComponentUtil.serializeAsJson(originComponent));
 								SoundPlay.playErrorSound(player);
 								prefix = Prefix.INFO_ERROR.get();
 								component = component.color(null);
-								if (originComponent.children().isEmpty() && originComponent.children().get(0).color() != null && originComponent.children().get(0).color().value() == NamedTextColor.RED.value())
-								{
-									List<Component> newChildren = new ArrayList<>();
-									for (int i = 0; i < component.children().size(); i++)
-									{
-										if (i == 0) newChildren.add(component.children().get(i).color(null));
-										newChildren.add(component.children().get(i));
-									}
-									component = component.children(newChildren);
-								}
 							}
 							if (isActionBar)
 								prefix = null;
@@ -702,9 +711,12 @@ public class ProtocolLibManager
 							{
 								component = Component.translatable("%s%s").arguments(prefix, component);
 							}
+
+							// 채팅창에 시각 표시
 							if (!isActionBar && UserData.SHOW_TIMESTAMP_ON_CHAT_MESSAGES.getBoolean(event.getPlayer()))
 							{
-								component = Component.empty().append(Component.text(DATE_FORMAT.format(new Date()), NamedTextColor.GRAY)).append(component);
+								Date date = new Date();
+								component = Component.empty().append(Component.text(DATE_FORMAT.format(date), NamedTextColor.GRAY)).append(component);
 							}
 							packet.getChatComponents().write(0, WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(component)));
 						}
@@ -724,6 +736,12 @@ public class ProtocolLibManager
 						{
 							Player sender = Bukkit.getPlayer(packet.getUUIDs().read(0));
 							WrappedChatComponent wrappedChatComponent = packet.getChatComponents().read(0);
+							
+							// 보통 대화 메시지 검증 명령어에서 null을 반환함(예: /say, /tell 등)
+							if (wrappedChatComponent == null)
+							{
+								return;
+							}
 							final Component originComponent = GsonComponentSerializer.gson().deserialize(wrappedChatComponent.getJson());
 							ItemStack itemStack = sender != null ? sender.getInventory().getItemInMainHand() : null;
 							if (ItemStackUtil.itemExists(itemStack))
@@ -817,7 +835,7 @@ public class ProtocolLibManager
 	}
 
 	@NotNull
-	private static Component parse(@NotNull Player player, @Nullable Component parent, @NotNull Component component)
+	private static Component parse(@NotNull Player player, boolean isAdminMessage, @NotNull Component component)
 	{
 		HoverEvent<?> hoverEvent = component.hoverEvent();
 		if (hoverEvent != null)
@@ -829,7 +847,7 @@ public class ProtocolLibManager
 					BinaryTagHolder binaryTagHolder = showItem.nbt();
 					String nbt = binaryTagHolder != null ? binaryTagHolder.toString() : "";
 					ItemStack itemStack = Bukkit.getItemFactory().createItemStack(showItem.item() + nbt);
-					component = ItemStackComponent.itemStackComponent(itemStack, 1, null, false, player);
+					component = ItemStackComponent.itemStackComponent(itemStack, 1, Constant.THE_COLOR, false, player);
 				}
 				else if (hoverEvent.value() instanceof ShowEntity showEntity)
 				{
@@ -837,7 +855,7 @@ public class ProtocolLibManager
 					Entity entity = Bukkit.getEntity(uuid);
 					if (entity != null)
 					{
-						component = SenderComponentUtil.senderComponent(player, entity, null);
+						component = SenderComponentUtil.senderComponent(player, entity, Constant.THE_COLOR);
 					}
 				}
 			}
@@ -860,20 +878,6 @@ public class ProtocolLibManager
 			for (ComponentLike componentLike : translationArguments)
 			{
 				Component argument = componentLike.asComponent();
-				TextColor argumentColor = argument.color();
-				// argument가 개체 또는 아이템을 보여주는데 컴포넌트 색이 없으면 argument의 색깔을 THE COLOR로 / 아닐 경우 색깔을 바꾸지 않음
-/*				Bukkit.getConsoleSender().sendMessage(component.color() + " foo ");
-				Bukkit.getConsoleSender().sendMessage(ComponentUtil.serializeAsJson(component) + " foo ");
-				if (parent != null)
-				{
-					Bukkit.getConsoleSender().sendMessage(parent.color() + " foop ");
-					Bukkit.getConsoleSender().sendMessage(ComponentUtil.serializeAsJson(parent) + " foop ");
-				}*/
-				if (argument.hoverEvent() != null && (argument.hoverEvent().value() instanceof ShowEntity || argument.hoverEvent().value() instanceof ShowItem))
-				{
-					argumentColor = (component.color() == null || component.color().value() == NamedTextColor.WHITE.value()) &&
-							(parent == null || parent.color() == null || parent.color().value() == NamedTextColor.WHITE.value()) ? Constant.THE_COLOR : argumentColor;
-				}
 				// 인수에 숫자가 있는데 만약 컴포넌트 색이 없으면 숫자의 색깔을 THE COLOR로 / 아닐 경우 색깔을 바꾸지 않음
 				if (argument instanceof TextComponent textComponent && textComponent.color() == null)
 				{
@@ -881,18 +885,20 @@ public class ProtocolLibManager
 					try
 					{
 						Double.parseDouble(content);
-						argumentColor = component.color() == null && (parent == null || parent.color() == null) ? Constant.THE_COLOR : argumentColor;
+						argument = argument.color(Constant.THE_COLOR);
 					}
 					catch (Exception ignored)
 					{
 					}
 				}
-				// 색상이 흰색이면 걍 없애자.
-				if (argumentColor != null && argumentColor.value() == NamedTextColor.WHITE.value())
+
+				argument = parse(player, isAdminMessage, argument);
+				// 관리자 명령어 메시지는 회색 기울임꼴이므로 인수의 색깔, 기울임 decoration을 제거한다.
+				if (isAdminMessage)
 				{
-					argumentColor = null;
+					argument = argument.color(null).decoration(TextDecoration.ITALIC, State.NOT_SET);
 				}
-				arguments.add(parse(player, null, argument).color(argument.color() != null && argument.color().value() != NamedTextColor.WHITE.value() ? argument.color() : Constant.THE_COLOR));
+				arguments.add(argument);
 			}
 			component = translatableComponent.key(ComponentUtil.translate(player, key, arguments).key()).arguments(arguments);
 		}
@@ -901,7 +907,7 @@ public class ProtocolLibManager
 			List<Component> newList = new ArrayList<>();
 			for (int i = 0; i < component.children().size(); i++)
 			{
-				newList.add(parse(player, component, component.children().get(i)));
+				newList.add(parse(player, isAdminMessage, component.children().get(i)));
 			}
 			component = component.children(newList);
 		}
@@ -1240,7 +1246,8 @@ public class ProtocolLibManager
 			{
 				switch (key)
 				{
-					case "display", "Lore", "Enchantments", "Damage", "HideFlags", "CustomModelData", "SkullOwner", "Potion", "pages", "author", "title", "CustomPotionColor", "StoredEnchantments", "AttributeModifiers", "Unbreakable", "CanPlaceOn", "CanDestroy", "BlockEntityTag" ->
+					case "display", "Lore", "Enchantments", "Damage", "HideFlags", "CustomModelData", "SkullOwner", "Potion", "pages", "author", "title",
+							 "CustomPotionColor", "StoredEnchantments", "AttributeModifiers", "Unbreakable", "CanPlaceOn", "CanDestroy", "BlockEntityTag" ->
 					{
 					}
 					default -> nbtItem.removeKey(key);

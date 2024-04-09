@@ -21,7 +21,9 @@ import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.format.TextDecoration.State;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.CreativeCategory;
 import org.bukkit.inventory.ItemFactory;
@@ -271,7 +273,7 @@ public class ItemLore
 					}
 				}
 			}
-			else if (itemMeta.hasDisplayName())
+			else if (itemMeta.hasDisplayName() && !nbtItem.hasTag("block_location_info"))
 			{
 				ItemStack clone = itemStack.clone();
 				ItemMeta cloneMeta = clone.getItemMeta();
@@ -279,6 +281,20 @@ public class ItemLore
 				clone.setItemMeta(cloneMeta);
 				defaultLore.add(Component.empty());
 				defaultLore.add(ComponentUtil.translate("&7원래 아이템 이름 : %s", ItemNameUtil.itemName(clone)));
+			}
+		}
+		if (nbtItem.hasTag("block_location_info") && nbtItem.getType("block_location_info") == NBTType.NBTTagCompound)
+		{
+			NBTCompound nbtCompound = nbtItem.addCompound("block_location_info");
+			World world = Bukkit.getWorld(nbtCompound.getString("world"));
+			int x = nbtCompound.getInteger("x");
+			int y = nbtCompound.getInteger("y");
+			int z = nbtCompound.getInteger("z");
+			if (world != null)
+			{
+				Location location = new Location(world, x, y, z);
+				defaultLore.add(ComponentUtil.create("&8" + Constant.SEPARATOR));
+				defaultLore.add(ComponentUtil.translate("&f좌표 : %s", location));
 			}
 		}
 		defaultLore.replaceAll(ComponentUtil::stripEvent);
