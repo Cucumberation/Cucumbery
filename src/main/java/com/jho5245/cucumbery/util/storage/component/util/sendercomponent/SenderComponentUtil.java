@@ -330,7 +330,6 @@ public class SenderComponentUtil
     }
     else if (object instanceof Entity entity)
     {
-      Bukkit.getConsoleSender().sendMessage(player + "ok?");
       return EntityComponentUtil.entityComponent(player, entity, defaultColor);
     }
     else if (object instanceof OfflinePlayer offlinePlayer)
