@@ -150,6 +150,19 @@ public class CommandUserData implements CucumberyCommandExecutor
             }
             config.getConfig().set(key.getKey(), material.toString());
           }
+          case MINING_SPEED_RATIO_MODIFIER_LIGHT_PENALTY ->
+          {
+            if (!MessageUtil.isInteger(sender, value, true))
+            {
+              return true;
+            }
+            int intVal = Integer.parseInt(value);
+            if (!MessageUtil.checkNumberSize(sender, intVal, 0, 100))
+            {
+              return true;
+            }
+            config.getConfig().set(key.getKey(), intVal);
+          }
           default ->
           {
             if (!value.equals("true") && !value.equals("false"))
@@ -240,6 +253,7 @@ public class CommandUserData implements CucumberyCommandExecutor
                 case ID, UUID -> CommandTabUtil.errorMessage(args[1] + "(" + key.getKey().replace("-", " ") + ")" + " 키의 값은 변경할 수 없습니다");
                 case ITEM_USE_DELAY, ITEM_DROP_DELAY -> CommandTabUtil.tabCompleterIntegerRadius(args, 0, 200, "<틱>");
                 case INVINCIBLE_TIME, INVINCIBLE_TIME_JOIN -> CommandTabUtil.tabCompleterIntegerRadius(args, -1, 2000, "<틱>");
+                case MINING_SPEED_RATIO_MODIFIER_LIGHT_PENALTY -> CommandTabUtil.tabCompleterIntegerRadius(args, 0, 100, "<페널티 비율>");
                 case CUSTOM_MINING_COOLDOWN_DISPLAY_BLOCK -> CommandTabUtil.tabCompleterList(args, Material.values(), "<블록 유형>", material -> !material.isBlock());
                 default -> CommandTabUtil.tabCompleterBoolean(args, "<값>");
               };

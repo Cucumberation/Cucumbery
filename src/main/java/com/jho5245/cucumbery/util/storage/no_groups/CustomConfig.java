@@ -380,6 +380,8 @@ public class CustomConfig
 		SHOW_ITEM_LORE_IN_CREATIVE_MODE("크리에이티브에서-추가-아이템-설명-표시", false),
 		SHOW_ENCHANTED_ITEM_GLINTS("마법이-부여된-아이템-반짝임-표시", true),
 		SHOW_TIMESTAMP_ON_CHAT_MESSAGES("채팅-메시지에-현재-시각-표시", true),
+		MINING_SPEED_RATIO_MODIFIER_LIGHT_PENALTY("채광-속도-비율-수정자-빛-페널티", 0),
+		IGNORE_MINING_SPEED_RATIO_MODIFIER_LIGHT_PENALTY("채광-속도-비율-수정자-빛-페널티-무시", false),
 		;
 
 		private final String key;

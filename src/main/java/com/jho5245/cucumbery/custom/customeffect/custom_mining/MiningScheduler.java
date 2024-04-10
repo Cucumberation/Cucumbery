@@ -18,6 +18,7 @@ import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import io.lumine.mythic.bukkit.utils.lib.jooq.User;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -38,6 +39,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.VoxelShape;
 import org.jetbrains.annotations.NotNull;
@@ -48,6 +50,8 @@ import java.util.*;
 public class MiningScheduler
 {
 	public static final HashMap<UUID, Integer> blockBreakKey = new HashMap<>();
+
+	private static final Set<UUID> LIGHT_PENALTY_ALERT_SET = new HashSet<>();
 
 	public static void customMining()
 	{
@@ -883,6 +887,32 @@ public class MiningScheduler
 				{
 					Variable.customMiningBlockBreakCooldown.add(uuid);
 					Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> Variable.customMiningBlockBreakCooldown.remove(uuid), 6L);
+				}
+				// 만약 블록이 캐졌을 때 플레이어 위치가 어두울 경우 다음 블록 채광부터 채광 속도 감소 페널티 적용
+				{
+					int penaltyRatio = UserData.MINING_SPEED_RATIO_MODIFIER_LIGHT_PENALTY.getInt(player);
+					Block eyeLocationBlock = player.getEyeLocation().getBlock();
+					// 야간투시가 없고 어두울 경우 페널티 수치 증가
+					if (!player.hasPotionEffect(PotionEffectType.NIGHT_VISION) && eyeLocationBlock.getLightFromSky() == 0 && eyeLocationBlock.getLightFromBlocks() == 0 && eyeLocationBlock.getLightLevel() == 0)
+					{
+						// 첫 페널티 적용일 경우 메시지 표시
+						if (!LIGHT_PENALTY_ALERT_SET.contains(uuid))
+						{
+							MessageUtil.sendWarn(player, "어두운 곳에서 채광을 지속할 경우 채광 속도가 감소합니다! 주변을 밝게 해주세요!");
+							LIGHT_PENALTY_ALERT_SET.add(uuid);
+							if (UserData.IGNORE_MINING_SPEED_RATIO_MODIFIER_LIGHT_PENALTY.getBoolean(player))
+							{
+								MessageUtil.info(player, "%s 옵션이 켜져 있어 실제로 감소하지 않습니다", UserData.IGNORE_MINING_SPEED_RATIO_MODIFIER_LIGHT_PENALTY);
+							}
+						}
+						UserData.MINING_SPEED_RATIO_MODIFIER_LIGHT_PENALTY.set(player, Math.min(80, penaltyRatio + 5));
+					}
+					// 아닐 경우 페널티 수치 감소
+					else
+					{
+						UserData.MINING_SPEED_RATIO_MODIFIER_LIGHT_PENALTY.set(player, Math.max(0, penaltyRatio - 10));
+					}
+
 				}
 				return;
 			}

@@ -1299,6 +1299,12 @@ public class MiningManager
 		// 블록을 캐면 항상 아이템이 나오는 경우인데, 이때 마인크래프트는 속도에 1.5를 곱한다
 		if (toolTier >= blockTier)
 			miningSpeed *= 1.5f;
+		// 어두운 곳에서 채광 시 페널티 수치
+		int speedRatioModifierLightPenalty = Math.min(100, Math.max(0, UserData.MINING_SPEED_RATIO_MODIFIER_LIGHT_PENALTY.getInt(player)));
+		if (!UserData.IGNORE_MINING_SPEED_RATIO_MODIFIER_LIGHT_PENALTY.getBoolean(player) && speedRatioModifierLightPenalty > 0)
+		{
+			miningSpeed *= (100 - speedRatioModifierLightPenalty) / 100d;
+		}
 		List<ItemStack> drop = new ArrayList<>();
 		int intSide = (int) miningFortune;
 		float floatSide = miningFortune - intSide;

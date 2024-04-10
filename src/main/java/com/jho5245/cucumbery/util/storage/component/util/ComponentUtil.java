@@ -522,7 +522,7 @@ public class ComponentUtil
 			else if (object instanceof UserData userData)
 			{
 				String key = userData.getKey().replace("-", " ");
-				Component concat = ComponentUtil.translate(key, Constant.THE_COLOR);
+				Component concat = Component.translatable(key, Constant.THE_COLOR);
 				if (player != null && player.hasPermission("asdf"))
 				{
 					Component hover = Component.empty().append(ComponentUtil.translate(key));
