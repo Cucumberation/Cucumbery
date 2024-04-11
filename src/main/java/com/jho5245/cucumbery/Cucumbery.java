@@ -461,7 +461,7 @@ public class Cucumbery extends JavaPlugin
 		}
 		for (UUID uuid : CommandRide.RIDE_AREA_EFFECT_CLOUDS)
 		{
-			Entity entity = Bukkit.getEntity(uuid);
+			Entity entity = Method2.getEntity(uuid);
 			if (entity != null)
 			{
 				if (entity.getPassengers().isEmpty() || entity.getVehicle() == null)

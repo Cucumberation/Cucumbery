@@ -4,6 +4,7 @@ import com.google.common.base.Predicates;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method;
+import com.jho5245.cucumbery.util.no_groups.Method2;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
@@ -198,7 +199,7 @@ public class SenderComponentUtil
     }
     if (object instanceof UUID uuid)
     {
-      Entity entity = Bukkit.getEntity(uuid);
+      Entity entity = Method2.getEntity(uuid);
       if (entity != null)
       {
         return senderComponent(player, entity, defaultColor);
@@ -213,7 +214,7 @@ public class SenderComponentUtil
         List<Entity> entities = new ArrayList<>();
         for (UUID uuid : uuids)
         {
-          Entity entity = Bukkit.getEntity(uuid);
+          Entity entity = Method2.getEntity(uuid);
           if (entity != null)
           {
             entities.add(entity);

@@ -15,7 +15,6 @@ import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -85,7 +84,7 @@ public class Data
           continue;
         }
         MessageUtil.sendWarn(target, "인벤토리가 가득 차서 %s이(가) 보낸 %s %s개 중 %s개를 지급받지 못했습니다", sender, item, amountComponent, Component.text(lostAmount, Constant.THE_COLOR));
-        if (itemStash && Permission.CMD_STASH.has(Objects.requireNonNull(Method2.getEntityAsync(target))))
+        if (itemStash && Permission.CMD_STASH.has(Objects.requireNonNull(Method2.getEntity(target))))
         {
           MessageUtil.sendMessage(target, Prefix.INFO_STASH, "보관함에 아이템이 %s개 있습니다. %s 명령어로 확인하세요!", Variable.itemStash.get(target).size(), "rg255,204;/stash");
         }

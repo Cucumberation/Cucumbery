@@ -1,5 +1,6 @@
 package com.jho5245.cucumbery.util.no_groups;
 
+import com.jho5245.cucumbery.util.storage.data.Variable;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -105,17 +106,28 @@ public class Method2 extends Method
   }
 
   @Nullable
-  public static Entity getEntityAsync(@NotNull UUID uuid)
+  public static Entity getEntity(@NotNull UUID uuid)
   {
-    for (World world : Bukkit.getWorlds())
+    if (Variable.PLAYER_HASH_MAP.containsKey(uuid))
     {
-      for (Chunk chunk : world.getLoadedChunks())
+      return Variable.PLAYER_HASH_MAP.get(uuid);
+    }
+    try
+    {
+      return Bukkit.getEntity(uuid);
+    }
+    catch (Throwable t)
+    {
+      for (World world : Bukkit.getWorlds())
       {
-        for (Entity entity : chunk.getEntities())
+        for (Chunk chunk : world.getLoadedChunks())
         {
-          if (entity.getUniqueId().equals(uuid))
+          for (Entity entity : chunk.getEntities())
           {
-            return entity;
+            if (entity.getUniqueId().equals(uuid))
+            {
+              return entity;
+            }
           }
         }
       }

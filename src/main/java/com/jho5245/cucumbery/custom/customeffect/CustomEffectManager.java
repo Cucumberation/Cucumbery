@@ -578,7 +578,7 @@ public class CustomEffectManager
 		}
 		effectMap.keySet().removeIf(uuid ->
 		{
-			Entity entity = Method2.getEntityAsync(uuid);
+			Entity entity = Method2.getEntity(uuid);
 			OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
 			boolean isPlayer = offlinePlayer.hasPlayedBefore() || offlinePlayer.getStatistic(Statistic.PLAY_ONE_MINUTE) > 0;
 			return effectMap.get(uuid).isEmpty() || (!isPlayer && entity == null);
@@ -591,7 +591,7 @@ public class CustomEffectManager
 		//MessageUtil.broadcastDebug("trying to save:" + uuid + ", effect size:" + customEffects.size());
 		OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
 		boolean isPlayer = offlinePlayer.hasPlayedBefore() || offlinePlayer.getStatistic(Statistic.PLAY_ONE_MINUTE) > 0;
-		Entity entity = Method2.getEntityAsync(uuid);
+		Entity entity = Method2.getEntity(uuid);
 		String entityType = entity != null ? entity.getType().toString().toLowerCase() : "unknown";
 		if (customEffects.isEmpty() || (!isPlayer && entity == null))
 		{
@@ -764,7 +764,7 @@ public class CustomEffectManager
 					String entityUuidString = root.getString(typeString + ".entity");
 					if (entityUuidString != null && Method.isUUID(entityUuidString))
 					{
-						Entity entity = Bukkit.getEntity(UUID.fromString(entityUuidString));
+						Entity entity = Method2.getEntity(UUID.fromString(entityUuidString));
 						if (entity != null)
 						{
 							customEffect = new EntityCustomEffectImple(customEffectType, initDuration, initAmplifier, displayType, entity);

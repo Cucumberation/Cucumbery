@@ -25,7 +25,7 @@ public class ShopSuccessPurchase implements Listener
   {
     Shop shop = event.getShop();
     UUID uuid = event.getPurchaser();
-    Entity entity = Method2.getEntityAsync(uuid);
+    Entity entity = Method2.getEntity(uuid);
     if (entity instanceof Player player)
     {
       ItemStack itemStack = shop.getItem().clone();

@@ -373,7 +373,7 @@ public class ItemLore2CustomMaterial
         if (uuidStr != null && Method.isUUID(uuidStr))
         {
           UUID uuid = UUID.fromString(uuidStr);
-          Entity entity = Method2.getEntityAsync(uuid);
+          Entity entity = Method2.getEntity(uuid);
           if (entity == null)
           {
             track = ComponentUtil.translate("&c잘못된 개체");

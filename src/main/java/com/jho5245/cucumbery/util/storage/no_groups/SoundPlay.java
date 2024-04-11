@@ -115,7 +115,7 @@ public class SoundPlay
   {
     if (audience instanceof UUID uuid)
     {
-      Entity entity = Method2.getEntityAsync(uuid);
+      Entity entity = Method2.getEntity(uuid);
       if (entity != null)
       {
         playWarnSound(entity);
@@ -137,7 +137,7 @@ public class SoundPlay
   {
     if (audience instanceof UUID uuid)
     {
-      Entity entity = Method2.getEntityAsync(uuid);
+      Entity entity = Method2.getEntity(uuid);
       if (entity != null)
       {
         playErrorSound(entity);

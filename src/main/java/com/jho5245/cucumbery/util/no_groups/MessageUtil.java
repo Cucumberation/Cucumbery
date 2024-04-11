@@ -374,7 +374,7 @@ public class MessageUtil
 		}
 		if (o instanceof UUID uuid)
 		{
-			Entity entity = Method2.getEntityAsync(uuid);
+			Entity entity = Method2.getEntity(uuid);
 			if (entity != null)
 			{
 				return entity;

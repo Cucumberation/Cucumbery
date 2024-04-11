@@ -175,7 +175,7 @@ public class Scheduler
         String uuidStr = new NBTItem(mainHand).getString("Tracking");
         if (uuidStr != null && Method.isUUID(uuidStr))
         {
-          Entity entity = Method2.getEntityAsync(UUID.fromString(uuidStr));
+          Entity entity = Method2.getEntity(UUID.fromString(uuidStr));
           Component message = ComponentUtil.translate("&cargument.entity.notfound.entity");
           if (entity != null)
           {
@@ -236,7 +236,7 @@ public class Scheduler
       {
         Variable.lastDamageMillis.keySet().removeIf(uuid ->
         {
-          Entity entity = Method2.getEntityAsync(uuid);
+          Entity entity = Method2.getEntity(uuid);
           return entity == null || !entity.isValid() || entity.isDead();
         });
       }
@@ -256,7 +256,7 @@ public class Scheduler
           {
             return true;
           }
-          Entity entity = Method2.getEntityAsync(uuid);
+          Entity entity = Method2.getEntity(uuid);
           return entity == null || !entity.isValid() || entity.isDead();
         });
       }
@@ -271,7 +271,7 @@ public class Scheduler
   {
     for (UUID uuid : CustomEffectManager.effectMap.keySet())
     {
-      Entity entity = Bukkit.getEntity(uuid);
+      Entity entity = Method2.getEntity(uuid);
       if (entity != null)
       {
         CustomEffectScheduler.tick(entity);

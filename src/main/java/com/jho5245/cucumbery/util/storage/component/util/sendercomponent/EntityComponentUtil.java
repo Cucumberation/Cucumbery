@@ -321,7 +321,7 @@ public class EntityComponentUtil
 				hover = hover.append(ComponentUtil.translate("%s의 평판", nameComponent));
 				for (UUID targetUUID : uuidSet)
 				{
-					Object target = Method2.getEntityAsync(targetUUID);
+					Object target = Method2.getEntity(targetUUID);
 					if (target == null)
 					{
 						target = Bukkit.getOfflinePlayer(targetUUID);
@@ -410,7 +410,7 @@ public class EntityComponentUtil
 			UUID spawningEntityUUID = phantom.getSpawningEntity();
 			if (spawningEntityUUID != null)
 			{
-				Entity spawningEntity = Method2.getEntityAsync(spawningEntityUUID);
+				Entity spawningEntity = Method2.getEntity(spawningEntityUUID);
 				if (spawningEntity != null)
 				{
 					hover = hover.append(Component.text("\n"));
@@ -521,7 +521,7 @@ public class EntityComponentUtil
 			UUID breedCause = animals.getBreedCause();
 			if (breedCause != null)
 			{
-				Entity breedCauseEntity = Method2.getEntityAsync(breedCause);
+				Entity breedCauseEntity = Method2.getEntity(breedCause);
 				if (breedCauseEntity != null)
 				{
 					hover = hover.append(Component.text("\n"));
@@ -665,7 +665,7 @@ public class EntityComponentUtil
 				UUID spawningEntityUUID = firework.getSpawningEntity();
 				if (spawningEntityUUID != null)
 				{
-					Entity spawningEntity = Method2.getEntityAsync(spawningEntityUUID);
+					Entity spawningEntity = Method2.getEntity(spawningEntityUUID);
 					if (spawningEntity != null)
 					{
 						hover = hover.append(Component.text("\n"));
@@ -876,6 +876,11 @@ public class EntityComponentUtil
 			hover = hover.append(Component.text("\n"));
 			hover = hover.append(Component.text("minecraft:" + entity.getType().toString().toLowerCase(), NamedTextColor.DARK_GRAY));
 			nameComponent = nameComponent.clickEvent(ClickEvent.suggestCommand(click));
+		}
+		if (!entity.isValid())
+		{
+			hover = hover.append(Component.text("\n"));
+			hover = hover.append(Component.translatable("현재 유효하지 않은 개체입니다(사망/접속 종료)", NamedTextColor.RED));
 		}
 		if (tmiMode || Cucumbery.config.getBoolean("use-hover-event-for-entities.enabled"))
 		{

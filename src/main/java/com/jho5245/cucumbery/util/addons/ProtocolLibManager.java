@@ -3,7 +3,6 @@ package com.jho5245.cucumbery.util.addons;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.PacketType.Play.Client;
 import com.comphenix.protocol.PacketType.Play.Server;
-import com.comphenix.protocol.PacketType.Sender;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.ListenerPriority;
@@ -46,7 +45,6 @@ import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.NBTList;
 import de.tr7zw.changeme.nbtapi.NBTType;
-import io.lumine.mythic.bukkit.utils.redis.jedis.args.ClientPauseMode;
 import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
@@ -56,11 +54,9 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
 import net.kyori.adventure.text.event.HoverEvent.ShowItem;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.format.TextDecoration.State;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.royawesome.jlibnoise.module.source.Const;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -75,9 +71,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.w3c.dom.Text;
 
-import javax.naming.Name;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
@@ -852,11 +846,7 @@ public class ProtocolLibManager
 				else if (hoverEvent.value() instanceof ShowEntity showEntity)
 				{
 					UUID uuid = showEntity.id();
-					Entity entity = Bukkit.getEntity(uuid);
-					if (entity == null)
-					{
-						entity = Variable.PLAYER_HASH_MAP.getOrDefault(uuid, null);
-					}
+					Entity entity = Method2.getEntity(uuid);
 					if (entity != null)
 					{
 						component = SenderComponentUtil.senderComponent(player, entity, Constant.THE_COLOR);

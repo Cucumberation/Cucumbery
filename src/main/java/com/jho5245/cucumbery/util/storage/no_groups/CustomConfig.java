@@ -536,7 +536,7 @@ public class CustomConfig
 
 		public void set(UUID uuid, Object value)
 		{
-			Player player = Method2.getEntityAsync(uuid) instanceof Player p ? p : null;
+			Player player = Method2.getEntity(uuid) instanceof Player p ? p : null;
 			YamlConfiguration config = Variable.userData.get(uuid);
 			boolean offline = config == null;
 			if (offline)

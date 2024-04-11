@@ -178,7 +178,7 @@ public class Initializer
 								if (Method.isUUID(fileName7))
 								{
 									UUID uuid = UUID.fromString(fileName7);
-									if (Method2.getEntityAsync(uuid) == null && !Bukkit.getOfflinePlayer(uuid).hasPlayedBefore())
+									if (Method2.getEntity(uuid) == null && !Bukkit.getOfflinePlayer(uuid).hasPlayedBefore())
 									{
 										if (!file.delete())
 										{
@@ -203,7 +203,7 @@ public class Initializer
 						if (Method.isUUID(fileName7))
 						{
 							UUID uuid = UUID.fromString(fileName7);
-							if (Method2.getEntityAsync(uuid) == null && !Bukkit.getOfflinePlayer(uuid).hasPlayedBefore())
+							if (Method2.getEntity(uuid) == null && !Bukkit.getOfflinePlayer(uuid).hasPlayedBefore())
 							{
 								if (!folder.delete())
 								{
