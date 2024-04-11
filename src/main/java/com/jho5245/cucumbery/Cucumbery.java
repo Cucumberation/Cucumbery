@@ -52,6 +52,7 @@ import com.jho5245.cucumbery.listeners.player.interact.PlayerInteract;
 import com.jho5245.cucumbery.listeners.player.interact.PlayerInteractAtEntity;
 import com.jho5245.cucumbery.listeners.player.interact.PlayerInteractEntity;
 import com.jho5245.cucumbery.listeners.player.item.*;
+import com.jho5245.cucumbery.listeners.player.item.PlayerPickItem;
 import com.jho5245.cucumbery.listeners.player.no_groups.*;
 import com.jho5245.cucumbery.listeners.server.ServerCommand;
 import com.jho5245.cucumbery.listeners.server.ServerListPing;

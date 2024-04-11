@@ -340,7 +340,8 @@ public class ProtocolLibManager
 
 		protocolManager.addPacketListener(
 				new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.HIGH, Server.RECIPE_UPDATE, Server.RECIPES, Server.ENTITY_METADATA, Server.ENTITY_EQUIPMENT,
-						Server.SYSTEM_CHAT, Server.SET_ACTION_BAR_TEXT, Server.CHAT, Client.CHAT)
+						Server.SYSTEM_CHAT, Server.SET_ACTION_BAR_TEXT, Server.CHAT, Client.CHAT/*, Client.PICK_ITEM, Client.HELD_ITEM_SLOT, Client.ITEM_NAME, Client.CLOSE_WINDOW,
+						Server.HELD_ITEM_SLOT, Client.WINDOW_CLICK, Server.SET_SLOT*/)
 				{
 					@SuppressWarnings({
 							"rawtypes",
@@ -675,7 +676,8 @@ public class ProtocolLibManager
 								}
 								component = component.children(children);
 							}
-							component = parse(event.getPlayer(), originComponent instanceof TranslatableComponent translatableComponent && translatableComponent.key().equals("chat.type.admin"), component);
+							component = parse(event.getPlayer(),
+									originComponent instanceof TranslatableComponent translatableComponent && translatableComponent.key().equals("chat.type.admin"), component, component);
 							Component prefix = null;
 							if (originComponent instanceof TranslatableComponent translatableComponent)
 							{
@@ -763,6 +765,14 @@ public class ProtocolLibManager
 								player.sendMessage(message);
 							}
 						}
+/*						if (packet.getType() == Server.HELD_ITEM_SLOT || packet.getType() == Server.SET_SLOT)
+						{
+							Bukkit.getConsoleSender().sendMessage(packet.getType().toString());
+							for (int i = 0; i < packet.getModifier().size(); i++)
+							{
+								Bukkit.getConsoleSender().sendMessage(packet.getModifier().read(i).getClass() + ": " + packet.getModifier().read(i));
+							}
+						}*/
 						if (packet.getType() == Server.TAB_COMPLETE)
 						{
 							Suggestions suggestions = (Suggestions) modifier.read(1);
@@ -824,12 +834,27 @@ public class ProtocolLibManager
 								}
 							}
 						}
+/*						Bukkit.getConsoleSender().sendMessage(packet.getType().toString());
+						if (packet.getType() == Client.HELD_ITEM_SLOT)
+						{
+							for (int i = 0; i < packet.getModifier().size(); i++)
+							{
+								// Bukkit.getConsoleSender().sendMessage(packet.getModifier().read(i).getClass() + ": " + packet.getModifier().read(i));
+							}
+						}
+						if (packet.getType() == Client.CLOSE_WINDOW && player.getGameMode() != GameMode.CREATIVE && UserData.SHOW_ITEM_LORE.getBoolean(player))
+						{
+							MessageUtil.broadcastDebug("foo");
+							UserData.SHOW_ITEM_LORE.set(player, false);
+							ItemStackUtil.updateInventory(player);
+							UserData.SHOW_ITEM_LORE.set(player, true);
+						}*/
 					}
 				});
 	}
 
 	@NotNull
-	private static Component parse(@NotNull Player player, boolean isAdminMessage, @NotNull Component component)
+	private static Component parse(@NotNull Player player, boolean isAdminMessage, @NotNull Component component, @NotNull Component root)
 	{
 		HoverEvent<?> hoverEvent = component.hoverEvent();
 		if (hoverEvent != null)
@@ -861,10 +886,13 @@ public class ProtocolLibManager
 		if (component instanceof TranslatableComponent translatableComponent)
 		{
 			String key = translatableComponent.key();
-			// 타임스탬프 표시되면 채팅창 줄바꿈됨 빡침
-			if (key.isBlank() && key.length() >= 12 && UserData.SHOW_TIMESTAMP_ON_CHAT_MESSAGES.getBoolean(player))
+			// 타임스탬프 표시되면 채팅창 줄바꿈됨 빡침 그래서 글자 수 좀 줄임
+			if (key.isBlank())
 			{
-				key = key.substring(12);
+				int componentLength = MessageUtil.stripColor(ComponentUtil.serialize(root)).length();
+				// Bukkit.getConsoleSender().sendMessage("length: " + componentLength);
+				int maxLength = UserData.SHOW_TIMESTAMP_ON_CHAT_MESSAGES.getBoolean(player) ? 65 : 77;
+				if (componentLength >= maxLength) key = key.substring(Math.min(key.length(), Math.abs(componentLength - maxLength)));
 			}
 
 			List<ComponentLike> translationArguments = new ArrayList<>(translatableComponent.arguments());
@@ -886,7 +914,7 @@ public class ProtocolLibManager
 					}
 				}
 
-				argument = parse(player, isAdminMessage, argument);
+				argument = parse(player, isAdminMessage, argument, root);
 				// 관리자 명령어 메시지는 회색 기울임꼴이므로 인수의 색깔, 기울임 decoration을 제거한다.
 				if (isAdminMessage)
 				{
@@ -901,7 +929,7 @@ public class ProtocolLibManager
 			List<Component> newList = new ArrayList<>();
 			for (int i = 0; i < component.children().size(); i++)
 			{
-				newList.add(parse(player, isAdminMessage, component.children().get(i)));
+				newList.add(parse(player, isAdminMessage, component.children().get(i), root));
 			}
 			component = component.children(newList);
 		}
