@@ -47,8 +47,7 @@ public class BlockDamage implements Listener
       {
         return;
       }
-      boolean instaBreak = block.getType().getHardness() == 0f;
-      if (block.getType() == Material.FIRE || instaBreak)
+      if (block.getType() == Material.FIRE)
       {
         if (!CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_2_NO_RESTORE))
         {

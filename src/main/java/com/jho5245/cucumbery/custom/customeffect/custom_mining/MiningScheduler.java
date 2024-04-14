@@ -3,8 +3,10 @@ package com.jho5245.cucumbery.custom.customeffect.custom_mining;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.children.group.LocationCustomEffect;
+import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCustomMining;
 import com.jho5245.cucumbery.events.block.CustomBlockBreakEvent;
+import com.jho5245.cucumbery.util.additemmanager.AddItemUtil;
 import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
 import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
@@ -73,6 +75,7 @@ public class MiningScheduler
 				if (!Variable.fakeBlocks.containsKey(location))
 				{
 					location.getBlock().getState().update();
+					BlockPlaceDataConfig.spawnItemDisplay(location);
 				}
 				else
 				{
@@ -112,6 +115,7 @@ public class MiningScheduler
 				if (!Variable.fakeBlocks.containsKey(location))
 				{
 					location.getBlock().getState().update();
+					BlockPlaceDataConfig.spawnItemDisplay(location);
 				}
 				else
 				{
@@ -148,7 +152,11 @@ public class MiningScheduler
 			{
 				if (!Variable.fakeBlocks.containsKey(location))
 				{
-					Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> location.getBlock().getState().update(), 0L);
+					Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+					{
+						location.getBlock().getState().update();
+						BlockPlaceDataConfig.spawnItemDisplay(location);
+					}, 0L);
 				}
 				else
 				{
@@ -427,7 +435,7 @@ public class MiningScheduler
 				// 이벤트 호출
 				CustomBlockBreakEvent customBlockBreakEvent = new CustomBlockBreakEvent(block, player);
 				Bukkit.getPluginManager().callEvent(customBlockBreakEvent);
-				boolean mode2 = CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_2);
+				boolean mode2 = CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_2) || miningResult.overrideMode2();
 				boolean mode3 = CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_2_NO_RESTORE);
 				// 블록을 캤을 때 소리 재생 및 채광 모드 2/미복구일 경우 블록 파괴 파티클 처리
 				{
@@ -573,14 +581,14 @@ public class MiningScheduler
 				}
 				// 블록 드롭 처리(염력 인챈트나 효과가 있으면 인벤토리에 지급 혹은 블록 위치에 아이템 떨굼
 				{
-//					boolean hasTelekinesis =
-//							CustomEnchant.isEnabled() && itemMeta != null && itemMeta.getEnchantLevel(CustomEnchant.TELEKINESIS) > 0 || CustomEffectManager.hasEffect(player,
-//									CustomEffectType.TELEKINESIS);
-//					if (hasTelekinesis)
-//					{
-//						AddItemUtil.addItem(player, drops);
-//					}
-//					else
+					boolean hasTelekinesis =
+							/*CustomEnchant.isEnabled() && itemMeta != null && itemMeta.getEnchantLevel(CustomEnchant.TELEKINESIS) > 0 || */CustomEffectManager.hasEffect(
+							player, CustomEffectType.TELEKINESIS);
+					if (hasTelekinesis)
+					{
+						AddItemUtil.addItem(player, drops);
+					}
+					else
 					{
 						for (ItemStack item : drops)
 						{
@@ -602,11 +610,11 @@ public class MiningScheduler
 						{
 							if (ItemStackUtil.itemExists(content))
 							{
-//								if (hasTelekinesis)
-//								{
-//									AddItemUtil.addItem(player, content);
-//								}
-//								else
+								//								if (hasTelekinesis)
+								//								{
+								//									AddItemUtil.addItem(player, content);
+								//								}
+								//								else
 								{
 									player.getWorld().dropItemNaturally(location, content);
 								}
@@ -661,8 +669,8 @@ public class MiningScheduler
 								Variable.customMiningMode2BlockDataTask.get(locationClone).cancel();
 							}
 							Variable.customMiningMode2BlockData.put(locationClone, originData);
+							BlockPlaceDataConfig.despawnItemDisplay(locationClone);
 							boolean isWater = originData instanceof Waterlogged waterlogged && waterlogged.isWaterlogged();
-
 							block.setBlockData(Bukkit.createBlockData(isWater ? Material.WATER : Material.AIR), false);
 							Variable.customMiningMode2BlockDataTask.put(locationClone, Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
 							{
@@ -672,6 +680,7 @@ public class MiningScheduler
 								{
 									block.setBlockData(originData, false);
 								}
+								BlockPlaceDataConfig.spawnItemDisplay(locationClone);
 								// 채광 모드 2에서는 재생 속도가 느려짐
 							}, (long) (miningResult.regenCooldown() * Cucumbery.config.getDouble("custom-mining.mining-mode-2-regen-multiplier"))));
 						}
@@ -679,6 +688,7 @@ public class MiningScheduler
 					// 채굴 모드 처리
 					else
 					{
+						BlockPlaceDataConfig.despawnItemDisplay(locationClone);
 						boolean extraBlockIgnoreCooldown = false;
 						if (Variable.customMiningExtraBlocks.containsKey(locationClone))
 						{
@@ -893,7 +903,8 @@ public class MiningScheduler
 					int penaltyRatio = UserData.MINING_SPEED_RATIO_MODIFIER_LIGHT_PENALTY.getInt(player);
 					Block eyeLocationBlock = player.getEyeLocation().getBlock();
 					// 야간투시가 없고 어두울 경우 페널티 수치 증가
-					if (!player.hasPotionEffect(PotionEffectType.NIGHT_VISION) && eyeLocationBlock.getLightFromSky() == 0 && eyeLocationBlock.getLightFromBlocks() == 0 && eyeLocationBlock.getLightLevel() == 0)
+					if (!player.hasPotionEffect(PotionEffectType.NIGHT_VISION) && eyeLocationBlock.getLightFromSky() == 0 && eyeLocationBlock.getLightFromBlocks() == 0
+							&& eyeLocationBlock.getLightLevel() == 0)
 					{
 						// 첫 페널티 적용일 경우 메시지 표시
 						if (!LIGHT_PENALTY_ALERT_SET.contains(uuid))

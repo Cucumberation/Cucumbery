@@ -150,6 +150,8 @@ public class ItemLoreCustomItem
 						if (!NBTAPI.arrayContainsValue(extraTags, ExtraTag.PRESERVE_BLOCK_NBT))
 						{
 							extraTags.add(ExtraTag.PRESERVE_BLOCK_NBT.toString());
+							// 커스텀 블록은 기존 마크의 블록 드롭 테이블 규칙을 무시하고 자기 자신을 드롭
+							nbtItem.setBoolean(MiningManager.IGNORE_VANILLA_MODIFICATION, true);
 						}
 					}
 					default ->
@@ -159,6 +161,8 @@ public class ItemLoreCustomItem
 							if (!NBTAPI.arrayContainsValue(extraTags, ExtraTag.PRESERVE_BLOCK_NBT))
 							{
 								extraTags.add(ExtraTag.PRESERVE_BLOCK_NBT.toString());
+								// 커스텀 블록은 기존 마크의 블록 드롭 테이블 규칙을 무시하고 자기 자신을 드롭
+								nbtItem.setBoolean(MiningManager.IGNORE_VANILLA_MODIFICATION, true);
 							}
 						}
 						else if (!NBTAPI.isRestricted(itemStack, RestrictionType.NO_PLACE))

@@ -88,6 +88,96 @@ public class ProtocolLibManager
 
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("[HH:mm:ss] ");
 
+	private static final Class<?> recipeHolderClass;
+
+	private static final Constructor<?> recipeHolderConstructor;
+	private static final Method getMinecraftKeyFromRecipeHolder;
+	private static final Method getIRecipeFromRecipeHolder;
+	private static final Method toBukkitRecipeFromRecipeHolder;
+
+	private static final Class<?> nonNullListClass = MinecraftReflection.getNonNullListClass();
+	private static final Method setFromNonNullListClass;
+
+	private static final Class<?> recipeItemStackClass;
+	private static final Method getItemStackArrayFromRecipeItemStack;
+	private static final Method staticRecipeItemStack;
+
+	private static final Class<?> shapedRecipePatternClass;
+	private static final Constructor<?> shapedRecipePatternConstructor;
+
+	private static final Class<?> shapelessRecipesClass;
+	private static final Constructor<?> shaplessRecipesConstructor;
+	private static final Method getCraftingBookCategoryFromShapelessRecipes;
+	private static final Method getNonNullListFromShapelessRecipes;
+	private static final Method getStringFromShapelessRecipes;
+	private static final Method toBukkitRecipeFromShaplessRecipes;
+
+	private static final Class<?> shapedRecipesClass;
+	private static final Constructor<?> shapedRecipeConstructor;
+	private static final Method getCraftingBookCategoryFromShapedRecipes;
+	private static final Method getNonNullListFromShapedRecipes;
+	private static final Method toBukkitRecipeFromShapedRecipes;
+
+	private static final Class<?> cookingRecipeClass;
+	private static final Method getCraftingBookCategoryFromCookingRecipeClass;
+
+	private static final Class<?> furnaceRecipeClass;
+	private static final Class<?> blastingRecipeClass;
+	private static final Class<?> smokingRecipeClass;
+
+	private static final Class<?> stoneCuttingRecipeClass;
+	private static final Constructor<?> stoneCuttingRecipeConstructor;
+	private static final Method toBukkitRecipeFromStoneCuttingRecipe;
+
+	static
+	{
+		try
+		{
+			recipeHolderClass = Class.forName("net.minecraft.world.item.crafting.RecipeHolder");
+			recipeHolderConstructor = recipeHolderClass.getDeclaredConstructors()[0];
+			getMinecraftKeyFromRecipeHolder = recipeHolderClass.getDeclaredMethod("a");
+			getIRecipeFromRecipeHolder = recipeHolderClass.getMethod("b");
+			toBukkitRecipeFromRecipeHolder = recipeHolderClass.getMethod("toBukkitRecipe");
+
+			setFromNonNullListClass = nonNullListClass.getDeclaredMethod("set", Integer.TYPE, Object.class);
+
+			recipeItemStackClass = Class.forName("net.minecraft.world.item.crafting.RecipeItemStack");
+			getItemStackArrayFromRecipeItemStack = recipeItemStackClass.getDeclaredMethod("a");
+			staticRecipeItemStack = recipeItemStackClass.getDeclaredMethod("a", Stream.class);
+
+			shapedRecipePatternClass = Class.forName("net.minecraft.world.item.crafting.ShapedRecipePattern");
+			shapedRecipePatternConstructor = shapedRecipePatternClass.getConstructors()[0];
+
+			shapelessRecipesClass = Class.forName("net.minecraft.world.item.crafting.ShapelessRecipes");
+			shaplessRecipesConstructor = shapelessRecipesClass.getDeclaredConstructors()[0];
+			getCraftingBookCategoryFromShapelessRecipes = shapelessRecipesClass.getDeclaredMethod("d");
+			getNonNullListFromShapelessRecipes = shapelessRecipesClass.getDeclaredMethod("a");
+			getStringFromShapelessRecipes = shapelessRecipesClass.getDeclaredMethod("c");
+			toBukkitRecipeFromShaplessRecipes = shapelessRecipesClass.getDeclaredMethod("toBukkitRecipe", NamespacedKey.class);
+
+			shapedRecipesClass = Class.forName("net.minecraft.world.item.crafting.ShapedRecipes");
+			shapedRecipeConstructor = shapedRecipesClass.getDeclaredConstructors()[0];
+			getCraftingBookCategoryFromShapedRecipes = shapedRecipesClass.getDeclaredMethod("d");
+			getNonNullListFromShapedRecipes = shapedRecipesClass.getDeclaredMethod("a");
+			toBukkitRecipeFromShapedRecipes = shapedRecipesClass.getDeclaredMethod("toBukkitRecipe", NamespacedKey.class);
+
+			cookingRecipeClass = Class.forName("net.minecraft.world.item.crafting.RecipeCooking");
+			getCraftingBookCategoryFromCookingRecipeClass = cookingRecipeClass.getDeclaredMethod("f");
+
+			furnaceRecipeClass = Class.forName("net.minecraft.world.item.crafting.FurnaceRecipe");
+			blastingRecipeClass = Class.forName("net.minecraft.world.item.crafting.RecipeBlasting");
+			smokingRecipeClass = Class.forName("net.minecraft.world.item.crafting.RecipeSmoking");
+
+			stoneCuttingRecipeClass = Class.forName("net.minecraft.world.item.crafting.RecipeStonecutting");
+			stoneCuttingRecipeConstructor = stoneCuttingRecipeClass.getDeclaredConstructors()[0];
+			toBukkitRecipeFromStoneCuttingRecipe = stoneCuttingRecipeClass.getDeclaredMethod("toBukkitRecipe", NamespacedKey.class);
+		}
+		catch (ReflectiveOperationException e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
+
 	public static void manage()
 	{
 		ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
@@ -368,46 +458,6 @@ public class ProtocolLibManager
 							}
 							try
 							{
-								Class<?> recipeHolderClass = Class.forName("net.minecraft.world.item.crafting.RecipeHolder");
-								Constructor<?> recipeHolderConstructor = recipeHolderClass.getDeclaredConstructors()[0];
-								Method getMinecraftKeyFromRecipeHolder = recipeHolderClass.getDeclaredMethod("a");
-								Method getIRecipeFromRecipeHolder = recipeHolderClass.getMethod("b");
-								Method toBukkitRecipeFromRecipeHolder = recipeHolderClass.getMethod("toBukkitRecipe");
-
-								Class<?> nonNullListClass = MinecraftReflection.getNonNullListClass();
-								Method setFromNonNullListClass = nonNullListClass.getDeclaredMethod("set", Integer.TYPE, Object.class);
-
-								Class<?> recipeItemStackClass = Class.forName("net.minecraft.world.item.crafting.RecipeItemStack");
-								Method getItemStackArrayFromRecipeItemStack = recipeItemStackClass.getDeclaredMethod("a");
-								Method staticRecipeItemStack = recipeItemStackClass.getDeclaredMethod("a", Stream.class);
-
-								Class<?> shapedRecipePatternClass = Class.forName("net.minecraft.world.item.crafting.ShapedRecipePattern");
-								Constructor<?> shapedRecipePatternConstructor = shapedRecipePatternClass.getConstructors()[0];
-
-								Class<?> shapelessRecipesClass = Class.forName("net.minecraft.world.item.crafting.ShapelessRecipes");
-								Constructor<?> shaplessRecipesConstructor = shapelessRecipesClass.getDeclaredConstructors()[0];
-								Method getCraftingBookCategoryFromShapelessRecipes = shapelessRecipesClass.getDeclaredMethod("d");
-								Method getNonNullListFromShapelessRecipes = shapelessRecipesClass.getDeclaredMethod("a");
-								Method getStringFromShapelessRecipes = shapelessRecipesClass.getDeclaredMethod("c");
-								Method toBukkitRecipeFromShaplessRecipes = shapelessRecipesClass.getDeclaredMethod("toBukkitRecipe", NamespacedKey.class);
-
-								Class<?> shapedRecipesClass = Class.forName("net.minecraft.world.item.crafting.ShapedRecipes");
-								Constructor<?> shapedRecipeConstructor = shapedRecipesClass.getDeclaredConstructors()[0];
-								Method getCraftingBookCategoryFromShapedRecipes = shapedRecipesClass.getDeclaredMethod("d");
-								Method getNonNullListFromShapedRecipes = shapedRecipesClass.getDeclaredMethod("a");
-								Method toBukkitRecipeFromShapedRecipes = shapedRecipesClass.getDeclaredMethod("toBukkitRecipe", NamespacedKey.class);
-
-								Class<?> cookingRecipeClass = Class.forName("net.minecraft.world.item.crafting.RecipeCooking");
-								Method getCraftingBookCategoryFromCookingRecipeClass = cookingRecipeClass.getDeclaredMethod("f");
-
-								Class<?> furnaceRecipeClass = Class.forName("net.minecraft.world.item.crafting.FurnaceRecipe");
-								Class<?> blastingRecipeClass = Class.forName("net.minecraft.world.item.crafting.RecipeBlasting");
-								Class<?> smokingRecipeClass = Class.forName("net.minecraft.world.item.crafting.RecipeSmoking");
-
-								Class<?> stoneCuttingRecipeClass = Class.forName("net.minecraft.world.item.crafting.RecipeStonecutting");
-								Constructor<?> stoneCuttingRecipeConstructor = stoneCuttingRecipeClass.getDeclaredConstructors()[0];
-								Method toBukkitRecipeFromStoneCuttingRecipe = stoneCuttingRecipeClass.getDeclaredMethod("toBukkitRecipe", NamespacedKey.class);
-
 								List recipeHolders = (List) modifier.read(0);
 								for (int i = 0; i < recipeHolders.size(); i++)
 								{

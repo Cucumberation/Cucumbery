@@ -18,7 +18,7 @@ public class ShopPreCreate implements Listener
 		ItemStack item = player.getInventory().getItemInMainHand();
 		if (NBTAPI.isRestricted(player, item, Constant.RestrictionType.NO_TRADE))
 		{
-			MessageUtil.sendError(player, "%s은 다른 플레이어와 거래할 수 없는 아이템입니다", item);
+			MessageUtil.sendError(player, "%s은(는) 다른 플레이어와 거래할 수 없는 아이템입니다", item);
 			event.setCancelled(true);
 		}
 	}

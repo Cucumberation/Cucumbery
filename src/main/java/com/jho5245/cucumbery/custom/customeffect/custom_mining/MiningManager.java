@@ -57,7 +57,7 @@ public class MiningManager
 {
 	public static final String BLOCK_TIER = "BlockTier", BLOCK_HARDNESS = "BlockHardness", BLOCK_EXP = "BlockExp", TOOL_TIER = "ToolTier", TOOL_SPEED = "ToolSpeed", TOOL_FORTUNE = "ToolFortune", IGNORE_VANILLA_MODIFICATION = "IgnoreVanillaModification", REMOVE_KEYS = "RemoveKeys", REGEN_COOLDOWN = "RegenCooldown", BREAK_SOUND = "BreakSound", BREAK_SOUND_VOLUME = "BreakSoundVolume", BREAK_SOUND_PITCH = "BreakSoundPitch",
 
-	BREAK_PARTICLE = "BreakParticle";
+	BREAK_PARTICLE = "BreakParticle", OVERRIDE_MODE_2 = "override_mode_2";
 
 	/**
 	 * Gets the result of mining of a {@link Player}.
@@ -172,6 +172,7 @@ public class MiningManager
 				}
 			}
 		}
+		// 보통 채광 블록이랑 드롭 아이템이 유형이 다를 때 무시할때 사용
 		boolean ignoreVanillaModification = false;
 		{
 			try
@@ -720,16 +721,17 @@ public class MiningManager
 				}
 			}
 		}
-		boolean hasExtra = Variable.customMiningExtraBlocks.containsKey(blockLocation);
+		//boolean hasExtra = Variable.customMiningExtraBlocks.containsKey(blockLocation);
 		// 커스텀 블록 채광 소리
 		Sound breakSound = null;
 		String breakCustomSound = null;
 		float breakSoundVolume = 0f, breakSoundPitch = 0f;
 		// 블록 파괴 입자(BLOCK:TYPE 또는 ITEM:{id})
 		String breakParticle = null;
-		boolean miningMode3 = CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_2_NO_RESTORE);
+		boolean overrideMode2 = false;
+		//boolean miningMode3 = CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_2_NO_RESTORE);
 		// 커스텀 블록 처리 (extra Block 존재 시 무시)
-		if (!hasExtra || CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_2_NO_RESTORE))
+		//if (!hasExtra || CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_2_NO_RESTORE))
 		{
 			{
 				ItemStack dataItem = BlockPlaceDataConfig.getItem(blockLocation, player);
@@ -822,6 +824,14 @@ public class MiningManager
 							dataNBTItem.removeKey(BREAK_PARTICLE);
 						}
 					}
+					if (dataNBTItem.hasTag(OVERRIDE_MODE_2) && dataNBTItem.getType(OVERRIDE_MODE_2) == NBTType.NBTTagByte)
+					{
+						overrideMode2 = dataNBTItem.getBoolean(OVERRIDE_MODE_2);
+						// if (removeKeys)
+						{
+							dataNBTItem.removeKey(OVERRIDE_MODE_2);
+						}
+					}
 					NBTList<String> extraTag = NBTAPI.getStringList(NBTAPI.getMainCompound(dataItem), CucumberyTag.EXTRA_TAGS_KEY);
 					if (removeKeys && NBTAPI.arrayContainsValue(extraTag, ExtraTag.PRESERVE_BLOCK_NBT))
 					{
@@ -853,7 +863,7 @@ public class MiningManager
 					{
 
 					}
-					if (ignoreVanillaModification || miningMode3)
+					if (ignoreVanillaModification)
 					{
 						drops.clear();
 						drops.add(dataItem);
@@ -1347,8 +1357,8 @@ public class MiningManager
 					Constant.Sosu2Force.format(Variable.customMiningProgress.getOrDefault(player.getUniqueId(), 0d) * 100d) + "%");
 		}
 
-		return new MiningResult(canMine, toolSpeed, miningSpeed, miningSpeedBeforeHaste, blockHardness, miningFortune, expToDrop, toolTier, blockTier,
-				regenCooldown, drop, breakSound, breakCustomSound, breakSoundVolume, breakSoundPitch, breakParticle);
+		return new MiningResult(canMine, overrideMode2, toolSpeed, miningSpeed, miningSpeedBeforeHaste, blockHardness, miningFortune, expToDrop, toolTier,
+				blockTier, regenCooldown, drop, breakSound, breakCustomSound, breakSoundVolume, breakSoundPitch, breakParticle);
 	}
 
 	public static boolean toolMatches(@NotNull ItemStack tool, int blockTier, Block block, @NotNull List<ItemStack> drops)
