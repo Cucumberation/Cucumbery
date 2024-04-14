@@ -42,6 +42,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.VoxelShape;
 import org.jetbrains.annotations.NotNull;
@@ -93,6 +94,30 @@ public class MiningScheduler
 			}
 			return false;
 		});
+
+		// 채광 모드 2 쿨타임 초기화
+		HashMap<Location, BlockData> blockDataHashMap = Variable.customMiningMode2BlockData;
+		blockDataHashMap.keySet().removeIf(location ->
+		{
+			if (location.getWorld().getName().equals(world.getName()))
+			{
+				location.getBlock().setBlockData(Variable.customMiningMode2BlockData.get(location), false);
+				BlockPlaceDataConfig.spawnItemDisplay(location);
+				return true;
+			}
+			return false;
+		});
+		HashMap<Location, BukkitTask> bukkitTaskHashMap = Variable.customMiningMode2BlockDataTask;
+		bukkitTaskHashMap.keySet().removeIf(location ->
+		{
+			if (location.getWorld().getName().equals(world.getName()))
+			{
+				Variable.customMiningMode2BlockDataTask.get(location).cancel();
+				BlockPlaceDataConfig.spawnItemDisplay(location);
+				return true;
+			}
+			return false;
+		});
 	}
 
 	public static void resetCooldowns(@NotNull Location from, Location to)
@@ -129,6 +154,40 @@ public class MiningScheduler
 						}
 					}
 				}
+				return true;
+			}
+			return false;
+		});
+
+		// 채광 모드 2 쿨타임 초기화
+		HashMap<Location, BlockData> blockDataHashMap = Variable.customMiningMode2BlockData;
+		blockDataHashMap.keySet().removeIf(location ->
+		{
+			int fromX = from.getBlockX(), fromY = from.getBlockY(), fromZ = from.getBlockZ();
+			int toX = to.getBlockX(), toY = to.getBlockY(), toZ = to.getBlockZ();
+			int minX = Math.min(fromX, toX), minY = Math.min(fromY, toY), minZ = Math.min(fromZ, toZ);
+			int maxX = Math.max(fromX, toX), maxY = Math.max(fromY, toY), maxZ = Math.max(fromZ, toZ);
+			int x = location.getBlockX(), y = location.getBlockY(), z = location.getBlockZ();
+			if (x >= minX && x <= maxX && y >= minY && y <= maxY && z >= minZ && z <= maxZ)
+			{
+				location.getBlock().setBlockData(Variable.customMiningMode2BlockData.get(location), false);
+				BlockPlaceDataConfig.spawnItemDisplay(location);
+				return true;
+			}
+			return false;
+		});
+		HashMap<Location, BukkitTask> bukkitTaskHashMap = Variable.customMiningMode2BlockDataTask;
+		bukkitTaskHashMap.keySet().removeIf(location ->
+		{
+			int fromX = from.getBlockX(), fromY = from.getBlockY(), fromZ = from.getBlockZ();
+			int toX = to.getBlockX(), toY = to.getBlockY(), toZ = to.getBlockZ();
+			int minX = Math.min(fromX, toX), minY = Math.min(fromY, toY), minZ = Math.min(fromZ, toZ);
+			int maxX = Math.max(fromX, toX), maxY = Math.max(fromY, toY), maxZ = Math.max(fromZ, toZ);
+			int x = location.getBlockX(), y = location.getBlockY(), z = location.getBlockZ();
+			if (x >= minX && x <= maxX && y >= minY && y <= maxY && z >= minZ && z <= maxZ)
+			{
+				Variable.customMiningMode2BlockDataTask.get(location).cancel();
+				BlockPlaceDataConfig.spawnItemDisplay(location);
 				return true;
 			}
 			return false;
