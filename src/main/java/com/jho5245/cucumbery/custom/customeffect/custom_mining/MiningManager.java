@@ -827,7 +827,7 @@ public class MiningManager
 					if (dataNBTItem.hasTag(OVERRIDE_MODE_2) && dataNBTItem.getType(OVERRIDE_MODE_2) == NBTType.NBTTagByte)
 					{
 						overrideMode2 = dataNBTItem.getBoolean(OVERRIDE_MODE_2);
-						// if (removeKeys)
+						// 해당 키는 읽기 전용이므로 드롭되는 아이템에서는 반드시 제거한다
 						{
 							dataNBTItem.removeKey(OVERRIDE_MODE_2);
 						}
