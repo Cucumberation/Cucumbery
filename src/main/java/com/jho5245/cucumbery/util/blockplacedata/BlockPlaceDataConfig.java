@@ -11,9 +11,11 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedDataValue;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher.Registry;
 import com.google.common.collect.Lists;
+import com.google.errorprone.annotations.Var;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.util.no_groups.*;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
+import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import de.tr7zw.changeme.nbtapi.*;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
@@ -680,6 +682,12 @@ public class BlockPlaceDataConfig extends ChunkConfig
 					Location location = ChunkConfig.stringToLocation(player.getWorld(), key);
 					if (location != null)
 					{
+						// 만약 해당 위치에 블록 채광 쿨타임이 있을 경우 추가하지 않는다
+						// 채광 모드 1, 채광 모드 2
+						if (Variable.customMiningCooldown.containsKey(location) || Variable.customMiningMode2BlockData.containsKey(location))
+						{
+							continue;
+						}
 						locations.add(location);
 					}
 				}
