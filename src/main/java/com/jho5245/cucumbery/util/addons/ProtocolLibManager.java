@@ -62,6 +62,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.RecipeChoice.ExactChoice;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
@@ -401,6 +402,22 @@ public class ProtocolLibManager
 				if (packet.getType() == Server.WINDOW_ITEMS)
 				{
 					UUID uuid = player.getUniqueId();
+					// 아이템이 표시될 때 실제 적용되야 하는 nbt는 적용함
+					{
+						Inventory top = player.getOpenInventory().getTopInventory(), bottom = player.getOpenInventory().getBottomInventory();
+						for (int i = 0; i < top.getSize(); i++)
+						{
+							ItemStack topItemStack = top.getItem(i);
+							if (!ItemStackUtil.itemExists(topItemStack)) continue;
+							top.setItem(i, ItemLore.setItemLore(topItemStack, true, ItemLoreView.of(player)));
+						}
+						for (int i = 0; i < bottom.getSize(); i++)
+						{
+							ItemStack bottomItemStack = bottom.getItem(i);
+							if (!ItemStackUtil.itemExists(bottomItemStack)) continue;
+							bottom.setItem(i, ItemLore.setItemLore(bottomItemStack, true, ItemLoreView.of(player)));
+						}
+					}
 					// MessageUtil.broadcastDebug("Window ID: " + packet.getIntegers().read(0));
 					UserData.WINDOW_ID.set(uuid, packet.getIntegers().read(0));
 					packet.getItemModifier().write(0, setItemLore(packet.getType(), packet.getItemModifier().read(0), player));
@@ -782,7 +799,6 @@ public class ProtocolLibManager
 						{
 							Player sender = Bukkit.getPlayer(packet.getUUIDs().read(0));
 							WrappedChatComponent wrappedChatComponent = packet.getChatComponents().read(0);
-							
 							// 보통 대화 메시지 검증 명령어에서 null을 반환함(예: /say, /tell 등)
 							if (wrappedChatComponent == null)
 							{

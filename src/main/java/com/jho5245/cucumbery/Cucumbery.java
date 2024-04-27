@@ -971,6 +971,7 @@ public class Cucumbery extends JavaPlugin
 		Initializer.registerEvent(new PlayerGameModeChange());
 		Initializer.registerEvent(new PlayerJoin());
 		Initializer.registerEvent(new PlayerJump());
+		Initializer.registerEvent(new PlayerKick());
 		Initializer.registerEvent(new PlayerLaunchProjectile());
 		Initializer.registerEvent(new PlayerLecternPageChange());
 		Initializer.registerEvent(new PlayerLoomPatternSelect());

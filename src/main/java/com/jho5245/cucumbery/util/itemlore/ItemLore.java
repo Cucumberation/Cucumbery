@@ -122,8 +122,7 @@ public class ItemLore
 		}
 		boolean hasOnlyNbtTagLore =
 				ItemLoreUtil.hasOnlyNbtTagLore(itemStack) || new NBTItem(itemStack).hasTag("NBTCopied") && new NBTItem(itemStack).getBoolean("NBTCopied");
-		NBTCompoundList potionsTag = NBTAPI.getCompoundList(itemTagReadOnly, CucumberyTag.CUSTOM_EFFECTS);
-		if (Cucumbery.config.getBoolean("use-no-effect-potions-weirdly") && itemStack.getItemMeta() instanceof PotionMeta potionMeta && potionsTag == null)
+		if (Cucumbery.config.getBoolean("use-no-effect-potions-weirdly") && itemStack.getItemMeta() instanceof PotionMeta potionMeta && NBTAPI.getCompoundList(itemTagReadOnly, CucumberyTag.CUSTOM_EFFECTS) == null)
 		{
 			PotionType potionType = potionMeta.getBasePotionType();
 			CustomEffectType customEffectType = switch (potionType)
@@ -136,12 +135,7 @@ public class ItemLore
 			};
 			if (customEffectType != null)
 			{
-				NBTCompound itemTag = nbtItem.getCompound(CucumberyTag.KEY_MAIN);
-				if (itemTag == null)
-				{
-					itemTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN);
-				}
-				potionsTag = itemTag.getCompoundList(CucumberyTag.CUSTOM_EFFECTS);
+				NBTCompoundList potionsTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).getCompoundList(CucumberyTag.CUSTOM_EFFECTS);
 				NBTContainer nbtContainer = new NBTContainer();
 				if (type == Material.LINGERING_POTION)
 				{
@@ -159,6 +153,8 @@ public class ItemLore
 				nbtContainer.setString(CucumberyTag.CUSTOM_EFFECTS_ID, customEffectType.toString());
 				nbtContainer.setString(CucumberyTag.CUSTOM_EFFECTS_DISPLAY_TYPE, customEffectType.getDefaultDisplayType().toString());
 				potionsTag.addCompound(nbtContainer);
+				itemStack.setItemMeta(nbtItem.getItem().getItemMeta());
+				itemMeta = itemStack.getItemMeta();
 			}
 		}
 		if (hasOnlyNbtTagLore)
