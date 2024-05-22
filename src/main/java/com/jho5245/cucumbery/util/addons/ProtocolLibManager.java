@@ -446,8 +446,9 @@ public class ProtocolLibManager
 		});
 
 		protocolManager.addPacketListener(
-				new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.HIGH, Server.RECIPE_UPDATE, Server.RECIPES, Server.ENTITY_METADATA, Server.ENTITY_EQUIPMENT,
-						Server.SYSTEM_CHAT, Server.SET_ACTION_BAR_TEXT, Server.CHAT, Client.CHAT/*, Client.PICK_ITEM, Client.HELD_ITEM_SLOT, Client.ITEM_NAME, Client.CLOSE_WINDOW,
+				new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.HIGH, Server.RECIPE_UPDATE, Server.RECIPES, Server.ENTITY_METADATA, Server.ENTITY_EQUIPMENT, Server.SPAWN_ENTITY,
+						Server.SYSTEM_CHAT, Server.SET_ACTION_BAR_TEXT, Server.CHAT, Client.CHAT, Server.WINDOW_ITEMS, Server.SET_SLOT, Server.OPEN_WINDOW_MERCHANT
+						/*, Client.PICK_ITEM, Client.HELD_ITEM_SLOT, Client.ITEM_NAME, Client.CLOSE_WINDOW,
 						Server.HELD_ITEM_SLOT, Client.WINDOW_CLICK, Server.SET_SLOT*/)
 				{
 					@SuppressWarnings({
@@ -465,6 +466,17 @@ public class ProtocolLibManager
 						PacketContainer packet = event.getPacket();
 						//MessageUtil.broadcast("sending:" + packet.getType());
 						StructureModifier<Object> modifier = packet.getModifier();
+						if (packet.getType() != Server.SYSTEM_CHAT)
+						{
+							MessageUtil.broadcastDebug("&m                                             ");
+							MessageUtil.broadcastDebug(packet.getType());
+							MessageUtil.broadcastDebug("modifierSize: ", packet.getModifier().size());
+							for (int i = 0;i < packet.getModifier().size(); i++)
+							{
+								MessageUtil.broadcastDebug(i + " : " + packet.getModifier().read(i).getClass() + " - " + packet.getModifier().read(i));
+							}
+							MessageUtil.broadcastDebug("datavalueCollectionSize", packet.getDataValueCollectionModifier().size());
+						}
 						if (packet.getType() == Server.RECIPE_UPDATE)
 						{
 							UUID uuid = player.getUniqueId();
@@ -690,8 +702,13 @@ public class ProtocolLibManager
 						if (packet.getType() == Server.RECIPES)
 						{
 						}
+						if (packet.getType() == Server.SPAWN_ENTITY)
+						{
+						}
 						if (packet.getType() == Server.ENTITY_METADATA)
 						{
+							MessageUtil.broadcastDebug("modifierSize: ", packet.getModifier().size());
+							MessageUtil.broadcastDebug("datavalueCollectionSize", packet.getDataValueCollectionModifier().size());
 							Entity entity = packet.getEntityModifier(player.getWorld()).read(0);
 							if (entity instanceof Item item)
 							{
