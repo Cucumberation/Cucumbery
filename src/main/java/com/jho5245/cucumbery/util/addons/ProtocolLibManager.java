@@ -1,6 +1,7 @@
 package com.jho5245.cucumbery.util.addons;
 
 import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.PacketType.Play;
 import com.comphenix.protocol.PacketType.Play.Client;
 import com.comphenix.protocol.PacketType.Play.Server;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -389,6 +390,42 @@ public class ProtocolLibManager
 			}
 		});
 
+		protocolManager.addPacketListener(new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.NORMAL, Server.WINDOW_ITEMS)
+		{
+			@Override
+			public void onPacketSending(PacketEvent event)
+			{
+				if (!Cucumbery.using_ProtocolLib)
+				{
+					return;
+				}
+				PacketContainer packet = event.getPacket();
+				Player player = event.getPlayer();
+				UUID uuid = player.getUniqueId();
+				// 아이템이 표시될 때 실제 적용되야 하는 nbt는 적용함
+				{
+					Inventory top = player.getOpenInventory().getTopInventory(), bottom = player.getOpenInventory().getBottomInventory();
+					for (int i = 0; i < top.getSize(); i++)
+					{
+						ItemStack topItemStack = top.getItem(i);
+						if (!ItemStackUtil.itemExists(topItemStack)) continue;
+						top.setItem(i, ItemLore.setItemLore(topItemStack, true, ItemLoreView.of(player)));
+					}
+					for (int i = 0; i < bottom.getSize(); i++)
+					{
+						ItemStack bottomItemStack = bottom.getItem(i);
+						if (!ItemStackUtil.itemExists(bottomItemStack)) continue;
+						bottom.setItem(i, ItemLore.setItemLore(bottomItemStack, true, ItemLoreView.of(player)));
+					}
+				}
+				// MessageUtil.broadcastDebug("Window ID: " + packet.getIntegers().read(0));
+				UserData.WINDOW_ID.set(uuid, packet.getIntegers().read(0));
+				packet.getItemModifier().write(0, setItemLore(packet.getType(), packet.getItemModifier().read(0), player));
+				StructureModifier<List<ItemStack>> modifier = packet.getItemListModifier();
+				modifier.write(0, setItemLore(packet.getType(), modifier.read(0), player));
+			}
+		});
+
 		protocolManager.addPacketListener(new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.NORMAL, ITEM_TYPES)
 		{
 			@Override
@@ -402,28 +439,7 @@ public class ProtocolLibManager
 				Player player = event.getPlayer();
 				if (packet.getType() == Server.WINDOW_ITEMS)
 				{
-					UUID uuid = player.getUniqueId();
-					// 아이템이 표시될 때 실제 적용되야 하는 nbt는 적용함
-					{
-						Inventory top = player.getOpenInventory().getTopInventory(), bottom = player.getOpenInventory().getBottomInventory();
-						for (int i = 0; i < top.getSize(); i++)
-						{
-							ItemStack topItemStack = top.getItem(i);
-							if (!ItemStackUtil.itemExists(topItemStack)) continue;
-							top.setItem(i, ItemLore.setItemLore(topItemStack, true, ItemLoreView.of(player)));
-						}
-						for (int i = 0; i < bottom.getSize(); i++)
-						{
-							ItemStack bottomItemStack = bottom.getItem(i);
-							if (!ItemStackUtil.itemExists(bottomItemStack)) continue;
-							bottom.setItem(i, ItemLore.setItemLore(bottomItemStack, true, ItemLoreView.of(player)));
-						}
-					}
-					// MessageUtil.broadcastDebug("Window ID: " + packet.getIntegers().read(0));
-					UserData.WINDOW_ID.set(uuid, packet.getIntegers().read(0));
-					packet.getItemModifier().write(0, setItemLore(packet.getType(), packet.getItemModifier().read(0), player));
-					StructureModifier<List<ItemStack>> modifier = packet.getItemListModifier();
-					modifier.write(0, setItemLore(packet.getType(), modifier.read(0), player));
+
 				}
 				else if (packet.getType() == Server.OPEN_WINDOW_MERCHANT)
 				{
@@ -442,6 +458,40 @@ public class ProtocolLibManager
 				{
 					StructureModifier<ItemStack> modifier = packet.getItemModifier();
 					modifier.write(0, setItemLore(packet.getType(), modifier.read(0), player));
+				}
+			}
+		});
+
+		protocolManager.addPacketListener(new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.HIGH, Server.ENTITY_METADATA)
+		{
+			@Override
+			public void onPacketSending(PacketEvent event)
+			{
+				if (!Cucumbery.using_ProtocolLib)
+					return;
+				Player player = event.getPlayer();
+				PacketContainer packet = event.getPacket();
+				MessageUtil.broadcastDebug("modifierSize: ", packet.getModifier().size());
+				MessageUtil.broadcastDebug("datavalueCollectionSize", packet.getDataValueCollectionModifier().size());
+				Entity entity = packet.getEntityModifier(player.getWorld()).read(0);
+				if (entity instanceof Item item)
+				{
+					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, item.getItemStack(), player);
+					Component component = itemStack.getAmount() == 1
+							? ItemNameUtil.itemName(itemStack)
+							: Component.translatable("%s (%s)").arguments(ItemNameUtil.itemName(itemStack), Component.text(itemStack.getAmount(), Constant.THE_COLOR));
+					boolean showCustomName =
+							UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player) && !UserData.FORCE_HIDE_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player);
+					Boolean shouldShowCustomName = ItemStackUtil.shouldShowCustomName(itemStack);
+					StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
+					List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
+					wrappedDataValues.add(
+							new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
+					wrappedDataValues.add(new WrappedDataValue(2, WrappedDataWatcher.Registry.getChatComponentSerializer(true),
+							Optional.of(WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(component)).getHandle())));
+					wrappedDataValues.add(new WrappedDataValue(3, WrappedDataWatcher.Registry.get(Boolean.class),
+							shouldShowCustomName != null ? shouldShowCustomName : showCustomName));
+					watchableAccessor.write(0, wrappedDataValues);
 				}
 			}
 		});
@@ -479,7 +529,7 @@ public class ProtocolLibManager
 							MessageUtil.broadcastDebug("datavalueCollectionSize", packet.getDataValueCollectionModifier().size());*/
 							if (packet.getDataValueCollectionModifier().size() > 0)
 							{
-								List<WrappedDataValue> wrappedDataValues = packet.getDataValueCollectionModifier().read(0);
+/*								List<WrappedDataValue> wrappedDataValues = packet.getDataValueCollectionModifier().read(0);
 								for (int i = 0; i < wrappedDataValues.size(); i++)
 								{
 									WrappedDataValue wrappedDataValue = wrappedDataValues.get(i);
@@ -494,6 +544,8 @@ public class ProtocolLibManager
 									MessageUtil.broadcastDebug("index : " + index);
 									MessageUtil.broadcastDebug("serializer : " + serializer);
 								}
+								wrappedDataValues.add(new WrappedDataValue(3, WrappedDataWatcher.Registry.get(Boolean.class), true));
+								packet.getDataValueCollectionModifier().write(0, wrappedDataValues);*/
 							}
 						}
 						if (packet.getType() == Server.RECIPE_UPDATE)
@@ -723,31 +775,6 @@ public class ProtocolLibManager
 						}
 						if (packet.getType() == Server.SPAWN_ENTITY)
 						{
-						}
-						if (packet.getType() == Server.ENTITY_METADATA)
-						{
-							MessageUtil.broadcastDebug("modifierSize: ", packet.getModifier().size());
-							MessageUtil.broadcastDebug("datavalueCollectionSize", packet.getDataValueCollectionModifier().size());
-							Entity entity = packet.getEntityModifier(player.getWorld()).read(0);
-							if (entity instanceof Item item)
-							{
-								ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, item.getItemStack(), player);
-								Component component = itemStack.getAmount() == 1
-										? ItemNameUtil.itemName(itemStack)
-										: Component.translatable("%s (%s)").arguments(ItemNameUtil.itemName(itemStack), Component.text(itemStack.getAmount(), Constant.THE_COLOR));
-								boolean showCustomName =
-										UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player) && !UserData.FORCE_HIDE_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player);
-								Boolean shouldShowCustomName = ItemStackUtil.shouldShowCustomName(itemStack);
-								StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
-								List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-								wrappedDataValues.add(
-										new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
-								wrappedDataValues.add(new WrappedDataValue(2, WrappedDataWatcher.Registry.getChatComponentSerializer(true),
-										Optional.of(WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(component)).getHandle())));
-								wrappedDataValues.add(new WrappedDataValue(3, WrappedDataWatcher.Registry.get(Boolean.class),
-										shouldShowCustomName != null ? shouldShowCustomName : showCustomName));
-								watchableAccessor.write(0, wrappedDataValues);
-							}
 						}
 						if (packet.getType() == Server.ENTITY_EQUIPMENT)
 						{
