@@ -13,6 +13,7 @@ import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.utility.MinecraftReflection;
 import com.comphenix.protocol.wrappers.EnumWrappers.ItemSlot;
 import com.comphenix.protocol.wrappers.*;
+import com.comphenix.protocol.wrappers.WrappedDataWatcher.Serializer;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
@@ -468,14 +469,32 @@ public class ProtocolLibManager
 						StructureModifier<Object> modifier = packet.getModifier();
 						if (packet.getType() != Server.SYSTEM_CHAT)
 						{
-							MessageUtil.broadcastDebug("&m                                             ");
+/*							MessageUtil.broadcastDebug("&m                                             ");
 							MessageUtil.broadcastDebug(packet.getType());
 							MessageUtil.broadcastDebug("modifierSize: ", packet.getModifier().size());
 							for (int i = 0;i < packet.getModifier().size(); i++)
 							{
 								MessageUtil.broadcastDebug(i + " : " + packet.getModifier().read(i).getClass() + " - " + packet.getModifier().read(i));
 							}
-							MessageUtil.broadcastDebug("datavalueCollectionSize", packet.getDataValueCollectionModifier().size());
+							MessageUtil.broadcastDebug("datavalueCollectionSize", packet.getDataValueCollectionModifier().size());*/
+							if (packet.getDataValueCollectionModifier().size() > 0)
+							{
+								List<WrappedDataValue> wrappedDataValues = packet.getDataValueCollectionModifier().read(0);
+								for (int i = 0; i < wrappedDataValues.size(); i++)
+								{
+									WrappedDataValue wrappedDataValue = wrappedDataValues.get(i);
+									Object value = wrappedDataValue.getValue();
+									Object rawValue = wrappedDataValue.getRawValue();
+									int index =	wrappedDataValue.getIndex();
+									Serializer serializer = wrappedDataValue.getSerializer();
+									MessageUtil.broadcastDebug("&m                                           ");
+									MessageUtil.broadcastDebug("i : " + i);
+									MessageUtil.broadcastDebug("value : " + value);
+									MessageUtil.broadcastDebug("raw-value : " + rawValue);
+									MessageUtil.broadcastDebug("index : " + index);
+									MessageUtil.broadcastDebug("serializer : " + serializer);
+								}
+							}
 						}
 						if (packet.getType() == Server.RECIPE_UPDATE)
 						{
