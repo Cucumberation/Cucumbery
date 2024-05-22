@@ -90,9 +90,9 @@ public class ItemLore2Durability
         }
 
         int dura = 0;
-        if (itemMeta.hasEnchant(Enchantment.DURABILITY))
+        if (itemMeta.hasEnchant(Enchantment.UNBREAKING))
         {
-          dura = itemMeta.getEnchantLevel(Enchantment.DURABILITY);
+          dura = itemMeta.getEnchantLevel(Enchantment.UNBREAKING);
         }
         if (itemMeta.hasEnchant(Enchantment.MENDING))
         {

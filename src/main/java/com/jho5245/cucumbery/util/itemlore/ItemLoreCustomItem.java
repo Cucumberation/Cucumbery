@@ -806,24 +806,24 @@ public class ItemLoreCustomItem
 
 				case STONK ->
 				{
-					if (!itemMeta.hasEnchant(Enchantment.DIG_SPEED))
+					if (!itemMeta.hasEnchant(Enchantment.EFFICIENCY))
 					{
-						itemMeta.addEnchant(Enchantment.DIG_SPEED, 6, true);
+						itemMeta.addEnchant(Enchantment.EFFICIENCY, 6, true);
 					}
 					itemMeta.setUnbreakable(true);
 				}
 				case MUSHROOM_STEW_PICKAXE ->
 				{
-					if (!itemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS))
+					if (!itemMeta.hasEnchant(Enchantment.FORTUNE))
 					{
-						itemMeta.addEnchant(Enchantment.LOOT_BONUS_BLOCKS, 10, true);
+						itemMeta.addEnchant(Enchantment.FORTUNE, 10, true);
 					}
 				}
 				case TODWOT_PICKAXE ->
 				{
-					if (!itemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS))
+					if (!itemMeta.hasEnchant(Enchantment.FORTUNE))
 					{
-						itemMeta.addEnchant(Enchantment.LOOT_BONUS_BLOCKS, 1, true);
+						itemMeta.addEnchant(Enchantment.FORTUNE, 1, true);
 					}
 				}
 
@@ -1183,9 +1183,9 @@ public class ItemLoreCustomItem
 							new AttributeModifier(UUID_1_4, customMaterial.toString(), 5, Operation.ADD_NUMBER, EquipmentSlot.HEAD));
 					itemMeta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH,
 							new AttributeModifier(UUID_1_5, customMaterial.toString(), 0.3, Operation.ADD_SCALAR, EquipmentSlot.HEAD));
-					itemMeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 20, true);
-					itemMeta.addEnchant(Enchantment.OXYGEN, 20, true);
-					itemMeta.addEnchant(Enchantment.WATER_WORKER, 1, true);
+					itemMeta.addEnchant(Enchantment.PROTECTION, 20, true);
+					itemMeta.addEnchant(Enchantment.RESPIRATION, 20, true);
+					itemMeta.addEnchant(Enchantment.AQUA_AFFINITY, 1, true);
 				}
 				case MINDAS_CHESTPLATE ->
 				{
@@ -1201,8 +1201,8 @@ public class ItemLoreCustomItem
 							new AttributeModifier(UUID_1_4, customMaterial.toString(), 8, Operation.ADD_NUMBER, EquipmentSlot.CHEST));
 					itemMeta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH,
 							new AttributeModifier(UUID_1_5, customMaterial.toString(), 0.5, Operation.ADD_SCALAR, EquipmentSlot.CHEST));
-					itemMeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 20, true);
-					itemMeta.addEnchant(Enchantment.DURABILITY, 10, true);
+					itemMeta.addEnchant(Enchantment.PROTECTION, 20, true);
+					itemMeta.addEnchant(Enchantment.UNBREAKING, 10, true);
 					itemMeta.addEnchant(Enchantment.MENDING, 1, true);
 				}
 				case MINDAS_LEGGINGS ->
@@ -1219,8 +1219,8 @@ public class ItemLoreCustomItem
 							new AttributeModifier(UUID_1_4, customMaterial.toString(), 6, Operation.ADD_NUMBER, EquipmentSlot.LEGS));
 					itemMeta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH,
 							new AttributeModifier(UUID_1_5, customMaterial.toString(), 0.4, Operation.ADD_SCALAR, EquipmentSlot.LEGS));
-					itemMeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 20, true);
-					itemMeta.addEnchant(Enchantment.DURABILITY, 10, true);
+					itemMeta.addEnchant(Enchantment.PROTECTION, 20, true);
+					itemMeta.addEnchant(Enchantment.UNBREAKING, 10, true);
 					itemMeta.addEnchant(Enchantment.MENDING, 1, true);
 					itemMeta.addEnchant(Enchantment.SWIFT_SNEAK, 5, true);
 				}
@@ -1238,8 +1238,8 @@ public class ItemLoreCustomItem
 							new AttributeModifier(UUID_1_4, customMaterial.toString(), 5, Operation.ADD_NUMBER, EquipmentSlot.FEET));
 					itemMeta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH,
 							new AttributeModifier(UUID_1_5, customMaterial.toString(), 0.35, Operation.ADD_SCALAR, EquipmentSlot.FEET));
-					itemMeta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 20, true);
-					itemMeta.addEnchant(Enchantment.DURABILITY, 10, true);
+					itemMeta.addEnchant(Enchantment.PROTECTION, 20, true);
+					itemMeta.addEnchant(Enchantment.UNBREAKING, 10, true);
 					itemMeta.addEnchant(Enchantment.MENDING, 1, true);
 					itemMeta.addEnchant(Enchantment.DEPTH_STRIDER, 3, true);
 				}

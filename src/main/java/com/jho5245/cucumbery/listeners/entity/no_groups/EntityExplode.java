@@ -115,7 +115,7 @@ public class EntityExplode implements Listener
             double offset = 360d / l;
             for (int i = 1; i <= l; i++)
             {
-              TNTPrimed tnt = (TNTPrimed) entity.getWorld().spawnEntity(entity.getLocation(), EntityType.PRIMED_TNT, SpawnReason.CUSTOM, (e) ->
+              TNTPrimed tnt = (TNTPrimed) entity.getWorld().spawnEntity(entity.getLocation(), EntityType.TNT, SpawnReason.CUSTOM, (e) ->
               {
                 TNTPrimed tnt2 = (TNTPrimed) e;
                 tnt2.setSource(((TNTPrimed) entity).getSource());
@@ -175,7 +175,7 @@ public class EntityExplode implements Listener
 
   private void TNTRegionProjection(EntityExplodeEvent event)
   {
-    if (event.getEntityType() != EntityType.PRIMED_TNT && event.getEntityType() != EntityType.MINECART_TNT)
+    if (event.getEntityType() != EntityType.TNT && event.getEntityType() != EntityType.TNT_MINECART)
     {
       return;
     }
@@ -312,7 +312,7 @@ public class EntityExplode implements Listener
 
   private void endCrystalRegionProjection(EntityExplodeEvent event)
   {
-    if (event.getEntityType() != EntityType.ENDER_CRYSTAL)
+    if (event.getEntityType() != EntityType.END_CRYSTAL)
     {
       return;
     }

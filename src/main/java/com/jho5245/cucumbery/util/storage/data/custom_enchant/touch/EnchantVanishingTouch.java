@@ -1,6 +1,7 @@
 package com.jho5245.cucumbery.util.storage.data.custom_enchant.touch;
 
 import com.jho5245.cucumbery.util.storage.data.custom_enchant.CustomEnchant;
+import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 
 public class EnchantVanishingTouch extends CustomEnchant

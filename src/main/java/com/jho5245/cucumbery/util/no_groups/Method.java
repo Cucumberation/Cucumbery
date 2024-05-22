@@ -1070,7 +1070,7 @@ public class Method extends SoundPlay
 				case SNOWBALL:
 					playSound(player, Sound.BLOCK_SNOW_PLACE, 0.5F, Method.random(100, 120) / 100.0F);
 					return;
-				case SCUTE:
+				case TURTLE_SCUTE:
 				case TURTLE_HELMET:
 					playSound(player, Sound.ITEM_ARMOR_EQUIP_TURTLE, 0.5F, Method.random(100, 120) / 100.0F);
 					return;
@@ -3477,7 +3477,7 @@ public class Method extends SoundPlay
 				if (UserData.FIREWORK_LAUNCH_ON_AIR.getBoolean(player.getUniqueId()))
 				{
 					Firework firework = (Firework) player.getWorld()
-							.spawnEntity(player.getEyeLocation().add(player.getEyeLocation().getDirection().multiply(radius)), EntityType.FIREWORK, SpawnReason.CUSTOM);
+							.spawnEntity(player.getEyeLocation().add(player.getEyeLocation().getDirection().multiply(radius)), EntityType.FIREWORK_ROCKET, SpawnReason.CUSTOM);
 					firework.setFireworkMeta(((FireworkMeta) itemMeta));
 					if (player.isSneaking())
 					{
@@ -3724,7 +3724,7 @@ public class Method extends SoundPlay
 	public static void itemBreakParticle(Player player, ItemStack item)
 	{
 		player.getLocation().getWorld()
-				.spawnParticle(Particle.ITEM_CRACK, player.getEyeLocation().add(player.getLocation().getDirection().multiply(1D)), 20, 0, 0, 0, 0.1, item);
+				.spawnParticle(Particle.ITEM, player.getEyeLocation().add(player.getLocation().getDirection().multiply(1D)), 20, 0, 0, 0, 0.1, item);
 	}
 
 	public static float getPitchFromNote(@NotNull Note note)

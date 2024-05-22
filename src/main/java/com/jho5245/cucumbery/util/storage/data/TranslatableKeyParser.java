@@ -68,23 +68,23 @@ public class TranslatableKeyParser
   @NotNull
   public static String getKey(@NotNull PotionEffectType potionEffectType)
   {
-    if (potionEffectType.equals(PotionEffectType.SLOW))
+    if (potionEffectType.equals(PotionEffectType.SLOWNESS))
       return "effect.minecraft.slowness";
-    if (potionEffectType.equals(PotionEffectType.CONFUSION))
+    if (potionEffectType.equals(PotionEffectType.NAUSEA))
       return "effect.minecraft.nausea";
-    if (potionEffectType.equals(PotionEffectType.DAMAGE_RESISTANCE))
+    if (potionEffectType.equals(PotionEffectType.RESISTANCE))
       return "effect.minecraft.resistance";
-    if (potionEffectType.equals(PotionEffectType.FAST_DIGGING))
+    if (potionEffectType.equals(PotionEffectType.HASTE))
       return "effect.minecraft.haste";
-    if (potionEffectType.equals(PotionEffectType.HARM))
+    if (potionEffectType.equals(PotionEffectType.INSTANT_DAMAGE))
       return "effect.minecraft.instant_damage";
-    if (potionEffectType.equals(PotionEffectType.HEAL))
+    if (potionEffectType.equals(PotionEffectType.INSTANT_HEALTH))
       return "effect.minecraft.instant_health";
-    if (potionEffectType.equals(PotionEffectType.INCREASE_DAMAGE))
+    if (potionEffectType.equals(PotionEffectType.STRENGTH))
       return "effect.minecraft.strength";
-    if (potionEffectType.equals(PotionEffectType.JUMP))
+    if (potionEffectType.equals(PotionEffectType.JUMP_BOOST))
       return "effect.minecraft.jump_boost";
-    if (potionEffectType.equals(PotionEffectType.SLOW_DIGGING))
+    if (potionEffectType.equals(PotionEffectType.MINING_FATIGUE))
       return "effect.minecraft.mining_fatigue";
     return "effect.minecraft." + potionEffectType.getName().toLowerCase();
   }

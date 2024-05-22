@@ -1,6 +1,5 @@
 package com.jho5245.cucumbery.listeners.block;
 
-import com.destroystokyo.paper.Namespaced;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.children.group.StringCustomEffectImple;
@@ -88,7 +87,9 @@ public class BlockBreak implements Listener
 			}
 			return;
 		}
-		if (player.getGameMode() == GameMode.SURVIVAL && itemMeta != null && itemMeta.hasDestroyableKeys())
+
+		// TODO: implement later commented since 2024.05.22
+/*		if (player.getGameMode() == GameMode.SURVIVAL && itemMeta != null && itemMeta.hasDestroyableKeys())
 		{
 			Set<Namespaced> keys = itemMeta.getDestroyableKeys();
 			if (!keys.contains(block.getType().getKey()))
@@ -96,7 +97,7 @@ public class BlockBreak implements Listener
 				event.setCancelled(true);
 				return;
 			}
-		}
+		}*/
 		if (!Permission.EVENT2_ANTI_ALLPLAYER.has(player) && Constant.AllPlayer.BLOCK_BREAK.isEnabled())
 		{
 			event.setCancelled(true);
@@ -262,7 +263,7 @@ public class BlockBreak implements Listener
 					if (clone.hasItemMeta())
 					{
 						ItemMeta cloneMeta = clone.getItemMeta();
-						cloneMeta.removeEnchant(Enchantment.LOOT_BONUS_BLOCKS);
+						cloneMeta.removeEnchant(Enchantment.FORTUNE);
 						clone.setItemMeta(cloneMeta);
 					}
 					int intSide = (int) farmingFortune;
@@ -448,7 +449,7 @@ public class BlockBreak implements Listener
 						{
 							if (online != player)
 							{
-								online.spawnParticle(Particle.BLOCK_CRACK, block.getLocation(), 10, Bukkit.createBlockData(Material.LECTERN));
+								online.spawnParticle(Particle.BLOCK, block.getLocation(), 10, Bukkit.createBlockData(Material.LECTERN));
 								online.playSound(block.getLocation(), Sound.BLOCK_WOOD_BREAK, SoundCategory.BLOCKS, 1f, 0.7f);
 							}
 						}
@@ -549,7 +550,7 @@ public class BlockBreak implements Listener
 						{
 							if (online != player)
 							{
-								online.spawnParticle(Particle.BLOCK_CRACK, block.getLocation(), 10, Bukkit.createBlockData(Material.LECTERN));
+								online.spawnParticle(Particle.BLOCK, block.getLocation(), 10, Bukkit.createBlockData(Material.LECTERN));
 								online.playSound(block.getLocation(), Sound.BLOCK_WOOD_BREAK, SoundCategory.BLOCKS, 1f, 0.7f);
 							}
 						}

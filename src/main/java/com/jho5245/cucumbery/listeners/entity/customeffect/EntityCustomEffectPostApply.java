@@ -146,7 +146,7 @@ public class EntityCustomEffectPostApply implements Listener
 			{
 				AreaEffectCloud areaEffectCloud = (AreaEffectCloud) e;
 				areaEffectCloud.setRadius(10f);
-				areaEffectCloud.setParticle(Particle.SPELL_WITCH);
+				areaEffectCloud.setParticle(Particle.WITCH);
 				areaEffectCloud.setDuration(200);
 				areaEffectCloud.setWaitTime(20);
 				areaEffectCloud.addCustomEffect(new PotionEffect(PotionEffectType.UNLUCK, 1, 0, false, false, false), true);
@@ -240,7 +240,7 @@ public class EntityCustomEffectPostApply implements Listener
 				if (allRemoved)
 				{
 					livingEntity.removePotionEffect(PotionEffectType.POISON);
-					livingEntity.removePotionEffect(PotionEffectType.CONFUSION);
+					livingEntity.removePotionEffect(PotionEffectType.NAUSEA);
 					livingEntity.removePotionEffect(PotionEffectType.BLINDNESS);
 					livingEntity.removePotionEffect(PotionEffectType.UNLUCK);
 					MessageUtil.sendMessage(livingEntity, Prefix.INFO_CUSTOM_EFFECT, "와 샌즈! %s의 효과로 인해 디버프가 제거되었습니다!", customEffect);
@@ -251,7 +251,7 @@ public class EntityCustomEffectPostApply implements Listener
 					PotionEffectType potionEffectType = switch ((int) (Math.random() * 4))
 					{
 						case 0 -> PotionEffectType.POISON;
-						case 1 -> PotionEffectType.CONFUSION;
+						case 1 -> PotionEffectType.NAUSEA;
 						case 2 -> PotionEffectType.BLINDNESS;
 						default -> PotionEffectType.UNLUCK;
 					};

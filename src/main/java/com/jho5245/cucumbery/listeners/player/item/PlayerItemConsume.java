@@ -122,8 +122,8 @@ public class PlayerItemConsume implements Listener
 		{
 			player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * 100, 0));
 			player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 20 * 100, 0));
-			player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20 * 100, 0));
-			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 20 * 100, 0));
+			player.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 20 * 100, 0));
+			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 20 * 100, 0));
 		}
 		this.customEffect(event);
 	}
@@ -185,7 +185,7 @@ public class PlayerItemConsume implements Listener
 				{
 					Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
 					{
-						player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 20 * 30, 0));
+						player.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 20 * 30, 0));
 						if (Math.random() < 0.8)
 						{
 							player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 20 * 30, 0));

@@ -57,8 +57,7 @@ public class ItemLore2Meta
 				PotionMeta potionMeta = (PotionMeta) itemMeta;
 				PotionData data = potionMeta.getBasePotionData();
 				PotionType potionType = data.getType();
-				if (!(potionType == PotionType.AWKWARD || potionType == PotionType.MUNDANE || potionType == PotionType.THICK || potionType == PotionType.UNCRAFTABLE
-						|| potionType == PotionType.WATER))
+				if (!(potionType == PotionType.AWKWARD || potionType == PotionType.MUNDANE || potionType == PotionType.THICK || potionType == PotionType.WATER))
 				{
 					ItemLoreUtil.setItemRarityValue(lore, +50);
 				}
@@ -86,8 +85,7 @@ public class ItemLore2Meta
 				PotionMeta potionMeta = (PotionMeta) itemMeta;
 				PotionData data = potionMeta.getBasePotionData();
 				PotionType potionType = data.getType();
-				if (!(potionType == PotionType.AWKWARD || potionType == PotionType.MUNDANE || potionType == PotionType.THICK || potionType == PotionType.UNCRAFTABLE
-						|| potionType == PotionType.WATER))
+				if (!(potionType == PotionType.AWKWARD || potionType == PotionType.MUNDANE || potionType == PotionType.THICK || potionType == PotionType.WATER))
 				{
 					ItemLoreUtil.setItemRarityValue(lore, 50);
 				}
@@ -115,8 +113,7 @@ public class ItemLore2Meta
 				PotionMeta potionMeta = (PotionMeta) itemMeta;
 				PotionData data = potionMeta.getBasePotionData();
 				PotionType potionType = data.getType();
-				if (!(potionType == PotionType.AWKWARD || potionType == PotionType.MUNDANE || potionType == PotionType.THICK || potionType == PotionType.UNCRAFTABLE
-						|| potionType == PotionType.WATER))
+				if (!(potionType == PotionType.AWKWARD || potionType == PotionType.MUNDANE || potionType == PotionType.THICK || potionType == PotionType.WATER))
 				{
 					ItemLoreUtil.setItemRarityValue(lore, +50);
 				}
@@ -144,8 +141,7 @@ public class ItemLore2Meta
 				PotionMeta potionMeta = (PotionMeta) itemMeta;
 				PotionData data = potionMeta.getBasePotionData();
 				PotionType potionType = data.getType();
-				if (!(potionType == PotionType.AWKWARD || potionType == PotionType.MUNDANE || potionType == PotionType.THICK || potionType == PotionType.UNCRAFTABLE
-						|| potionType == PotionType.WATER))
+				if (!(potionType == PotionType.AWKWARD || potionType == PotionType.MUNDANE || potionType == PotionType.THICK || potionType == PotionType.WATER))
 				{
 					ItemLoreUtil.setItemRarityValue(lore, 50);
 				}
@@ -201,7 +197,8 @@ public class ItemLore2Meta
 				lore.add(ComponentUtil.translate("&7출판 : %s", ComponentUtil.translate("&6book.generation." + (g != null ? g.ordinal() : "0"))));
 				lore.add(ComponentUtil.translate("&7쪽수 : %s", ComponentUtil.translate("&6%s장", pageCount)));
 			}
-			case WHITE_BANNER, BLACK_BANNER, BLUE_BANNER, BROWN_BANNER, CYAN_BANNER, GRAY_BANNER, GREEN_BANNER, LIGHT_BLUE_BANNER, LIGHT_GRAY_BANNER, LIME_BANNER, MAGENTA_BANNER, ORANGE_BANNER, PURPLE_BANNER, PINK_BANNER, RED_BANNER, YELLOW_BANNER ->
+			case WHITE_BANNER, BLACK_BANNER, BLUE_BANNER, BROWN_BANNER, CYAN_BANNER, GRAY_BANNER, GREEN_BANNER, LIGHT_BLUE_BANNER, LIGHT_GRAY_BANNER, LIME_BANNER,
+					 MAGENTA_BANNER, ORANGE_BANNER, PURPLE_BANNER, PINK_BANNER, RED_BANNER, YELLOW_BANNER ->
 			{
 				BannerMeta bannerMeta = (BannerMeta) itemMeta;
 				if (bannerMeta.numberOfPatterns() != 0)
@@ -478,7 +475,8 @@ public class ItemLore2Meta
 				lore.add(Component.empty());
 				lore.add(ComponentUtil.translate("rg255,204;무늬 : %s", ComponentUtil.translate("&7" + type.translationKey() + ".desc")));
 			}
-			case MUSIC_DISC_11, MUSIC_DISC_13, MUSIC_DISC_BLOCKS, MUSIC_DISC_CAT, MUSIC_DISC_CHIRP, MUSIC_DISC_FAR, MUSIC_DISC_MALL, MUSIC_DISC_MELLOHI, MUSIC_DISC_PIGSTEP, MUSIC_DISC_STAL, MUSIC_DISC_STRAD, MUSIC_DISC_WAIT, MUSIC_DISC_WARD, MUSIC_DISC_5, MUSIC_DISC_OTHERSIDE, MUSIC_DISC_RELIC ->
+			case MUSIC_DISC_11, MUSIC_DISC_13, MUSIC_DISC_BLOCKS, MUSIC_DISC_CAT, MUSIC_DISC_CHIRP, MUSIC_DISC_FAR, MUSIC_DISC_MALL, MUSIC_DISC_MELLOHI,
+					 MUSIC_DISC_PIGSTEP, MUSIC_DISC_STAL, MUSIC_DISC_STRAD, MUSIC_DISC_WAIT, MUSIC_DISC_WARD, MUSIC_DISC_5, MUSIC_DISC_OTHERSIDE, MUSIC_DISC_RELIC ->
 			{
 				itemMeta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
 				lore.add(Component.empty());

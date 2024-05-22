@@ -152,7 +152,7 @@ public class EntityCustomEffectRemove implements Listener
 						{
 							if (entity instanceof Player player)
 							{
-								player.spawnParticle(Particle.MOB_APPEARANCE, player.getLocation(), 1);
+								player.spawnParticle(Particle.ELDER_GUARDIAN, player.getLocation(), 1);
 							}
 							if (amplifier >= 2)
 							{

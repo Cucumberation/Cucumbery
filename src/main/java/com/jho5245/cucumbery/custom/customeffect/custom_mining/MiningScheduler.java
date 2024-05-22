@@ -612,7 +612,7 @@ public class MiningScheduler
 									minY += diffY * 0.1;
 									minZ += diffZ * 0.1;
 
-									Particle particle = blockData == null ? Particle.ITEM_CRACK : Particle.BLOCK_CRACK;
+									Particle particle = blockData == null ? Particle.ITEM : Particle.BLOCK;
 									Object data = blockData == null ? breakParticleItem : blockData;
 
 									for (int a = 0; a < 4; a++)
@@ -893,7 +893,7 @@ public class MiningScheduler
 					}
 					if (maxDurability > 0)
 					{
-						int unbreakingLevel = toolItemStack.getEnchantmentLevel(Enchantment.DURABILITY);
+						int unbreakingLevel = toolItemStack.getEnchantmentLevel(Enchantment.UNBREAKING);
 						if (Math.random() >= 1d * unbreakingLevel / (unbreakingLevel + 1) && Math.random() > chanceNotLoseDura / 100d)
 						{
 							currentDurability++;
@@ -903,7 +903,7 @@ public class MiningScheduler
 						{
 							player.incrementStatistic(Statistic.BREAK_ITEM, toolItemStack.getType());
 							player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1F, 1F);
-							player.spawnParticle(Particle.ITEM_CRACK, player.getEyeLocation().add(0, -0.5, 0), 30, 0, 0, 0, 0.1, toolItemStack);
+							player.spawnParticle(Particle.ITEM, player.getEyeLocation().add(0, -0.5, 0), 30, 0, 0, 0, 0.1, toolItemStack);
 							PlayerItemBreakEvent playerItemBreakEvent = new PlayerItemBreakEvent(player, toolItemStack);
 							Bukkit.getPluginManager().callEvent(playerItemBreakEvent);
 							toolItemStack.setAmount(toolItemStack.getAmount() - 1);
@@ -949,7 +949,7 @@ public class MiningScheduler
 				// sus
 				if (isSUS)
 				{
-					location.clone().getWorld().spawnParticle(Particle.EXPLOSION_LARGE, location.clone().add(0.5, 0.5, 0.5), 1);
+					location.clone().getWorld().spawnParticle(Particle.EXPLOSION, location.clone().add(0.5, 0.5, 0.5), 1);
 				}
 				// 즉시 부서지는 블록이 아닐 경우 다음 블록을 부수기까지 짧은 쿨타임 추가
 				if (miningResult.miningSpeed() < miningResult.blockHardness() * 20d)

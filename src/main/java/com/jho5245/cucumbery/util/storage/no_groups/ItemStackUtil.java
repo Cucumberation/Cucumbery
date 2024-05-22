@@ -1094,7 +1094,7 @@ public class ItemStackUtil
 						{
 							display = ComponentUtil.translate("굳검버리가 좋아하는 것");
 							itemStack.setType(
-									getAnimatedMaterial(Arrays.asList(Material.TNT, Material.TNT_MINECART, Material.COMMAND_BLOCK, Material.FLINT_AND_STEEL, Material.SCUTE)));
+									getAnimatedMaterial(Arrays.asList(Material.TNT, Material.TNT_MINECART, Material.COMMAND_BLOCK, Material.FLINT_AND_STEEL, Material.TURTLE_SCUTE)));
 						}
 						if (customTags.getBoolean("gemstones"))
 						{

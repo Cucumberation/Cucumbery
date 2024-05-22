@@ -206,8 +206,8 @@ public class ItemLore2
 		// 이스터 에그(만렙 낚싯대)
 		if (type == Material.FISHING_ROD)
 		{
-			if (itemMeta.getEnchantLevel(Enchantment.DURABILITY) == 3 && itemMeta.getEnchantLevel(Enchantment.MENDING) == 1
-					&& itemMeta.getEnchantLevel(Enchantment.LURE) == 3 && itemMeta.getEnchantLevel(Enchantment.LUCK) == 3)
+			if (itemMeta.getEnchantLevel(Enchantment.UNBREAKING) == 3 && itemMeta.getEnchantLevel(Enchantment.MENDING) == 1
+					&& itemMeta.getEnchantLevel(Enchantment.LURE) == 3 && itemMeta.getEnchantLevel(Enchantment.LUCK_OF_THE_SEA) == 3)
 			{
 				lore.add(Component.empty());
 				lore.add(ComponentUtil.translate("&b[이스터 에그]"));

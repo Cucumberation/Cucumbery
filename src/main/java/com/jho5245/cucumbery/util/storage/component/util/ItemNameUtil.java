@@ -2,7 +2,6 @@ package com.jho5245.cucumbery.util.storage.component.util;
 
 import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.no_groups.PlayerHeadInfo;
-import io.papermc.paper.inventory.ItemRarity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -12,8 +11,10 @@ import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Banner;
 import org.bukkit.block.BlockState;
+import org.bukkit.inventory.ItemRarity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
+import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -147,17 +148,9 @@ public class ItemNameUtil
           PotionMeta potionMeta = (PotionMeta) itemMeta;
           if (potionMeta != null)
           {
-            String potionId = potionMeta.getBasePotionData().getType().toString().toLowerCase();
-            switch (potionMeta.getBasePotionData().getType())
-            {
-              default -> component = ComponentUtil.translate(id + ".effect." + potionId);
-              case UNCRAFTABLE -> component = ComponentUtil.translate(id + ".effect.empty");
-              case JUMP -> component = ComponentUtil.translate(id + ".effect.leaping");
-              case REGEN -> component = ComponentUtil.translate(id + ".effect.regeneration");
-              case SPEED -> component = ComponentUtil.translate(id + ".effect.swiftness");
-              case INSTANT_HEAL -> component = ComponentUtil.translate(id + ".effect.healing");
-              case INSTANT_DAMAGE -> component = ComponentUtil.translate(id + ".effect.harming");
-            }
+            PotionType potionType = potionMeta.getBasePotionType();
+            String potionId = potionType != null ? potionType.getKey().getKey().toLowerCase() : "empty";
+            component = ComponentUtil.translate(id + ".effect." + potionId);
           }
         }
         case WRITTEN_BOOK ->
@@ -210,7 +203,7 @@ public class ItemNameUtil
     // 아이템의 등급이 있고 아이템 이름에 색깔이 없을 경우와 기본 아이템 색깔이 흰색이 아닐 경우 색깔을 추가한다.
     if (material.isItem() && material != Material.AIR)
     {
-      ItemRarity itemRarity = material.getItemRarity();
+      ItemRarity itemRarity = itemMeta != null && itemMeta.hasRarity() ? itemMeta.getRarity() : null;
       // 아이템에 마법이 부여되어 있을 경우 기본 아이템 이름의 색깔이 변경되므로 해당 색깔을 추가한다.
       boolean hasEnchants = itemMeta != null && itemMeta.hasEnchants();
       if (textColor == null)
@@ -220,7 +213,7 @@ public class ItemNameUtil
           case UNCOMMON -> textColor = hasEnchants ? NamedTextColor.AQUA : NamedTextColor.YELLOW;
           case RARE -> textColor = hasEnchants ? NamedTextColor.LIGHT_PURPLE : NamedTextColor.AQUA;
           case EPIC -> textColor = NamedTextColor.LIGHT_PURPLE;
-          default -> textColor = hasEnchants ? NamedTextColor.AQUA : null;
+          case null, default -> textColor = hasEnchants ? NamedTextColor.AQUA : null;
         }
         component = component.color(textColor);
       }

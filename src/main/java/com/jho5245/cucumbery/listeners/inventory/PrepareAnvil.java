@@ -337,7 +337,7 @@ public class PrepareAnvil implements Listener
 						boolean canEnchant = enchantment.canEnchantItem(firstItem);
 						// 특정 인챈트는 특정 아이템에 예외적으로 인챈트 가능(예: 드릴에 효율/행운)
 						{
-							if (enchantment.equals(Enchantment.DIG_SPEED) || enchantment.equals(Enchantment.LOOT_BONUS_BLOCKS))
+							if (enchantment.equals(Enchantment.EFFICIENCY) || enchantment.equals(Enchantment.FORTUNE))
 							{
 								if (firstItemCustomMaterial != null && firstItemCustomMaterial.isDrill())
 								{
@@ -407,7 +407,7 @@ public class PrepareAnvil implements Listener
 						boolean canEnchant = enchantment.canEnchantItem(firstItem);
 						// 특정 인챈트는 특정 아이템에 예외적으로 인챈트 가능(예: 드릴에 효율/행운)
 						{
-							if (enchantment.equals(Enchantment.DIG_SPEED) || enchantment.equals(Enchantment.LOOT_BONUS_BLOCKS))
+							if (enchantment.equals(Enchantment.EFFICIENCY) || enchantment.equals(Enchantment.FORTUNE))
 							{
 								if (firstItemCustomMaterial != null && firstItemCustomMaterial.isDrill())
 								{

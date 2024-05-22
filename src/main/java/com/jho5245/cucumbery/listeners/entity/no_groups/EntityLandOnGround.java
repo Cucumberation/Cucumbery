@@ -46,7 +46,7 @@ public class EntityLandOnGround implements Listener
         else if (lastDamageCause instanceof EntityDamageByBlockEvent damageByBlockEvent)
         {
           Block block = damageByBlockEvent.getDamager();
-          lastDamageCause = new EntityDamageByBlockEvent(block, entity, DamageCause.FALL, org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.GENERIC).build(), 1, block.getState());
+          lastDamageCause = new EntityDamageByBlockEvent(block, block.getState(), entity, DamageCause.FALL, org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.GENERIC).build(), map, map2);
         }
         else
         {

@@ -129,7 +129,7 @@ public class BlockPlace implements Listener
 				{
 					block.setBlockData(Bukkit.createBlockData(Material.AIR));
 					Method.playSoundLocation(location, Sound.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5, 2);
-					location.getWorld().spawnParticle(Particle.SMOKE_LARGE, location.add(0.5, 0.5, 0.5), 8, 0.4, 0.4, 0.4, 0);
+					location.getWorld().spawnParticle(Particle.LARGE_SMOKE, location.add(0.5, 0.5, 0.5), 8, 0.4, 0.4, 0.4, 0);
 				}, 0L);
 			}
 			else
@@ -242,17 +242,17 @@ public class BlockPlace implements Listener
 						{
 							continue;
 						}
-						online.spawnParticle(Particle.BLOCK_CRACK, locationClone.clone().add(minX, minY, minZ), 5, 0, 0, 0, 0, blockData);
+						online.spawnParticle(Particle.BLOCK, locationClone.clone().add(minX, minY, minZ), 5, 0, 0, 0, 0, blockData);
 
-						online.spawnParticle(Particle.BLOCK_CRACK, locationClone.clone().add(maxX, minY, minZ), 5, 0, 0, 0, 0, blockData);
-						online.spawnParticle(Particle.BLOCK_CRACK, locationClone.clone().add(minX, maxY, minZ), 5, 0, 0, 0, 0, blockData);
-						online.spawnParticle(Particle.BLOCK_CRACK, locationClone.clone().add(minX, minY, maxZ), 5, 0, 0, 0, 0, blockData);
+						online.spawnParticle(Particle.BLOCK, locationClone.clone().add(maxX, minY, minZ), 5, 0, 0, 0, 0, blockData);
+						online.spawnParticle(Particle.BLOCK, locationClone.clone().add(minX, maxY, minZ), 5, 0, 0, 0, 0, blockData);
+						online.spawnParticle(Particle.BLOCK, locationClone.clone().add(minX, minY, maxZ), 5, 0, 0, 0, 0, blockData);
 
-						online.spawnParticle(Particle.BLOCK_CRACK, locationClone.clone().add(maxX, maxY, minZ), 5, 0, 0, 0, 0, blockData);
-						online.spawnParticle(Particle.BLOCK_CRACK, locationClone.clone().add(maxX, minY, maxZ), 5, 0, 0, 0, 0, blockData);
-						online.spawnParticle(Particle.BLOCK_CRACK, locationClone.clone().add(minX, maxY, maxZ), 5, 0, 0, 0, 0, blockData);
+						online.spawnParticle(Particle.BLOCK, locationClone.clone().add(maxX, maxY, minZ), 5, 0, 0, 0, 0, blockData);
+						online.spawnParticle(Particle.BLOCK, locationClone.clone().add(maxX, minY, maxZ), 5, 0, 0, 0, 0, blockData);
+						online.spawnParticle(Particle.BLOCK, locationClone.clone().add(minX, maxY, maxZ), 5, 0, 0, 0, 0, blockData);
 
-						online.spawnParticle(Particle.BLOCK_CRACK, locationClone.clone().add(maxX, maxY, maxZ), 5, 0, 0, 0, 0, blockData);
+						online.spawnParticle(Particle.BLOCK, locationClone.clone().add(maxX, maxY, maxZ), 5, 0, 0, 0, 0, blockData);
 					}
 					if (player.getGameMode() != GameMode.CREATIVE)
 					{

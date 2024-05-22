@@ -61,9 +61,9 @@ public class ItemLore2Anvil
         }
         // 내구성이 있을 경우 모루 합성 횟수로 인한 아이템 희귀도 차감량 감소
         int duraEnch = -1;
-        if (itemMeta.hasEnchant(Enchantment.DURABILITY))
+        if (itemMeta.hasEnchant(Enchantment.UNBREAKING))
         {
-          duraEnch = itemMeta.getEnchantLevel(Enchantment.DURABILITY);
+          duraEnch = itemMeta.getEnchantLevel(Enchantment.UNBREAKING);
         }
         if (duraEnch > 0)
         {

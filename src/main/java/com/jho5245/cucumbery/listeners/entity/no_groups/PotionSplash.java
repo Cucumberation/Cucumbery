@@ -45,9 +45,8 @@ public class PotionSplash implements Listener
       if (itemStack.getItemMeta() instanceof PotionMeta potionMeta)
       {
         hasVanillaEffects = potionMeta.hasCustomEffects();
-        PotionType potionType = potionMeta.getBasePotionData().getType();
-        hasVanillaEffects = hasVanillaEffects || !(potionType == PotionType.AWKWARD || potionType == PotionType.MUNDANE || potionType == PotionType.THICK || potionType == PotionType.UNCRAFTABLE
-                || potionType == PotionType.WATER);
+        PotionType potionType = potionMeta.getBasePotionType();
+        hasVanillaEffects = hasVanillaEffects || !(potionType == PotionType.AWKWARD || potionType == PotionType.MUNDANE || potionType == PotionType.THICK || potionType == PotionType.WATER);
       }
       Collection<Entity> entities = new ArrayList<>(event.getAffectedEntities());
       for (Entity entity : thrownPotion.getNearbyEntities(5, 5, 5))

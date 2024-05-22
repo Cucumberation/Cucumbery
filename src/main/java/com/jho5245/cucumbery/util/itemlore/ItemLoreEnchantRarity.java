@@ -38,9 +38,9 @@ public class ItemLoreEnchantRarity
     }
 
     // 보호
-    if (itemMeta.hasEnchant(Enchantment.PROTECTION_ENVIRONMENTAL))
+    if (itemMeta.hasEnchant(Enchantment.PROTECTION))
     {
-      int level = itemStack.getEnchantmentLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+      int level = itemStack.getEnchantmentLevel(Enchantment.PROTECTION);
       init = 10D;
       for (int i = 1; i < level; i++)
       {
@@ -53,9 +53,9 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 폭발로부터 보호
-    if (itemMeta.hasEnchant(Enchantment.PROTECTION_EXPLOSIONS))
+    if (itemMeta.hasEnchant(Enchantment.BLAST_PROTECTION))
     {
-      int level = itemStack.getEnchantmentLevel(Enchantment.PROTECTION_EXPLOSIONS);
+      int level = itemStack.getEnchantmentLevel(Enchantment.BLAST_PROTECTION);
       init = 10D;
       for (int i = 1; i < level; i++)
       {
@@ -69,9 +69,9 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 화염으로부터 보호
-    if (itemMeta.hasEnchant(Enchantment.PROTECTION_FIRE))
+    if (itemMeta.hasEnchant(Enchantment.FIRE_PROTECTION))
     {
-      int level = itemStack.getEnchantmentLevel(Enchantment.PROTECTION_FIRE);
+      int level = itemStack.getEnchantmentLevel(Enchantment.FIRE_PROTECTION);
       init = 10D;
       for (int i = 1; i < level; i++)
       {
@@ -85,9 +85,9 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 발사체로부터 보호
-    if (itemMeta.hasEnchant(Enchantment.PROTECTION_PROJECTILE))
+    if (itemMeta.hasEnchant(Enchantment.PROJECTILE_PROTECTION))
     {
-      int level = itemStack.getEnchantmentLevel(Enchantment.PROTECTION_PROJECTILE);
+      int level = itemStack.getEnchantmentLevel(Enchantment.PROJECTILE_PROTECTION);
       init = 10D;
       for (int i = 1; i < level; i++)
       {
@@ -117,9 +117,9 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 호흡
-    if (itemMeta.hasEnchant(Enchantment.OXYGEN))
+    if (itemMeta.hasEnchant(Enchantment.RESPIRATION))
     {
-      int level = itemStack.getEnchantmentLevel(Enchantment.OXYGEN);
+      int level = itemStack.getEnchantmentLevel(Enchantment.RESPIRATION);
       init = 15D;
       for (int i = 1; i < level; i++)
       {
@@ -133,14 +133,14 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 친수성
-    if (itemMeta.hasEnchant(Enchantment.WATER_WORKER))
+    if (itemMeta.hasEnchant(Enchantment.AQUA_AFFINITY))
     {
       value += 100;
     }
     // 가벼운 착지
-    if (itemMeta.hasEnchant(Enchantment.PROTECTION_FALL))
+    if (itemMeta.hasEnchant(Enchantment.FEATHER_FALLING))
     {
-      int level = itemStack.getEnchantmentLevel(Enchantment.PROTECTION_FALL);
+      int level = itemStack.getEnchantmentLevel(Enchantment.FEATHER_FALLING);
       init = 10D;
       for (int i = 1; i < level; i++)
       {
@@ -218,9 +218,9 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 날카로움
-    if (itemMeta.hasEnchant(Enchantment.DAMAGE_ALL))
+    if (itemMeta.hasEnchant(Enchantment.SHARPNESS))
     {
-      int level = itemStack.getEnchantmentLevel(Enchantment.DAMAGE_ALL);
+      int level = itemStack.getEnchantmentLevel(Enchantment.SHARPNESS);
       init = 10D;
       for (int i = 1; i < level; i++)
       {
@@ -234,9 +234,9 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 강타
-    if (itemMeta.hasEnchant(Enchantment.DAMAGE_UNDEAD))
+    if (itemMeta.hasEnchant(Enchantment.SMITE))
     {
-      int level = itemStack.getEnchantmentLevel(Enchantment.DAMAGE_UNDEAD);
+      int level = itemStack.getEnchantmentLevel(Enchantment.SMITE);
       init = 10D;
       for (int i = 1; i < level; i++)
       {
@@ -250,9 +250,9 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 살충
-    if (itemMeta.hasEnchant(Enchantment.DAMAGE_ARTHROPODS))
+    if (itemMeta.hasEnchant(Enchantment.BANE_OF_ARTHROPODS))
     {
-      int level = itemStack.getEnchantmentLevel(Enchantment.DAMAGE_ARTHROPODS);
+      int level = itemStack.getEnchantmentLevel(Enchantment.BANE_OF_ARTHROPODS);
       init = 10D;
       for (int i = 1; i < level; i++)
       {
@@ -266,9 +266,9 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 약탈
-    if (itemMeta.hasEnchant(Enchantment.LOOT_BONUS_MOBS))
+    if (itemMeta.hasEnchant(Enchantment.LOOTING))
     {
-      int level = itemStack.getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS);
+      int level = itemStack.getEnchantmentLevel(Enchantment.LOOTING);
       init = 25D;
       for (int i = 1; i < level; i++)
       {
@@ -329,9 +329,9 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 활 - 힘
-    if (material == Material.BOW && itemMeta.hasEnchant(Enchantment.ARROW_DAMAGE))
+    if (material == Material.BOW && itemMeta.hasEnchant(Enchantment.POWER))
     {
-      int level = itemStack.getEnchantmentLevel(Enchantment.ARROW_DAMAGE);
+      int level = itemStack.getEnchantmentLevel(Enchantment.POWER);
       init = 10D;
       for (int i = 1; i < level; i++)
       {
@@ -345,19 +345,19 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 활 - 화염
-    if (material == Material.BOW && itemMeta.hasEnchant(Enchantment.ARROW_FIRE))
+    if (material == Material.BOW && itemMeta.hasEnchant(Enchantment.FLAME))
     {
       value += 50;
     }
     // 활 - 무한
-    if (material == Material.BOW && itemMeta.hasEnchant(Enchantment.ARROW_INFINITE))
+    if (material == Material.BOW && itemMeta.hasEnchant(Enchantment.INFINITY))
     {
       value += 50;
     }
     // 활 - 밀어내기
-    if (material == Material.BOW && itemMeta.hasEnchant(Enchantment.ARROW_KNOCKBACK))
+    if (material == Material.BOW && itemMeta.hasEnchant(Enchantment.PUNCH))
     {
-      int level = itemStack.getEnchantmentLevel(Enchantment.ARROW_KNOCKBACK);
+      int level = itemStack.getEnchantmentLevel(Enchantment.PUNCH);
       init = 30D;
       for (int i = 1; i < level; i++)
       {
@@ -468,9 +468,9 @@ public class ItemLoreEnchantRarity
       value += 50;
     }
     // 도구 - 효율
-    if (Constant.TOOLS.contains(material) && itemMeta.hasEnchant(Enchantment.DIG_SPEED))
+    if (Constant.TOOLS.contains(material) && itemMeta.hasEnchant(Enchantment.EFFICIENCY))
     {
-      int level = itemStack.getEnchantmentLevel(Enchantment.DIG_SPEED);
+      int level = itemStack.getEnchantmentLevel(Enchantment.EFFICIENCY);
       init = 20D;
       for (int i = 0; i < level - 1; i++)
       {
@@ -484,9 +484,9 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 행운
-    if (itemMeta.hasEnchant(Enchantment.LOOT_BONUS_BLOCKS))
+    if (itemMeta.hasEnchant(Enchantment.FORTUNE))
     {
-      int level = itemStack.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS);
+      int level = itemStack.getEnchantmentLevel(Enchantment.FORTUNE);
       init = 30D;
       for (int i = 0; i < level - 1; i++)
       {
@@ -528,9 +528,9 @@ public class ItemLoreEnchantRarity
       }
     }
     // 낚싯대 - 바다의 행운
-    if (material == Material.FISHING_ROD && itemMeta.hasEnchant(Enchantment.LUCK))
+    if (material == Material.FISHING_ROD && itemMeta.hasEnchant(Enchantment.LUCK_OF_THE_SEA))
     {
-      int level = itemStack.getEnchantmentLevel(Enchantment.LUCK);
+      int level = itemStack.getEnchantmentLevel(Enchantment.LUCK_OF_THE_SEA);
       init = 25D;
       for (int i = 0; i < level - 1; i++)
       {
@@ -544,9 +544,9 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 내구성
-    if (Constant.DURABLE_ITEMS.contains(material) && itemMeta.hasEnchant(Enchantment.DURABILITY))
+    if (Constant.DURABLE_ITEMS.contains(material) && itemMeta.hasEnchant(Enchantment.UNBREAKING))
     {
-      int level = itemStack.getEnchantmentLevel(Enchantment.DURABILITY);
+      int level = itemStack.getEnchantmentLevel(Enchantment.UNBREAKING);
       init = 20D;
       for (int i = 1; i < level; i++)
       {
@@ -567,9 +567,9 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 내구성과 수선 동시 적용
-    if (Constant.DURABLE_ITEMS.contains(material) && itemMeta.hasEnchant(Enchantment.DURABILITY) && itemMeta.hasEnchant(Enchantment.MENDING))
+    if (Constant.DURABLE_ITEMS.contains(material) && itemMeta.hasEnchant(Enchantment.UNBREAKING) && itemMeta.hasEnchant(Enchantment.MENDING))
     {
-      int level = itemStack.getEnchantmentLevel(Enchantment.DURABILITY);
+      int level = itemStack.getEnchantmentLevel(Enchantment.UNBREAKING);
       init = 10D;
       for (int i = 1; i < level; i++)
       {
@@ -607,9 +607,9 @@ public class ItemLoreEnchantRarity
     }
 
     // 갑옷 - 보호
-    if (bookMeta.hasStoredEnchant(Enchantment.PROTECTION_ENVIRONMENTAL))
+    if (bookMeta.hasStoredEnchant(Enchantment.PROTECTION))
     {
-      int level = bookMeta.getStoredEnchantLevel(Enchantment.PROTECTION_ENVIRONMENTAL);
+      int level = bookMeta.getStoredEnchantLevel(Enchantment.PROTECTION);
       init = 10D;
       for (int i = 1; i < level; i++)
       {
@@ -623,9 +623,9 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 갑옷 - 폭발로부터 보호
-    if (bookMeta.hasStoredEnchant(Enchantment.PROTECTION_EXPLOSIONS))
+    if (bookMeta.hasStoredEnchant(Enchantment.BLAST_PROTECTION))
     {
-      int level = bookMeta.getStoredEnchantLevel(Enchantment.PROTECTION_EXPLOSIONS);
+      int level = bookMeta.getStoredEnchantLevel(Enchantment.BLAST_PROTECTION);
       init = 10D;
       for (int i = 1; i < level; i++)
       {
@@ -639,9 +639,9 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 갑옷 - 화염으로부터 보호
-    if (bookMeta.hasStoredEnchant(Enchantment.PROTECTION_FIRE))
+    if (bookMeta.hasStoredEnchant(Enchantment.FIRE_PROTECTION))
     {
-      int level = bookMeta.getStoredEnchantLevel(Enchantment.PROTECTION_FIRE);
+      int level = bookMeta.getStoredEnchantLevel(Enchantment.FIRE_PROTECTION);
       init = 10D;
       for (int i = 1; i < level; i++)
       {
@@ -655,9 +655,9 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 갑옷 - 발사체로부터 보호
-    if (bookMeta.hasStoredEnchant(Enchantment.PROTECTION_PROJECTILE))
+    if (bookMeta.hasStoredEnchant(Enchantment.PROJECTILE_PROTECTION))
     {
-      int level = bookMeta.getStoredEnchantLevel(Enchantment.PROTECTION_PROJECTILE);
+      int level = bookMeta.getStoredEnchantLevel(Enchantment.PROJECTILE_PROTECTION);
       init = 10D;
       for (int i = 1; i < level; i++)
       {
@@ -687,9 +687,9 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 투구 - 호흡
-    if (bookMeta.hasStoredEnchant(Enchantment.OXYGEN))
+    if (bookMeta.hasStoredEnchant(Enchantment.RESPIRATION))
     {
-      int level = bookMeta.getStoredEnchantLevel(Enchantment.OXYGEN);
+      int level = bookMeta.getStoredEnchantLevel(Enchantment.RESPIRATION);
       init = 15D;
       for (int i = 1; i < level; i++)
       {
@@ -703,14 +703,14 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 투구 - 친수성
-    if (bookMeta.hasStoredEnchant(Enchantment.WATER_WORKER))
+    if (bookMeta.hasStoredEnchant(Enchantment.AQUA_AFFINITY))
     {
       value += 100;
     }
     // 신발 - 가벼운 착지
-    if (bookMeta.hasStoredEnchant(Enchantment.PROTECTION_FALL))
+    if (bookMeta.hasStoredEnchant(Enchantment.FEATHER_FALLING))
     {
-      int level = bookMeta.getStoredEnchantLevel(Enchantment.PROTECTION_FALL);
+      int level = bookMeta.getStoredEnchantLevel(Enchantment.FEATHER_FALLING);
       init = 10D;
       for (int i = 1; i < level; i++)
       {
@@ -788,9 +788,9 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 검 - 날카로움
-    if (bookMeta.hasStoredEnchant(Enchantment.DAMAGE_ALL))
+    if (bookMeta.hasStoredEnchant(Enchantment.SHARPNESS))
     {
-      int level = bookMeta.getStoredEnchantLevel(Enchantment.DAMAGE_ALL);
+      int level = bookMeta.getStoredEnchantLevel(Enchantment.SHARPNESS);
       init = 10D;
       for (int i = 1; i < level; i++)
       {
@@ -804,9 +804,9 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 검 - 강타
-    if (bookMeta.hasStoredEnchant(Enchantment.DAMAGE_UNDEAD))
+    if (bookMeta.hasStoredEnchant(Enchantment.SMITE))
     {
-      int level = bookMeta.getStoredEnchantLevel(Enchantment.DAMAGE_UNDEAD);
+      int level = bookMeta.getStoredEnchantLevel(Enchantment.SMITE);
       init = 10D;
       for (int i = 1; i < level; i++)
       {
@@ -820,9 +820,9 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 검 - 살충
-    if (bookMeta.hasStoredEnchant(Enchantment.DAMAGE_ARTHROPODS))
+    if (bookMeta.hasStoredEnchant(Enchantment.BANE_OF_ARTHROPODS))
     {
-      int level = bookMeta.getStoredEnchantLevel(Enchantment.DAMAGE_ARTHROPODS);
+      int level = bookMeta.getStoredEnchantLevel(Enchantment.BANE_OF_ARTHROPODS);
       init = 10D;
       for (int i = 1; i < level; i++)
       {
@@ -836,9 +836,9 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 검 - 약탈
-    if (bookMeta.hasStoredEnchant(Enchantment.LOOT_BONUS_MOBS))
+    if (bookMeta.hasStoredEnchant(Enchantment.LOOTING))
     {
-      int level = bookMeta.getStoredEnchantLevel(Enchantment.LOOT_BONUS_MOBS);
+      int level = bookMeta.getStoredEnchantLevel(Enchantment.LOOTING);
       init = 25D;
       for (int i = 1; i < level; i++)
       {
@@ -900,9 +900,9 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 활 - 힘
-    if (bookMeta.hasStoredEnchant(Enchantment.ARROW_DAMAGE))
+    if (bookMeta.hasStoredEnchant(Enchantment.POWER))
     {
-      int level = bookMeta.getStoredEnchantLevel(Enchantment.ARROW_DAMAGE);
+      int level = bookMeta.getStoredEnchantLevel(Enchantment.POWER);
       init = 10D;
       for (int i = 1; i < level; i++)
       {
@@ -916,19 +916,19 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 활 - 화염
-    if (bookMeta.hasStoredEnchant(Enchantment.ARROW_FIRE))
+    if (bookMeta.hasStoredEnchant(Enchantment.FLAME))
     {
       value += 50;
     }
     // 활 - 무한
-    if (bookMeta.hasStoredEnchant(Enchantment.ARROW_INFINITE))
+    if (bookMeta.hasStoredEnchant(Enchantment.INFINITY))
     {
       value += 50;
     }
     // 활 - 밀어내기
-    if (bookMeta.hasStoredEnchant(Enchantment.ARROW_KNOCKBACK))
+    if (bookMeta.hasStoredEnchant(Enchantment.PUNCH))
     {
-      int level = bookMeta.getStoredEnchantLevel(Enchantment.ARROW_KNOCKBACK);
+      int level = bookMeta.getStoredEnchantLevel(Enchantment.PUNCH);
       init = 30D;
       for (int i = 1; i < level; i++)
       {
@@ -1039,9 +1039,9 @@ public class ItemLoreEnchantRarity
       value += 50;
     }
     // 도구 - 효율
-    if (bookMeta.hasStoredEnchant(Enchantment.DIG_SPEED))
+    if (bookMeta.hasStoredEnchant(Enchantment.EFFICIENCY))
     {
-      int level = bookMeta.getStoredEnchantLevel(Enchantment.DIG_SPEED);
+      int level = bookMeta.getStoredEnchantLevel(Enchantment.EFFICIENCY);
       init = 20D;
       for (int i = 0; i < level - 1; i++)
       {
@@ -1054,9 +1054,9 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 도구 - 행운
-    if (bookMeta.hasStoredEnchant(Enchantment.LOOT_BONUS_BLOCKS))
+    if (bookMeta.hasStoredEnchant(Enchantment.FORTUNE))
     {
-      int level = bookMeta.getStoredEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS);
+      int level = bookMeta.getStoredEnchantLevel(Enchantment.FORTUNE);
       init = 30D;
       for (int i = 0; i < level - 1; i++)
       {
@@ -1098,9 +1098,9 @@ public class ItemLoreEnchantRarity
       }
     }
     // 낚싯대 - 바다의 행운
-    if (bookMeta.hasStoredEnchant(Enchantment.LUCK))
+    if (bookMeta.hasStoredEnchant(Enchantment.LUCK_OF_THE_SEA))
     {
-      int level = bookMeta.getStoredEnchantLevel(Enchantment.LUCK);
+      int level = bookMeta.getStoredEnchantLevel(Enchantment.LUCK_OF_THE_SEA);
       init = 25D;
       for (int i = 0; i < level - 1; i++)
       {
@@ -1114,9 +1114,9 @@ public class ItemLoreEnchantRarity
       value += level * (int) init;
     }
     // 내구성
-    if (bookMeta.hasStoredEnchant(Enchantment.DURABILITY))
+    if (bookMeta.hasStoredEnchant(Enchantment.UNBREAKING))
     {
-      int level = bookMeta.getStoredEnchantLevel(Enchantment.DURABILITY);
+      int level = bookMeta.getStoredEnchantLevel(Enchantment.UNBREAKING);
       init = 10D;
       for (int i = 1; i < level; i++)
       {
@@ -1131,9 +1131,9 @@ public class ItemLoreEnchantRarity
     }
 
     // 내구성과 수선 동시 적용
-    if (bookMeta.hasStoredEnchant(Enchantment.DURABILITY) && bookMeta.hasStoredEnchant(Enchantment.MENDING))
+    if (bookMeta.hasStoredEnchant(Enchantment.UNBREAKING) && bookMeta.hasStoredEnchant(Enchantment.MENDING))
     {
-      int level = bookMeta.getStoredEnchantLevel(Enchantment.DURABILITY);
+      int level = bookMeta.getStoredEnchantLevel(Enchantment.UNBREAKING);
       init = 10D;
       for (int i = 1; i < level; i++)
       {

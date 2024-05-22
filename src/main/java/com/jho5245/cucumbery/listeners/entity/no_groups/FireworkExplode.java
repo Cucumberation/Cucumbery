@@ -60,7 +60,7 @@ public class FireworkExplode implements Listener
           }
           for (int i = 0; i < repeatCount; i++)
           {
-            Firework f = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK, SpawnReason.CUSTOM);
+            Firework f = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK_ROCKET, SpawnReason.CUSTOM);
             f.setFireworkMeta(fireworkMeta);
             f.setTicksToDetonate(Math.min(20, Math.max(5, lifeTime / 4)));
             f.setVelocity(firework.getVelocity().add(new Vector(Math.random(), Math.random(), Math.random())));
@@ -71,7 +71,7 @@ public class FireworkExplode implements Listener
         case FIREWORK_ROCKET_REPEATING -> {
           if (firework.getTicksToDetonate() > 1)
           {
-            Firework f = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK, SpawnReason.CUSTOM);
+            Firework f = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK_ROCKET, SpawnReason.CUSTOM);
             f.setFireworkMeta(fireworkMeta);
             f.setTicksToDetonate(Math.min(10, detonateTime - 1));
             f.setVelocity(firework.getLocation().getDirection());

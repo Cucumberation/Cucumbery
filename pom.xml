@@ -11,8 +11,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <java.version>17</java.version>
     </properties>
 
@@ -27,6 +27,12 @@
         <repository>
             <id>amethy</id>
             <url>https://api.wany.io/amethy/repository/maven</url>
+        </repository>
+
+        <!-- adventure snapshot Repository -->
+        <repository>
+            <id>sonatype-oss-snapshots1</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
         </repository>
 
         <!-- Paper Repository -->
@@ -115,7 +121,7 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.20.4-R0.1-SNAPSHOT</version>
+            <version>1.20.6-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -123,14 +129,14 @@
         <dependency>
             <groupId>de.tr7zw</groupId>
             <artifactId>item-nbt-api</artifactId>
-            <version>2.12.2</version>
+            <version>2.12.4</version>
         </dependency>
 
         <!-- CommandAPI Dependency -->
         <dependency>
             <groupId>dev.jorel</groupId>
             <artifactId>commandapi-bukkit-shade</artifactId>
-            <version>9.3.0</version>
+            <version>9.4.1</version>
         </dependency>
 
         <!-- Mojang Brigadier Dependency -->
@@ -168,7 +174,7 @@
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
-            <version>2.11.5</version>
+            <version>2.11.6</version>
             <scope>provided</scope>
         </dependency>
 
@@ -176,7 +182,7 @@
         <dependency>
             <groupId>io.lumine</groupId>
             <artifactId>Mythic-Dist</artifactId>
-            <version>5.3.3</version>
+            <version>5.6.2</version>
             <scope>provided</scope>
         </dependency>
 
@@ -192,7 +198,7 @@
         <dependency>
             <groupId>com.sk89q.worldedit</groupId>
             <artifactId>worldedit-bukkit</artifactId>
-            <version>7.2.15</version>
+            <version>7.3.1</version>
             <scope>provided</scope>
         </dependency>
 
@@ -200,7 +206,7 @@
         <dependency>
             <groupId>com.sk89q.worldguard</groupId>
             <artifactId>worldguard-bukkit</artifactId>
-            <version>7.0.8</version>
+            <version>7.0.10</version>
             <scope>provided</scope>
         </dependency>
 
@@ -232,7 +238,7 @@
         <dependency>
             <groupId>net.coreprotect</groupId>
             <artifactId>coreprotect</artifactId>
-            <version>22.2</version>
+            <version>22.4</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -242,7 +248,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.4.1</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -259,7 +265,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.5.3</version>
                 <executions>
                     <execution>
                         <id>shade</id>
@@ -294,8 +300,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>17</source>
-                    <target>17</target>
+                    <source>21</source>
+                    <target>21</target>
                 </configuration>
             </plugin>
         </plugins>

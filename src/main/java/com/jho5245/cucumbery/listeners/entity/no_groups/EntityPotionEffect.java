@@ -44,7 +44,7 @@ public class EntityPotionEffect implements Listener
 			int duration = newEffect.getDuration();
 			PotionEffectType effectType = newEffect.getType();
 			// 커스텀 채광 시스템으로 인한 성급함, 채굴 피로 효과 적용 여부
-			boolean isCustomMiningBaseEffect = duration == 2 && (effectType.equals(PotionEffectType.FAST_DIGGING) || effectType.equals(PotionEffectType.SLOW_DIGGING))
+			boolean isCustomMiningBaseEffect = duration == 2 && (effectType.equals(PotionEffectType.HASTE) || effectType.equals(PotionEffectType.MINING_FATIGUE))
 					&& CustomEffectManager.hasEffect(entity, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE);
 			if (!isCustomMiningBaseEffect)
 			{
@@ -119,7 +119,7 @@ public class EntityPotionEffect implements Listener
 			event.setCancelled(true);
 		}
 
-		if (action == Action.ADDED && (effectType.equals(PotionEffectType.POISON) || effectType.equals(PotionEffectType.CONFUSION) || effectType.equals(
+		if (action == Action.ADDED && (effectType.equals(PotionEffectType.POISON) || effectType.equals(PotionEffectType.NAUSEA) || effectType.equals(
 				PotionEffectType.BLINDNESS) || effectType.equals(PotionEffectType.UNLUCK)) && CustomEffectManager.hasEffect(entity, CustomEffectType.VAR_DETOXICATE)
 				&& entity instanceof LivingEntity livingEntity)
 		{
@@ -130,7 +130,7 @@ public class EntityPotionEffect implements Listener
 			if (allRemoved)
 			{
 				livingEntity.removePotionEffect(PotionEffectType.POISON);
-				livingEntity.removePotionEffect(PotionEffectType.CONFUSION);
+				livingEntity.removePotionEffect(PotionEffectType.NAUSEA);
 				livingEntity.removePotionEffect(PotionEffectType.BLINDNESS);
 				livingEntity.removePotionEffect(PotionEffectType.UNLUCK);
 				MessageUtil.sendMessage(livingEntity, Prefix.INFO_CUSTOM_EFFECT, "와 샌즈! %s의 효과로 인해 디버프가 제거되었습니다!", customEffect);

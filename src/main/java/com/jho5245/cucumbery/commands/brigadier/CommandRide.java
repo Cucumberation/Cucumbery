@@ -104,7 +104,7 @@ public class CommandRide extends CommandBase
 				}
 				try
 				{
-					cloud.setParticle(Particle.BLOCK_CRACK, Material.AIR.createBlockData());
+					cloud.setParticle(Particle.BLOCK, Material.AIR.createBlockData());
 				}
 				catch (Throwable ignored)
 				{

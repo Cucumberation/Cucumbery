@@ -53,7 +53,7 @@ public class BlockDispense implements Listener
             event.setCancelled(true);
             Vector vector = event.getVelocity();
             Location location = new Location(block.getWorld(), vector.getX(), vector.getY(), vector.getZ());
-            location.getWorld().spawnEntity(location, EntityType.PRIMED_TNT, SpawnReason.CUSTOM, entity ->
+            location.getWorld().spawnEntity(location, EntityType.TNT, SpawnReason.CUSTOM, entity ->
             {
               entity.getScoreboardTags().add("custom_material_" + customMaterial.toString().toLowerCase());
               if (customMaterial == CustomMaterial.TNT_DONUT)

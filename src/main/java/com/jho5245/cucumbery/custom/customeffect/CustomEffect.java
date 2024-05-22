@@ -237,7 +237,7 @@ public class CustomEffect
 					ComponentUtil.translate("물 속에서 산소 소모 속도가 %s 증가하고", Constant.THE_COLOR_HEX + (amplifier + 1) * 10 + "%").append(Component.text("\n"))
 							.append(ComponentUtil.translate("물 밖으로 나와도 산소가 회복되지 않습니다"));
 			case "VAR_DETOXICATE" ->
-					ComponentUtil.translate("%s, %s, %s, %s 상태 효과를 가지고 있을 경우", PotionEffectType.POISON, PotionEffectType.CONFUSION, PotionEffectType.BLINDNESS,
+					ComponentUtil.translate("%s, %s, %s, %s 상태 효과를 가지고 있을 경우", PotionEffectType.POISON, PotionEffectType.NAUSEA, PotionEffectType.BLINDNESS,
 									PotionEffectType.UNLUCK).append(Component.text("\n")).append(ComponentUtil.translate("해당 상태 효과의 농도 레벨을 1단계 낮추거나 제거합니다"))
 							.append(Component.text("\n")).append(
 									ComponentUtil.translate("%s 확률로 농도 레벨이 2단계가 낮아지거나 %s 확률로 3단계가 낮아질", Constant.THE_COLOR_HEX + (amplifier + 1) + "%",
@@ -258,17 +258,17 @@ public class CustomEffect
 			case "HASTE" -> ComponentUtil.translate("채광 속도가 %s 증가합니다", Constant.THE_COLOR_HEX + (amplifier + 1) * 10 + "%");
 			case "MINING_FORTUNE" -> ComponentUtil.translate("채광 행운이 %s 증가합니다", Constant.THE_COLOR_HEX + (amplifier + 1) * 5);
 			case "MINECRAFT_SPEED" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.SPEED, duration, amplifier));
-			case "MINECRAFT_SLOWNESS" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.SLOW, duration, amplifier));
-			case "MINECRAFT_HASTE" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.FAST_DIGGING, duration, amplifier), viewer);
-			case "MINECRAFT_MINING_FATIGUE" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.SLOW_DIGGING, duration, amplifier), viewer);
-			case "MINECRAFT_STRENGTH" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, duration, amplifier));
+			case "MINECRAFT_SLOWNESS" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.SLOWNESS, duration, amplifier));
+			case "MINECRAFT_HASTE" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.HASTE, duration, amplifier), viewer);
+			case "MINECRAFT_MINING_FATIGUE" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.MINING_FATIGUE, duration, amplifier), viewer);
+			case "MINECRAFT_STRENGTH" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.STRENGTH, duration, amplifier));
 			case "MINECRAFT_WEAKNESS" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.WEAKNESS, duration, amplifier));
-			case "MINECRAFT_INSTANT_DAMAGE" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.HARM, duration, amplifier));
-			case "MINECRAFT_INSTANT_HEAL" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.HEAL, duration, amplifier));
-			case "MINECRAFT_JUMP_BOOST" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.JUMP, duration, amplifier));
-			case "MINECRAFT_NAUSEA" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.CONFUSION, duration, amplifier));
+			case "MINECRAFT_INSTANT_DAMAGE" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.INSTANT_DAMAGE, duration, amplifier));
+			case "MINECRAFT_INSTANT_HEAL" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.INSTANT_HEALTH, duration, amplifier));
+			case "MINECRAFT_JUMP_BOOST" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.JUMP_BOOST, duration, amplifier));
+			case "MINECRAFT_NAUSEA" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.NAUSEA, duration, amplifier));
 			case "MINECRAFT_REGENERATION" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.REGENERATION, duration, amplifier));
-			case "MINECRAFT_RESISTANCE" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, duration, amplifier));
+			case "MINECRAFT_RESISTANCE" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.RESISTANCE, duration, amplifier));
 			case "MINECRAFT_FIRE_RESISTANCE" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, duration, amplifier));
 			case "MINECRAFT_WATER_BREATHING" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.WATER_BREATHING, duration, amplifier));
 			case "MINECRAFT_BLINDNESS" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.BLINDNESS, duration, amplifier));

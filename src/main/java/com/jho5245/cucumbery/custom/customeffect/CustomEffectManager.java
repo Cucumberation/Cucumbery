@@ -924,8 +924,8 @@ public class CustomEffectManager
 		potionEffects = new ArrayList<>(potionEffects);
 		// 커스텀 채광 효과
 		potionEffects.removeIf(
-				potionEffect -> potionEffect.getDuration() < 3 && (potionEffect.getType().equals(PotionEffectType.SLOW_DIGGING) || potionEffect.getType()
-						.equals(PotionEffectType.FAST_DIGGING)));
+				potionEffect -> potionEffect.getDuration() < 3 && (potionEffect.getType().equals(PotionEffectType.MINING_FATIGUE) || potionEffect.getType()
+						.equals(PotionEffectType.HASTE)));
 		potionEffects.removeIf(potionEffect -> (CustomEffectManager.hasEffect(player, CustomEffectType.FANCY_SPOTLIGHT) || CustomEffectManager.hasEffect(player,
 				CustomEffectType.FANCY_SPOTLIGHT_ACTIVATED)) && potionEffect.getType().equals(PotionEffectType.REGENERATION));
 		List<PotionEffectType> removeList = new ArrayList<>();
@@ -1164,15 +1164,15 @@ public class CustomEffectManager
 		{
 			return "속증";
 		}
-		if (potionEffectType.equals(PotionEffectType.SLOW))
+		if (potionEffectType.equals(PotionEffectType.SLOWNESS))
 		{
 			return "속감";
 		}
-		if (potionEffectType.equals(PotionEffectType.FAST_DIGGING))
+		if (potionEffectType.equals(PotionEffectType.HASTE))
 		{
 			return "성급";
 		}
-		if (potionEffectType.equals(PotionEffectType.SLOW_DIGGING))
+		if (potionEffectType.equals(PotionEffectType.MINING_FATIGUE))
 		{
 			return "채피";
 		}
@@ -1180,15 +1180,15 @@ public class CustomEffectManager
 		{
 			return "나약";
 		}
-		if (potionEffectType.equals(PotionEffectType.HARM))
+		if (potionEffectType.equals(PotionEffectType.INSTANT_DAMAGE))
 		{
 			return "즉피";
 		}
-		if (potionEffectType.equals(PotionEffectType.HEAL))
+		if (potionEffectType.equals(PotionEffectType.INSTANT_HEALTH))
 		{
 			return "즉치";
 		}
-		if (potionEffectType.equals(PotionEffectType.JUMP))
+		if (potionEffectType.equals(PotionEffectType.JUMP_BOOST))
 		{
 			return "점강";
 		}
@@ -1234,19 +1234,19 @@ public class CustomEffectManager
 	@SuppressWarnings("all")
 	public static boolean isVanillaNegative(@NotNull PotionEffectType potionEffectType)
 	{
-		if (potionEffectType.equals(PotionEffectType.SLOW))
+		if (potionEffectType.equals(PotionEffectType.SLOWNESS))
 		{
 			return true;
 		}
-		if (potionEffectType.equals(PotionEffectType.CONFUSION))
+		if (potionEffectType.equals(PotionEffectType.NAUSEA))
 		{
 			return true;
 		}
-		if (potionEffectType.equals(PotionEffectType.SLOW_DIGGING))
+		if (potionEffectType.equals(PotionEffectType.MINING_FATIGUE))
 		{
 			return true;
 		}
-		if (potionEffectType.equals(PotionEffectType.HARM))
+		if (potionEffectType.equals(PotionEffectType.INSTANT_DAMAGE))
 		{
 			return true;
 		}

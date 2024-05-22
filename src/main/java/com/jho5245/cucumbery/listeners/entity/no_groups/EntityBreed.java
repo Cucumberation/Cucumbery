@@ -1,6 +1,7 @@
 package com.jho5245.cucumbery.listeners.entity.no_groups;
 
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
+import org.bukkit.Registry;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Horse;
@@ -26,8 +27,8 @@ public class EntityBreed implements Listener
       double fatherHealth = fatherHorse.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
       double motherSpeed = motherHorse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue();
       double fatherSpeed = fatherHorse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue();
-      double motherJump = motherHorse.getAttribute(Attribute.HORSE_JUMP_STRENGTH).getBaseValue();
-      double fatherJump = fatherHorse.getAttribute(Attribute.HORSE_JUMP_STRENGTH).getBaseValue();
+      double motherJump = motherHorse.getAttribute(Attribute.GENERIC_JUMP_STRENGTH).getBaseValue();
+      double fatherJump = fatherHorse.getAttribute(Attribute.GENERIC_JUMP_STRENGTH).getBaseValue();
 
       double health = Math.random() * 4 + 25;
       double speed = Math.random() * 0.0625 + 0.275;
@@ -38,7 +39,7 @@ public class EntityBreed implements Listener
       jump = (motherJump + fatherJump + jump) / 3;
       babyHorse.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
       babyHorse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speed);
-      babyHorse.getAttribute(Attribute.HORSE_JUMP_STRENGTH).setBaseValue(jump);
+      babyHorse.getAttribute(Attribute.GENERIC_JUMP_STRENGTH).setBaseValue(jump);
       babyHorse.setHealth(health);
       babyHorse.setTamed(true);
       babyHorse.setOwner((AnimalTamer) event.getBreeder());

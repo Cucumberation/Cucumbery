@@ -1,7 +1,5 @@
 package com.jho5245.cucumbery.custom.customeffect.custom_mining;
 
-import com.destroystokyo.paper.Namespaced;
-import com.destroystokyo.paper.NamespacedTag;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffect;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
@@ -14,7 +12,6 @@ import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method;
-import com.jho5245.cucumbery.util.no_groups.Method2;
 import com.jho5245.cucumbery.util.no_groups.PlaceHolderUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Constant.ExtraTag;
@@ -215,7 +212,7 @@ public class MiningManager
 		{
 			clone.setType(Material.NETHERITE_PICKAXE);
 			ItemMeta cloneMeta = clone.getItemMeta();
-			cloneMeta.removeEnchant(Enchantment.LOOT_BONUS_BLOCKS);
+			cloneMeta.removeEnchant(Enchantment.FORTUNE);
 			clone.setItemMeta(cloneMeta);
 		}
 		boolean isSilkTouch = clone.getEnchantmentLevel(Enchantment.SILK_TOUCH) > 0;
@@ -919,7 +916,7 @@ public class MiningManager
 			{
 				// 효율 인챈트
 				{
-					int enchantDigSpeedLevel = itemStack.getEnchantmentLevel(Enchantment.DIG_SPEED);
+					int enchantDigSpeedLevel = itemStack.getEnchantmentLevel(Enchantment.EFFICIENCY);
 					// 바닐라 채광이 아니거나 효율의 영향을 받을 경우에만 속도 증가
 					if (enchantDigSpeedLevel > 0 && toolMatches(itemStack, blockTier, block, drops))
 					{
@@ -1016,7 +1013,7 @@ public class MiningManager
 				}
 				// 친수성이 없고 물 속에 있을 때 친수성 효과가 없을 경우 : 80% 감소
 				ItemStack helmet = player.getInventory().getHelmet();
-				if (!(helmet != null && helmet.hasItemMeta() && helmet.getItemMeta().hasEnchant(Enchantment.WATER_WORKER)) && !CustomEffectManager.hasEffect(player,
+				if (!(helmet != null && helmet.hasItemMeta() && helmet.getItemMeta().hasEnchant(Enchantment.AQUA_AFFINITY)) && !CustomEffectManager.hasEffect(player,
 						CustomEffectTypeCustomMining.AQUA_AFFINITY))
 				{
 					Block b = player.getEyeLocation().getBlock();
@@ -1032,7 +1029,7 @@ public class MiningManager
 				}
 				// 채굴 피로 효과 : 레벨당 70% 복리로 감소
 				boolean vanilla = false;
-				PotionEffect miningFatigue = player.getPotionEffect(PotionEffectType.SLOW_DIGGING);
+				PotionEffect miningFatigue = player.getPotionEffect(PotionEffectType.MINING_FATIGUE);
 				if (miningFatigue != null && (miningFatigue.getDuration() > 2 || Cucumbery.using_ProtocolLib && miningFatigue.getAmplifier() > 0))
 				{
 					int amplifier = miningFatigue.getAmplifier();
@@ -1068,7 +1065,7 @@ public class MiningManager
 		{
 			// 성급함 포션효과
 			{
-				PotionEffect potionEffect = player.getPotionEffect(PotionEffectType.FAST_DIGGING);
+				PotionEffect potionEffect = player.getPotionEffect(PotionEffectType.HASTE);
 				int potionHasteLevel =
 						potionEffect != null && (potionEffect.getDuration() > (Cucumbery.using_ProtocolLib ? 2 : 10) || potionEffect.getAmplifier() > 0) ?
 								potionEffect.getAmplifier() + 1 : 0;
@@ -1106,7 +1103,7 @@ public class MiningManager
 		// 채광 행운 처리
 		{
 			int enchantFortuneLevel =
-					itemStack.hasItemMeta() && itemStack.getItemMeta().hasEnchants() ? itemStack.getItemMeta().getEnchantLevel(Enchantment.LOOT_BONUS_BLOCKS) : 0;
+					itemStack.hasItemMeta() && itemStack.getItemMeta().hasEnchants() ? itemStack.getItemMeta().getEnchantLevel(Enchantment.FORTUNE) : 0;
 			// 바닐라 채광이 아니거나 효율의 영향을 받을 경우에만 속도 증가
 			if (enchantFortuneLevel > 0)
 			{
@@ -1205,9 +1202,10 @@ public class MiningManager
 			}
 		}
 
-		boolean canMine;
+		// TODO: implement later commented since 2024.05.22
+		boolean canMine = true;
 		// 채광 도구에 특정 블록만 캘 수 있는지 확인
-		{
+/*		{
 			Set<Namespaced> getCanDestroyables = itemStack.hasItemMeta() ? itemStack.getItemMeta().getDestroyableKeys() : Collections.emptySet();
 			Set<String> minecraftKeys = new HashSet<>();
 			getCanDestroyables.forEach(namespaced ->
@@ -1230,7 +1228,7 @@ public class MiningManager
 				}
 			});
 			canMine = getCanDestroyables.isEmpty() || minecraftKeys.contains(blockType.toString().toLowerCase());
-		}
+		}*/
 
 		// 일부 아이템은 채광 행운 미적용
 		{
@@ -1261,7 +1259,7 @@ public class MiningManager
 					case AMETHYST_SHARD, BEEF, BLAZE_ROD, BONE, CHICKEN, COAL, COD, COOKED_BEEF, COOKED_CHICKEN, COOKED_COD, COOKED_MUTTON, COOKED_PORKCHOP,
 							 COOKED_RABBIT, COOKED_SALMON, COPPER_INGOT, RAW_COPPER, DIAMOND, EMERALD, ENDER_PEARL, FEATHER, FLINT, GLOW_INK_SAC, GOLD_INGOT, RAW_GOLD,
 							 GUNPOWDER, INK_SAC, IRON_INGOT, RAW_IRON, LAPIS_LAZULI, LEATHER, MAGMA_CREAM, MUTTON, NETHERITE_INGOT, PHANTOM_MEMBRANE, PORKCHOP, PUFFERFISH,
-							 QUARTZ, RABBIT, RABBIT_FOOT, RABBIT_HIDE, REDSTONE, ROTTEN_FLESH, SALMON, SCUTE, SLIME_BALL, SNOWBALL, SPIDER_EYE, TROPICAL_FISH ->
+							 QUARTZ, RABBIT, RABBIT_FOOT, RABBIT_HIDE, REDSTONE, ROTTEN_FLESH, SALMON, TURTLE_SCUTE, SLIME_BALL, SNOWBALL, SPIDER_EYE, TROPICAL_FISH ->
 					{
 						if (blockType == Material.REDSTONE_WIRE)
 						{

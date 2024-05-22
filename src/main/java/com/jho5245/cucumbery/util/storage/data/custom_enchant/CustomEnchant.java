@@ -14,6 +14,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.enchantments.EnchantmentWrapper;
 import org.bukkit.entity.EntityCategory;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.BlockInventoryHolder;
@@ -329,6 +330,12 @@ public abstract class CustomEnchant extends Enchantment
 	public Set<EquipmentSlot> getActiveSlots()
 	{
 		return new HashSet<>(Arrays.asList(EquipmentSlot.values()));
+	}
+
+	@Override
+	public float getDamageIncrease(int level, @NotNull EntityType entityType)
+	{
+		return 0;
 	}
 
 	/**

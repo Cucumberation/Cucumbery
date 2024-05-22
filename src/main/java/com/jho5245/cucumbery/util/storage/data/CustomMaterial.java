@@ -46,8 +46,8 @@ public enum CustomMaterial implements Translatable
 	BEACON_HAT_UNTRADEABLE(Material.BEACON, "&ikey:item.cucumbery.beacon_hat|신호기 모자", Rarity.EPIC, "key:" + CreativeCategory.DECORATIONS + "|치장 아이템"),
 
 	BLUE_NUMBER_BLOCK(Material.PLAYER_HEAD, "&ikey:block.cucumbery.blue_number_block|파란 숫자 블록", Rarity._ADMIN, "key:" + CreativeCategory.DECORATIONS + "|치장 아이템"),
-	BOO(Material.SCUTE, "&bkey:item.cucumbery.boo|부우"),
-	BOO_HUNGRY(Material.SCUTE, "&bkey:item.cucumbery.boo_hungry|배고프부우.."),
+	BOO(Material.TURTLE_SCUTE, "&bkey:item.cucumbery.boo|부우"),
+	BOO_HUNGRY(Material.TURTLE_SCUTE, "&bkey:item.cucumbery.boo_hungry|배고프부우.."),
 	BOW_CRIT(Material.BOW, "&ikey:item.cucumbery.bow_crit|치명적인 활", Rarity.RARE, CreativeCategory.COMBAT),
 	BOW_ENDER_PEARL(Material.BOW, "&ikey:item.cucumbery.bow_ender_pearl|엔더 진주 활", Rarity.RARE, CreativeCategory.COMBAT),
 
@@ -103,7 +103,7 @@ public enum CustomMaterial implements Translatable
 	CORE_GEMSTONE_MIRROR(Material.PRISMARINE_CRYSTALS, "&ckey:item.cucumbery.core_gemstone_mirror|거울세계의 코어 젬스톤", Rarity.EPIC, "key:itemGroup.misc|기타 아이템"),
 	CORE_GEMSTONE_MITRA(Material.PRISMARINE_CRYSTALS, "&6key:item.cucumbery.core_gemstone_mitra|미트라의 코어 젬스톤", Rarity.EPIC, "key:itemGroup.misc|기타 아이템"),
 	CUCUMBERITE_INGOT(Material.EMERALD, "&ikey:item.cucumbery.cucumberite_ingot|오이스터늄 주괴"),
-	CUCUMBERITE_ORE(Material.SCUTE, "&ikey:item.cucumbery.cucumberite_ore|오이스터늄 원석"),
+	CUCUMBERITE_ORE(Material.TURTLE_SCUTE, "&ikey:item.cucumbery.cucumberite_ore|오이스터늄 원석"),
 	CUSTOM_CRAFTING_TABLE(Material.PLAYER_HEAD, "&ikey:block.cucumbery.custom_crafting_table|커스텀 제작대", Rarity.RARE, "itemGroup.functional"),
 	CUSTOM_CRAFTING_TABLE_PORTABLE(Material.CRAFTING_TABLE, "&ikey:block.cucumbery.custom_crafting_table_portable|휴대용 커스텀 제작대", Rarity.RARE,
 			CreativeCategory.TOOLS),
@@ -228,7 +228,7 @@ public enum CustomMaterial implements Translatable
 	ENCHANTED_ROTTEN_FLESH(Material.ROTTEN_FLESH, "&ikey:item.cucumbery.enchanted_rotten_flesh|마법이 부여된 썩은 살점", Rarity.RARE),
 	ENCHANTED_SALMON(Material.SALMON, "&ikey:item.cucumbery.enchanted_salmon|마법이 부여된 연어", Rarity.RARE),
 	ENCHANTED_SAND(Material.SAND, "&ikey:item.cucumbery.enchanted_sand|마법이 부여된 모래", Rarity.RARE),
-	ENCHANTED_SCUTE(Material.SCUTE, "&ikey:item.cucumbery.enchanted_scute|마법이 부여된 인갑", Rarity.UNIQUE),
+	ENCHANTED_SCUTE(Material.TURTLE_SCUTE, "&ikey:item.cucumbery.enchanted_scute|마법이 부여된 인갑", Rarity.UNIQUE),
 	ENCHANTED_SLIME_BALL(Material.SLIME_BALL, "&ikey:item.cucumbery.enchanted_slime_ball|마법이 부여된 슴라임볼", Rarity.RARE),
 	ENCHANTED_SNOWBALL(Material.SNOWBALL, "&ikey:item.cucumbery.enchanted_snowball|마법이 부여된 눈덩이", Rarity.RARE),
 	ENCHANTED_SNOW_BLOCK(Material.SNOW_BLOCK, "&ikey:item.cucumbery.enchanted_snow_block|마법이 부여된 눈 블록", Rarity.EPIC),

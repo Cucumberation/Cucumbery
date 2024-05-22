@@ -1705,7 +1705,7 @@ public class CommandReinforce implements CommandExecutor, TabCompleter, AsyncTab
   protected static void successTitle(Player player)
   {
     Location loc = player.getLocation().add(player.getLocation().getDirection().multiply(4D)).add(0D, 1.7D, 0D);
-    player.spawnParticle(Particle.FIREWORKS_SPARK, loc, 500, 0, 0, 0, 1);
+    player.spawnParticle(Particle.FIREWORK, loc, 500, 0, 0, 0, 1);
     MessageUtil.sendTitle(player, "rg255,204;&n★", CommandReinforceConstantsAndUtils.MESSAGE_SUCCESS, 0, 10, 0);
     Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Cucumbery.getPlugin(), () ->
     {
@@ -1747,7 +1747,7 @@ public class CommandReinforce implements CommandExecutor, TabCompleter, AsyncTab
     if (particle)
     {
       Location loc = player.getLocation().add(player.getLocation().getDirection().multiply(4D)).add(0D, 1.7D, 0D);
-      player.spawnParticle(Particle.ITEM_CRACK, loc, 10, 0, 0, 0, 0.3, player.getInventory().getItemInMainHand());
+      player.spawnParticle(Particle.ITEM, loc, 10, 0, 0, 0, 0.3, player.getInventory().getItemInMainHand());
     }
   }
 
@@ -1755,7 +1755,7 @@ public class CommandReinforce implements CommandExecutor, TabCompleter, AsyncTab
   {
     MessageUtil.sendTitle(player, "&8&oDESTROYED", CommandReinforceConstantsAndUtils.MESSAGE_DESTROY, 0, 30, 15);
     Location loc = player.getLocation().add(player.getLocation().getDirection().multiply(4D)).add(0D, 1.7D, 0D);
-    Bukkit.getServer().getWorld(loc.getWorld().getName()).spawnParticle(Particle.ITEM_CRACK, loc, 500, 0, 0, 0, 0.3, player.getInventory().getItemInMainHand());
+    Bukkit.getServer().getWorld(loc.getWorld().getName()).spawnParticle(Particle.ITEM, loc, 500, 0, 0, 0, 0.3, player.getInventory().getItemInMainHand());
   }
 
   public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args)

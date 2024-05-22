@@ -205,7 +205,7 @@ public class EntityDamage implements Listener
     Entity victim = event.getEntity();
     if (damageCause == DamageCause.FALL && !(event instanceof EntityDamageByEntityEvent) && CustomEffectManager.hasEffect(victim, CustomEffectTypeRune.RUNE_EARTHQUAKE))
     {
-      victim.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, victim.getLocation(), 10, 3, 0, 3, 1);
+      victim.getWorld().spawnParticle(Particle.EXPLOSION, victim.getLocation(), 10, 3, 0, 3, 1);
       List<Entity> entities = victim.getNearbyEntities(5, 2, 5);
       int count = 0;
       for (Entity entity : entities)
@@ -431,7 +431,7 @@ public class EntityDamage implements Listener
   private void cancelLavaBurnItem(EntityDamageEvent event)
   {
     EntityType type = event.getEntityType();
-    if (type != EntityType.DROPPED_ITEM)
+    if (type != EntityType.ITEM)
     {
       return;
     }

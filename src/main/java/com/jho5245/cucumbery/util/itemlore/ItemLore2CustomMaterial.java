@@ -181,13 +181,13 @@ public class ItemLore2CustomMaterial
       {
         lore.add(Component.empty());
         lore.add(ComponentUtil.translate("&6세트 능력 : %s", ComponentUtil.translate("&a개구리 점프")));
-        lore.add(ComponentUtil.translate("&7영구적으로 %s 4단계 효과 적용", PotionEffectType.JUMP));
+        lore.add(ComponentUtil.translate("&7영구적으로 %s 4단계 효과 적용", PotionEffectType.JUMP_BOOST));
       }
       case MINER_HELMET, MINER_CHESTPLATE, MINER_LEGGINGS, MINER_BOOTS ->
       {
         lore.add(Component.empty());
         lore.add(ComponentUtil.translate("&6세트 능력 : %s", ComponentUtil.translate("&a노동력 충만")));
-        lore.add(ComponentUtil.translate("&7영구적으로 %s 1단계 효과 적용", PotionEffectType.FAST_DIGGING));
+        lore.add(ComponentUtil.translate("&7영구적으로 %s 1단계 효과 적용", PotionEffectType.HASTE));
       }
       case FLINT_SHOVEL ->
       {
@@ -270,21 +270,21 @@ public class ItemLore2CustomMaterial
       case ARROW_CRIT -> {
         lore.add(Component.empty());
         lore.add(ComponentUtil.translate("&733% 확률로 대미지 2배로 증가"));
-        lore.add(ComponentUtil.translate("&7%s 마법의 영향을 받지 않음", Enchantment.ARROW_INFINITE));
+        lore.add(ComponentUtil.translate("&7%s 마법의 영향을 받지 않음", Enchantment.INFINITY));
       }
       case ARROW_EXPLOSIVE -> {
         lore.add(Component.empty());
         lore.add(ComponentUtil.translate("&7블록을 파괴하지 않는 강도 2의 폭발을 적중 위치에 발생시킴"));
-        lore.add(ComponentUtil.translate("&7%s 마법의 영향을 받지 않음", Enchantment.ARROW_INFINITE));
+        lore.add(ComponentUtil.translate("&7%s 마법의 영향을 받지 않음", Enchantment.INFINITY));
       }
       case ARROW_EXPLOSIVE_DESTRUCTION -> {
         lore.add(Component.empty());
         lore.add(ComponentUtil.translate("&7블록을 파괴하는 강도 2의 폭발을 적중 위치에 발생시킴"));
-        lore.add(ComponentUtil.translate("&7%s 마법의 영향을 받지 않음", Enchantment.ARROW_INFINITE));
+        lore.add(ComponentUtil.translate("&7%s 마법의 영향을 받지 않음", Enchantment.INFINITY));
       }
       case ARROW_FLAME -> {
         lore.add(Component.empty());
-        lore.add(ComponentUtil.translate("&7%s 마법의 영향을 받지 않음", Enchantment.ARROW_INFINITE));
+        lore.add(ComponentUtil.translate("&7%s 마법의 영향을 받지 않음", Enchantment.INFINITY));
       }
       case ARROW_INFINITE -> {
         lore.add(Component.empty());
@@ -295,19 +295,19 @@ public class ItemLore2CustomMaterial
         lore.add(Component.empty());
         lore.add(ComponentUtil.translate("&7자신이 발사한 화살에 탑승하여 같이 발사됨"));
         lore.add(ComponentUtil.translate("&7블록에 적중한 화살은 50% 확률로 파괴됨"));
-        lore.add(ComponentUtil.translate("&7%s 마법의 영향을 받지 않음", Enchantment.ARROW_INFINITE));
+        lore.add(ComponentUtil.translate("&7%s 마법의 영향을 받지 않음", Enchantment.INFINITY));
       }
       case ARROW_MOUNT_INFINITE -> {
         lore.add(Component.empty());
         lore.add(ComponentUtil.translate("&7자신이 발사한 화살에 탑승하여 같이 발사됨"));
         lore.add(ComponentUtil.translate("&7블록에 적중해도 화살은 파괴되지 않음"));
-        lore.add(ComponentUtil.translate("&7%s 마법의 영향을 받지 않음", Enchantment.ARROW_INFINITE));
+        lore.add(ComponentUtil.translate("&7%s 마법의 영향을 받지 않음", Enchantment.INFINITY));
       }
       case ARROW_MOUNT_DISPOSAL -> {
         lore.add(Component.empty());
         lore.add(ComponentUtil.translate("&7자신이 발사한 화살에 탑승하여 같이 발사됨"));
         lore.add(ComponentUtil.translate("&7블록에 적중한 화살은 100% 확률로 파괴됨"));
-        lore.add(ComponentUtil.translate("&7%s 마법의 영향을 받지 않음", Enchantment.ARROW_INFINITE));
+        lore.add(ComponentUtil.translate("&7%s 마법의 영향을 받지 않음", Enchantment.INFINITY));
       }
       case BOW_CRIT -> {
         lore.add(Component.empty());

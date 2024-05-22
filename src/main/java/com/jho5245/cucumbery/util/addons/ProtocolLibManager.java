@@ -247,17 +247,17 @@ public class ProtocolLibManager
 					{
 						if (CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE))
 						{
-							if (potionEffectType.equals(PotionEffectType.FAST_DIGGING) && duration < 3 && amplifier == 0)
+							if (potionEffectType.equals(PotionEffectType.HASTE) && duration < 3 && amplifier == 0)
 							{
 								modifier.write(3, -1);
 								event.setPacket(packet);
 							}
-							if (potionEffectType.equals(PotionEffectType.SLOW_DIGGING) && duration < 3 && amplifier == 0)
+							if (potionEffectType.equals(PotionEffectType.MINING_FATIGUE) && duration < 3 && amplifier == 0)
 							{
 								modifier.write(3, -1);
 								event.setPacket(packet);
 							}
-							if (potionEffectType.equals(PotionEffectType.SLOW_DIGGING))
+							if (potionEffectType.equals(PotionEffectType.MINING_FATIGUE))
 							{
 								modifier.write(2, (byte) 127);
 								event.setPacket(packet);
@@ -270,19 +270,19 @@ public class ProtocolLibManager
 							event.setPacket(packet);
 						}
 
-						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.SLOWNESS) && potionEffectType.equals(PotionEffectType.SLOW))
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.SLOWNESS) && potionEffectType.equals(PotionEffectType.SLOWNESS))
 						{
 							modifier.write(3, CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.SLOWNESS).getDuration());
 							event.setPacket(packet);
 						}
 
-						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.HASTE) && potionEffectType.equals(PotionEffectType.FAST_DIGGING))
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.HASTE) && potionEffectType.equals(PotionEffectType.HASTE))
 						{
 							modifier.write(3, CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.HASTE).getDuration());
 							event.setPacket(packet);
 						}
 
-						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.MINING_FATIGUE) && potionEffectType.equals(PotionEffectType.SLOW_DIGGING))
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.MINING_FATIGUE) && potionEffectType.equals(PotionEffectType.MINING_FATIGUE))
 						{
 							modifier.write(3, CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.MINING_FATIGUE).getDuration());
 							event.setPacket(packet);
@@ -325,14 +325,14 @@ public class ProtocolLibManager
 						}
 
 						if (helmetType == CustomMaterial.MINER_HELMET && chestplateType == CustomMaterial.MINER_CHESTPLATE && leggingsType == CustomMaterial.MINER_LEGGINGS
-								&& bootsType == CustomMaterial.MINER_BOOTS && potionEffectType.equals(PotionEffectType.FAST_DIGGING) && duration < 5)
+								&& bootsType == CustomMaterial.MINER_BOOTS && potionEffectType.equals(PotionEffectType.HASTE) && duration < 5)
 						{
 							packet.getModifier().write(3, -1);
 							event.setPacket(packet);
 						}
 
 						if (helmetType == CustomMaterial.FROG_HELMET && chestplateType == CustomMaterial.FROG_CHESTPLATE && leggingsType == CustomMaterial.FROG_LEGGINGS
-								&& bootsType == CustomMaterial.FROG_BOOTS && potionEffectType.equals(PotionEffectType.JUMP) && duration < 3)
+								&& bootsType == CustomMaterial.FROG_BOOTS && potionEffectType.equals(PotionEffectType.JUMP_BOOST) && duration < 3)
 						{
 							packet.getModifier().write(3, -1);
 							event.setPacket(packet);
@@ -785,7 +785,8 @@ public class ProtocolLibManager
 						}
 						if (packet.getType() == Server.SET_ACTION_BAR_TEXT)
 						{
-							Component component = (Component) modifier.read(1);
+							WrappedChatComponent wrappedChatComponent = packet.getChatComponents().read(0);
+							Component component = GsonComponentSerializer.gson().deserialize(wrappedChatComponent.getJson());
 							if (component instanceof TranslatableComponent translatableComponent && !translatableComponent.arguments().isEmpty())
 							{
 								List<Component> components = new ArrayList<>();
@@ -793,7 +794,7 @@ public class ProtocolLibManager
 									components.add(componentLike.asComponent());
 								component = translatableComponent.key(ComponentUtil.translate(event.getPlayer(), translatableComponent.key(), components).key());
 							}
-							packet.getModifier().write(1, component);
+							packet.getChatComponents().write(0, WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(component)));
 						}
 						if (packet.getType() == Server.CHAT)
 						{

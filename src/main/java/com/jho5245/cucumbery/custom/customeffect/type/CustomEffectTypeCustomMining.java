@@ -43,12 +43,12 @@ public class CustomEffectTypeCustomMining extends CustomEffectType
 
   AIR_SCAFFOLDING = new CustomEffectType("air_scaffolding", "공중 비계", builder().description("지면에 서 있지 않은 상태에서도 채광 속도가 감소하지 않습니다")),
 
-  AQUA_AFFINITY = new CustomEffectType("aqua_affinity", Enchantment.WATER_WORKER.translationKey(), builder().description("물 속에 있어도 채광 속도가 감소하지 않습니다")),
+  AQUA_AFFINITY = new CustomEffectType("aqua_affinity", Enchantment.AQUA_AFFINITY.translationKey(), builder().description("물 속에 있어도 채광 속도가 감소하지 않습니다")),
 
   MOVEMENT_CHECK = new CustomEffectType("custom_mining_movement_check", "", builder().hidden().defaultDuration(-1).skipEvent()),
 
   MINER_ARMOR_SET_EFFECT = new CustomEffectType("miner_armor_set_effect", "노동력 충만", builder().enumHidden().timeHidden().defaultDuration(-1).nonRemovable().skipEvent()
-          .description("광부 갑옷 세트 효과로 %s 1단계 효과가 적용 중입니다", PotionEffectType.FAST_DIGGING).icon(() ->
+          .description("광부 갑옷 세트 효과로 %s 1단계 효과가 적용 중입니다", PotionEffectType.HASTE).icon(() ->
           {
             ItemStack itemStack = new ItemStack(Material.POTION);
             ItemMeta itemMeta = itemStack.getItemMeta();

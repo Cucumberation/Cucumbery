@@ -2097,7 +2097,7 @@ public class EntityDamageByEntity implements Listener
   {
     Entity entity = event.getEntity(), damager = event.getDamager();
     EntityDamageEvent.DamageCause dc = event.getCause();
-    if (dc == DamageCause.ENTITY_EXPLOSION && damager.getType() == EntityType.FIREWORK)
+    if (dc == DamageCause.ENTITY_EXPLOSION && damager.getType() == EntityType.FIREWORK_ROCKET)
     {
       Firework firework = (Firework) damager;
       if (firework.hasMetadata("no_damage"))
@@ -2115,7 +2115,7 @@ public class EntityDamageByEntity implements Listener
       {
         return;
       }
-      if (dc == DamageCause.ENTITY_EXPLOSION && damager.getType() == EntityType.FIREWORK)
+      if (dc == DamageCause.ENTITY_EXPLOSION && damager.getType() == EntityType.FIREWORK_ROCKET)
       {
         event.setCancelled(true);
       }

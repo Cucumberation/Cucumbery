@@ -57,9 +57,9 @@ public class CustomEffectType implements Translatable, EnumHideable
           MUNDANE = new CustomEffectType("mundane", "평범함", "평범", builder().removeOnMilk()),
           UNCRAFTABLE = new CustomEffectType("uncraftable", "제작 불가능함", builder().negative().maxAmplifier(2)),
 
-  /**/ BANE_OF_ARTHROPODS = new CustomEffectType("bane_of_arthropods", Enchantment.DAMAGE_ARTHROPODS.translationKey(), builder().removeOnMilk().maxAmplifier(255)),
-          SHARPNESS = new CustomEffectType("sharpness", Enchantment.DAMAGE_ALL.translationKey(), builder().removeOnMilk().maxAmplifier(255)),
-          SMITE = new CustomEffectType("smite", Enchantment.DAMAGE_UNDEAD.translationKey(), builder().removeOnMilk().maxAmplifier(255)),
+  /**/ BANE_OF_ARTHROPODS = new CustomEffectType("bane_of_arthropods", Enchantment.BANE_OF_ARTHROPODS.translationKey(), builder().removeOnMilk().maxAmplifier(255)),
+          SHARPNESS = new CustomEffectType("sharpness", Enchantment.SHARPNESS.translationKey(), builder().removeOnMilk().maxAmplifier(255)),
+          SMITE = new CustomEffectType("smite", Enchantment.SMITE.translationKey(), builder().removeOnMilk().maxAmplifier(255)),
 
   /**/ CONTINUAL_SPECTATING = new CustomEffectType("continual_spectating", "관전 지속", builder().keepOnDeath().defaultDuration(-1)),
           CONTINUAL_SPECTATING_EXEMPT = new CustomEffectType("continual_spectating_exempt", "관전 지속 외출", builder().keepOnDeath()),
@@ -161,7 +161,7 @@ public class CustomEffectType implements Translatable, EnumHideable
           DO_NOT_PICKUP_BUT_THROW_IT = new CustomEffectType("do_not_pickup_but_throw_it", "줍지 마, 던져!", builder().negative().maxAmplifier(9)),
           DODGE = new CustomEffectType("dodge", "회피", builder().maxAmplifier(99)),
           ELYTRA_BOOSTER = new CustomEffectType("elytra_booster", "겉날개 부스터", builder().maxAmplifier(9)),
-          FEATHER_FALLING = new CustomEffectType("feather_falling", Enchantment.PROTECTION_FALL.translationKey(), builder().maxAmplifier(9)),
+          FEATHER_FALLING = new CustomEffectType("feather_falling", Enchantment.FEATHER_FALLING.translationKey(), builder().maxAmplifier(9)),
           FROST_WALKER = new CustomEffectType("frost_walker", Enchantment.FROST_WALKER.translationKey()),
           HEALTH_INCREASE = new CustomEffectType("health_increase", "HP 증가", builder().maxAmplifier(99)),
           IDIOT_SHOOTER = new CustomEffectType("idiot_shooter", "똥손", builder().negative().keepOnDeath().maxAmplifier(19)),
@@ -743,7 +743,7 @@ public class CustomEffectType implements Translatable, EnumHideable
                       .append(Component.text("\n"))
                       .append(ComponentUtil.translate("물 밖으로 나와도 산소가 회복되지 않습니다"));
               case "VAR_DETOXICATE" ->
-                      ComponentUtil.translate("%s, %s, %s, %s 상태 효과를 가지고 있을 경우", PotionEffectType.POISON, PotionEffectType.CONFUSION, PotionEffectType.BLINDNESS, PotionEffectType.UNLUCK)
+                      ComponentUtil.translate("%s, %s, %s, %s 상태 효과를 가지고 있을 경우", PotionEffectType.POISON, PotionEffectType.NAUSEA, PotionEffectType.BLINDNESS, PotionEffectType.UNLUCK)
                               .append(Component.text("\n"))
                               .append(ComponentUtil.translate("해당 상태 효과의 농도 레벨을 1단계 낮추거나 제거합니다"))
                               .append(Component.text("\n"))
@@ -806,17 +806,17 @@ public class CustomEffectType implements Translatable, EnumHideable
                       .append(Component.text("\n"))
                       .append(ComponentUtil.translate("rg255,204;또한, 스택이 중첩될 수록 최대 지속 시간이 감소합니다"));
               case "MINECRAFT_SPEED" -> VanillaEffectDescription.getDescription(PotionEffectType.SPEED);
-              case "MINECRAFT_SLOWNESS" -> VanillaEffectDescription.getDescription(PotionEffectType.SLOW);
-              case "MINECRAFT_HASTE" -> VanillaEffectDescription.getDescription(PotionEffectType.FAST_DIGGING);
-              case "MINECRAFT_MINING_FATIGUE" -> VanillaEffectDescription.getDescription(PotionEffectType.SLOW_DIGGING);
-              case "MINECRAFT_STRENGTH" -> VanillaEffectDescription.getDescription(PotionEffectType.INCREASE_DAMAGE);
+              case "MINECRAFT_SLOWNESS" -> VanillaEffectDescription.getDescription(PotionEffectType.SLOWNESS);
+              case "MINECRAFT_HASTE" -> VanillaEffectDescription.getDescription(PotionEffectType.HASTE);
+              case "MINECRAFT_MINING_FATIGUE" -> VanillaEffectDescription.getDescription(PotionEffectType.MINING_FATIGUE);
+              case "MINECRAFT_STRENGTH" -> VanillaEffectDescription.getDescription(PotionEffectType.STRENGTH);
               case "MINECRAFT_WEAKNESS" -> VanillaEffectDescription.getDescription(PotionEffectType.WEAKNESS);
-              case "MINECRAFT_INSTANT_DAMAGE" -> VanillaEffectDescription.getDescription(PotionEffectType.HARM);
-              case "MINECRAFT_INSTANT_HEALTH" -> VanillaEffectDescription.getDescription(PotionEffectType.HEAL);
-              case "MINECRAFT_JUMP_BOOST" -> VanillaEffectDescription.getDescription(PotionEffectType.JUMP);
-              case "MINECRAFT_NAUSEA" -> VanillaEffectDescription.getDescription(PotionEffectType.CONFUSION);
+              case "MINECRAFT_INSTANT_DAMAGE" -> VanillaEffectDescription.getDescription(PotionEffectType.INSTANT_DAMAGE);
+              case "MINECRAFT_INSTANT_HEALTH" -> VanillaEffectDescription.getDescription(PotionEffectType.INSTANT_HEALTH);
+              case "MINECRAFT_JUMP_BOOST" -> VanillaEffectDescription.getDescription(PotionEffectType.JUMP_BOOST);
+              case "MINECRAFT_NAUSEA" -> VanillaEffectDescription.getDescription(PotionEffectType.NAUSEA);
               case "MINECRAFT_REGENERATION" -> VanillaEffectDescription.getDescription(PotionEffectType.REGENERATION);
-              case "MINECRAFT_RESISTANCE" -> VanillaEffectDescription.getDescription(PotionEffectType.DAMAGE_RESISTANCE);
+              case "MINECRAFT_RESISTANCE" -> VanillaEffectDescription.getDescription(PotionEffectType.RESISTANCE);
               case "MINECRAFT_FIRE_RESISTANCE" -> VanillaEffectDescription.getDescription(PotionEffectType.FIRE_RESISTANCE);
               case "MINECRAFT_WATER_BREATHING" -> VanillaEffectDescription.getDescription(PotionEffectType.WATER_BREATHING);
               case "MINECRAFT_BLINDNESS" -> VanillaEffectDescription.getDescription(PotionEffectType.BLINDNESS);
@@ -903,7 +903,7 @@ public class CustomEffectType implements Translatable, EnumHideable
       case "FROST_WALKER" ->
       {
         itemStack = new ItemStack(Material.DIAMOND_BOOTS);
-        itemMeta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
+        itemMeta.addEnchant(Enchantment.INFINITY, 1, true);
       }
       case "GAESANS" -> itemStack = new ItemStack(Material.POTION);
       case "HEALTH_INCREASE" -> itemStack = new ItemStack(Material.RED_DYE);

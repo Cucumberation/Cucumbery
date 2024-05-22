@@ -130,8 +130,7 @@ public class ItemLore
 				case AWKWARD -> CustomEffectType.AWKWARD;
 				case MUNDANE -> CustomEffectType.MUNDANE;
 				case THICK -> CustomEffectType.THICK;
-				case UNCRAFTABLE -> CustomEffectType.UNCRAFTABLE;
-				default -> null;
+				case null, default -> null;
 			};
 			if (customEffectType != null)
 			{

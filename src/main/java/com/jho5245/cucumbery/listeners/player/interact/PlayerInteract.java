@@ -1556,7 +1556,7 @@ public class PlayerInteract implements Listener
 			{
 				step = origin.getDirection().multiply(1D / density * (reverse ? -1d : 1d));
 			}
-			Particle particle = Particle.FIREWORKS_SPARK;
+			Particle particle = Particle.FIREWORK;
 			if (customItemTagCompound.hasTag(CucumberyTag.CUSTOM_ITEM_RAILGUN_PARTICLE_TYPE))
 			{
 				try
@@ -1714,7 +1714,7 @@ public class PlayerInteract implements Listener
 							}
 							if (livingEntity.getHealth() <= 0.0D && entity.isDead())
 							{
-								Firework fw = (Firework) player.getWorld().spawnEntity(entity.getLocation(), EntityType.FIREWORK);
+								Firework fw = (Firework) player.getWorld().spawnEntity(entity.getLocation(), EntityType.FIREWORK_ROCKET);
 								FireworkMeta fwM = fw.getFireworkMeta();
 								fw.setMetadata("no_damage", new FixedMetadataValue(Cucumbery.getPlugin(), "asdddf"));
 								if (useFireworkAmmo && hasAmmo)

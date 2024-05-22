@@ -174,7 +174,7 @@ public class DamageManager
               CustomEffect customEffectBaneOfArthropods = CustomEffectManager.getEffect(damagerEntity, CustomEffectType.BANE_OF_ARTHROPODS);
               int amplifier = customEffectBaneOfArthropods.getAmplifier();
               damage += (amplifier + 1) * 2.5;
-              ((Monster) victim).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (20 + Math.random() * (amplifier + 1) * 5), 3));
+              ((Monster) victim).addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, (int) (20 + Math.random() * (amplifier + 1) * 5), 3));
             }
             if (CustomEffectManager.hasEffect(damagerEntity, CustomEffectType.BLESS_OF_SANS))
             {

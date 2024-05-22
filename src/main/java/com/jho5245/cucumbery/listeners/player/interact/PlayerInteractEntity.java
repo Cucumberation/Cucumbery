@@ -145,7 +145,7 @@ public class PlayerInteractEntity implements Listener
     }
     if (NBTAPI.isRestricted(player, item, RestrictionType.NO_SMELT))
     {
-      if (entityType == EntityType.MINECART_FURNACE)
+      if (entityType == EntityType.FURNACE_MINECART)
       {
         event.setCancelled(true);
         if (!Permission.EVENT_ERROR_HIDE.has(player) && !Variable.playerInteractAtEntityRestrictedItemAlertCooldown.contains(uuid))
@@ -163,12 +163,12 @@ public class PlayerInteractEntity implements Listener
       event.setCancelled(true);
       return;
     }
-    if ((entityType == EntityType.MUSHROOM_COW) && material == Material.BOWL)
+    if ((entityType == EntityType.MOOSHROOM) && material == Material.BOWL)
     {
       Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 0L);
     }
 
-    if (entityType == EntityType.COW || entityType == EntityType.MUSHROOM_COW && material == Material.BUCKET)
+    if (entityType == EntityType.COW || entityType == EntityType.MOOSHROOM && material == Material.BUCKET)
     {
       if (player.getGameMode() != GameMode.CREATIVE && NBTAPI.arrayContainsValue(NBTAPI.getStringList(NBTAPI.getMainCompound(item), CucumberyTag.EXTRA_TAGS_KEY),
               Constant.ExtraTag.INFINITE.toString()))

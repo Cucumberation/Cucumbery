@@ -1,7 +1,5 @@
 package com.jho5245.cucumbery.util.itemlore;
 
-import com.destroystokyo.paper.Namespaced;
-import com.destroystokyo.paper.NamespacedTag;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
@@ -28,7 +26,8 @@ public class ItemLore2CanPlaceAndDestroys
 {
   protected static void setItemLore(@NotNull ItemMeta itemMeta, @NotNull List<Component> lore, @Nullable NBTList<String> hideFlags)
   {
-    if (itemMeta.hasDestroyableKeys())
+    // TODO: implement later. commented since 2024.05.22
+/*    if (itemMeta.hasDestroyableKeys())
     {
       itemMeta.addItemFlags(ItemFlag.HIDE_DESTROYS);
       if (!NBTAPI.arrayContainsValue(hideFlags, CucumberyHideFlag.CAN_DESTROY))
@@ -176,6 +175,6 @@ public class ItemLore2CanPlaceAndDestroys
     else
     {
       itemMeta.removeItemFlags(ItemFlag.HIDE_PLACED_ON);
-    }
+    }*/
   }
 }

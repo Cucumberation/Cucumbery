@@ -27,7 +27,7 @@ public class EnchantDefenseChance extends CustomEnchant
   @Override
   public boolean conflictsWith(@NotNull Enchantment other)
   {
-    return other.equals(Enchantment.DURABILITY);
+    return other.equals(Enchantment.UNBREAKING);
   }
 
   @Override
