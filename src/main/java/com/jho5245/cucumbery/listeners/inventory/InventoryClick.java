@@ -1509,7 +1509,7 @@ public class InventoryClick implements Listener
 					barHasEmptySlot = true;
 				}
 			}
-			double playerBlockInteractionRange = 6.5d; // TODO: use Attribute when 1.20.5
+			double playerBlockInteractionRange = Objects.requireNonNull(player.getAttribute(Attribute.PLAYER_BLOCK_INTERACTION_RANGE)).getValue();
 			RayTraceResult rayTraceResult = player.rayTraceBlocks(playerBlockInteractionRange, FluidCollisionMode.NEVER);
 			Block targetBlock = rayTraceResult != null ? rayTraceResult.getHitBlock() : null;
 			ItemStack blockplaceDataItemStack = targetBlock != null ? BlockPlaceDataConfig.getItem(targetBlock.getLocation(), player) : null;

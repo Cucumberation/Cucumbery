@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -20,6 +21,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.util.RayTraceResult;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class PlayerArmSwing implements Listener
@@ -41,7 +43,7 @@ public class PlayerArmSwing implements Listener
 				if (Variable.customMiningFallbackLocation.containsKey(uuid))
 				{
 					Location location = Variable.customMiningFallbackLocation.get(uuid);
-					double playerBlockInteractionRange = 4.5; // TODO: use AttributeInstance after 1.20.5
+					double playerBlockInteractionRange = Objects.requireNonNull(player.getAttribute(Attribute.PLAYER_BLOCK_INTERACTION_RANGE)).getValue();
 					RayTraceResult rayTraceResult = player.rayTraceBlocks(playerBlockInteractionRange, FluidCollisionMode.NEVER);
 					Block targetBlock = rayTraceResult != null ? rayTraceResult.getHitBlock() : null;
 					Location targetLocation = targetBlock != null ? targetBlock.getLocation() : null;
@@ -73,7 +75,7 @@ public class PlayerArmSwing implements Listener
 				if (!CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PROGRESS) && !CustomEffectManager.hasEffect(player,
 						CustomEffectType.IGNORE_ARM_SWING) && !Variable.customMiningFallbackLocation.containsKey(uuid))
 				{
-					double playerBlockInteractionRange = 4.5; // TODO: use AttributeInstance after 1.20.5
+					double playerBlockInteractionRange = Objects.requireNonNull(player.getAttribute(Attribute.PLAYER_BLOCK_INTERACTION_RANGE)).getValue();
 					RayTraceResult rayTraceResult = player.rayTraceBlocks(playerBlockInteractionRange, FluidCollisionMode.NEVER);
 					customMining(player, rayTraceResult);
 				}
