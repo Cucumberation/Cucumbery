@@ -169,7 +169,6 @@ public class BlockPlaceDataConfig extends ChunkConfig
 	public ItemStack getItemStack(@NotNull Location location, @Nullable CommandSender sender)
 	{
 		String data = getConfig().getString(locationToString(location));
-		MessageUtil.broadcastDebug("getItemStack: " + data);
 		if (sender != null && data != null && data.length() - data.replace("%", "").length() >= 2)
 		{
 			data = PlaceHolderUtil.placeholder(sender, data, null);

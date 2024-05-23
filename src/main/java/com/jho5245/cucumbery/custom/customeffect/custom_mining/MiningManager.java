@@ -10,6 +10,7 @@ import com.jho5245.cucumbery.events.block.PreCustomBlockBreakEvent;
 import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
+import com.jho5245.cucumbery.util.no_groups.ItemSerializer;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.no_groups.PlaceHolderUtil;
@@ -726,6 +727,8 @@ public class MiningManager
 		// 블록 파괴 입자(BLOCK:TYPE 또는 ITEM:{id})
 		String breakParticle = null;
 		boolean overrideMode2 = false;
+		// 채광 모드 3에서는 블록을 채굴하는 좌표에 커스텀 아이템이 저장되어 있으면 해당 아이템의 nbt를 일체 수정하지 않고 그대로 드롭한다.
+		boolean mode3 = CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_2_NO_RESTORE);
 		//boolean miningMode3 = CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_2_NO_RESTORE);
 		// 커스텀 블록 처리 (extra Block 존재 시 무시)
 		//if (!hasExtra || CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_2_NO_RESTORE))
@@ -735,8 +738,8 @@ public class MiningManager
 				if (ItemStackUtil.itemExists(dataItem))
 				{
 					NBTItem dataNBTItem = new NBTItem(dataItem, true);
-					boolean removeKeys =
-							dataNBTItem.hasTag(REMOVE_KEYS) && dataNBTItem.getType(REMOVE_KEYS) == NBTType.NBTTagByte && dataNBTItem.getBoolean(REMOVE_KEYS) != null
+					// 일부 태그는 채광 모드 3을 제외한 모드에서는 제거한다.
+					boolean removeKeys = !mode3 && dataNBTItem.hasTag(REMOVE_KEYS) && dataNBTItem.getType(REMOVE_KEYS) == NBTType.NBTTagByte && dataNBTItem.getBoolean(REMOVE_KEYS) != null
 									&& Boolean.TRUE.equals(dataNBTItem.getBoolean(REMOVE_KEYS));
 					if (removeKeys)
 					{
@@ -845,22 +848,29 @@ public class MiningManager
 							dataNBTItem.removeKey("displays");
 						}
 					}
-					try
+					// TODO: 여기 try문 안에서 바닐라 nbt가 삭제되는 버그 해결해야함
+/*					try
 					{
+						MessageUtil.broadcastDebug("dataItemA: " + ItemSerializer.serialize(dataItem));
+
 						if (dataNBTItem.getCompound(CucumberyTag.KEY_MAIN).getStringList(CucumberyTag.EXTRA_TAGS_KEY).isEmpty())
 						{
 							dataNBTItem.getCompound(CucumberyTag.KEY_MAIN).removeKey(CucumberyTag.EXTRA_TAGS_KEY);
 						}
+
+						MessageUtil.broadcastDebug("dataItemB: " + ItemSerializer.serialize(dataItem));
 						if (dataNBTItem.getCompound(CucumberyTag.KEY_MAIN).getKeys().isEmpty())
 						{
 							dataNBTItem.removeKey(CucumberyTag.KEY_MAIN);
 						}
-					}
-					catch (Exception ignored)
-					{
 
+						MessageUtil.broadcastDebug("dataItemC: " + ItemSerializer.serialize(dataItem));
 					}
-					if (ignoreVanillaModification)
+					catch (Exception e)
+					{
+						e.printStackTrace();
+					}*/
+					if (mode3 || ignoreVanillaModification)
 					{
 						drops.clear();
 						drops.add(dataItem);
@@ -869,7 +879,7 @@ public class MiningManager
 			}
 		}
 		// 못부수는 블록 처리(설치된 상태로 파괴 불가)
-		if (!drops.isEmpty() && ItemStackUtil.itemExists(drops.get(0)) && NBTAPI.isRestricted(player, drops.get(0), RestrictionType.NO_BLOCK_BREAK))
+		if (!drops.isEmpty() && ItemStackUtil.itemExists(drops.getFirst()) && NBTAPI.isRestricted(player, drops.getFirst(), RestrictionType.NO_BLOCK_BREAK))
 		{
 			return null;
 		}
