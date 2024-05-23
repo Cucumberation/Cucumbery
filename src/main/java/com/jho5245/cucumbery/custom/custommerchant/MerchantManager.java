@@ -20,14 +20,11 @@ public class MerchantManager
   {
     List<MerchantRecipe> merchantRecipes = new ArrayList<>();
     ConfigurationSection root = configuration.getConfigurationSection("recipes");
-    MessageUtil.broadcastDebug(root + "");
     if (root != null)
     {
-      MessageUtil.broadcastDebug("rootsize : " + root.getKeys(false).size());
       for (String number : root.getKeys(false))
       {
         String resultString = root.getString(number + ".result");
-        MessageUtil.broadcastDebug("result : " + resultString);
         if (resultString == null)
         {
           continue;

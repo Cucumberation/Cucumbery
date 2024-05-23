@@ -291,6 +291,8 @@ public class CustomEffectType implements Translatable, EnumHideable
   DAMAGE_SPREAD = new CustomEffectType("damage_spread", "피해 발산", builder().hidden().defaultDuration(100).skipEvent().removeOnQuit().nonBuffFreezable()),
 
   THE_CHAOS_INVENTORY = new CustomEffectType("the_chaos_inventory", "key:effect.cucumbery.the_chaos_inventory|혼벤토리", builder().negative().keepOnDeath()),
+  
+  HIDE_ITEM_TOOLTIP = new CustomEffectType("hide_item_tooltip", "key:effect.cucumbery.hide_item_tooltip|아이템 툴팁 숨김", builder().description("아이템 설명이 숨겨집니다 ㅅㄱ").negative().keepOnDeath()),
 
   /**
    * PlayerArmSwingEvent가 멈췄을때(플레이어가 팔을 흔드는 것을 멈췄을때)를 감지하기 위한 효과
@@ -381,7 +383,8 @@ public class CustomEffectType implements Translatable, EnumHideable
             DAMAGE_INDICATOR, FREEZING, NO_CUCUMBERY_ITEM_USAGE_ATTACK, GLIDING, NOTIFY_NO_TRADE_ITEM_DROP, DYNAMIC_LIGHT,
             CUSTOM_DEATH_MESSAGE,
             REMOVE_NO_DAMAGE_TICKS, MASTER_OF_FISHING, MASTER_OF_FISHING_D, ASSASSINATION, ALARM, GAESANS, SUPERIOR_LEVITATION,
-            THE_CHAOS_INVENTORY, ARM_SWING, IGNORE_ARM_SWING, BLANKET_LOVER,
+            THE_CHAOS_INVENTORY, HIDE_ITEM_TOOLTIP,
+            ARM_SWING, IGNORE_ARM_SWING, BLANKET_LOVER,
 
 
 

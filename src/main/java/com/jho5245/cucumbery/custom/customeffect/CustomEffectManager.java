@@ -850,7 +850,6 @@ public class CustomEffectManager
 					}
 					if (root.isLong(typeString + ".start-time") && root.isLong(typeString + ".end-time"))
 					{
-						MessageUtil.broadcastDebug("foo");
 						long startTime = root.getLong(typeString + ".start-time"), endTime = root.getLong(typeString + ".end-time");
 						customEffect = new RealDurationCustomEffectImple(customEffectType, initDuration, initAmplifier, displayType, startTime, endTime, builder);
 					}

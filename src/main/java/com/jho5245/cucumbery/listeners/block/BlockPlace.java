@@ -275,28 +275,30 @@ public class BlockPlace implements Listener
 			NBTItem nbtItem = new NBTItem(item, true);
 			if (!NBTAPI.arrayContainsValue(extraTags, Constant.ExtraTag.PRESERVE_BLOCK_ENTITY_TAG))
 			{
+				ItemStack finalItem2 = item;
 				NBT.modify(item, nbt ->
 				{
 					nbt.modifyMeta((readableNBT, itemMeta) ->
 					{
-						if (itemMeta instanceof BlockStateMeta blockStateMeta)
+						if (itemMeta instanceof BlockStateMeta blockStateMeta && blockStateMeta.hasBlockState())
 						{
 							blockStateMeta.clearBlockState();
+							finalItem2.setItemMeta(blockStateMeta);
 						}
 					});
 				});
 			}
 			if (!NBTAPI.arrayContainsValue(extraTags, Constant.ExtraTag.PRESERVE_BLOCK_DATA_TAG))
 			{
-
 				ItemStack finalItem1 = item;
 				NBT.modify(item, nbt ->
 				{
 					nbt.modifyMeta((readableNBT, itemMeta) ->
 					{
-						if (itemMeta instanceof BlockDataMeta blockDataMeta)
+						if (itemMeta instanceof BlockDataMeta blockDataMeta && blockDataMeta.hasBlockData())
 						{
 							blockDataMeta.setBlockData(finalItem1.getType().createBlockData());
+							finalItem1.setItemMeta(blockDataMeta);
 						}
 					});
 				});
@@ -395,7 +397,6 @@ public class BlockPlace implements Listener
 					}
 				}
 				BlockPlaceDataConfig.setItem(location, item);
-				MessageUtil.broadcastDebug(ItemSerializer.serialize(item) + " is item saved");
 				BlockPlaceDataConfig.spawnItemDisplay(location);
 				if (nbtItem.hasTag("change_material") && nbtItem.hasTag("displays"))
 				{

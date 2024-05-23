@@ -198,6 +198,12 @@ public class ItemNameUtil
         component = customMaterial.getDisplayName();
       }
     }
+    
+    // 아이템 기본 이름이 있을 경우 기본 이름 반환
+    if (itemMeta != null && itemMeta.hasItemName())
+    {
+      component = itemMeta.itemName();
+    }
 
     @Nullable TextColor textColor = component.color();
     // 아이템의 등급이 있고 아이템 이름에 색깔이 없을 경우와 기본 아이템 색깔이 흰색이 아닐 경우 색깔을 추가한다.

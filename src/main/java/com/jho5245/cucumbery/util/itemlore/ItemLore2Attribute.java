@@ -51,6 +51,7 @@ public class ItemLore2Attribute
 							case LEGS -> lore.add(Constant.ITEM_MODIFIERS_LEGS);
 							case CHEST -> lore.add(Constant.ITEM_MODIFIERS_CHEST);
 							case HEAD -> lore.add(Constant.ITEM_MODIFIERS_HEAD);
+							case BODY -> lore.add(Constant.ITEM_MODIFIERS_BODY);
 						}
 						for (Attribute attribute : Attribute.values())
 						{

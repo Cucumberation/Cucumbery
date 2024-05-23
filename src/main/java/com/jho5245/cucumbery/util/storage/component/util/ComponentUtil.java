@@ -51,6 +51,7 @@ import org.json.simple.parser.JSONParser;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -150,7 +151,9 @@ public class ComponentUtil
 					component = component.append(ItemNameUtil.itemName(material, Constant.THE_COLOR));
 					continue;
 				}
-				Component concat = Cucumbery.using_ProtocolLib ? ItemNameUtil.itemName(itemStack, Constant.THE_COLOR).hoverEvent(itemStack) : ItemStackComponent.itemStackComponent(itemStack, 1, Constant.THE_COLOR, false, player);
+				Component concat = Cucumbery.using_ProtocolLib
+						? ItemNameUtil.itemName(itemStack, Constant.THE_COLOR).hoverEvent(itemStack)
+						: ItemStackComponent.itemStackComponent(itemStack, 1, Constant.THE_COLOR, false, player);
 				component = component.append(concat);
 			}
 			else if (object instanceof CustomMaterial customMaterial)
@@ -1050,7 +1053,12 @@ public class ComponentUtil
 		if (!componentArgs.isEmpty())
 		{
 			component = component.args(componentArgs);
-			component = yeet(component.key(), component);
+			if (player == null || player.locale().equals(Locale.KOREA))
+			{
+				if (player != null)
+				Bukkit.getConsoleSender().sendMessage(player.getName() + " is korean");
+				component = yeet(component.key(), component);
+			}
 			List<Component> children = new ArrayList<>(component.children());
 			if (!children.isEmpty())
 			{

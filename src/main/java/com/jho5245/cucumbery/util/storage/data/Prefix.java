@@ -58,7 +58,7 @@ public enum Prefix
   INFO_WHATIS("&d뭐야여기", "&f"),
   INFO_LEVEL("&a레벨", "&2"),
   INFO_CLEARCHAT("rg255,204;청소채팅", "&c"),
-  INFO_HANDGIVE("&b주거니받거니", "&2"),
+  INFO_HANDGIVE("&bkey:cucumbery.chat.prefix.give|주거니받거니", "&2"),
   INFO_SIGN("rg255,204;표지판", "&5"),
   INFO_SOUND("&b소리", "&3"),
   INFO_ALLPLAYER("&a올플레이어", "&6"),

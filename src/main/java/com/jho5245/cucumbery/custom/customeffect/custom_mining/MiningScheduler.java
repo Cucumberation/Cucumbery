@@ -594,10 +594,11 @@ public class MiningScheduler
 							{
 								boundingBoxes.add(new BoundingBox(0.3d, 0.3d, 0.3d, 1d, 0.0625d, 1d));
 							}
-							if (boundingBoxes.isEmpty())
-							{
-								boundingBoxes.add(block.getBoundingBox());
-							}
+						}
+						if (boundingBoxes.isEmpty())
+						{
+							boundingBoxes.add(block.getBoundingBox());
+							boundingBoxes.add(new BoundingBox(0d, 0d, 0d, 1d, 1d, 1d));
 						}
 						for (Player online : Bukkit.getOnlinePlayers())
 						{
@@ -616,11 +617,11 @@ public class MiningScheduler
 									Particle particle = blockData == null ? Particle.ITEM : Particle.BLOCK;
 									Object data = blockData == null ? breakParticleItem : blockData;
 
-									for (int a = 0; a < 4; a++)
+									for (int a = 0; a < 4 * Math.max(0.5, maxX - minX); a++)
 									{
-										for (int b = 0; b < 4; b++)
+										for (int b = 0; b < 4 * Math.max(0.5, maxY - minY); b++)
 										{
-											for (int c = 0; c < 4; c++)
+											for (int c = 0; c < 4 * Math.max(0.5, maxZ - minZ); c++)
 											{
 												online.spawnParticle(particle, location.clone().add(minX + diffX * a, minY + diffY * b, minZ + diffZ * c), 1, 0, 0, 0, 0.2, data);
 											}

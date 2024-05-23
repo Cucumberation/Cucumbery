@@ -38,10 +38,7 @@ import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
-import de.tr7zw.changeme.nbtapi.NBTCompound;
-import de.tr7zw.changeme.nbtapi.NBTItem;
-import de.tr7zw.changeme.nbtapi.NBTList;
-import de.tr7zw.changeme.nbtapi.NBTType;
+import de.tr7zw.changeme.nbtapi.*;
 import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
@@ -854,6 +851,8 @@ public class ProtocolLibManager
 					return;
 				}
 				Player player = event.getPlayer();
+				if (!player.locale().equals(Locale.KOREA))
+					return;
 				PacketContainer packet = event.getPacket();
 				WrappedChatComponent wrappedChatComponent = packet.getChatComponents().read(0);
 				Component component = GsonComponentSerializer.gson().deserialize(wrappedChatComponent.getJson());
@@ -1133,7 +1132,7 @@ public class ProtocolLibManager
 						loop++;
 					}
 				}
-				itemMeta.removeEnchantments();
+				itemMeta.setEnchantmentGlintOverride(false);
 			}
 		}
 
@@ -1142,7 +1141,7 @@ public class ProtocolLibManager
 		{
 			if (!forceShowEnchants && !showEnchants)
 			{
-				itemMeta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
+				itemMeta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
 			}
 			else
 			{
@@ -1158,44 +1157,7 @@ public class ProtocolLibManager
 		// 크리에이티브 모드에서는 발광 아이템을 대체하면 실제로 아이템이 바뀌므로 비활성화
 		if (ignoreCreativeWhat && !showEnchantGlints)
 		{
-			switch (clone.getType())
-			{
-				case ENCHANTED_GOLDEN_APPLE, ENCHANTED_BOOK, END_CRYSTAL, NETHER_STAR, EXPERIENCE_BOTTLE ->
-				{
-					isStorageMeta = clone.getType() == Material.ENCHANTED_BOOK;
-					Material type = switch (clone.getType())
-					{
-						case ENCHANTED_BOOK -> Material.BOOK;
-						case ENCHANTED_GOLDEN_APPLE -> Material.GOLDEN_APPLE;
-						case END_CRYSTAL -> Material.PURPLE_STAINED_GLASS_PANE;
-						case NETHER_STAR -> Material.SUGAR;
-						case EXPERIENCE_BOTTLE -> Material.LIME_CANDLE;
-						default -> clone.getType();
-					};
-					clone.setType(type);
-					final Component displayName = itemMeta.displayName();
-					if (displayName == null)
-					{
-						itemMeta.displayName(ItemNameUtil.itemName(itemStack.getType()));
-					}
-					else if (displayName.color() == null)
-					{
-						ItemStack clone2 = clone.clone();
-						clone2.setType(itemStack.getType());
-						itemMeta.displayName(displayName.color(ItemNameUtil.itemName(clone2).color()));
-					}
-					if (itemMeta instanceof EnchantmentStorageMeta storageMeta && !showItemLore && showEnchants)
-					{
-						int loop = 0;
-						Map<Enchantment, Integer> enchants = storageMeta.getStoredEnchants();
-						for (Enchantment enchant : new ArrayList<>(enchants.keySet()))
-						{
-							lore.add(loop, enchant.displayName(storageMeta.getStoredEnchantLevel(enchant)).decoration(TextDecoration.ITALIC, State.FALSE));
-							loop++;
-						}
-					}
-				}
-			}
+			itemMeta.setEnchantmentGlintOverride(false);
 		}
 
 		if (ignoreCreativeWhat && showItemLore && !new NBTItem(itemStack).getKeys().isEmpty())
@@ -1209,9 +1171,9 @@ public class ProtocolLibManager
 		}
 
 		CustomMaterial customMaterial = CustomMaterial.itemStackOf(clone);
-		if (customMaterial != null && itemMeta.displayName() == null)
+		if (customMaterial != null)
 		{
-			itemMeta.displayName(customMaterial.getDisplayName());
+			itemMeta.itemName(customMaterial.getDisplayName());
 		}
 
 		if (ignoreCreativeWhat && customMaterial != null)
@@ -1251,19 +1213,6 @@ public class ProtocolLibManager
 				lore.add(ComponentUtil.translate("&b설정에 관계없이 켜짐으로 설정됩니다"));
 				itemMeta.lore(lore);
 				clone.setItemMeta(itemMeta);
-			}
-		}
-
-		// TODO: 커스텀 내구도가 있는 일반 아이템인데 도구가 있는 가짜 아이템으로 빙의해서 내구도 Damage 태그 갱신 - 1.20.5때 삭제
-		if (player.getGameMode() != GameMode.CREATIVE && NBTAPI.getCompound(NBTAPI.getMainCompound(clone), CucumberyTag.CUSTOM_DURABILITY_KEY) != null)
-		{
-			Long currentDurability = NBTAPI.getLong(NBTAPI.getCompound(NBTAPI.getMainCompound(clone), CucumberyTag.CUSTOM_DURABILITY_KEY),
-					CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY);
-			if (currentDurability != null)
-			{
-				Damageable damageable = (Damageable) itemMeta;
-				damageable.setDamage(Math.toIntExact(currentDurability));
-				clone.setItemMeta(damageable);
 			}
 		}
 
@@ -1363,6 +1312,12 @@ public class ProtocolLibManager
 			clone.setItemMeta(itemMeta);
 		}
 
+		if (CustomEffectManager.hasEffect(player, CustomEffectType.HIDE_ITEM_TOOLTIP))
+		{
+			itemMeta.setHideTooltip(true);
+			clone.setItemMeta(itemMeta);
+		}
+
 		if (ignoreCreativeWhat && CustomEffectManager.hasEffect(player, CustomEffectType.THE_CHAOS_INVENTORY))
 		{
 			List<Material> materials = new ArrayList<>(Arrays.asList(Material.values()));
@@ -1377,22 +1332,11 @@ public class ProtocolLibManager
 		}
 
 		nbtItem = new NBTItem(clone, true);
-		if (nbtItem.hasTag("Enchantments") && nbtItem.getCompoundList("Enchantments").isEmpty())
-		{
-			nbtItem.removeKey("Enchantments");
-		}
 		if (!player.hasPermission("asdf") && ignoreCreativeWhat)
 		{
 			for (String key : nbtItem.getKeys())
 			{
-				switch (key)
-				{
-					case "display", "Lore", "Enchantments", "Damage", "HideFlags", "CustomModelData", "SkullOwner", "Potion", "pages", "author", "title",
-							 "CustomPotionColor", "StoredEnchantments", "AttributeModifiers", "Unbreakable", "CanPlaceOn", "CanDestroy", "BlockEntityTag" ->
-					{
-					}
-					default -> nbtItem.removeKey(key);
-				}
+				nbtItem.removeKey(key);
 			}
 		}
 		return clone;

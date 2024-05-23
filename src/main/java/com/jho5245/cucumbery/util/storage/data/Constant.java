@@ -54,6 +54,7 @@ public class Constant
   public static final Component ITEM_MODIFIERS_FEET = ComponentUtil.translate(ITEM_MODIFIERS_BRACKET, ComponentUtil.translate("item.modifiers.feet"));
   public static final Component ITEM_MODIFIERS_HEAD = ComponentUtil.translate(ITEM_MODIFIERS_BRACKET, ComponentUtil.translate("item.modifiers.head"));
   public static final Component ITEM_MODIFIERS_LEGS = ComponentUtil.translate(ITEM_MODIFIERS_BRACKET, ComponentUtil.translate("item.modifiers.legs"));
+  public static final Component ITEM_MODIFIERS_BODY = ComponentUtil.translate(ITEM_MODIFIERS_BRACKET, ComponentUtil.translate("item.modifiers.body"));
   public static final Component ITEM_MODIFIERS_MAINHAND = ComponentUtil.translate(ITEM_MODIFIERS_BRACKET, ComponentUtil.translate("item.modifiers.mainhand"));
   public static final Component ITEM_MODIFIERS_OFFHAND = ComponentUtil.translate(ITEM_MODIFIERS_BRACKET, ComponentUtil.translate("item.modifiers.offhand"));
   public static final String TMI_LORE_NBT_TAG_COPIED = "[NBT 태그 복사됨]";

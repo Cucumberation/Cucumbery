@@ -736,11 +736,7 @@ public class ItemLoreCustomItem
 		}
 		itemStack.setType(displayMaterial);
 		ItemMeta itemMeta = itemStack.getItemMeta();
-		Component displayName = itemMeta.displayName();
-		if (displayName == null || displayName.color() != null || displayName.decoration(TextDecoration.ITALIC) != State.NOT_SET)
-		{
-			itemMeta.displayName(customMaterial.getDisplayName());
-		}
+		itemMeta.itemName(customMaterial.getDisplayName());
 		// 커스텀 모델 데이터 설정
 		{
 			if (customMaterial.isVerticalSlab())

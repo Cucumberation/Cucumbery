@@ -246,11 +246,11 @@ public class PlayerDropItem implements Listener
       Component itemStackComponent = ItemNameUtil.itemName(item, TextColor.fromHexString("#ff9900"));
       if (amount == 1 && item.getType().getMaxStackSize() == 1)
       {
-        player.sendActionBar(ComponentUtil.translate("#ffd900;%s을(를) 버렸습니다", itemStackComponent));
+        player.sendActionBar(ComponentUtil.translate(player,"#ffd900;key:cucumbery.action_bar.item_drop|%s을(를) 버렸습니다", itemStackComponent));
       }
       else
       {
-        player.sendActionBar(ComponentUtil.translate("#ffd900;%s을(를) %s개 버렸습니다", itemStackComponent, "#ff9900;" + amount));
+        player.sendActionBar(ComponentUtil.translate(player, "#ffd900;key:cucumbery.action_bar.item_drop.count|%s을(를) %s개 버렸습니다", itemStackComponent, "#ff9900;" + amount));
       }
     }
     if (UserData.LISTEN_ITEM_DROP.getBoolean(player.getUniqueId()))

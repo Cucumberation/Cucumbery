@@ -337,7 +337,9 @@ public class RecipeInventoryRecipe
 				ItemMeta itemMeta = ingredient.getItemMeta();
 				List<Component> lore;
 				int amount = ingredientAmounts.get(i);
-				ingredient.setAmount(Math.min(64, amount));
+				itemMeta.setMaxStackSize(Math.min(99, amount));
+				ingredient.setItemMeta(itemMeta);
+				ingredient.setAmount(Math.min(127, amount));
 				String ingredientString = config.getString("recipes." + recipe + ".ingredients." + (i + 1) + ".item");
 				int playerAmount = ItemStackUtil.countItem(player.getInventory(), ingredient);
 				Component display = ItemNameUtil.itemName(ingredient, NamedTextColor.WHITE);
