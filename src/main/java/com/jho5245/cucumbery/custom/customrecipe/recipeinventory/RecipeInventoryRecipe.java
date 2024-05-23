@@ -157,6 +157,10 @@ public class RecipeInventoryRecipe
 			{
 				ItemStack deco1 = CreateItemStack.create(Material.WHITE_STAINED_GLASS_PANE, 1, "§와", false);
 				ItemStack deco2 = CreateItemStack.create(Material.BROWN_STAINED_GLASS_PANE, 1, "§와", false);
+				ItemMeta itemMeta = deco1.getItemMeta();
+				itemMeta.setHideTooltip(true);
+				deco1.setItemMeta(itemMeta);
+				deco2.setItemMeta(itemMeta);
 				menu.setItem(0, deco1);
 				menu.setItem(1, deco1);
 				menu.setItem(2, deco1);
