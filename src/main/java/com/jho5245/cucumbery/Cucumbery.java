@@ -124,7 +124,8 @@ public class Cucumbery extends JavaPlugin
 	/**
 	 * Shaded since 2022.07.04 so always true
 	 */
-	public static boolean using_CommandAPI = true;
+	// TODO: set to false to fix bug since 2024.05.23
+	public static boolean using_CommandAPI = false;
 
 	public static boolean using_Vault_Economy;
 

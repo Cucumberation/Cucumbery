@@ -1,8 +1,10 @@
 package com.jho5245.cucumbery.util.no_groups;
 
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
+import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -33,6 +35,7 @@ public class ItemSerializer
     }
     catch (Exception e)
     {
+      e.printStackTrace();
       return new ItemStack(Material.AIR);
     }
   }

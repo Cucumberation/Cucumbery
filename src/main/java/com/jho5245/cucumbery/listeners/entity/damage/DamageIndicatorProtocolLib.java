@@ -32,7 +32,7 @@ public class DamageIndicatorProtocolLib
   {
     int entityId = Method.random(1, Integer.MAX_VALUE);
     ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
-    PacketContainer packet = protocolManager.createPacket(Server.SPAWN_ENTITY);
+    PacketContainer packet = new PacketContainer(Server.SPAWN_ENTITY);
     packet.getIntegers().write(0, entityId);
     packet.getEntityTypeModifier().write(0, EntityType.TEXT_DISPLAY);
     // Set location

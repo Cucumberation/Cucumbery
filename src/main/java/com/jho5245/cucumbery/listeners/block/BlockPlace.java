@@ -4,19 +4,19 @@ import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCustomMining;
+import com.jho5245.cucumbery.listeners.entity.item.ItemMerge;
 import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
+import com.jho5245.cucumbery.util.no_groups.ItemSerializer;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.no_groups.Method2;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.*;
+import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
-import de.tr7zw.changeme.nbtapi.NBTCompound;
-import de.tr7zw.changeme.nbtapi.NBTItem;
-import de.tr7zw.changeme.nbtapi.NBTList;
-import de.tr7zw.changeme.nbtapi.NBTType;
+import de.tr7zw.changeme.nbtapi.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.*;
@@ -29,6 +29,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BlockDataMeta;
+import org.bukkit.inventory.meta.BlockStateMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 
@@ -272,11 +275,31 @@ public class BlockPlace implements Listener
 			NBTItem nbtItem = new NBTItem(item, true);
 			if (!NBTAPI.arrayContainsValue(extraTags, Constant.ExtraTag.PRESERVE_BLOCK_ENTITY_TAG))
 			{
-				nbtItem.removeKey("BlockEntityTag");
+				NBT.modify(item, nbt ->
+				{
+					nbt.modifyMeta((readableNBT, itemMeta) ->
+					{
+						if (itemMeta instanceof BlockStateMeta blockStateMeta)
+						{
+							blockStateMeta.clearBlockState();
+						}
+					});
+				});
 			}
 			if (!NBTAPI.arrayContainsValue(extraTags, Constant.ExtraTag.PRESERVE_BLOCK_DATA_TAG))
 			{
-				nbtItem.removeKey("BlockStateTag");
+
+				ItemStack finalItem1 = item;
+				NBT.modify(item, nbt ->
+				{
+					nbt.modifyMeta((readableNBT, itemMeta) ->
+					{
+						if (itemMeta instanceof BlockDataMeta blockDataMeta)
+						{
+							blockDataMeta.setBlockData(finalItem1.getType().createBlockData());
+						}
+					});
+				});
 			}
 			NBTList<String> extraTag = NBTAPI.getStringList(NBTAPI.getMainCompound(item), CucumberyTag.EXTRA_TAGS_KEY);
 			if (item.hasItemMeta() && (NBTAPI.arrayContainsValue(extraTag, Constant.ExtraTag.PRESERVE_BLOCK_NBT) || !Cucumbery.config.getBoolean(
@@ -372,6 +395,7 @@ public class BlockPlace implements Listener
 					}
 				}
 				BlockPlaceDataConfig.setItem(location, item);
+				MessageUtil.broadcastDebug(ItemSerializer.serialize(item) + " is item saved");
 				BlockPlaceDataConfig.spawnItemDisplay(location);
 				if (nbtItem.hasTag("change_material") && nbtItem.hasTag("displays"))
 				{

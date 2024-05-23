@@ -1359,7 +1359,7 @@ public class ItemStackUtil
 		{
 			ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 			boolean showItemLore = UserData.SHOW_ITEM_LORE.getBoolean(player);
-			PacketContainer packet = protocolManager.createPacket(Play.Server.WINDOW_ITEMS);
+			PacketContainer packet = new PacketContainer(Play.Server.WINDOW_ITEMS);
 			InventoryView inventoryView = player.getOpenInventory();
 			InventoryType inventoryType = inventoryView.getType();
 			Inventory top = inventoryView.getTopInventory(), bottom = inventoryView.getBottomInventory();

@@ -14,6 +14,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -142,6 +143,16 @@ public class TestCommand implements CucumberyCommandExecutor
 			{
 				Player player = (Player) sender;
 				setPlayerNameTag(player, args[1]);
+			}
+
+			if (args[0].equals("nbt"))
+			{
+				Player player = (Player) sender;
+				ItemStack itemStack = player.getInventory().getItemInMainHand();
+				String nbt = ItemSerializer.serialize(itemStack);
+				player.sendMessage("item nbt: " + nbt);
+				ItemStack build = ItemSerializer.deserialize(nbt);
+				player.getInventory().addItem(build);
 			}
 
 /*			RecipeChoice ingredient = PotionMix.createPredicateChoice(itemStack -> CustomMaterial.itemStackOf(itemStack) == CustomMaterial.JADE);
