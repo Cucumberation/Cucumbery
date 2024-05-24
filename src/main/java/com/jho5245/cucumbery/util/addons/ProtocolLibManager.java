@@ -13,7 +13,6 @@ import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.utility.MinecraftReflection;
 import com.comphenix.protocol.wrappers.EnumWrappers.ItemSlot;
 import com.comphenix.protocol.wrappers.*;
-import com.google.gson.JsonElement;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
@@ -39,14 +38,14 @@ import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
-import de.tr7zw.changeme.nbtapi.*;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.nbt.api.BinaryTagHolder;
+import de.tr7zw.changeme.nbtapi.NBTCompound;
+import de.tr7zw.changeme.nbtapi.NBTItem;
+import de.tr7zw.changeme.nbtapi.NBTList;
+import de.tr7zw.changeme.nbtapi.NBTType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TranslatableComponent;
-import net.kyori.adventure.text.event.DataComponentValue;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
 import net.kyori.adventure.text.event.HoverEvent.ShowItem;
@@ -54,8 +53,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.format.TextDecoration.State;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.kyori.adventure.text.serializer.gson.GsonDataComponentValue;
-import net.kyori.examination.ExaminableProperty;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -64,14 +61,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.RecipeChoice.ExactChoice;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
-import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.management.ReflectionException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
@@ -533,6 +528,8 @@ public class ProtocolLibManager
 				List<Pair<ItemSlot, ItemStack>> listStructureModifier = packet.getSlotStackPairLists().read(0);
 				for (Pair<ItemSlot, ItemStack> pair : listStructureModifier)
 				{
+					if (!ItemStackUtil.itemExists(pair.getSecond()))
+						continue;
 					pair.setSecond(setItemLore(Server.WINDOW_ITEMS, pair.getSecond(), player));
 				}
 				packet.getSlotStackPairLists().write(0, listStructureModifier);
@@ -1096,7 +1093,8 @@ public class ProtocolLibManager
 		if (lore == null)
 			lore = new ArrayList<>();
 
-		if (!useLoreInCreative && !lore.isEmpty() && lore.getFirst() instanceof TranslatableComponent translatableComponent && translatableComponent.key().isEmpty())
+		if (!useLoreInCreative && !lore.isEmpty() && lore.getFirst() instanceof TranslatableComponent translatableComponent && translatableComponent.key()
+				.isEmpty())
 		{
 			lore.set(0, Component.empty());
 		}
@@ -1293,11 +1291,12 @@ public class ProtocolLibManager
 			originMeta.lore(cloneLore);
 			clone.setItemMeta(originMeta);
 		}
-		
+
 		itemMeta = clone.getItemMeta();
 		lore = itemMeta.lore();
-		if (lore == null) lore = new ArrayList<>();
-		
+		if (lore == null)
+			lore = new ArrayList<>();
+
 		if (player.hasPermission("asdf") && UserData.SHOW_ITEM_COMPONENTS_INFO.getBoolean(player))
 		{
 			List<Component> componentLore = new ArrayList<>();
@@ -1334,14 +1333,14 @@ public class ProtocolLibManager
 			return clone;
 		}
 
-		nbtItem = new NBTItem(clone, true);
+/*		nbtItem = new NBTItem(clone, true);
 		if (!player.hasPermission("asdf") && ignoreCreativeWhat)
 		{
 			for (String key : nbtItem.getKeys())
 			{
 				nbtItem.removeKey(key);
 			}
-		}
+		}*/
 		return clone;
 	}
 

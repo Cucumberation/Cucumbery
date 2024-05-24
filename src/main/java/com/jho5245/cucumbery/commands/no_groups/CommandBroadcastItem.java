@@ -112,10 +112,7 @@ public class CommandBroadcastItem implements CucumberyCommandExecutor
           }
         }
       }
-      for (Player online : Bukkit.getOnlinePlayers())
-      {
-        MessageUtil.sendMessage(online, Prefix.INFO_ITEMSTORAGE, "%s이(가) %s을(를) 채팅창에 올렸습니다", player, item);
-      }
+      MessageUtil.broadcast(Prefix.INFO_ITEMSTORAGE, "%s이(가) %s을(를) 채팅창에 올렸습니다", player, item);
       return true;
     }
     if (!msg.contains("[i]") && !msg.contains("[i1]") && !msg.contains("[i2]") && !msg.contains("[i3]") && !msg.contains("[i4]") && !msg.contains("[i5]") && !msg.contains("[i6]") && !msg.contains(

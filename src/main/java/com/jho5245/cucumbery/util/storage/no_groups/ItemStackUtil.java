@@ -1494,7 +1494,6 @@ public class ItemStackUtil
 			try
 			{
 				Class<?> clazz = dataComponentValue.getClass();
-				Bukkit.getConsoleSender().sendMessage(dataComponentValue.toString());
 				switch (clazz.getName())
 				{
 					case "net.kyori.adventure.text.serializer.gson.GsonDataComponentValueImpl" ->
