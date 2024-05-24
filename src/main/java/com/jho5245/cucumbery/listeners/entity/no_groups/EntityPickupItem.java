@@ -255,15 +255,12 @@ public class EntityPickupItem implements Listener
 		if (UserData.SHOW_ACTIONBAR_ON_ITEM_PICKUP.getBoolean(player))
 		{
 			Component itemStackComponent = ItemNameUtil.itemName(itemStack, TextColor.fromHexString("#00ff3c"));
-			if (amount == 1 && itemStack.getType().getMaxStackSize() == 1)
+			if (amount == 1 && (itemStack.getType().getMaxStackSize() == 1 || itemStack.getItemMeta().hasMaxStackSize() && itemStack.getItemMeta().getMaxStackSize() == 1))
 			{
 				player.sendActionBar(ComponentUtil.translate(player, "#00ccff;key:cucumbery.action_bar.item_pickup|%s을(를) 주웠습니다", itemStackComponent));
 			}
 			else
 			{
-				Bukkit.getConsoleSender().sendMessage("foo: " + player.getName());
-				Component component = ComponentUtil.translate(player,"#00ccff;key:cucumbery.action_bar.item_pickup.count|%s을(를) %s개 주웠습니다", itemStackComponent, "#00ff3c;" + amount);
-				Bukkit.getConsoleSender().sendMessage(ComponentUtil.serializeAsJson(component));
 				player.sendActionBar(ComponentUtil.translate(player,"#00ccff;key:cucumbery.action_bar.item_pickup.count|%s을(를) %s개 주웠습니다", itemStackComponent, "#00ff3c;" + amount));
 			}
 		}

@@ -238,13 +238,13 @@ public class PlayerDropItem implements Listener
     }
   }
 
-  private void actionbarOnItemDrop(Player player, ItemStack item)
+  private void actionbarOnItemDrop(Player player, ItemStack itemStack)
   {
     if (UserData.SHOW_ACTIONBAR_ON_ITEM_DROP.getBoolean(player.getUniqueId()))
     {
-      int amount = item.getAmount();
-      Component itemStackComponent = ItemNameUtil.itemName(item, TextColor.fromHexString("#ff9900"));
-      if (amount == 1 && item.getType().getMaxStackSize() == 1)
+      int amount = itemStack.getAmount();
+      Component itemStackComponent = ItemNameUtil.itemName(itemStack, TextColor.fromHexString("#ff9900"));
+      if (amount == 1 && (itemStack.getType().getMaxStackSize() == 1 || itemStack.getItemMeta().hasMaxStackSize() && itemStack.getItemMeta().getMaxStackSize() == 1))
       {
         player.sendActionBar(ComponentUtil.translate(player,"#ffd900;key:cucumbery.action_bar.item_drop|%s을(를) 버렸습니다", itemStackComponent));
       }
@@ -255,7 +255,7 @@ public class PlayerDropItem implements Listener
     }
     if (UserData.LISTEN_ITEM_DROP.getBoolean(player.getUniqueId()))
     {
-      Method.heldItemSound(player, item);
+      Method.heldItemSound(player, itemStack);
       SoundPlay.playSound(player, Sound.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1F, 0.5F);
     }
   }
