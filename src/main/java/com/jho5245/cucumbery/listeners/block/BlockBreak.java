@@ -293,8 +293,8 @@ public class BlockBreak implements Listener
 			modified = true;
 		}
 
-		String toolId = ItemStackUtil.itemExists(itemStack) ? new NBTItem(itemStack).getString(CustomMaterial.IDENDIFER) : "", blockId =
-				!drops.isEmpty() && ItemStackUtil.itemExists(drops.get(0)) ? new NBTItem(drops.get(0)).getString(CustomMaterial.IDENDIFER) : "";
+		String toolId = ItemStackUtil.itemExists(itemStack) ? new NBTItem(itemStack).getString(CustomMaterial.IDENDTIFER) : "", blockId =
+				!drops.isEmpty() && ItemStackUtil.itemExists(drops.get(0)) ? new NBTItem(drops.get(0)).getString(CustomMaterial.IDENDTIFER) : "";
 		if (CustomMaterial.FLINT_SHOVEL.toString().equalsIgnoreCase(toolId) && blockId.isEmpty() && blockType == Material.GRAVEL)
 		{
 			modified = true;

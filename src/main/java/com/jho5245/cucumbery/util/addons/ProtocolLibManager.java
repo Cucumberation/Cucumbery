@@ -13,6 +13,7 @@ import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.utility.MinecraftReflection;
 import com.comphenix.protocol.wrappers.EnumWrappers.ItemSlot;
 import com.comphenix.protocol.wrappers.*;
+import com.google.gson.JsonElement;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
@@ -39,11 +40,13 @@ import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
 import de.tr7zw.changeme.nbtapi.*;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.text.event.DataComponentValue;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
 import net.kyori.adventure.text.event.HoverEvent.ShowItem;
@@ -51,6 +54,8 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.format.TextDecoration.State;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.text.serializer.gson.GsonDataComponentValue;
+import net.kyori.examination.ExaminableProperty;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -66,6 +71,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.management.ReflectionException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.text.DateFormat;
@@ -959,10 +965,7 @@ public class ProtocolLibManager
 			{
 				if (hoverEvent.value() instanceof ShowItem showItem)
 				{
-					BinaryTagHolder binaryTagHolder = showItem.nbt();
-					String nbt = binaryTagHolder != null ? binaryTagHolder.toString() : "";
-					ItemStack itemStack = Bukkit.getItemFactory().createItemStack(showItem.item() + nbt);
-					component = ItemStackComponent.itemStackComponent(itemStack, 1, Constant.THE_COLOR, false, player);
+					component = ItemStackComponent.itemStackComponent(ItemStackUtil.getItemStackFromHoverEvent(showItem), 1, Constant.THE_COLOR, false, player);
 				}
 				else if (hoverEvent.value() instanceof ShowEntity showEntity)
 				{

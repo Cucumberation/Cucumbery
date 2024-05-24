@@ -3,12 +3,10 @@ package com.jho5245.cucumbery.commands.brigadier;
 import com.jho5245.cucumbery.commands.brigadier.base.ArgumentUtil;
 import com.jho5245.cucumbery.commands.brigadier.base.CommandBase;
 import com.jho5245.cucumbery.util.additemmanager.AddItemUtil;
-import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.Variable;
-import com.mojang.brigadier.Message;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
@@ -18,11 +16,9 @@ import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
-import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -163,7 +159,7 @@ public class CommandGive2 extends CommandBase
 			CustomMaterial customMaterial = CustomMaterial.valueOf(customType.toUpperCase());
 			ItemStack itemStack = new ItemStack(customMaterial.getDisplayMaterial());
 			NBTItem nbtItem = new NBTItem(itemStack, true);
-			nbtItem.setString(CustomMaterial.IDENDIFER, customMaterial.toString().toLowerCase());
+			nbtItem.setString(CustomMaterial.IDENDTIFER, customMaterial.toString().toLowerCase());
 			return itemStack;
 		}
 		catch (IllegalArgumentException e)
@@ -174,7 +170,7 @@ public class CommandGive2 extends CommandBase
 			}
 			ItemStack itemStack = new ItemStack(Material.STONE);
 			NBTItem nbtItem = new NBTItem(itemStack, true);
-			nbtItem.setString(CustomMaterial.IDENDIFER, customType);
+			nbtItem.setString(CustomMaterial.IDENDTIFER, customType);
 			return itemStack;
 		}
 	}

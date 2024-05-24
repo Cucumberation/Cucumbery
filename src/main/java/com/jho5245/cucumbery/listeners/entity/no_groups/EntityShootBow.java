@@ -132,7 +132,7 @@ public class EntityShootBow implements Listener
           if (projectile instanceof AbstractArrow abstractArrow)
           {
             ItemStack consumableClone = consumable != null ? consumable.clone() : CustomMaterial.ARROW_CRIT.create();
-            new NBTItem(consumableClone, true).setString(CustomMaterial.IDENDIFER, "arrow_crit");
+            new NBTItem(consumableClone, true).setString(CustomMaterial.IDENDTIFER, "arrow_crit");
             consumableClone.setAmount(1);
             Variable.entityShootBowConsumableMap.put(abstractArrow.getUniqueId(), ItemSerializer.serialize(consumableClone));
             if (consumable != null)
@@ -182,7 +182,7 @@ public class EntityShootBow implements Listener
           if (projectile instanceof AbstractArrow abstractArrow)
           {
             ItemStack consumableClone = consumable != null ? consumable.clone() : CustomMaterial.ARROW_FLAME.create();
-            new NBTItem(consumableClone, true).setString(CustomMaterial.IDENDIFER, "arrow_flame");
+            new NBTItem(consumableClone, true).setString(CustomMaterial.IDENDTIFER, "arrow_flame");
             consumableClone.setAmount(1);
             Variable.entityShootBowConsumableMap.put(abstractArrow.getUniqueId(), ItemSerializer.serialize(consumableClone));
             if (consumable != null)
@@ -207,7 +207,7 @@ public class EntityShootBow implements Listener
           if (projectile instanceof AbstractArrow abstractArrow)
           {
             ItemStack consumableClone = consumable != null ? consumable.clone() : CustomMaterial.ARROW_MOUNT.create();
-            new NBTItem(consumableClone, true).setString(CustomMaterial.IDENDIFER, "arrow_mount");
+            new NBTItem(consumableClone, true).setString(CustomMaterial.IDENDTIFER, "arrow_mount");
             consumableClone.setAmount(1);
             Variable.entityShootBowConsumableMap.put(abstractArrow.getUniqueId(), ItemSerializer.serialize(consumableClone));
             if (consumable != null)

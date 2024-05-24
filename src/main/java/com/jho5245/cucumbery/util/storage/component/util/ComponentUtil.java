@@ -893,7 +893,7 @@ public class ComponentUtil
 				String editKey = yeet2(vanillaKey, serial);
 				if (!editKey.equals(vanillaKey))
 				{
-					component = component.key(editKey);
+					component = component.key(editKey).fallback(editKey);
 				}
 			}
 		}
@@ -918,7 +918,7 @@ public class ComponentUtil
 				String editKey = yeet2(key, serial);
 				if (!editKey.equals(key))
 				{
-					component = component.key(editKey);
+					component = component.key(editKey).fallback(editKey);
 				}
 			}
 		}
@@ -1053,10 +1053,9 @@ public class ComponentUtil
 		if (!componentArgs.isEmpty())
 		{
 			component = component.args(componentArgs);
+			// 플레이어가 없거나 해당 플레이어가 한국어 사용중일 경우 '을/를' 등의 조사를 적절히 치환
 			if (player == null || player.locale().equals(Locale.KOREA))
 			{
-				if (player != null)
-				Bukkit.getConsoleSender().sendMessage(player.getName() + " is korean");
 				component = yeet(component.key(), component);
 			}
 			List<Component> children = new ArrayList<>(component.children());

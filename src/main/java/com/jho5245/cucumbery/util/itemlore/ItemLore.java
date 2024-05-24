@@ -14,7 +14,6 @@ import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemCategory;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemCategory.Rarity;
-import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import de.tr7zw.changeme.nbtapi.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
@@ -26,7 +25,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.CreativeCategory;
-import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -98,7 +96,7 @@ public class ItemLore
 		}
 		Material type = itemStack.getType();
 		NBTItem nbtItem = new NBTItem(itemStack, true);
-		String customType = nbtItem.getString(CustomMaterial.IDENDIFER);
+		String customType = nbtItem.getString(CustomMaterial.IDENDTIFER);
 		CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
 		{
 			try
@@ -249,9 +247,9 @@ public class ItemLore
 					defaultLore.add(ComponentUtil.translate("&7원래 아이템 이름 : %s", customMaterial.getDisplayName()));
 				}
 			}
-			else if (nbtItem.hasTag(CustomMaterial.IDENDIFER) && !"".equals(nbtItem.getString(CustomMaterial.IDENDIFER)))
+			else if (nbtItem.hasTag(CustomMaterial.IDENDTIFER) && !"".equals(nbtItem.getString(CustomMaterial.IDENDTIFER)))
 			{
-				String id = nbtItem.getString(CustomMaterial.IDENDIFER);
+				String id = nbtItem.getString(CustomMaterial.IDENDTIFER);
 				ConfigurationSection section = Variable.customItemsConfig.getConfigurationSection(id);
 				if (section != null)
 				{
@@ -448,7 +446,7 @@ public class ItemLore
 		NBTItem nbtItem = new NBTItem(itemStack);
 		nbtItem.removeKey(CucumberyTag.KEY_TMI);
 		itemStack.setItemMeta(nbtItem.getItem().getItemMeta());
-		if (nbtItem.hasTag(CustomMaterial.IDENDIFER))
+		if (nbtItem.hasTag(CustomMaterial.IDENDTIFER))
 		{
 			itemMeta = itemStack.getItemMeta();
 /*			CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);

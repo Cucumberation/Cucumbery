@@ -42,7 +42,7 @@ public class ItemLore2
 		Player viewer = params instanceof ItemLoreView view ? view.player() : null;
 		Material type = item.getType();
 		NBTItem nbtItem = new NBTItem(item.clone());
-		String customType = nbtItem.getString(CustomMaterial.IDENDIFER);
+		String customType = nbtItem.getString(CustomMaterial.IDENDTIFER);
 		// CustomMaterial read
 		final CustomMaterial customMaterial = CustomMaterial.itemStackOf(item);
 		{

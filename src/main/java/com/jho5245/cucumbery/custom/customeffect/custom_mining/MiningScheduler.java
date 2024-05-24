@@ -10,7 +10,6 @@ import com.jho5245.cucumbery.util.additemmanager.AddItemUtil;
 import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
 import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
-import com.jho5245.cucumbery.util.no_groups.ItemSerializer;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.TPSMeter;
 import com.jho5245.cucumbery.util.storage.data.Constant;
@@ -21,7 +20,6 @@ import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
-import io.lumine.mythic.bukkit.utils.lib.jooq.User;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -489,7 +487,7 @@ public class MiningScheduler
 			double progress = Variable.customMiningProgress.getOrDefault(uuid, 0d);
 			progress = Math.max(0f, Math.min(1f, progress));
 			// 블록이 캐짐
-			boolean instaBreak = miningResult.blockHardness() == Float.MIN_VALUE;
+			boolean instaBreak = miningResult.blockHardness() == Double.MIN_VALUE;
 			if (progress >= 1 || instaBreak) // insta break
 			{
 				// 이벤트 호출
@@ -685,10 +683,10 @@ public class MiningScheduler
 				}
 				// 경험치 드롭 처리
 				{
-					float exp = miningResult.exp();
+					double exp = miningResult.expToDrop();
 					int intSide = (int) exp;
-					float floatSide = exp - intSide;
-					if (Math.random() < floatSide)
+					double doubleSide = exp - intSide;
+					if (Math.random() < doubleSide)
 					{
 						intSide++;
 					}

@@ -14,9 +14,6 @@ import com.jho5245.cucumbery.util.storage.data.custom_enchant.CustomEnchant;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.RecipeChecker;
 import de.tr7zw.changeme.nbtapi.*;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.format.TextDecoration.State;
 import org.bukkit.*;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.attribute.Attribute;
@@ -95,7 +92,7 @@ public class ItemLoreCustomItem
 			CustomMaterial origin = customMaterial.getOrigin();
 			if (origin != null)
 			{
-				nbtItem.setString(CustomMaterial.IDENDIFER, origin.toString().toLowerCase());
+				nbtItem.setString(CustomMaterial.IDENDTIFER, origin.toString().toLowerCase());
 				itemLore(itemStack, nbtItem, origin);
 				return;
 			}
@@ -343,7 +340,7 @@ public class ItemLoreCustomItem
 				case CUSTOM_CRAFTING_TABLE ->
 				{
 					nbtItem.setString("change_material", Material.CYAN_STAINED_GLASS.toString());
-					nbtItem.setFloat("BlockHardness", MiningManager.getBlockHardness(Material.CRAFTING_TABLE) * 1.5f);
+					nbtItem.setDouble("BlockHardness", MiningManager.getBlockHardness(Material.CRAFTING_TABLE) * 1.5f);
 					nbtItem.setString("BreakSound", Sound.BLOCK_WOOD_BREAK.toString());
 					nbtItem.setString("BreakParticle", "block:crafting_table[]");
 					nbtItem.setString("MatchTools", "AXE");
@@ -709,7 +706,7 @@ public class ItemLoreCustomItem
 					nbtItem.removeKey("BlockTier");
 					nbtItem.setString("MatchTools", "AXE");
 				}
-				nbtItem.setFloat("BlockHardness", MiningManager.getBlockHardness(customMaterial.getDisplayMaterial()));
+				nbtItem.setDouble("BlockHardness", MiningManager.getBlockHardness(customMaterial.getDisplayMaterial()));
 				nbtItem.setString("BreakParticle", "block:" + customMaterial.getDisplayMaterial().toString().toLowerCase());
 				nbtItem.setString("BreakSound", customMaterial.getDisplayMaterial().createBlockData().getSoundGroup().getBreakSound().toString());
 				nbtItem.setFloat("additionalPitch", 90f);

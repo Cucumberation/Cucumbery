@@ -34,7 +34,7 @@ public class ItemLore3
   {
     Material type = itemStack.getType();
     NBTItem nbtItem = new NBTItem(itemStack);
-    String customType = nbtItem.getString(CustomMaterial.IDENDIFER);
+    String customType = nbtItem.getString(CustomMaterial.IDENDTIFER);
     CustomMaterial customMaterial = null;
     {
       try

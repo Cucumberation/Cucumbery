@@ -28,9 +28,9 @@ public class ItemStackBuilder
   }
 
   @NotNull
-  public ItemStackBuilder blockHardness(float blockHardness)
+  public ItemStackBuilder blockHardness(double blockHardness)
   {
-    nbtItem.setFloat(MiningManager.BLOCK_HARDNESS, blockHardness);
+    nbtItem.setDouble(MiningManager.BLOCK_HARDNESS, blockHardness);
     nbtItem.setBoolean(MiningManager.REMOVE_KEYS, true);
     return this;
   }
@@ -44,10 +44,10 @@ public class ItemStackBuilder
   }
 
   @NotNull
-  public ItemStackBuilder blockStandard(int blockTier, float blockHardness, float blockExp)
+  public ItemStackBuilder blockStandard(int blockTier, double blockHardness, float blockExp)
   {
     nbtItem.setInteger(MiningManager.BLOCK_TIER, blockTier);
-    nbtItem.setFloat(MiningManager.BLOCK_HARDNESS, blockHardness);
+    nbtItem.setDouble(MiningManager.BLOCK_HARDNESS, blockHardness);
     nbtItem.setFloat(MiningManager.BLOCK_EXP, blockExp);
     nbtItem.setBoolean(MiningManager.REMOVE_KEYS, true);
     return this;

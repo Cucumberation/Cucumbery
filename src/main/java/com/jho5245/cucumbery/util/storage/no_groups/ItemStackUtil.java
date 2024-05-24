@@ -1,7 +1,6 @@
 package com.jho5245.cucumbery.util.storage.no_groups;
 
 import com.comphenix.protocol.PacketType.Play;
-import com.comphenix.protocol.PacketType.Play.Client;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
@@ -10,7 +9,6 @@ import com.destroystokyo.paper.profile.ProfileProperty;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
-import com.jho5245.cucumbery.util.addons.ProtocolLibManager;
 import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.itemlore.ItemLore.RemoveFlag;
 import com.jho5245.cucumbery.util.itemlore.ItemLore4;
@@ -28,8 +26,12 @@ import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.NBTList;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.text.event.DataComponentValue;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.event.HoverEvent.ShowItem;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.format.TextDecoration.State;
@@ -47,6 +49,7 @@ import org.bukkit.inventory.meta.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Method;
 import java.util.*;
 
 public class ItemStackUtil
@@ -603,7 +606,7 @@ public class ItemStackUtil
 					CustomMaterial smeltedItem = customMaterial.getSmeltedItem();
 					if (smeltedItem != null)
 					{
-						nbtItem.setString(CustomMaterial.IDENDIFER, smeltedItem.toString().toLowerCase());
+						nbtItem.setString(CustomMaterial.IDENDTIFER, smeltedItem.toString().toLowerCase());
 					}
 					Material smeltedItemVanilla = customMaterial.getSmeltedItemVanilla();
 					if (smeltedItemVanilla != null)
@@ -970,7 +973,7 @@ public class ItemStackUtil
 		try
 		{
 			NBTContainer nbtContainer = new NBTContainer(predicate);
-			String id = nbtContainer.getString(CustomMaterial.IDENDIFER);
+			String id = nbtContainer.getString(CustomMaterial.IDENDTIFER);
 			if (!id.isEmpty())
 			{
 				CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
@@ -983,7 +986,7 @@ public class ItemStackUtil
 				{
 					ItemStack i = new ItemStack(Material.STONE);
 					NBTItem nbtItem = new NBTItem(i, true);
-					nbtItem.setString(CustomMaterial.IDENDIFER, id);
+					nbtItem.setString(CustomMaterial.IDENDTIFER, id);
 					itemStack = i;
 					display = i.getItemMeta().displayName();
 				}
@@ -1093,8 +1096,8 @@ public class ItemStackUtil
 						if (customTags.getBoolean("cucumbery_likes"))
 						{
 							display = ComponentUtil.translate("굳검버리가 좋아하는 것");
-							itemStack.setType(
-									getAnimatedMaterial(Arrays.asList(Material.TNT, Material.TNT_MINECART, Material.COMMAND_BLOCK, Material.FLINT_AND_STEEL, Material.TURTLE_SCUTE)));
+							itemStack.setType(getAnimatedMaterial(
+									Arrays.asList(Material.TNT, Material.TNT_MINECART, Material.COMMAND_BLOCK, Material.FLINT_AND_STEEL, Material.TURTLE_SCUTE)));
 						}
 						if (customTags.getBoolean("gemstones"))
 						{
@@ -1135,8 +1138,8 @@ public class ItemStackUtil
 	 * <p>
 	 * minecraft:diamond_sowrd = {@link Material#DIAMOND_SWORD}
 	 * <p>
-	 * stick{display:{Name:'{"text":"foo","italic":false}'},Enchantments:[{id:"minecraft:sharpness",lvl:3s}]} = {@link Enchantment#DAMAGE_ALL} 인챈트 레벨 3이 부여된 foo
-	 * 라는 이름의 {@link Material#STICK}
+	 * stick[minecraft:custom_name:'{"text":"foo","italic":false}',minecraft:enchantments={"minecraft:sharpness":3}] = {@link Enchantment#SHARPNESS} 인챈트 레벨 3이 부여된
+	 * foo 라는 이름의 {@link Material#STICK}
 	 *
 	 * @param sender
 	 * 		제작할 때 오류 발생 시 메시지를 보낼 개체
@@ -1161,8 +1164,8 @@ public class ItemStackUtil
 	 * <p>
 	 * minecraft:diamond_sowrd = {@link Material#DIAMOND_SWORD}
 	 * <p>
-	 * stick{display:{Name:'{"text":"foo","italic":false}'},Enchantments:[{id:"minecraft:sharpness",lvl:3s}]} = {@link Enchantment#DAMAGE_ALL} 인챈트 레벨 3이 부여된 foo
-	 * 라는 이름의 {@link Material#STICK}
+	 * stick[minecraft:custom_name:'{"text":"foo","italic":false}',minecraft:enchantments={"minecraft:sharpness":3}] = {@link Enchantment#SHARPNESS} 인챈트 레벨 3이 부여된
+	 * foo 라는 이름의 {@link Material#STICK}
 	 *
 	 * @param sender
 	 * 		제작할 때 오류 발생 시 메시지를 보낼 개체
@@ -1457,6 +1460,80 @@ public class ItemStackUtil
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * {@link HoverEvent}의 {@link ShowItem}에서 {@link ItemStack}을 반환합니다.
+	 *
+	 * @param showItem
+	 * 		아이템을 가져올 {@link ShowItem}
+	 * @return 해당하는 아이템
+	 */
+	@NotNull
+	public static ItemStack getItemStackFromHoverEvent(ShowItem showItem)
+	{
+		return Bukkit.getItemFactory().createItemStack(showItem.item() + getComponentsFromHoverEvent(showItem));
+	}
+
+	/**
+	 * {@link HoverEvent}의 {@link ShowItem}에서 {@link ItemStack}의 컴포넌트를 문자열 형태로 반환합니다.
+	 *
+	 * @param showItem
+	 * 		아이템을 가져올 {@link ShowItem}
+	 * @return 문자열 형태의 아이템의 컴포넌트
+	 */
+	@NotNull
+	public static String getComponentsFromHoverEvent(ShowItem showItem)
+	{
+		Map<Key, DataComponentValue> map = showItem.dataComponents();
+		StringBuilder nbt = new StringBuilder();
+		List<String> strings = new ArrayList<>();
+		map.forEach((key, dataComponentValue) ->
+		{
+			strings.add(key.asString() + "=");
+			try
+			{
+				Class<?> clazz = dataComponentValue.getClass();
+				Bukkit.getConsoleSender().sendMessage(dataComponentValue.toString());
+				switch (clazz.getName())
+				{
+					case "net.kyori.adventure.text.serializer.gson.GsonDataComponentValueImpl" ->
+					{
+						Method method = clazz.getDeclaredMethod("element");
+						method.setAccessible(true);
+						strings.add(method.invoke(dataComponentValue).toString() + ",");
+					}
+					case "io.papermc.paper.adventure.PaperAdventure$DataComponentValueImpl" ->
+					{
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		});
+		for (String s : strings)
+		{
+			nbt.append(s);
+		}
+		if (nbt.isEmpty()) return "";
+
+		nbt = new StringBuilder("[" + nbt.substring(0, nbt.length() - 1) + "]");
+		return nbt.toString();
+	}
+
+	/**
+	 * {@link ItemStack}의 컴포넌트를 문자열 형태로 반환합니다.
+	 *
+	 * @param itemStack
+	 * 		컴포넌트를 읽을 아이템
+	 * @return 문자열 형태의 컴포넌트
+	 */
+	@NotNull
+	public static String getComponentsFromItemStack(@NotNull ItemStack itemStack)
+	{
+		return itemStack.getItemMeta().getAsComponentString();
 	}
 }
 

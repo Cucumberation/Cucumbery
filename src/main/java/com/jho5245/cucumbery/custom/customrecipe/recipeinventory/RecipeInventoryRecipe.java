@@ -26,7 +26,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.format.TextDecoration.State;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -369,7 +368,7 @@ public class RecipeInventoryRecipe
 						{
 							ItemStack itemStack = new ItemStack(Material.STONE);
 							NBTItem nbtItem = new NBTItem(itemStack, true);
-							nbtItem.setString(CustomMaterial.IDENDIFER, id);
+							nbtItem.setString(CustomMaterial.IDENDTIFER, id);
 							ingredient.setItemMeta(itemStack.getItemMeta());
 						}
 					}

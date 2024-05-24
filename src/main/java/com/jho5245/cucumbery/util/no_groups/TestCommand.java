@@ -136,8 +136,8 @@ public class TestCommand implements CucumberyCommandExecutor
 			if (args[0].equals("item"))
 			{
 				Player player = (Player) sender;
-				MessageUtil.sendMessage(player, "foo is %s", player.getInventory().getItemInMainHand());
-				MessageUtil.sendMessage(player, 30, ComponentUtil.translate(player, "foo foo is %s", player.getInventory().getItemInMainHand()));
+				ItemStack itemStack = player.getInventory().getItemInMainHand();
+				player.sendMessage(Component.text("foo").hoverEvent(itemStack));
 			}
 			if (args[0].equals("tag"))
 			{

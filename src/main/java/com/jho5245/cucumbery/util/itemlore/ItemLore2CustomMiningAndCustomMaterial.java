@@ -35,8 +35,8 @@ public class ItemLore2CustomMiningAndCustomMaterial
         if (params instanceof ItemLoreView view && CustomEffectManager.hasEffect(view.getPlayer(), CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE))
         {
           int toolTier = MiningManager.getToolTier(item);
-          float toolSpeed = MiningManager.getToolSpeed(item);
-          Float toolFortune = nbtItem.getFloat(MiningManager.TOOL_FORTUNE);
+          double toolSpeed = MiningManager.getToolSpeed(item);
+          Double toolFortune = nbtItem.getDouble(MiningManager.TOOL_FORTUNE);
           if (toolTier > 0 || toolSpeed > 0f || toolFortune > 0f)
           {
             lore.add(Component.empty());

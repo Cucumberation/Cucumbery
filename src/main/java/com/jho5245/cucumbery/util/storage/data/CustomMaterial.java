@@ -596,7 +596,7 @@ public enum CustomMaterial implements Translatable
 		this.category = category;
 	}
 
-	public static final String IDENDIFER = "internal_material_id";
+	public static final String IDENDTIFER = "internal_material_id";
 
 	/**
 	 * @return true if this item should be glow even wihtout any {@link org.bukkit.enchantments.Enchantment} it has otherwise false.
@@ -685,7 +685,7 @@ public enum CustomMaterial implements Translatable
 		}
 		try
 		{
-			return CustomMaterial.valueOf(new NBTItem(itemStack).getString(CustomMaterial.IDENDIFER).toUpperCase());
+			return CustomMaterial.valueOf(new NBTItem(itemStack).getString(CustomMaterial.IDENDTIFER).toUpperCase());
 		}
 		catch (Exception e)
 		{
@@ -781,7 +781,7 @@ public enum CustomMaterial implements Translatable
 	{
 		ItemStack itemStack = new ItemStack(this.displayMaterial, amount);
 		NBTItem nbtItem = new NBTItem(itemStack, true);
-		nbtItem.setString(IDENDIFER, this.toString().toLowerCase());
+		nbtItem.setString(IDENDTIFER, this.toString().toLowerCase());
 		ItemLore.setItemLore(itemStack, !withLore);
 		return itemStack;
 	}

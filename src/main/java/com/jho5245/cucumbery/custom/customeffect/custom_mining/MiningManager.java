@@ -186,24 +186,24 @@ public class MiningManager
 			}
 		}
 		int blockTier = getVanillaBlockTier(blockType), toolTier = getToolTier(itemStack);
-		float blockHardness = getBlockHardness(blockType), toolSpeed = getToolSpeed(itemStack);
+		double blockHardness = getBlockHardness(blockType), toolSpeed = getToolSpeed(itemStack);
 		boolean toolSpeedZero = toolSpeed <= 0f;
 		// 드롭 경험치
-		float expToDrop = 0;
+		double expToDrop = 0;
 		// 채광 속도 처리
-		double miningSpeed = 0f, miningSpeedBeforeHaste, speedMultiplier = 1f, finalSpeedMultiplier = 1f, bonusSpeed = 0f;
+		double miningSpeed = 0d, miningSpeedBeforeHaste, speedMultiplier = 1d, finalSpeedMultiplier = 1d, bonusSpeed = 0d;
 		// 블록 리젠 속도 (틱)
 		int regenCooldown = Math.max(0, Cucumbery.config.getInt("custom-mining.default-ore-regen-in-ticks"));
 		// 드롭율 배수
-		float miningFortune = 1f, farmingFortune = 1f, foragingFortune = 1f;
+		double miningFortune = 1d, farmingFortune = 1d, foragingFortune = 1d;
 		// 아이템의 드롭율 태그
 		{
 			if (ItemStackUtil.itemExists(itemStack))
 			{
 				NBTItem nbtItem = new NBTItem(itemStack);
-				if (nbtItem.hasTag(TOOL_FORTUNE) && nbtItem.getType(TOOL_FORTUNE) == NBTType.NBTTagFloat)
+				if (nbtItem.hasTag(TOOL_FORTUNE) && nbtItem.getType(TOOL_FORTUNE) == NBTType.NBTTagDouble)
 				{
-					miningFortune += nbtItem.getFloat(TOOL_FORTUNE) / 100f;
+					miningFortune += nbtItem.getDouble(TOOL_FORTUNE) / 100d;
 				}
 			}
 		}
@@ -639,7 +639,7 @@ public class MiningManager
 							blockHardness = 300f;
 							drops.clear();
 							drops.add(CustomMaterial.PLASTIC_DEBRIS.create());
-							expToDrop = (float) (Math.random() * 2 + 1);
+							expToDrop = Math.random() * 2 + 1;
 						}
 					}
 					case LAPIS_BLOCK, BLUE_WOOL, BLUE_CONCRETE ->
@@ -661,7 +661,7 @@ public class MiningManager
 							blockHardness = 3500f;
 							drops.clear();
 							drops.add(CustomMaterial.MITHRIL_ORE.create());
-							expToDrop = (float) (Math.random() * 3 + 2);
+							expToDrop = Math.random() * 3 + 2;
 						}
 					}
 					case PRISMARINE, PRISMARINE_BRICKS, DARK_PRISMARINE ->
@@ -694,7 +694,7 @@ public class MiningManager
 							blockHardness = 7500f;
 							drops.clear();
 							drops.add(CustomMaterial.NAUTILITE_ORE.create());
-							expToDrop = (float) (Math.random() * 4 + 3);
+							expToDrop = Math.random() * 4 + 3;
 						}
 					}
 					case STRIPPED_MANGROVE_WOOD, MANGROVE_PLANKS, RED_TERRACOTTA ->
@@ -705,7 +705,7 @@ public class MiningManager
 							blockHardness = 11000f;
 							drops.clear();
 							drops.add(CustomMaterial.SHROOMITE_ORE.create());
-							expToDrop = (float) (Math.random() * 2 + 10);
+							expToDrop = Math.random() * 2 + 10;
 						}
 					}
 					case GREEN_GLAZED_TERRACOTTA, GREEN_WOOL, GREEN_TERRACOTTA ->
@@ -714,7 +714,7 @@ public class MiningManager
 						blockHardness = 13500f;
 						drops.clear();
 						drops.add(CustomMaterial.CUCUMBERITE_ORE.create());
-						expToDrop = (float) (Math.random() * 50 + 2);
+						expToDrop = Math.random() * 50 + 2;
 					}
 				}
 			}
@@ -745,9 +745,9 @@ public class MiningManager
 					{
 						dataNBTItem.removeKey(REMOVE_KEYS);
 					}
-					if (dataNBTItem.hasTag(BLOCK_HARDNESS) && dataNBTItem.getType(BLOCK_HARDNESS) == NBTType.NBTTagFloat)
+					if (dataNBTItem.hasTag(BLOCK_HARDNESS) && dataNBTItem.getType(BLOCK_HARDNESS) == NBTType.NBTTagDouble)
 					{
-						blockHardness = dataNBTItem.getFloat(BLOCK_HARDNESS);
+						blockHardness = dataNBTItem.getDouble(BLOCK_HARDNESS);
 						if (removeKeys)
 						{
 							dataNBTItem.removeKey(BLOCK_HARDNESS);
@@ -761,9 +761,9 @@ public class MiningManager
 							dataNBTItem.removeKey(BLOCK_TIER);
 						}
 					}
-					if (dataNBTItem.hasTag(BLOCK_EXP) && dataNBTItem.getType(BLOCK_EXP) == NBTType.NBTTagFloat)
+					if (dataNBTItem.hasTag(BLOCK_EXP) && dataNBTItem.getType(BLOCK_EXP) == NBTType.NBTTagDouble)
 					{
-						expToDrop = dataNBTItem.getFloat(BLOCK_EXP);
+						expToDrop = dataNBTItem.getDouble(BLOCK_EXP);
 						if (removeKeys)
 						{
 							dataNBTItem.removeKey(BLOCK_EXP);
@@ -910,7 +910,7 @@ public class MiningManager
 		{
 			for (double d : expList)
 			{
-				expToDrop += (float) d;
+				expToDrop += d;
 			}
 			expToDrop += miningExp(blockType);
 		}
@@ -944,7 +944,7 @@ public class MiningManager
 						{
 							MessageUtil.sendWarn(Bukkit.getConsoleSender(), "config.yml 파일에서 custom-mining.efficiency의 값이 잘못 지정되어 있습니다!");
 						}
-						toolSpeed += (float) value;
+						toolSpeed += value;
 					}
 				}
 				if (toolId == CustomMaterial.MITHRIL_PICKAXE_REFINED && blockId == CustomMaterial.MITHRIL_ORE)
@@ -1063,7 +1063,7 @@ public class MiningManager
 		{
 			if (!toolMatches(itemStack, blockTier, block, drops))
 			{
-				float defaultSpeed = (float) Cucumbery.config.getDouble("custom-mining.default-tool-info.default.speed");
+				double defaultSpeed = Cucumbery.config.getDouble("custom-mining.default-tool-info.default.speed");
 				if (miningSpeed > defaultSpeed)
 				{
 					miningSpeed = defaultSpeed;
@@ -1119,11 +1119,11 @@ public class MiningManager
 			{
 				String formula = Cucumbery.config.getString("custom-mining.fortune", "100*((1/(%level%+2)+(%level%+1)/2)-1)")
 						.replace("%level%", enchantFortuneLevel + "");
-				float value = 0f;
+				double value = 0d;
 				try
 				{
-					value = Float.parseFloat(PlaceHolderUtil.evalString("{eval:" + formula + "}"));
-					if (Float.isNaN(value) || Float.isInfinite(value))
+					value = Double.parseDouble(PlaceHolderUtil.evalString("{eval:" + formula + "}"));
+					if (Double.isNaN(value) || Double.isInfinite(value))
 					{
 						throw new NumberFormatException();
 					}
@@ -1137,7 +1137,7 @@ public class MiningManager
 			CustomEffect miningFortuneEffect = CustomEffectManager.getEffectNullable(player, CustomEffectTypeCustomMining.MINING_FORTUNE);
 			if (miningFortuneEffect != null)
 			{
-				miningFortune += (float) ((miningFortuneEffect.getAmplifier() + 1) * 0.05);
+				miningFortune += (miningFortuneEffect.getAmplifier() + 1) * 0.05;
 			}
 			if (toolId == CustomMaterial.MITHRIL_PICKAXE && blockId == CustomMaterial.MITHRIL_ORE)
 			{
@@ -1304,13 +1304,13 @@ public class MiningManager
 		//    }
 
 		// 블록이 즉시 파괴되는 블록이면 최솟값으로 보정
-		if (blockHardness == 0f)
+		if (blockHardness == 0d)
 		{
-			blockHardness = Float.MIN_VALUE;
+			blockHardness = Double.MIN_VALUE;
 		}
-		if (blockHardness < 0f)
+		if (blockHardness < 0d)
 		{
-			blockHardness = -1f;
+			blockHardness = -1d;
 		}
 
 		miningSpeed = miningSpeed * speedMultiplier * finalSpeedMultiplier + bonusSpeed;
@@ -1325,8 +1325,8 @@ public class MiningManager
 		}
 		List<ItemStack> drop = new ArrayList<>();
 		int intSide = (int) miningFortune;
-		float floatSide = miningFortune - intSide;
-		if (Math.random() < floatSide)
+		double doubleSide = miningFortune - intSide;
+		if (Math.random() < doubleSide)
 		{
 			intSide++;
 		}
@@ -1421,40 +1421,40 @@ public class MiningManager
 		return !toDefaultSpeed;
 	}
 
-	public static float miningExp(@NotNull Material blockType)
+	public static double miningExp(@NotNull Material blockType)
 	{
-		float exp = 0f;
+		double exp = 0f;
 		if (Tag.COAL_ORES.isTagged(blockType))
 		{
-			exp += (float) (Math.random() * 2);
+			exp += Math.random() * 2;
 		}
 		if (blockType == Material.NETHER_GOLD_ORE)
 		{
-			exp += (float) Math.random();
+			exp += Math.random();
 		}
 		if (Tag.DIAMOND_ORES.isTagged(blockType) || Tag.EMERALD_ORES.isTagged(blockType))
 		{
-			exp += (float) (Math.random() * 4 + 3);
+			exp += Math.random() * 4 + 3;
 		}
 		if (Tag.LAPIS_ORES.isTagged(blockType) || blockType == Material.NETHER_QUARTZ_ORE)
 		{
-			exp += (float) (Math.random() * 3 + 2);
+			exp += Math.random() * 3 + 2;
 		}
 		if (Tag.REDSTONE_ORES.isTagged(blockType))
 		{
-			exp += (float) (Math.random() * 4 + 1);
+			exp += Math.random() * 4 + 1;
 		}
 		if (blockType == Material.SPAWNER)
 		{
-			exp += (float) (Math.random() * 28 + 15);
+			exp += Math.random() * 28 + 15;
 		}
 		if (blockType == Material.SCULK)
 		{
-			exp += 1f;
+			exp += 1d;
 		}
 		if (blockType == Material.SCULK_SENSOR || blockType == Material.SCULK_SHRIEKER || blockType == Material.SCULK_CATALYST)
 		{
-			exp += 5f;
+			exp += 5d;
 		}
 		return exp;
 	}
@@ -1494,39 +1494,39 @@ public class MiningManager
 		return toolTier;
 	}
 
-	public static float getToolSpeed(@NotNull ItemStack itemStack)
+	public static double getToolSpeed(@NotNull ItemStack itemStack)
 	{
 		Material type = itemStack.getType();
-		float toolSpeed = switch (type)
+		double toolSpeed = switch (type)
 		{
-			case GOLDEN_SWORD, SHEARS -> 750f;
-			case WOODEN_PICKAXE, WOODEN_AXE, WOODEN_SHOVEL, WOODEN_HOE -> 100f;
-			case STONE_PICKAXE, STONE_AXE, STONE_SHOVEL, STONE_HOE -> 200f;
-			case IRON_PICKAXE, IRON_AXE, IRON_SHOVEL, IRON_HOE -> 300f;
-			case DIAMOND_PICKAXE, DIAMOND_AXE, DIAMOND_SHOVEL, DIAMOND_HOE -> 400f;
-			case NETHERITE_PICKAXE, NETHERITE_AXE, NETHERITE_SHOVEL, NETHERITE_HOE -> 450f;
-			case WOODEN_SWORD -> 500f;
-			case STONE_SWORD -> 550f;
-			case IRON_SWORD, GOLDEN_PICKAXE, GOLDEN_AXE, GOLDEN_SHOVEL, GOLDEN_HOE -> 600f;
-			case DIAMOND_SWORD -> 650f;
-			case NETHERITE_SWORD -> 700f;
-			default -> 50f;
+			case GOLDEN_SWORD, SHEARS -> 750d;
+			case WOODEN_PICKAXE, WOODEN_AXE, WOODEN_SHOVEL, WOODEN_HOE -> 100d;
+			case STONE_PICKAXE, STONE_AXE, STONE_SHOVEL, STONE_HOE -> 200d;
+			case IRON_PICKAXE, IRON_AXE, IRON_SHOVEL, IRON_HOE -> 300d;
+			case DIAMOND_PICKAXE, DIAMOND_AXE, DIAMOND_SHOVEL, DIAMOND_HOE -> 400d;
+			case NETHERITE_PICKAXE, NETHERITE_AXE, NETHERITE_SHOVEL, NETHERITE_HOE -> 450d;
+			case WOODEN_SWORD -> 500d;
+			case STONE_SWORD -> 550d;
+			case IRON_SWORD, GOLDEN_PICKAXE, GOLDEN_AXE, GOLDEN_SHOVEL, GOLDEN_HOE -> 600d;
+			case DIAMOND_SWORD -> 650d;
+			case NETHERITE_SWORD -> 700d;
+			default -> 50d;
 		};
 		YamlConfiguration config = Cucumbery.config;
 		if (config.contains("custom-mining.default-tool-info." + type + ".speed"))
 		{
-			toolSpeed = (float) config.getDouble("custom-mining.default-tool-info." + type + ".speed");
+			toolSpeed = config.getDouble("custom-mining.default-tool-info." + type + ".speed");
 		}
-		else if (toolSpeed == 50f && config.contains("custom-mining.default-tool-info.default.speed"))
+		else if (toolSpeed == 50d && config.contains("custom-mining.default-tool-info.default.speed"))
 		{
-			toolSpeed = (float) config.getDouble("custom-mining.default-tool-info.default.speed");
+			toolSpeed = config.getDouble("custom-mining.default-tool-info.default.speed");
 		}
 		try
 		{
 			NBTItem nbtItem = new NBTItem(itemStack);
-			if (nbtItem.hasTag(TOOL_SPEED) && nbtItem.getType(TOOL_SPEED) == NBTType.NBTTagFloat)
+			if (nbtItem.hasTag(TOOL_SPEED) && nbtItem.getType(TOOL_SPEED) == NBTType.NBTTagDouble)
 			{
-				toolSpeed = nbtItem.getFloat(TOOL_SPEED);
+				toolSpeed = nbtItem.getDouble(TOOL_SPEED);
 			}
 		}
 		catch (Exception ignored)
@@ -1561,17 +1561,17 @@ public class MiningManager
 		return 0;
 	}
 
-	public static float getBlockHardness(@NotNull Material type)
+	public static double getBlockHardness(@NotNull Material type)
 	{
-		float multiplier = 100f;
+		double multiplier = 100d;
 		YamlConfiguration config = Cucumbery.config;
 		if (config.contains("custom-mining.default-block-info.multiplier"))
 		{
-			multiplier = (float) config.getDouble("custom-mining.default-block-info.multiplier");
+			multiplier = config.getDouble("custom-mining.default-block-info.multiplier");
 		}
 		if (config.contains("custom-mining.default-block-info." + type + ".hardness"))
 		{
-			return (float) config.getDouble("custom-mining.default-block-info." + type + ".hardness") * multiplier;
+			return config.getDouble("custom-mining.default-block-info." + type + ".hardness") * multiplier;
 		}
 		return type.getHardness() * multiplier;
 	}

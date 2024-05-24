@@ -7,12 +7,11 @@ import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
-import com.jho5245.cucumbery.util.no_groups.ItemSerializer;
-import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant.CucumberyHideFlag;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
+import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.NBTList;
@@ -24,6 +23,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.format.TextDecoration.State;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -131,9 +131,8 @@ public class ItemStackComponent
 			{
 				tooltip.add(Component.empty());
 				tooltip.add(ComponentUtil.translate("&7클릭하여 /give 명령어로 복사"));
-				Object o = new NBTItem(giveItem).getCompound();
-				String nbt = o != null ? o.toString() : "";
-				if (nbt.equals("{}"))
+				String nbt = ItemStackUtil.getComponentsFromItemStack(itemStack).replace(": ", ":").replace(", ", ",");
+				if (nbt.equals("[]"))
 					nbt = "";
 				if (UserData.SHOW_GIVE_COMMAND_NBT_ON_ITEM_ON_CHAT.getBoolean(viewer) && !nbt.isEmpty())
 				{
@@ -160,6 +159,7 @@ public class ItemStackComponent
 		}
 		bundleMeta.addItem(Cucumbery.using_ProtocolLib && viewer != null ? ProtocolLibManager.setItemLore(Server.ABILITIES, itemStack, viewer) : itemStack);
 		bundleMeta.addItemFlags(ItemFlag.values());
+		bundleMeta.removeItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
 		bundleMeta.displayName(ItemNameUtil.itemName(itemStack));
 		hover.setItemMeta(bundleMeta);
 		if (itemName instanceof TextComponent textComponent && textComponent.content().isEmpty())

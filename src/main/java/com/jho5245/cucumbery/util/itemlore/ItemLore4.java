@@ -2,17 +2,14 @@ package com.jho5245.cucumbery.util.itemlore;
 
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
-import com.jho5245.cucumbery.util.storage.no_groups.ItemCategory;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -45,14 +42,14 @@ public class ItemLore4
       itemStack.setItemMeta(nbtItem.getItem().getItemMeta());
       return;
     }
-    if (customTags != null || nbtItem.hasTag(CustomMaterial.IDENDIFER) && !"".equals(nbtItem.getString(CustomMaterial.IDENDIFER)))
+    if (customTags != null || nbtItem.hasTag(CustomMaterial.IDENDTIFER) && !"".equals(nbtItem.getString(CustomMaterial.IDENDTIFER)))
     {
       itemStack.setItemMeta(nbtItem.getItem().getItemMeta());
       return;
     }
     NBTCompound vanillaTags = nbtCompound.addCompound(CucumberyTag.TMI_VANILLA_TAGS);
     Material type = itemStack.getType();
-    String customType = nbtItem.getString(CustomMaterial.IDENDIFER);
+    String customType = nbtItem.getString(CustomMaterial.IDENDTIFER);
     try
     {
       type = Material.valueOf(customType.toUpperCase());

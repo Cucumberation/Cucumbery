@@ -130,11 +130,11 @@ public class PlayerCommandPreprocess implements Listener
 		}
 
 		// cucumberify
-		if (message.startsWith("/give "))
+/*		if (message.startsWith("/give "))
 		{
 			message = "/cgive " + message.substring(6);
 			event.setMessage(message);
-		}
+		}*/
 		if (message.startsWith("/cgive"))
 		{
 			String[] split2 = message.split(" ");

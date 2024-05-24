@@ -261,6 +261,9 @@ public class EntityPickupItem implements Listener
 			}
 			else
 			{
+				Bukkit.getConsoleSender().sendMessage("foo: " + player.getName());
+				Component component = ComponentUtil.translate(player,"#00ccff;key:cucumbery.action_bar.item_pickup.count|%s을(를) %s개 주웠습니다", itemStackComponent, "#00ff3c;" + amount);
+				Bukkit.getConsoleSender().sendMessage(ComponentUtil.serializeAsJson(component));
 				player.sendActionBar(ComponentUtil.translate(player,"#00ccff;key:cucumbery.action_bar.item_pickup.count|%s을(를) %s개 주웠습니다", itemStackComponent, "#00ff3c;" + amount));
 			}
 		}

@@ -2,6 +2,7 @@ package com.jho5245.cucumbery.commands.no_groups;
 
 import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent.Completion;
 import com.jho5245.cucumbery.Cucumbery;
+import com.jho5245.cucumbery.util.additemmanager.AddItemUtil;
 import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
 import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.no_groups.*;
@@ -12,6 +13,7 @@ import com.jho5245.cucumbery.util.storage.data.Permission;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import de.tr7zw.changeme.nbtapi.NBTContainer;
+import net.bytebuddy.implementation.bytecode.Addition;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
@@ -218,6 +220,25 @@ public class CommandBlockPlaceData implements CucumberyCommandExecutor
           }
         }
       }
+      case "get" -> {
+        if (!(sender instanceof Player player))
+        {
+          MessageUtil.sendError(sender, Prefix.ONLY_PLAYER);
+          return failure;
+        }
+        if (data == null)
+        {
+          MessageUtil.sendError(sender, "%s 위치에는 저장된 블록 데이터가 없습니다", location);
+          return failure;
+        }
+        if (!ItemStackUtil.itemExists(itemStack))
+        {
+          MessageUtil.sendWarn(sender, "%s에 있는 아이템이 손상되어 있습니다: %s", location, data);
+          return true;
+        }
+        AddItemUtil.addItemResult2(sender, player, itemStack, itemStack.getAmount()).stash().sendFeedback(false);
+        return true;
+      }
       default ->
       {
         MessageUtil.wrongArg(sender, 2, args);
@@ -276,7 +297,7 @@ public class CommandBlockPlaceData implements CucumberyCommandExecutor
     }
     if (length == 2)
     {
-      return CommandTabUtil.tabCompleterList(args, "<인수>", false, "info", "remove", "modify");
+      return CommandTabUtil.tabCompleterList(args, "<인수>", false, "info", "remove", "modify", "get");
     }
     if (args[1].equals("modify"))
     {

@@ -78,8 +78,7 @@ public class CommandSetData implements CommandExecutor, AsyncTabCompleter
             }
             clone.setAmount(amount);
             player.getInventory().setItemInMainHand(clone);
-            Component txt = ComponentUtil.create(Prefix.INFO_SETDATA, ComponentUtil.translate("주로 사용하는 손에 들고 있는 아이템의 개수를 %s개로 설정했습니다", amount).hoverEvent(item.asHoverEvent()));
-            player.sendMessage(txt);
+            MessageUtil.sendMessage(player, Prefix.INFO_SETDATA, "주로 사용하는 손에 들고 있는 아이템의 개수를 %s개로 설정했습니다 (원래 아이템 : %s)", amount, item);
             return true;
           case "durability":
             clone = item.clone();
@@ -96,9 +95,7 @@ public class CommandSetData implements CommandExecutor, AsyncTabCompleter
             duraMeta.setDamage(durability);
             clone.setItemMeta(duraMeta);
             player.getInventory().setItemInMainHand(clone);
-            ItemStackUtil.updateInventory(player);
-            txt = ComponentUtil.create(Prefix.INFO_SETDATA, ComponentUtil.translate("주로 사용하는 손에 들고 있는 아이템의 내구도를 %s(으)로 설정했습니다", durability).hoverEvent(item.asHoverEvent()));
-            player.sendMessage(txt);
+            MessageUtil.sendMessage(player, Prefix.INFO_SETDATA, "주로 사용하는 손에 들고 있는 아이템의 내구도를 %s(으)로 설정했습니다 (원래 아이템 : %s)", durability, item);
             return true;
           case "material":
             Material type;
@@ -126,21 +123,7 @@ public class CommandSetData implements CommandExecutor, AsyncTabCompleter
               clone = new ItemStack(type);
             }
             player.getInventory().setItemInMainHand(clone);
-            if (!ItemStackUtil.itemExists(player.getInventory().getItemInMainHand()))
-            {
-              player.getInventory().setItemInMainHand(item);
-              MessageUtil.sendWarn(player, "존재할 수 없는 물질이여서 변경이 취소되었습니다 (rg255,204;" + ItemNameUtil.itemName(type) + "&r)");
-              return true;
-            }
-            if (ItemStackUtil.itemExists(item))
-            {
-              txt = ComponentUtil.create(Prefix.INFO_SETDATA, ComponentUtil.translate("주로 사용하는 손에 들고 있는 아이템의 종류를 %s(으)로 설정했습니다", type).hoverEvent(item.asHoverEvent()));
-            }
-            else
-            {
-              txt = ComponentUtil.create(Prefix.INFO_SETDATA, ComponentUtil.translate("주로 사용하는 손에 들고 있는 아이템의 종류를 %s(으)로 설정했습니다", type).hoverEvent(new ItemStack(type).asHoverEvent()));
-            }
-            player.sendMessage(txt);
+            MessageUtil.sendMessage(player, Prefix.INFO_SETDATA, "주로 사용하는 손에 들고 있는 아이템의 종류를 %s(으)로 설정했습니다 (원래 아이템 : %s)", type, ItemStackUtil.itemExists(item) ? item : type);
             return true;
           case "skull":
             clone = item.clone();
