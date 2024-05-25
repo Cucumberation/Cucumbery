@@ -263,4 +263,9 @@ public class Variable
    * uuid로 플레이어 찾을때 사용함 - 접속을 종료해도 플레이어 정보 가져오려고
    */
   public static final HashMap<UUID, Player> PLAYER_HASH_MAP = new HashMap<>();
+
+  /**
+   * 플레이어가 마지막으로 사용했던 명령어
+   */
+  public static final HashMap<UUID, String> LAST_USED_COMMAND_MAP = new HashMap<>();
 }

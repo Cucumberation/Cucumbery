@@ -13,6 +13,7 @@ import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.utility.MinecraftReflection;
 import com.comphenix.protocol.wrappers.EnumWrappers.ItemSlot;
 import com.comphenix.protocol.wrappers.*;
+import com.google.common.collect.Multimap;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
@@ -54,6 +55,8 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.format.TextDecoration.State;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -799,7 +802,7 @@ public class ProtocolLibManager
 					component = component.children(children);
 				}
 				component = parse(event.getPlayer(),
-						originComponent instanceof TranslatableComponent translatableComponent && translatableComponent.key().equals("chat.type.admin"), component,
+						originComponent instanceof TranslatableComponent translatableComponent && translatableComponent.key().equals("chat.type.admin"), true, component,
 						component);
 				Component prefix = null;
 				if (originComponent instanceof TranslatableComponent translatableComponent)
@@ -828,7 +831,9 @@ public class ProtocolLibManager
 					component = component.color(null);
 				}
 				if (isActionBar)
+				{
 					prefix = null;
+				}
 				if (prefix != null)
 				{
 					component = Component.translatable("%s%s").arguments(prefix, component);
@@ -864,7 +869,8 @@ public class ProtocolLibManager
 					List<Component> components = new ArrayList<>();
 					for (ComponentLike componentLike : translatableComponent.arguments())
 						components.add(componentLike.asComponent());
-					component = translatableComponent.key(ComponentUtil.translate(player, translatableComponent.key(), components).key());
+					String key = ComponentUtil.convertConsonant(translatableComponent.key(), translatableComponent).key();
+					component = translatableComponent.key(key).fallback(key);
 				}
 				packet.getChatComponents().write(0, WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(component)));
 			}
@@ -953,7 +959,7 @@ public class ProtocolLibManager
 	}
 
 	@NotNull
-	private static Component parse(@NotNull Player player, boolean isAdminMessage, @NotNull Component component, @NotNull Component root)
+	private static Component parse(@NotNull Player player, boolean isAdminMessage, boolean changeArgumentColor, @NotNull Component component, @NotNull Component root)
 	{
 		HoverEvent<?> hoverEvent = component.hoverEvent();
 		if (hoverEvent != null)
@@ -990,6 +996,7 @@ public class ProtocolLibManager
 				int maxLength = UserData.SHOW_TIMESTAMP_ON_CHAT_MESSAGES.getBoolean(player) ? 65 : 77;
 				if (componentLength >= maxLength)
 					key = key.substring(Math.min(key.length(), Math.abs(componentLength - maxLength)));
+				translatableComponent = translatableComponent.key(key);
 			}
 
 			List<ComponentLike> translationArguments = new ArrayList<>(translatableComponent.arguments());
@@ -998,7 +1005,7 @@ public class ProtocolLibManager
 			{
 				Component argument = componentLike.asComponent();
 				// 인수에 숫자가 있는데 만약 컴포넌트 색이 없으면 숫자의 색깔을 THE COLOR로 / 아닐 경우 색깔을 바꾸지 않음
-				if (argument instanceof TextComponent textComponent && textComponent.color() == null)
+				if (changeArgumentColor && argument instanceof TextComponent textComponent && textComponent.color() == null)
 				{
 					String content = textComponent.content();
 					try
@@ -1011,7 +1018,7 @@ public class ProtocolLibManager
 					}
 				}
 
-				argument = parse(player, isAdminMessage, argument, root);
+				argument = parse(player, isAdminMessage, changeArgumentColor, argument, root);
 				// 관리자 명령어 메시지는 회색 기울임꼴이므로 인수의 색깔, 기울임 decoration을 제거한다.
 				if (isAdminMessage)
 				{
@@ -1019,14 +1026,17 @@ public class ProtocolLibManager
 				}
 				arguments.add(argument);
 			}
-			component = translatableComponent.key(ComponentUtil.translate(player, key, arguments).key()).arguments(arguments);
+			// 시스템 메시지를 보는 플레이어의 언어가 한국어일 경우 조사(을/를, 은/는 등) 적절하게 조정
+			boolean playerIsKorean = player.locale().equals(Locale.KOREA);
+			String translationKey = playerIsKorean ? ComponentUtil.convertConsonant(translatableComponent.key(), translatableComponent).key() : translatableComponent.key();
+			component = translatableComponent.key(translationKey).arguments(arguments).fallback(playerIsKorean && translatableComponent.fallback() != null ? translationKey : translatableComponent.fallback());
 		}
 		if (!component.children().isEmpty())
 		{
 			List<Component> newList = new ArrayList<>();
 			for (int i = 0; i < component.children().size(); i++)
 			{
-				newList.add(parse(player, isAdminMessage, component.children().get(i), root));
+				newList.add(parse(player, isAdminMessage, changeArgumentColor, component.children().get(i), root));
 			}
 			component = component.children(newList);
 		}
@@ -1190,18 +1200,27 @@ public class ProtocolLibManager
 			}
 		}
 
+		if (showItemLore && !itemMeta.hasAttributeModifiers())
+		{
+			Material type = clone.getType();
+			for (EquipmentSlot equipmentSlot : EquipmentSlot.values())
+			{
+				Multimap<Attribute, AttributeModifier> attributeModifierMultimap = type.getDefaultAttributeModifiers(equipmentSlot);
+				for (Attribute attribute : attributeModifierMultimap.keySet())
+				{
+					itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+					Collection<AttributeModifier> modifiers = attributeModifierMultimap.get(attribute);
+					for (AttributeModifier modifier : modifiers)
+					{
+						itemMeta.addAttributeModifier(attribute, modifier);
+					}
+				}
+			}
+		}
+
 		if (!useLoreInCreative)
 		{
 			clone.setItemMeta(itemMeta);
-		}
-
-		if (ignoreCreativeWhat && isStorageMeta)
-		{
-			ItemStack temp = new ItemStack(Material.ENCHANTED_BOOK);
-			temp.setItemMeta(itemMeta);
-			NBTItem tempNBTItem = new NBTItem(temp);
-			tempNBTItem.removeKey("StoredEnchantments");
-			new NBTItem(clone, true).mergeCompound(tempNBTItem);
 		}
 
 		if (player.getGameMode() == GameMode.CREATIVE && !showEnchantGlints)
@@ -1333,14 +1352,23 @@ public class ProtocolLibManager
 			return clone;
 		}
 
-/*		nbtItem = new NBTItem(clone, true);
-		if (!player.hasPermission("asdf") && ignoreCreativeWhat)
+		// 플레이어 언어가 한국어일 경우 lore 조사 수정
+		if (player.locale().equals(Locale.KOREA))
 		{
-			for (String key : nbtItem.getKeys())
+			itemMeta = clone.getItemMeta();
+			lore = itemMeta.lore();
+			if (lore != null)
 			{
-				nbtItem.removeKey(key);
+				for (int i = 0; i < lore.size(); i++)
+				{
+					Component changedLore = parse(player, false, false, lore.get(i), lore.get(i));
+					lore.set(i, changedLore);
+				}
 			}
-		}*/
+			itemMeta.lore(lore);
+			clone.setItemMeta(itemMeta);
+		}
+
 		return clone;
 	}
 

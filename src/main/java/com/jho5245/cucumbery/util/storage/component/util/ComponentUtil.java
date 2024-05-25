@@ -872,8 +872,14 @@ public class ComponentUtil
 		return ComponentUtil.translate(key, true);
 	}
 
+	/**
+	 * {@link TranslatableComponent#key()}의 값을 인수에 따라 적절하게 문장의 조사를 조정합니다. 한국어 문법에만 대응합니다.
+	 * @param key 해당 컴포넌트의 키
+	 * @param component 해당하는 컴포넌트
+	 * @return 조사가 조정된 컴포넌트
+	 */
 	@NotNull
-	private static TranslatableComponent yeet(@NotNull String key, @NotNull TranslatableComponent component)
+	public static TranslatableComponent convertConsonant(@NotNull String key, @NotNull TranslatableComponent component)
 	{
 		String vanillaKey = Variable.lang.getString(key.replace(".", "-"));
 		boolean needChange = false;
@@ -1054,9 +1060,9 @@ public class ComponentUtil
 		{
 			component = component.args(componentArgs);
 			// 플레이어가 없거나 해당 플레이어가 한국어 사용중일 경우 '을/를' 등의 조사를 적절히 치환
-			if (player == null || player.locale().equals(Locale.KOREA))
+			if ((!Cucumbery.using_ProtocolLib && player != null && player.locale().equals(Locale.KOREA) || (player == null && Locale.getDefault().equals(Locale.KOREA))))
 			{
-				component = yeet(component.key(), component);
+				component = convertConsonant(component.key(), component);
 			}
 			List<Component> children = new ArrayList<>(component.children());
 			if (!children.isEmpty())

@@ -209,7 +209,7 @@ public class ItemLore2BlockState
 							}
 							if (itemStackList.size() == 1)
 							{
-								lore.addAll(ItemStackUtil.getItemInfoAsComponents(itemStackList.get(0), params, customNameLore, true));
+								lore.addAll(ItemStackUtil.getItemInfoAsComponents(itemStackList.getFirst(), params, customNameLore, true));
 							}
 							else
 							{

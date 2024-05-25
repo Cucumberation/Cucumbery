@@ -85,7 +85,9 @@ public class PlayerCommandPreprocess implements Listener
 		String message = event.getMessage();
 		String[] split = message.split(" ");
 		String label = split[0];
+		// 마지막으로 사용한 명령어에 저장
 		label = label.substring(1);
+		Variable.LAST_USED_COMMAND_MAP.put(uuid, label);
 		if (!Permission.EVENT2_COMMAND_SEND_COLON.has(player))
 		{
 			if (label.contains(":"))

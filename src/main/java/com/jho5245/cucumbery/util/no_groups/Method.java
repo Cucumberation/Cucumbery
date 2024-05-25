@@ -1567,8 +1567,13 @@ public class Method extends SoundPlay
 		}
 		if (notice)
 		{
-			Bukkit.dispatchCommand(sender, "cucumberyunknowncommand");
-			MessageUtil.consoleSendMessage(Prefix.INFO_WARN, sender, "translate:이(가) 권한이 부족하여 명령어 사용에 실패했습니다");
+			MessageUtil.sendError(sender, "command.unknown.command");
+			sender.sendMessage(
+					Component.text(Variable.LAST_USED_COMMAND_MAP.getOrDefault(sender instanceof Player player ? player.getUniqueId() : UUID.randomUUID(), ""), NamedTextColor.RED)
+							.decoration(TextDecoration.UNDERLINED, State.TRUE)
+							.append(Component.translatable("command.context.here").decoration(TextDecoration.UNDERLINED, State.FALSE).decoration(TextDecoration.ITALIC, State.TRUE))
+			);
+			MessageUtil.sendWarn(Bukkit.getConsoleSender(), "%s이(가) 권한이 부족하여 명령어 사용에 실패했습니다", sender);
 		}
 		return false;
 	}
