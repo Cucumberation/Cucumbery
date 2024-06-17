@@ -113,24 +113,6 @@ public class PlayerCommandPreprocess implements Listener
 			}
 		}
 
-		// TODO: will be removed from 1.20.5
-		if ("playsound".equals(label))
-		{
-			switch (split.length)
-			{
-				case 2 ->
-				{
-					message += " master @s";
-					event.setMessage(message);
-				}
-				case 3 ->
-				{
-					message += " @s";
-					event.setMessage(message);
-				}
-			}
-		}
-
 		// cucumberify
 /*		if (message.startsWith("/give "))
 		{

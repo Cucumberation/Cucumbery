@@ -129,7 +129,7 @@ public class ItemLore2Enchant
 			EnchantmentStorageMeta storageMeta = (EnchantmentStorageMeta) itemMeta;
 			if (storageMeta.hasStoredEnchants() && (!hideEnchant || eventAccessMode))
 			{
-				itemMeta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
+				itemMeta.addItemFlags(ItemFlag.HIDE_STORED_ENCHANTS);
 				List<Component> enchantLore = new ArrayList<>();
 				Map<Enchantment, Integer> enchants = new HashMap<>(storageMeta.getStoredEnchants());
 				enchants.keySet().removeIf(enchantment -> enchantment.equals(CustomEnchant.GLOW));
@@ -207,7 +207,7 @@ public class ItemLore2Enchant
 			}
 			else
 			{
-				itemMeta.removeItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
+				itemMeta.removeItemFlags(ItemFlag.HIDE_STORED_ENCHANTS);
 			}
 		}
 	}

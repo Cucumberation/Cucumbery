@@ -360,7 +360,7 @@ public enum CustomMaterial implements Translatable
 
 	SPYGLASS_TELEPORT(Material.SPYGLASS, "key:item.cucumbery.spyglass_teleport|텔레포트 망원경", Rarity.ELITE, "key:itemGroup.magical_tools|마법 도구"),
 	STONK(Material.GOLDEN_PICKAXE, "key:item.cucumbery.stonk|채굴기", Rarity.EPIC, CreativeCategory.TOOLS),
-	SUS(Material.PLAYER_HEAD, "key:block.cucumbery.sus|Amogus Gusensus sansus 광석", Rarity.EPIC, "itemGroup.natural"),
+	SUS(Material.PLAYER_HEAD, "key:block.cucumbery.sus|Amogus Gusensus sansus 광석", Rarity.EPIC, "key:itemGroup.sus|SUS"),
 	TEST_PICKAXE(Material.IRON_PICKAXE, "key:item.cucumbery.test_pickaxe|테스트 곡괭이", Rarity._ADMIN, CreativeCategory.TOOLS),
 	THE_MUSIC(Material.MUSIC_DISC_5, "key:item.cucumbery.the_music|'그' 노래", Rarity.EPIC),
 	TIGHTLY_TIED_HAY_BLOCK(Material.PLAYER_HEAD, "key:item.cucumbery.tightly_tied_hay_block|꽉 묶은 건초 더미", Rarity.ELITE),

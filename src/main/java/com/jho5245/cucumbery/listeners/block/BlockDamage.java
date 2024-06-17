@@ -47,14 +47,6 @@ public class BlockDamage implements Listener
       {
         return;
       }
-      if (block.getType() == Material.FIRE)
-      {
-        if (!CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_2_NO_RESTORE))
-        {
-          event.setCancelled(true);
-        }
-        return;
-      }
       if (!Cucumbery.using_mcMMO)
       {
         event.setCancelled(true);

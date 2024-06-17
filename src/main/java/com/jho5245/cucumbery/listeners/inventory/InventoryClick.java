@@ -445,6 +445,8 @@ public class InventoryClick implements Listener
 			return;
 		}
 		InventoryView view = event.getView();
+		Component title = view.title();
+		ItemStack current = event.getCurrentItem(), cursor = event.getCursor();
 		Player player = (Player) view.getPlayer();
 		UUID uuid = player.getUniqueId();
 		if (Variable.scrollReinforcing.contains(uuid))
@@ -452,7 +454,6 @@ public class InventoryClick implements Listener
 			event.setCancelled(true);
 			return;
 		}
-		Component title = view.title();
 		GameMode gameMode = player.getGameMode();
 		PlayerInventory playerInventory = player.getInventory();
 		ItemStack helmet = playerInventory.getHelmet();
@@ -474,7 +475,6 @@ public class InventoryClick implements Listener
 		{
 			CustomEffectManager.addEffect(player, CustomEffectType.IGNORE_ARM_SWING);
 		}
-		ItemStack current = event.getCurrentItem(), cursor = event.getCursor();
 		Inventory inventory = event.getInventory();
 		Location inventoryLocation = inventory.getLocation();
 		ItemStack placedBlockDataItemStack = inventoryLocation == null ? null : BlockPlaceDataConfig.getItem(inventoryLocation);
@@ -1760,10 +1760,6 @@ public class InventoryClick implements Listener
 			return;
 		}
 		ItemStack item = event.getCurrentItem();
-		if (!ItemStackUtil.hasItemMeta(item))
-		{
-			return;
-		}
 		int random = Method.random(1, 10000);
 		boolean ohYes = random >= 9700;
 		if (ohYes && Cucumbery.config.getBoolean("gui-easter-egg-sound"))
@@ -1841,6 +1837,14 @@ public class InventoryClick implements Listener
 		{
 			return;
 		}
+		ItemStack item = event.getCurrentItem();
+		String invName = event.getView().getTitle();
+		Component title = event.getView().title();
+		if ((GUIManager.isGUITitle(title) || invName.contains(Constant.CANCEL_STRING)) && ItemStackUtil.itemExists(item) && item.getItemMeta().isHideTooltip())
+		{
+			event.setCancelled(true);
+			return;
+		}
 		if (event.getInventory().getLocation() != null)
 		{
 			return;
@@ -1853,13 +1857,22 @@ public class InventoryClick implements Listener
 			return;
 		}
 		ClickType clickType = event.getClick();
-		Component title = event.getView().title();
 		if (event.getView().getTitle().startsWith(Constant.CANCEL_STRING) || GUIManager.isGUITitle(title))
 		{
 			event.setCancelled(true);
 		}
 		else
 		{
+			return;
+		}
+		if (!ItemStackUtil.itemExists(item))
+		{
+			event.setCancelled(true);
+			return;
+		}
+		if (clickType == ClickType.NUMBER_KEY)
+		{
+			event.setCancelled(true);
 			return;
 		}
 		if (event.getSlotType() == SlotType.OUTSIDE)
@@ -1874,13 +1887,7 @@ public class InventoryClick implements Listener
 		{
 			return;
 		}
-		ItemStack item = event.getCurrentItem();
-		if (!ItemStackUtil.hasItemMeta(item))
-		{
-			return;
-		}
 		Material type = Objects.requireNonNull(item).getType();
-		String invName = event.getView().getTitle();
 		String itemName = ComponentUtil.serialize(ItemNameUtil.itemName(item));
 		if (itemName.isEmpty())
 		{

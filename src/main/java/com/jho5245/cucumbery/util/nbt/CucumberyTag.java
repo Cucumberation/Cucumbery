@@ -32,6 +32,11 @@ public class CucumberyTag
   public static final String USAGE_DISPOSABLE_KEY = "Disposable";
   public static final String USAGE_COMMANDS_KEY = "Commands";
 
+  /**
+   * ProtocolLib에 의해 아이템 설명이 바뀌는 것을 방지할 태그
+   */
+  public static final String INTERNAL_DO_NOT_SET_ITEM_LORE = "DO_NOT_SET_ITEM_LORE";
+
   public static final String USAGE_COMMANDS_SNEAK_KEY = "Sneak";
   public static final String USAGE_COMMANDS_SPRINT_KEY = "Sprint";
 

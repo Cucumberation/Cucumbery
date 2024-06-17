@@ -338,6 +338,12 @@ public abstract class CustomEnchant extends Enchantment
 		return 0;
 	}
 
+	@Override
+	public int getAnvilCost()
+	{
+		return 0;
+	}
+
 	/**
 	 * @return true if this custom enchant is ultimate enchant.
 	 */

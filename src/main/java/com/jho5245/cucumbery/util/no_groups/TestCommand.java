@@ -18,6 +18,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -153,6 +154,17 @@ public class TestCommand implements CucumberyCommandExecutor
 				player.sendMessage("item nbt: " + nbt);
 				ItemStack build = ItemSerializer.deserialize(nbt);
 				player.getInventory().addItem(build);
+			}
+
+			if (args[0].equals("meta"))
+			{
+				Player player = (Player) sender;
+				ItemStack itemStack = player.getInventory().getItemInMainHand();
+				ItemMeta itemMeta = itemStack.hasItemMeta() ? itemStack.getItemMeta() : null;
+				MessageUtil.sendMessage(player, itemMeta + "");
+				if (itemMeta != null)
+				{
+				}
 			}
 
 /*			RecipeChoice ingredient = PotionMix.createPredicateChoice(itemStack -> CustomMaterial.itemStackOf(itemStack) == CustomMaterial.JADE);

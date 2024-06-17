@@ -1,18 +1,24 @@
 package com.jho5245.cucumbery.listeners.entity.no_groups;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.custom_enchant.CustomEnchant;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
+
+import java.nio.Buffer;
+import java.util.function.Supplier;
 
 public class ProjectileLaunch implements Listener
 {
@@ -55,8 +61,6 @@ public class ProjectileLaunch implements Listener
     {
       ItemStack snowBallItemStack = snowball.getItem();
       CustomMaterial customMaterial = CustomMaterial.itemStackOf(snowBallItemStack);
-      if (customMaterial != null)
-      {
         switch (customMaterial)
         {
           case BRICK_THROWABLE -> snowBallItemStack.setType(Material.BRICK);
@@ -65,10 +69,22 @@ public class ProjectileLaunch implements Listener
           case IRON_INGOT_THROWABLE -> snowBallItemStack.setType(Material.IRON_INGOT);
           case GOLD_INGOT_THROWABLE -> snowBallItemStack.setType(Material.GOLD_INGOT);
           case NETHERITE_INGOT_THROWABLE -> snowBallItemStack.setType(Material.NETHERITE_INGOT);
+          case SNOWBALL_AI_VO, SNOWBALL_GGUMONG -> {
+            snowBallItemStack = new ItemStack(Material.PLAYER_HEAD);
+            SkullMeta skullMeta = (SkullMeta) snowBallItemStack.getItemMeta();
+            String name = switch (customMaterial)
+            {
+              default -> "";
+              case SNOWBALL_AI_VO -> "Ai_vo";
+              case SNOWBALL_GGUMONG -> "GGUMONG";
+            };
+            skullMeta.setPlayerProfile(Bukkit.createProfile(name));
+            snowBallItemStack.setItemMeta(skullMeta);
+          }
+          case null, default -> {}
         }
         snowball.setItem(snowBallItemStack);
         snowball.setVelocity(snowball.getVelocity().multiply(0.5d));
-      }
     }
   }
 }

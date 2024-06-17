@@ -36,7 +36,7 @@ public class ItemLore2Meta2
       case FIREWORK_ROCKET ->
       {
         FireworkMeta fireworkMeta = (FireworkMeta) itemMeta;
-        fireworkMeta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
+        fireworkMeta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
         int power = fireworkMeta.getPower();
         if (power >= 0 && power <= 127)
         {
@@ -151,7 +151,7 @@ public class ItemLore2Meta2
           RAISER_ARMOR_TRIM_SMITHING_TEMPLATE, RIB_ARMOR_TRIM_SMITHING_TEMPLATE, SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE, SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE, SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE,
           SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE, TIDE_ARMOR_TRIM_SMITHING_TEMPLATE, VEX_ARMOR_TRIM_SMITHING_TEMPLATE, WARD_ARMOR_TRIM_SMITHING_TEMPLATE, WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE,
           WILD_ARMOR_TRIM_SMITHING_TEMPLATE -> {
-        itemMeta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
+        itemMeta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
         String pattern = type.toString().toLowerCase().split("_")[0];
         lore.add(Component.empty());
         lore.add(ComponentUtil.translate("&7key:cucumbery.item_lore.description.trim_smithing_template|%s에서 갑옷에 주괴 및 수정으로 장식할 수 있다.", Material.SMITHING_TABLE));
@@ -159,7 +159,7 @@ public class ItemLore2Meta2
         lore.add(ComponentUtil.translate("&ekey:cucumbery.item_lore.trim_smithing_template|형판 유형 : %s", ComponentUtil.translate("&6trim_pattern.minecraft." + pattern)));
       }
       case NETHERITE_UPGRADE_SMITHING_TEMPLATE -> {
-        itemMeta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
+        itemMeta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
         lore.add(Component.empty());
         lore.add(ComponentUtil.translate("&7key:cucumbery.item_lore.description.netherite_upgrade_smithing_template|%s에서 다이아몬드 장비와 네더라이트 주괴를", Material.SMITHING_TABLE));
         lore.add(ComponentUtil.translate("&7key:cucumbery.item_lore.description.netherite_upgrade_smithing_template_2|사용하여 네더라이트 장비로 업그레이드할 수 있다."));

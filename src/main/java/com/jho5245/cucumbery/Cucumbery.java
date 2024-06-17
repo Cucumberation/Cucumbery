@@ -116,7 +116,7 @@ import java.util.UUID;
 
 public class Cucumbery extends JavaPlugin
 {
-	public static final int CONFIG_VERSION = 47, DEATH_MESSAGES_CONFIG_VERSION = 12, LANG_CONFIG_VERSION = 7;
+	public static final int CONFIG_VERSION = 47, DEATH_MESSAGES_CONFIG_VERSION = 13, LANG_CONFIG_VERSION = 7;
 
 	//  private static final ExecutorService brigadierService = Executors.newFixedThreadPool(1);
 	public static YamlConfiguration config;
@@ -124,8 +124,7 @@ public class Cucumbery extends JavaPlugin
 	/**
 	 * Shaded since 2022.07.04 so always true
 	 */
-	// TODO: set to false to fix bug since 2024.05.23
-	public static boolean using_CommandAPI = false;
+	public static boolean using_CommandAPI = true;
 
 	public static boolean using_Vault_Economy;
 
@@ -316,7 +315,7 @@ public class Cucumbery extends JavaPlugin
 				Bukkit.getScheduler().runTaskLaterAsynchronously(cucumbery, () -> BlockPlaceDataConfig.display(player, player.getLocation()), 0L);
 			}
 			Variable.PLAYER_HASH_MAP.put(player.getUniqueId(), player);
-			String displayName = UserData.DISPLAY_NAME.getString(player);
+/*			String displayName = UserData.DISPLAY_NAME.getString(player);
 			if (displayName != null)
 			{
 				PlayerProfile playerProfile = player.getPlayerProfile();
@@ -325,7 +324,7 @@ public class Cucumbery extends JavaPlugin
 					name = name.substring(0, 16);
 				playerProfile.setName(name);
 				player.setPlayerProfile(playerProfile);
-			}
+			}*/
 			ItemStackUtil.updateInventory(player);
 		}
 		for (World world : Bukkit.getWorlds())
@@ -387,13 +386,13 @@ public class Cucumbery extends JavaPlugin
 						e.remove();
 				}
 			}
-			String name = Variable.ORIGINAL_NAME.get(player.getUniqueId());
+/*			String name = Variable.ORIGINAL_NAME.get(player.getUniqueId());
 			if (name != null)
 			{
 				PlayerProfile playerProfile = player.getPlayerProfile();
 				playerProfile.setName(name);
 				player.setPlayerProfile(playerProfile);
-			}
+			}*/
 		}
 		if (using_ProtocolLib)
 		{
@@ -592,9 +591,9 @@ public class Cucumbery extends JavaPlugin
 
 		if (using_Residence)
 		{
-			Plugin plugin = pluginManager.getPlugin("Residence");
-			using_Residence = plugin != null && plugin.getClass().getName().equals("com.bekvon.bukkit.residence.Residence");
-		}
+		Plugin plugin = pluginManager.getPlugin("Residence");
+		using_Residence = plugin != null && plugin.getClass().getName().equals("com.bekvon.bukkit.residence.Residence");
+	}
 		if (using_WorldEdit)
 		{
 			Plugin plugin = this.pluginManager.getPlugin("WorldEdit");
@@ -1010,18 +1009,22 @@ public class Cucumbery extends JavaPlugin
 		Initializer.registerEvent(new PlayerPickItem());
 		Initializer.registerEvent(new PlayerStopUsingItem());
 		Initializer.registerEvent(new PlayerSwapHandItems());
+
 		// listener.server
 		Initializer.registerEvent(new ServerCommand());
 		Initializer.registerEvent(new ServerListPing());
+
 		// listener.vehicle
 		Initializer.registerEvent(new VehicleDamage());
 		Initializer.registerEvent(new VehicleDestroy());
 		Initializer.registerEvent(new VehicleExit());
+
 		// listener.world
 		Initializer.registerEvent(new EntitiesLoad());
 		// listener.world.chunk
 		Initializer.registerEvent(new PlayerChunkLoad());
 		Initializer.registerEvent(new PlayerChunkUnload());
+
 		// listener.addon.quickshop
 		if (using_QuickShop)
 		{

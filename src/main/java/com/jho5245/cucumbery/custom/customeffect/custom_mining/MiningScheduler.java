@@ -420,20 +420,15 @@ public class MiningScheduler
 			boolean toolIsDrill = toolCustomMaterial != null && toolCustomMaterial.isDrill();
 			ItemMeta itemMeta = toolItemStack.getItemMeta();
 			// 드릴 연료 0 이하일 시 사용 불가 처리
-			if (toolIsDrill)
+			if (toolIsDrill && itemMeta instanceof Damageable damageable)
 			{
-				NBTItem nbtItem = new NBTItem(toolItemStack);
-				NBTCompound itemTag = nbtItem.getCompound(CucumberyTag.KEY_MAIN);
-				NBTCompound duraTag = itemTag != null ? itemTag.getCompound(CucumberyTag.CUSTOM_DURABILITY_KEY) : null;
-				if (duraTag != null)
+				int currentDurability = damageable.hasDamage() ? damageable.getDamage() : 0;
+				int maxDurability = damageable.hasMaxDamage() ? damageable.getMaxDamage() : 0;
+				if (currentDurability >= maxDurability)
 				{
-					long curDura = duraTag.getLong(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY);
-					if (curDura >= duraTag.getLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY))
-					{
-						MessageUtil.sendWarn(player, "%s의 연료가 다 떨어져서 사용할 수 없습니다. 모루에서 드릴과 드릴 연료를 사용하여 연료를 충전할 수 있습니다.", toolItemStack);
-						MiningManager.quitCustomMining(player);
-						return;
-					}
+					MessageUtil.sendWarn(player, "%s의 연료가 다 떨어져서 사용할 수 없습니다. 모루에서 드릴과 드릴 연료를 사용하여 연료를 충전할 수 있습니다.", toolItemStack);
+					MiningManager.quitCustomMining(player);
+					return;
 				}
 			}
 			MiningResult miningResult = MiningManager.getMiningInfo(player, location);
@@ -525,6 +520,12 @@ public class MiningScheduler
 						pitch = miningResult.breakSoundPitch();
 					}
 					Sound sound = breakSound != null ? breakSound : soundGroup.getBreakSound();
+					// 불 블록은 전용 소리 재생
+					if (block.getType() == Material.FIRE && BlockPlaceDataConfig.getItem(location) == null)
+					{
+						sound = Sound.BLOCK_FIRE_EXTINGUISH;
+						pitch = 2f;
+					}
 					for (Player online : Bukkit.getOnlinePlayers())
 					{
 						if (online.getWorld().getName().equals(player.getWorld().getName()))
@@ -598,6 +599,9 @@ public class MiningScheduler
 							boundingBoxes.add(block.getBoundingBox());
 							boundingBoxes.add(new BoundingBox(0d, 0d, 0d, 1d, 1d, 1d));
 						}
+						// 불 블록은 파괴 입자 처리 안함
+						if (block.getType() == Material.FIRE && BlockPlaceDataConfig.getItem(location) == null)
+							boundingBoxes.clear();
 						for (Player online : Bukkit.getOnlinePlayers())
 						{
 							if (UserData.SHOW_BLOCK_BREAK_PARTICLE_ON_CUSTOM_MINING.getBoolean(online) && online.getWorld().getName().equals(player.getWorld().getName()))
@@ -872,15 +876,17 @@ public class MiningScheduler
 					NBTCompound itemTag = nbtItem.getCompound(CucumberyTag.KEY_MAIN);
 					NBTCompound duraTag = itemTag != null ? itemTag.getCompound(CucumberyTag.CUSTOM_DURABILITY_KEY) : null;
 					boolean duraTagExists = duraTag != null;
-					long currentDurability = ((Damageable) toolItemStack.getItemMeta()).getDamage();
-					long maxDurability = toolItemStack.getType().getMaxDurability();
+					int currentDurability = ((Damageable) toolItemStack.getItemMeta()).getDamage();
+					int maxDurability = toolItemStack.getType().getMaxDurability();
+					if (toolItemStack.getItemMeta() instanceof Damageable damageable && damageable.hasMaxDamage())
+					{
+						maxDurability = damageable.getMaxDamage();
+					}
 					double chanceNotLoseDura = 0d;
 					if (duraTagExists)
 					{
 						try
 						{
-							currentDurability = duraTag.getLong(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY);
-							maxDurability = duraTag.getLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY);
 							if (duraTag.hasTag(CucumberyTag.CUSTOM_DURABILITY_CHANCE_NOT_TO_CONSUME_DURABILITY))
 							{
 								chanceNotLoseDura = duraTag.getDouble(CucumberyTag.CUSTOM_DURABILITY_CHANCE_NOT_TO_CONSUME_DURABILITY);
@@ -910,21 +916,11 @@ public class MiningScheduler
 						}
 						else
 						{
-							if (duraTagExists)
-							{
-								duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY, currentDurability);
-							}
-							else
-							{
-								Damageable damageable = (Damageable) itemMeta;
-								if (damageable != null)
-								{
-									damageable.setDamage((int) (currentDurability));
-								}
-								toolItemStack.setItemMeta(damageable);
-							}
+							Damageable damageable = (Damageable) itemMeta;
+							damageable.setDamage(currentDurability);
+							toolItemStack.setItemMeta(damageable);
 						}
-						player.getInventory().setItemInMainHand(ItemLore.setItemLore(toolItemStack));
+						player.getInventory().setItemInMainHand(toolItemStack);
 						if (dropDura && toolIsDrill)
 						{
 							double ratio = (maxDurability - currentDurability) * 1d / maxDurability;

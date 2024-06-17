@@ -165,7 +165,7 @@ public class ItemInfo
 				}
 			}
 			if ((itemMeta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)) || (itemMeta.hasItemFlag(ItemFlag.HIDE_DESTROYS)) || (itemMeta.hasItemFlag(ItemFlag.HIDE_ENCHANTS))
-					|| (itemMeta.hasItemFlag(ItemFlag.HIDE_PLACED_ON)) || (itemMeta.hasItemFlag(ItemFlag.HIDE_ITEM_SPECIFICS)) || (itemMeta.hasItemFlag(
+					|| (itemMeta.hasItemFlag(ItemFlag.HIDE_PLACED_ON)) || (itemMeta.hasItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)) || (itemMeta.hasItemFlag(
 					ItemFlag.HIDE_UNBREAKABLE)))
 			{
 				MessageUtil.sendMessage(sender, Prefix.INFO_ITEMSTORAGE, "-- 아이템 플래그 목록 --");
@@ -186,7 +186,7 @@ public class ItemInfo
 				{
 					flag += "설치 가능 블록 숨김, ";
 				}
-				if (itemMeta.hasItemFlag(ItemFlag.HIDE_ITEM_SPECIFICS))
+				if (itemMeta.hasItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP))
 				{
 					flag += "포션 효과 숨김, ";
 				}
@@ -722,7 +722,7 @@ public class ItemInfo
 					MapMeta mapMeta = (MapMeta) itemMeta;
 					if (mapMeta.hasMapView())
 					{
-						mapMeta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
+						mapMeta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
 						MapView mapView = mapMeta.getMapView();
 						int centerX = mapView.getCenterX(), centerZ = mapView.getCenterZ();
 						int id = mapView.getId();

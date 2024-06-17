@@ -383,6 +383,7 @@ public class CustomConfig
 		SHOW_TIMESTAMP_ON_CHAT_MESSAGES("채팅-메시지에-현재-시각-표시", true),
 		MINING_SPEED_RATIO_MODIFIER_LIGHT_PENALTY("채광-속도-비율-수정자-빛-페널티", 0),
 		IGNORE_MINING_SPEED_RATIO_MODIFIER_LIGHT_PENALTY("채광-속도-비율-수정자-빛-페널티-무시", false),
+		SHOW_CLICK_EVENT_INFORMATION_ON_CHAT_IF_NULL("채팅-메시지-클릭-이벤트-정보-표시(없을 경우)", false),
 		;
 
 		private final String key;

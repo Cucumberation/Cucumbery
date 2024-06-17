@@ -1,4 +1,4 @@
-config-version: 12
+config-version: 13
 # 데스 메시지 기능 편집
 death-messages:
   enable: true # 사용 여부. true 또는 false
@@ -755,15 +755,12 @@ death-messages:
       - "death.fell.accident.water... 이 아니고 %1$s이(가) 물에서 떨어졌습니다"
     wither:
       - "death.attack.wither" # %1$s이(가) 사그라졌습니다
-      - "%1$s이(가) 사그라졌습니다"
     wither-combat:
       - "death.attack.wither.player" # %1$s이(가) %2$s과(와) 싸우다가 사그라졌습니다
-      - "%1$s이(가) %2$s과(와) 싸우다가 사그라졌습니다"
     wither-combat-item:
       - "%1$s이(가) %3$s을(를) 사용한 %2$s과(와) 싸우다가 사그라졌습니다"
     wither-combat-suicide:
       - "death.attack.wither.player" # %1$s이(가) %2$s과(와) 싸우다가 사그라졌습니다
-      - "%1$s이(가) %2$s과(와) 싸우다가 사그라졌습니다"
     wither-combat-suicide-item:
       - "%1$s이(가) %3$s을(를) 사용한 %2$s과(와) 싸우다가 사그라졌습니다"
     wither-skull:
@@ -780,14 +777,19 @@ death-messages:
     wither-skull-combat-unknown:
       - "%1$s이(가) 어딘가에서 날아온 %2$s에게 저격당했습니다"
     world-border:
+      - "death.attack.outsideBorder" # %1$s이(가) 세계의 한계를 벗어났습니다
       - "%1$s이(가) %2$s 밖으로 탈출하려다 질식사했습니다"
     world-border-combat:
+      - "death.attack.outsideBorder.player" # %1$s이(가) %2$s과(와) 싸우다가 세계의 한계를 벗어났습니다
       - "%1$s이(가) %2$s과(와) 싸우고 %3$s 밖으로 탈출하려다 질식사했습니다"
     world-border-combat-item:
+      - "%1$s이(가) %3$s을(를) 사용한 %2$s과(와) 싸우다가 세계의 한계를 벗어났습니다"
       - "%1$s이(가) %3$s을(를) 사용한 %2$s과(와) 싸우고 %4$s 밖으로 탈출하려다 질식사했습니다"
     world-border-combat-suicide:
+      - "%1$s이(가) 스스로를 세계의 한계로 벗어나게 했습니다"
       - "%1$s이(가) %3$s 밖으로 스스로의 몸을 던져 질식사했습니다"
     world-border-combat-suicide-item:
+      - "%1$s이(가) %3$s을(를) 사용하여 스스로를 세계의 한계로 벗어나게 했습니다"
       - "%1$s이(가) %3$s을(를) 사용하여 %4$s 밖으로 스스로의 몸을 던져 질식사했습니다"
     custom-darkness-terror:
       - "%1$s이(가) 너무 어두운 곳에서 채광을 하다 파편에 찔려 죽었습니다"

@@ -17,6 +17,7 @@ import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CreateItemStack;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
+import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.NBTList;
@@ -435,6 +436,12 @@ public class RecipeInventoryRecipe
 						ComponentUtil.create(display, "&8 : " + playerAmountColor + playerAmount + " &7/rgb0,255,84; " + amount + (reusable ? " &8[∞]" : "")));
 				itemMeta.lore(lore);
 				ingredient.setItemMeta(itemMeta);
+				// 재료 아이템은 ProtocolLib에 의해 아이템 설명 갱신이 되지 않도록 함
+				{
+					NBT.modify(ingredient, nbt -> {
+						nbt.setBoolean(CucumberyTag.INTERNAL_DO_NOT_SET_ITEM_LORE, true);
+					});
+				}
 				menuItems[i] = ingredient;
 			}
 			String invName = menu.getViewers().isEmpty() ? "" : menu.getViewers().get(0).getOpenInventory().getTitle();

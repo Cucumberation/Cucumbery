@@ -38,23 +38,13 @@ public class ItemLore2Durability
         }
         itemMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
       }
-      else if (Constant.DURABLE_ITEMS.contains(type) || duraTag != null)
+      else
       {
-        long currentDurability = 0, maxDurability = 0;
+        long currentDurability = 0, maxDurability = item.getType().getMaxDurability();
         double chanceNotToConsumeDura = 0d;
         boolean duraTagExists = duraTag != null;
         if (duraTagExists)
         {
-          try
-          {
-            maxDurability = duraTag.getLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY);
-            currentDurability = duraTag.getLong(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY);
-          }
-          catch (Exception e)
-          {
-            currentDurability = 0;
-            maxDurability = 0;
-          }
           try
           {
             chanceNotToConsumeDura = duraTag.getDouble(CucumberyTag.CUSTOM_DURABILITY_CHANCE_NOT_TO_CONSUME_DURABILITY);
@@ -63,19 +53,15 @@ public class ItemLore2Durability
           {
             chanceNotToConsumeDura = 0d;
           }
-          if (maxDurability != 0)
-          {
-            double originItemDuraDouble = getOriginItemDuraDouble(type, maxDurability, currentDurability);
-            Damageable damageable = (Damageable) itemMeta;
-            damageable.setDamage((int) originItemDuraDouble);
-            item.setItemMeta(damageable);
-          }
         }
 
-        if (maxDurability == 0 && Constant.DURABLE_ITEMS.contains(type))
+        if (itemMeta instanceof Damageable damageable)
         {
-          maxDurability = type.getMaxDurability();
-          currentDurability = ((Damageable) item.getItemMeta()).getDamage();
+          currentDurability = damageable.getDamage();
+          if (damageable.hasMaxDamage())
+          {
+            maxDurability = damageable.getMaxDamage();
+          }
         }
 
         if (maxDurability != 0 || Constant.DURABLE_ITEMS.contains(type))
@@ -113,17 +99,6 @@ public class ItemLore2Durability
           {
             lore.add(Component.empty());
             lore.add(ComponentUtil.create("&a내구도 감소 무효 확률 : +" + Constant.Sosu4.format(chanceNotToConsumeDura) + "%"));
-          }
-        }
-      }
-      else if (type != Material.MAP)
-      {
-        if (itemMeta instanceof Damageable duraMeta)
-        {
-          if (duraMeta.getDamage() != 0)
-          {
-            lore.add(Component.empty());
-            lore.add(ComponentUtil.translate("&6내구도 손상 : %s", duraMeta.getDamage() + ""));
           }
         }
       }

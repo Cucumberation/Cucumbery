@@ -95,8 +95,8 @@ public class ItemLore
 			}
 		}
 		Material type = itemStack.getType();
-		NBTItem nbtItem = new NBTItem(itemStack, true);
-		String customType = nbtItem.getString(CustomMaterial.IDENDTIFER);
+		NBTItem nbtItem = new NBTItem(itemStack);
+		String customType = NBT.get(itemStack, nbt -> {return nbt.getString(CustomMaterial.IDENDTIFER);});
 		CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
 		{
 			try
@@ -110,7 +110,7 @@ public class ItemLore
 		}
 		if (customMaterial != null)
 		{
-			ItemLoreCustomItem.itemLore(itemStack, nbtItem, customMaterial);
+			ItemLoreCustomItem.itemLore(itemStack, customMaterial);
 			itemMeta = itemStack.getItemMeta();
 		}
 		if (!customType.isEmpty())
@@ -443,29 +443,9 @@ public class ItemLore
 		if (removeFlag.removeItemFlags)
 			itemMeta.removeItemFlags(ItemFlag.values());
 		itemStack.setItemMeta(itemMeta);
-		NBTItem nbtItem = new NBTItem(itemStack);
-		nbtItem.removeKey(CucumberyTag.KEY_TMI);
-		itemStack.setItemMeta(nbtItem.getItem().getItemMeta());
-		if (nbtItem.hasTag(CustomMaterial.IDENDTIFER))
-		{
-			itemMeta = itemStack.getItemMeta();
-/*			CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
-			if (customMaterial != null && customMaterial.getDisplayName().equals(itemMeta.displayName()))
-			{
-				itemMeta.displayName(null);
-			}*/
-			itemStack.setItemMeta(itemMeta);
-			if (removeFlag.removeSkullMeta && itemMeta instanceof SkullMeta skullMeta)
-			{
-				skullMeta.setOwningPlayer(null);
-				itemStack.setItemMeta(skullMeta);
-			}
-			if (removeFlag.removeUUID && nbtItem.hasTag("uuid"))
-			{
-				nbtItem = new NBTItem(itemStack, true);
-				nbtItem.removeKey("uuid");
-			}
-		}
+		NBT.modify(itemStack, nbt -> {
+			nbt.removeKey(CucumberyTag.KEY_TMI);
+		});
 		return itemStack;
 	}
 

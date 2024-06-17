@@ -45,11 +45,11 @@ public class DeathManager
 			.clickEvent(ClickEvent.openUrl("https://bugs.mojang.com/browse/MCPE-28723"));
 
 	public static final Component downloadURL = ComponentUtil.translate("&9&l여기")
-			.hoverEvent(HoverEvent.showText(ComponentUtil.translate("클릭하여 %s 주소로 이동합니다", "rg255,204;https://cucumbery.com/api/builds/dev/latest/download")))
+			.hoverEvent(HoverEvent.showText(ComponentUtil.translate("클릭하여 %s 주소로 연결합니다", "rg255,204;https://cucumbery.com/api/builds/dev/latest/download")))
 			.clickEvent(ClickEvent.openUrl("https://cucumbery.com/api/builds/dev/latest/download"));
 
 	public static final Component reportBugURL = ComponentUtil.translate("&9&l여기")
-			.hoverEvent(HoverEvent.showText(ComponentUtil.translate("클릭하여 %s 주소로 이동합니다", "rg255,204;https://github.com/jho5245/Cucumbery/issues/new")))
+			.hoverEvent(HoverEvent.showText(ComponentUtil.translate("클릭하여 %s 주소로 연결합니다", "rg255,204;https://github.com/jho5245/Cucumbery/issues/new")))
 			.clickEvent(ClickEvent.openUrl("https://github.com/jho5245/Cucumbery/issues/new"));
 
 	public static final int MAXIMUM_COMPONENT_SERIAL_LENGTH = 100000;

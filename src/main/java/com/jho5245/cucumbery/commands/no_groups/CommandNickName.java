@@ -101,12 +101,12 @@ public class CommandNickName implements CommandExecutor, TabCompleter
 					player.playerListName(finalNickname);
 					UserData.DISPLAY_NAME.set(uuid, serialNickname);
 					UserData.PLAYER_LIST_NAME.set(uuid, serialNickname);
-					PlayerProfile profile = player.getPlayerProfile();
+/*					PlayerProfile profile = player.getPlayerProfile();
 					String name = MessageUtil.stripColor(off ? Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName()) : ComponentUtil.serialize(nickName));
 					if (name.length() > 16)
 						name = name.substring(0, 16);
 					profile.setName(name);
-					player.setPlayerProfile(profile);
+					player.setPlayerProfile(profile);*/
 				}
 				else if (args[0].equalsIgnoreCase("display"))
 				{
@@ -214,12 +214,12 @@ public class CommandNickName implements CommandExecutor, TabCompleter
 				{
 					target.displayName(finalNickname);
 					target.playerListName(finalNickname);
-					PlayerProfile profile = target.getPlayerProfile();
+/*					PlayerProfile profile = target.getPlayerProfile();
 					String name = MessageUtil.stripColor(off ? Variable.ORIGINAL_NAME.getOrDefault(target.getUniqueId(), target.getName()) : ComponentUtil.serialize(finalNickname));
 					if (name.length() > 16)
 						name = name.substring(0, 16);
 					profile.setName(name);
-					target.setPlayerProfile(profile);
+					target.setPlayerProfile(profile);*/
 				}
 				UserData.DISPLAY_NAME.set(uuid, nicknameSerialJson);
 				UserData.PLAYER_LIST_NAME.set(uuid, nicknameSerialJson);

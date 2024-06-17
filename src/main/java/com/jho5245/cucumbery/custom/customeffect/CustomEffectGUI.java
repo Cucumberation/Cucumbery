@@ -4,6 +4,7 @@ import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffect.DisplayType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.util.gui.GUIManager;
+import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.no_groups.ColorUtil;
 import com.jho5245.cucumbery.util.no_groups.ColorUtil.Type;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
@@ -11,6 +12,7 @@ import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil.TimeForma
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.TranslatableKeyParser;
 import com.jho5245.cucumbery.util.storage.no_groups.CreateItemStack;
+import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -42,6 +44,9 @@ public class CustomEffectGUI
 		{
 			// deco template
 			ItemStack deco = CreateItemStack.create(Material.WHITE_STAINED_GLASS_PANE, 1, Component.text("§와"), false);
+			ItemMeta itemMeta = deco.getItemMeta();
+			itemMeta.setHideTooltip(true);
+			deco.setItemMeta(itemMeta);
 			menu.setItem(0, deco);
 			menu.setItem(1, deco);
 			menu.setItem(2, deco);
@@ -147,9 +152,10 @@ public class CustomEffectGUI
 				itemStack.setItemMeta(itemMeta);
 				if (customEffect.isRemoveable())
 				{
-					NBTItem nbtItem = new NBTItem(itemStack, true);
-					nbtItem.setString("removeEffect", "custom:" + effectType.getNamespacedKey());
-					nbtItem.setInteger("removeEffectAmplifier", customEffect.getAmplifier());
+					NBT.modify(itemStack, nbt -> {
+						nbt.setString("removeEffect", "custom:" + effectType.getNamespacedKey());
+						nbt.setInteger("removeEffectAmplifier", customEffect.getAmplifier());
+					});
 				}
 				menu.addItem(itemStack);
 			}
@@ -162,7 +168,7 @@ public class CustomEffectGUI
 				PotionEffectType effectType = potionEffect.getType();
 				ItemStack itemStack = new ItemStack(Material.POTION, Math.min(64, potionEffect.getAmplifier() + 1));
 				PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
-				potionMeta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ENCHANTS);
+				potionMeta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP, ItemFlag.HIDE_ENCHANTS);
 				String effectKey = TranslatableKeyParser.getKey(effectType);
 				int id = potionEffect.getType().getId() + 15200;
 				potionMeta.setCustomModelData(id);
@@ -172,8 +178,9 @@ public class CustomEffectGUI
 				itemStack.setItemMeta(potionMeta);
 				if (!CustomEffectManager.isVanillaNegative(effectType))
 				{
-					NBTItem nbtItem = new NBTItem(itemStack, true);
-					nbtItem.setString("removeEffect", "potion:" + effectType.getName());
+					NBT.modify(itemStack, nbt -> {
+						nbt.setString("removeEffect", "potion:" + effectType.getName());
+					});
 				}
 				menu.addItem(itemStack);
 			}
@@ -358,26 +365,6 @@ public class CustomEffectGUI
 				lore.add(ComponentUtil.translate("rg255,204;우클릭하여 효과 제거"));
 			}
 		}
-		//    PotionEffectType potionEffectType = potionEffect.getType();
-		//    String effectKey = TranslatableKeyParser.getKey(potionEffectType);
-		//    String id = effectKey.substring(17);
-		//    int duration = potionEffect.getDuration(), amplifier = potionEffect.getAmplifier();
-		//    boolean hasParticles = potionEffect.hasParticles(), hasIcon = potionEffect.hasIcon(), isAmbient = potionEffect.isAmbient();
-		//    lore.add(ComponentUtil.translate("지속 시간 : %s", Constant.THE_COLOR_HEX + Method.timeFormatMilli(duration * 50L)));
-		//    lore.add(ComponentUtil.translate("농도 레벨 : %s단계", amplifier + 1));
-		//    if (!hasParticles)
-		//    {
-		//      lore.add(ComponentUtil.translate("&a입자 숨김"));
-		//    }
-		//    if (!hasIcon)
-		//    {
-		//      lore.add(ComponentUtil.translate("&a우측 상단 아이콘 숨김"));
-		//    }
-		//    if (isAmbient)
-		//    {
-		//      lore.add(ComponentUtil.translate("&a우측 상단 효과 빛남"));
-		//    }
-		//    lore.add(Component.text("minecraft:" + id, NamedTextColor.DARK_GRAY));
 		return lore;
 	}
 }

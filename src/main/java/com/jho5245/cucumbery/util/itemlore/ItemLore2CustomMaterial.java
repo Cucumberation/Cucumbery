@@ -104,7 +104,7 @@ public class ItemLore2CustomMaterial
     {
       case THE_MUSIC ->
       {
-        itemMeta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
+        itemMeta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
         lore.add(Component.empty());
         lore.add(ComponentUtil.translate("&6능력 : %s %s", ComponentUtil.translate("&a'그 노래' 재생"), ComponentUtil.translate("&e&l우클릭")));
         lore.add(ComponentUtil.translate("&7재사용 대기시간 : %s", ComponentUtil.translate("&a%s초", 10)));

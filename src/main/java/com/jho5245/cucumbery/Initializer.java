@@ -739,7 +739,7 @@ public class Initializer
 		}
 		Component display = ComponentUtil.create(displayName);
 		player.displayName(display);
-		if (UserData.DISPLAY_NAME.getString(player) != null)
+/*		if (UserData.DISPLAY_NAME.getString(player) != null)
 		{
 			PlayerProfile playerProfile = player.getPlayerProfile();
 			String name = MessageUtil.stripColor(ComponentUtil.serialize(display));
@@ -749,7 +749,7 @@ public class Initializer
 			}
 			playerProfile.setName(name);
 			player.setPlayerProfile(playerProfile);
-		}
+		}*/
 		Component list = ComponentUtil.create(listName);
 		player.playerListName(list);
 	}

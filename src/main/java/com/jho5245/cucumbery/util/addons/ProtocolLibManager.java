@@ -18,7 +18,6 @@ import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCooldown;
-import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCustomMining;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeMinecraft;
 import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.itemlore.ItemLore.RemoveFlag;
@@ -39,14 +38,13 @@ import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
-import de.tr7zw.changeme.nbtapi.NBTCompound;
-import de.tr7zw.changeme.nbtapi.NBTItem;
-import de.tr7zw.changeme.nbtapi.NBTList;
-import de.tr7zw.changeme.nbtapi.NBTType;
+import de.tr7zw.changeme.nbtapi.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.ClickEvent.Action;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
 import net.kyori.adventure.text.event.HoverEvent.ShowItem;
@@ -260,29 +258,9 @@ public class ProtocolLibManager
 					StructureModifier<PotionEffectType> effectTypes = packet.getEffectTypes();
 					PotionEffectType potionEffectType = effectTypes.read(0);
 					StructureModifier<Object> modifier = packet.getModifier();
-					@SuppressWarnings("unused") byte amplifier = (byte) modifier.read(2);
 					int duration = (int) modifier.read(3);
 					if (entity instanceof Player player)
 					{
-						if (CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE))
-						{
-							if (potionEffectType.equals(PotionEffectType.HASTE) && duration < 3 && amplifier == 0)
-							{
-								modifier.write(3, -1);
-								event.setPacket(packet);
-							}
-							if (potionEffectType.equals(PotionEffectType.MINING_FATIGUE) && duration < 3 && amplifier == 0)
-							{
-								modifier.write(3, -1);
-								event.setPacket(packet);
-							}
-							if (potionEffectType.equals(PotionEffectType.MINING_FATIGUE))
-							{
-								modifier.write(2, (byte) 127);
-								event.setPacket(packet);
-							}
-						}
-
 						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.SPEED) && potionEffectType.equals(PotionEffectType.SPEED))
 						{
 							modifier.write(3, CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.SPEED).getDuration());
@@ -421,14 +399,14 @@ public class ProtocolLibManager
 				UUID uuid = player.getUniqueId();
 				// 아이템이 표시될 때 실제 적용되야 하는 nbt는 적용함
 				{
-					Inventory top = player.getOpenInventory().getTopInventory(), bottom = player.getOpenInventory().getBottomInventory();
-					for (int i = 0; i < top.getSize(); i++)
+					Inventory /*top = player.getOpenInventory().getTopInventory(), */bottom = player.getOpenInventory().getBottomInventory();
+/*					for (int i = 0; i < top.getSize(); i++)
 					{
 						ItemStack topItemStack = top.getItem(i);
 						if (!ItemStackUtil.itemExists(topItemStack))
 							continue;
 						top.setItem(i, ItemLore.setItemLore(topItemStack, true, ItemLoreView.of(player)));
-					}
+					}*/
 					for (int i = 0; i < bottom.getSize(); i++)
 					{
 						ItemStack bottomItemStack = bottom.getItem(i);
@@ -477,7 +455,7 @@ public class ProtocolLibManager
 				for (MerchantRecipe recipe : merchantRecipeList)
 				{
 					MerchantRecipe newRecipe = new MerchantRecipe(setItemLore(packet.getType(), recipe.getResult(), player), recipe.getUses(), recipe.getMaxUses(),
-							recipe.hasExperienceReward(), recipe.getVillagerExperience(), recipe.getPriceMultiplier());
+							recipe.hasExperienceReward(), recipe.getVillagerExperience(), recipe.getPriceMultiplier(), recipe.getDemand(), recipe.getSpecialPrice(), recipe.shouldIgnoreDiscounts());
 					newRecipe.setIngredients(setItemLore(packet.getType(), recipe.getIngredients(), player));
 					newMerchantRecipeList.add(newRecipe);
 				}
@@ -959,7 +937,8 @@ public class ProtocolLibManager
 	}
 
 	@NotNull
-	private static Component parse(@NotNull Player player, boolean isAdminMessage, boolean changeArgumentColor, @NotNull Component component, @NotNull Component root)
+	private static Component parse(@NotNull Player player, boolean isAdminMessage, boolean changeArgumentColor, @NotNull Component component,
+			@NotNull Component root)
 	{
 		HoverEvent<?> hoverEvent = component.hoverEvent();
 		if (hoverEvent != null)
@@ -984,6 +963,52 @@ public class ProtocolLibManager
 			{
 				Bukkit.getConsoleSender().sendMessage("§4" + e.getMessage());
 			}
+		}
+		ClickEvent clickEvent = component.clickEvent();
+		// 컴포넌트의 ClickEvent, Insertion 관련 데이터가 있을 때 새로 추가할 hoverEvent 메시지(기존에 hoverEvent가 없는 경우)
+		Component hover = Component.empty();
+		if (clickEvent != null)
+		{
+			Action action = clickEvent.action();
+			String value = clickEvent.value();
+			if (action == Action.OPEN_URL)
+			{
+				if (hoverEvent == null)
+				{
+					hover = ComponentUtil.translate("클릭하여 %s 주소로 연결합니다",
+							Component.text(value, component.color() != null ? component.color() : Constant.THE_COLOR));
+					component = component.decoration(TextDecoration.UNDERLINED, State.TRUE);
+				}
+			}
+			else
+			{
+				if (hoverEvent == null && UserData.SHOW_CLICK_EVENT_INFORMATION_ON_CHAT_IF_NULL.getBoolean(player))
+				{
+					hover = ComponentUtil.translate("클릭 이벤트 유형 : %s", Constant.THE_COLOR_HEX + action);
+					hover = hover.append(Component.text("\n"));
+					hover = hover.append(ComponentUtil.translate("값 : %s", Constant.THE_COLOR_HEX + value));
+				}
+			}
+		}
+		String insertion = component.insertion();
+		if (insertion != null && hoverEvent == null)
+		{
+			if (!hover.equals(Component.empty()))
+			{
+				hover = hover.append(Component.text("\n"));
+				hover = hover.append(Component.text("\n"));
+			}
+			hover = hover.append(ComponentUtil.translate("insertion 텍스트 : %s", Constant.THE_COLOR_HEX + insertion));
+		}
+		if (!hover.equals(Component.empty()))
+		{
+			if (player.hasPermission("asdf"))
+			{
+				hover = hover.append(Component.text("\n"));
+				hover = hover.append(Component.text("\n"));
+				hover = hover.append(ComponentUtil.translate("&8&oCucumbery에 의해 HoverEvent 추가됨"));
+			}
+			component = component.hoverEvent(hover);
 		}
 		if (component instanceof TranslatableComponent translatableComponent)
 		{
@@ -1011,6 +1036,20 @@ public class ProtocolLibManager
 					try
 					{
 						Double.parseDouble(content);
+						// 채팅 메시지에 숫자를 입력한 것은 색깔 변경하지 않음
+						// 일부 메시지는 색깔 변경하지 않음
+						switch (key)
+						{
+							case "chat.type.text",
+									 "chat.type.team.sent",
+									 "chat.type.team.text",
+									 "chat.type.emote",
+									 "chat.coordinates" -> throw new Exception();
+						}
+						// key에 색상이 있는 메시지는 색깔 변경하지 않음
+						if (component.color() != null)
+							throw new Exception();
+						// Bukkit.getConsoleSender().sendMessage(key + ", color: " + component.color());
 						argument = argument.color(Constant.THE_COLOR);
 					}
 					catch (Exception ignored)
@@ -1027,9 +1066,18 @@ public class ProtocolLibManager
 				arguments.add(argument);
 			}
 			// 시스템 메시지를 보는 플레이어의 언어가 한국어일 경우 조사(을/를, 은/는 등) 적절하게 조정
-			boolean playerIsKorean = player.locale().equals(Locale.KOREA);
-			String translationKey = playerIsKorean ? ComponentUtil.convertConsonant(translatableComponent.key(), translatableComponent).key() : translatableComponent.key();
-			component = translatableComponent.key(translationKey).arguments(arguments).fallback(playerIsKorean && translatableComponent.fallback() != null ? translationKey : translatableComponent.fallback());
+			if (player.locale().equals(Locale.KOREA))
+			{
+				String translationKey = ComponentUtil.convertConsonant(translatableComponent.key(), translatableComponent).key();
+				// 만약 translationKey가 변형되었다면 fallback은 null로 설정
+				if (!translationKey.equals(translatableComponent.key()))
+				{
+					translatableComponent = translatableComponent.fallback(null);
+				}
+				translatableComponent = translatableComponent.key(translationKey);
+			}
+			translatableComponent = translatableComponent.arguments(arguments);
+			component = translatableComponent;
 		}
 		if (!component.children().isEmpty())
 		{
@@ -1056,6 +1104,26 @@ public class ProtocolLibManager
 		if (!ItemStackUtil.itemExists(itemStack))
 		{
 			return itemStack;
+		}
+
+		if (Objects.equals(NBT.get(itemStack, nbt ->
+		{
+			return nbt.getBoolean(CucumberyTag.INTERNAL_DO_NOT_SET_ITEM_LORE);
+		}), Boolean.TRUE))
+		{
+			return itemStack;
+		}
+
+		// GUI에서 설명이 없는 아이템(배경)을 더블클릭할 경우 서로 겹쳐서 클릭 이벤트 반복 호출 -> 서버 랙 유발 방지용 랜덤 nbt 패킷 전송
+		{
+			if (itemStack.getItemMeta().isHideTooltip() && !itemStack.getItemMeta().hasLore())
+			{
+				NBT.modify(itemStack, nbt ->
+				{
+					nbt.setString("Obfuscated", UUID.randomUUID().toString());
+				});
+				return itemStack;
+			}
 		}
 
 		boolean useLoreInCreative = !UserData.SHOW_ITEM_LORE_IN_CREATIVE_MODE.getBoolean(player) && player.getGameMode() == GameMode.CREATIVE, showItemLore =
@@ -1159,12 +1227,11 @@ public class ProtocolLibManager
 				if (forceShowEnchants && !showEnchants)
 				{
 					lore.add(ComponentUtil.translate("&8관리자 권한으로 숨겨진 마법을 참조합니다"));
-					itemMeta.removeItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
+					itemMeta.removeItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
 				}
 			}
 		}
 
-		boolean isStorageMeta = false;
 		// 크리에이티브 모드에서는 발광 아이템을 대체하면 실제로 아이템이 바뀌므로 비활성화
 		if (ignoreCreativeWhat && !showEnchantGlints)
 		{
@@ -1316,7 +1383,7 @@ public class ProtocolLibManager
 		if (lore == null)
 			lore = new ArrayList<>();
 
-		if (player.hasPermission("asdf") && UserData.SHOW_ITEM_COMPONENTS_INFO.getBoolean(player))
+		if (showItemLore && UserData.SHOW_ITEM_COMPONENTS_INFO.getBoolean(player))
 		{
 			List<Component> componentLore = new ArrayList<>();
 			if (itemMeta.hasMaxStackSize())

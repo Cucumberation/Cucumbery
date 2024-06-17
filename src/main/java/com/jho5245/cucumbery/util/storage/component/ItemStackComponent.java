@@ -111,7 +111,7 @@ public class ItemStackComponent
 			{
 				cloneMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 				if (cloneMeta instanceof EnchantmentStorageMeta)
-					cloneMeta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
+					cloneMeta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
 			}
 			clone.setItemMeta(cloneMeta);
 			List<Component> tooltip = new ArrayList<>(clone.computeTooltipLines(TooltipContext.create(), viewer));
@@ -160,7 +160,7 @@ public class ItemStackComponent
 		bundleMeta.addItem(Cucumbery.using_ProtocolLib && viewer != null ? ProtocolLibManager.setItemLore(Server.ABILITIES, itemStack, viewer) : itemStack);
 		bundleMeta.addItemFlags(ItemFlag.values());
 		bundleMeta.removeItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
-		bundleMeta.displayName(ItemNameUtil.itemName(itemStack));
+		bundleMeta.itemName(ItemNameUtil.itemName(itemStack));
 		hover.setItemMeta(bundleMeta);
 		if (itemName instanceof TextComponent textComponent && textComponent.content().isEmpty())
 		{

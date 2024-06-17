@@ -108,6 +108,7 @@ public class ItemNameUtil
       {
         component = component.decoration(TextDecoration.ITALIC, State.TRUE);
       }
+
       List<Component> children = new ArrayList<>(component.children());
       boolean childrenChanged = false;
       for (int i = 0; i < children.size(); i++)
@@ -189,15 +190,16 @@ public class ItemNameUtil
       component = component.decoration(TextDecoration.ITALIC, State.FALSE);
     }
 
-    // 커스텀 아이템의 경우 커스텀 아이템을 가져온다
-    if (respectCustomMaterial || itemMeta == null || !itemMeta.hasDisplayName())
-    {
-      CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
-      if (customMaterial != null)
-      {
-        component = customMaterial.getDisplayName();
-      }
-    }
+//
+//    // 커스텀 아이템의 경우 커스텀 아이템을 가져온다
+//    if (respectCustomMaterial || itemMeta == null || !itemMeta.hasDisplayName())
+//    {
+//      CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
+//      if (customMaterial != null)
+//      {
+//        component = customMaterial.getDisplayName();
+//      }
+//    }
     
     // 아이템 기본 이름이 있을 경우 기본 이름 반환
     if (itemMeta != null && itemMeta.hasItemName())

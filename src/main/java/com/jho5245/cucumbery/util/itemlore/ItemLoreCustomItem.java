@@ -23,11 +23,9 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemRarity;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.inventory.meta.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -63,9 +61,10 @@ public class ItemLoreCustomItem
 
 	private static final UUID UUID_4_1 = UUID.fromString("4962252e-347b-4711-b418-41");
 
-	protected static void itemLore(@NotNull ItemStack itemStack, @NotNull NBTItem nbtItem, @NotNull CustomMaterial customMaterial)
+	protected static void itemLore(@NotNull ItemStack itemStack,  @NotNull CustomMaterial customMaterial)
 	{
 		Material displayMaterial = customMaterial.getDisplayMaterial();
+		NBTItem nbtItem = new NBTItem(itemStack);
 		NBTCompound itemTag = nbtItem.getCompound(CucumberyTag.KEY_MAIN);
 		if (itemTag == null)
 		{
@@ -93,7 +92,7 @@ public class ItemLoreCustomItem
 			if (origin != null)
 			{
 				nbtItem.setString(CustomMaterial.IDENDTIFER, origin.toString().toLowerCase());
-				itemLore(itemStack, nbtItem, origin);
+				itemLore(itemStack, origin);
 				return;
 			}
 		}
@@ -289,7 +288,7 @@ public class ItemLoreCustomItem
 				}
 			}
 		}
-		// NBT 설정
+		// CustomNBT 설정
 		{
 			switch (customMaterial)
 			{
@@ -297,7 +296,7 @@ public class ItemLoreCustomItem
 				{
 					nbtItem.setString("change_material", Material.GRAY_STAINED_GLASS.toString());
 					nbtItem.setInteger("BlockTier", 2);
-					nbtItem.setFloat("BlockHardness", 500f);
+					nbtItem.setDouble("BlockHardness", 500d);
 					nbtItem.setString("BreakSound", Sound.BLOCK_STONE_BREAK.toString());
 					nbtItem.setString("BreakParticle", "block:stone[]");
 					NBTCompound nbtCompound = nbtItem.addCompound("displays");
@@ -318,7 +317,7 @@ public class ItemLoreCustomItem
 				case SUS ->
 				{
 					nbtItem.setString("change_material", Material.LIGHT_GRAY_STAINED_GLASS.toString());
-					nbtItem.setFloat("BlockHardness", 195f);
+					nbtItem.setDouble("BlockHardness", 195d);
 					nbtItem.setString("BreakSound", "custom_sus_broken");
 					nbtItem.setFloat("BreakSoundPitch", 1f);
 					nbtItem.setString("BreakParticle", "block:stone[]");
@@ -364,7 +363,7 @@ public class ItemLoreCustomItem
 					nbtItem.setString("change_material", Material.BLUE_STAINED_GLASS.toString());
 					nbtItem.setString("BreakParticle", "block:blue_concrete[]");
 					nbtItem.setInteger("BlockTier", 1);
-					nbtItem.setFloat("BlockHardness", 1000f);
+					nbtItem.setDouble("BlockHardness", 1000d);
 					nbtItem.setString("BreakSound", Sound.BLOCK_STONE_BREAK.toString());
 					NBTCompound nbtCompound = nbtItem.addCompound("displays");
 					nbtCompound.setString("type", "player_heads");
@@ -385,7 +384,7 @@ public class ItemLoreCustomItem
 				{
 					nbtItem.setString("change_material", Material.ORANGE_STAINED_GLASS.toString());
 					nbtItem.setString("BreakParticle", "block:orange_concrete[]");
-					nbtItem.setFloat("BlockHardness", 100f);
+					nbtItem.setDouble("BlockHardness", 100d);
 					nbtItem.setString("BreakSound", "custom_i_wont_let_you_go");
 					nbtItem.setFloat("BreakSoundPitch", 1f);
 					NBTCompound nbtCompound = nbtItem.addCompound("displays");
@@ -405,240 +404,156 @@ public class ItemLoreCustomItem
 				}
 				case TEST_PICKAXE ->
 				{
-					nbtItem.setFloat(MiningManager.TOOL_SPEED, 18000f);
+					nbtItem.setDouble(MiningManager.TOOL_SPEED, 18000d);
 					nbtItem.setInteger(MiningManager.TOOL_TIER, 10);
-					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, 12345678L);
 				}
 				case MUSHROOM_STEW_PICKAXE ->
 				{
-					nbtItem.setFloat(MiningManager.TOOL_SPEED, 18_000_000f);
+					nbtItem.setDouble(MiningManager.TOOL_SPEED, 18_000_000d);
 					nbtItem.setInteger(MiningManager.TOOL_TIER, 99);
 				}
 				case TODWOT_PICKAXE ->
 				{
-					nbtItem.setFloat(MiningManager.TOOL_SPEED, 1f);
+					nbtItem.setDouble(MiningManager.TOOL_SPEED, 1d);
 					nbtItem.setInteger(MiningManager.TOOL_TIER, 1);
-					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, 1000L);
 				}
 				case COPPER_AXE, COPPER_HOE, COPPER_PICKAXE, COPPER_SHOVEL, COPPER_SWORD ->
 				{
-					nbtItem.setFloat(MiningManager.TOOL_SPEED, customMaterial != CustomMaterial.COPPER_SWORD ? 300f : 600f);
+					nbtItem.setDouble(MiningManager.TOOL_SPEED, customMaterial != CustomMaterial.COPPER_SWORD ? 300d : 600d);
 					if (customMaterial == CustomMaterial.COPPER_PICKAXE)
 					{
 						nbtItem.setInteger(MiningManager.TOOL_TIER, 2);
 					}
-					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, 76L);
 				}
 				case PLATINUM_AXE, PLATINUM_HOE, PLATINUM_PICKAXE, PLATINUM_SHOVEL, PLATINUM_SWORD ->
 				{
-					nbtItem.setFloat(MiningManager.TOOL_SPEED, 600f);
+					nbtItem.setDouble(MiningManager.TOOL_SPEED, 600d);
 					if (customMaterial == CustomMaterial.PLATINUM_PICKAXE)
 					{
 						nbtItem.setInteger(MiningManager.TOOL_TIER, 2);
 					}
-					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, 34L);
 				}
 				case TIN_AXE, TIN_HOE, TIN_PICKAXE, TIN_SHOVEL, TIN_SWORD ->
 				{
-					nbtItem.setFloat(MiningManager.TOOL_SPEED, customMaterial != CustomMaterial.TIN_SWORD ? 200f : 550f);
+					nbtItem.setDouble(MiningManager.TOOL_SPEED, customMaterial != CustomMaterial.TIN_SWORD ? 200d : 550d);
 					if (customMaterial == CustomMaterial.TIN_PICKAXE)
 					{
 						nbtItem.setInteger(MiningManager.TOOL_TIER, 3);
 					}
-					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, 142L);
 				}
 				case LEAD_AXE, LEAD_HOE, LEAD_PICKAXE, LEAD_SHOVEL, LEAD_SWORD ->
 				{
-					nbtItem.setFloat(MiningManager.TOOL_SPEED, customMaterial != CustomMaterial.LEAD_SWORD ? 250f : 550f);
+					nbtItem.setDouble(MiningManager.TOOL_SPEED, customMaterial != CustomMaterial.LEAD_SWORD ? 250d : 550d);
 					if (customMaterial == CustomMaterial.LEAD_PICKAXE)
 					{
 						nbtItem.setInteger(MiningManager.TOOL_TIER, 4);
 					}
-					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, 176L);
 				}
 				case PLASTIC_AXE, PLASTIC_HOE, PLASTIC_PICKAXE, PLASTIC_SHOVEL, PLASTIC_SWORD ->
 				{
-					nbtItem.setFloat(MiningManager.TOOL_SPEED, customMaterial != CustomMaterial.PLASTIC_SWORD ? 250f : 550f);
+					nbtItem.setDouble(MiningManager.TOOL_SPEED, customMaterial != CustomMaterial.PLASTIC_SWORD ? 250d : 550d);
 					if (customMaterial == CustomMaterial.PLASTIC_PICKAXE)
 					{
 						nbtItem.setInteger(MiningManager.TOOL_TIER, 4);
 					}
-					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, 185L);
 				}
 				case BRONZE_AXE, BRONZE_HOE, BRONZE_PICKAXE, BRONZE_SHOVEL, BRONZE_SWORD ->
 				{
-					nbtItem.setFloat(MiningManager.TOOL_SPEED, customMaterial != CustomMaterial.BRONZE_SWORD ? 270f : 600f);
+					nbtItem.setDouble(MiningManager.TOOL_SPEED, customMaterial != CustomMaterial.BRONZE_SWORD ? 270d : 600d);
 					if (customMaterial == CustomMaterial.BRONZE_PICKAXE)
 					{
 						nbtItem.setInteger(MiningManager.TOOL_TIER, 5);
 					}
-					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, 209L);
 				}
 				case CEMENTED_CARBIDE_AXE, CEMENTED_CARBIDE_HOE, CEMENTED_CARBIDE_PICKAXE, CEMENTED_CARBIDE_SHOVEL, CEMENTED_CARBIDE_SWORD ->
 				{
-					nbtItem.setFloat(MiningManager.TOOL_SPEED, customMaterial != CustomMaterial.CEMENTED_CARBIDE_SWORD ? 800f : 1000f);
+					nbtItem.setDouble(MiningManager.TOOL_SPEED, customMaterial != CustomMaterial.CEMENTED_CARBIDE_SWORD ? 800d : 1000d);
 					if (customMaterial == CustomMaterial.CEMENTED_CARBIDE_PICKAXE)
 					{
 						nbtItem.setInteger(MiningManager.TOOL_TIER, 10);
 					}
-					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, 5876L);
 				}
 				case NAUTILITE_AXE, NAUTILITE_HOE, NAUTILITE_PICKAXE, NAUTILITE_SHOVEL, NAUTILITE_SWORD ->
 				{
-					nbtItem.setFloat(MiningManager.TOOL_SPEED, customMaterial != CustomMaterial.NAUTILITE_SWORD ? 800f : 1000f);
+					nbtItem.setDouble(MiningManager.TOOL_SPEED, customMaterial != CustomMaterial.NAUTILITE_SWORD ? 800d : 1000d);
 					if (customMaterial == CustomMaterial.NAUTILITE_PICKAXE)
 					{
 						nbtItem.setInteger(MiningManager.TOOL_TIER, 10);
 					}
-					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, 3413L);
 				}
 				case TUNGSTEN_AXE, TUNGSTEN_HOE, TUNGSTEN_PICKAXE, TUNGSTEN_SHOVEL, TUNGSTEN_SWORD ->
 				{
-					nbtItem.setFloat(MiningManager.TOOL_SPEED, customMaterial != CustomMaterial.TUNGSTEN_SWORD ? 600f : 850f);
+					nbtItem.setDouble(MiningManager.TOOL_SPEED, customMaterial != CustomMaterial.TUNGSTEN_SWORD ? 600d : 850d);
 					if (customMaterial == CustomMaterial.TUNGSTEN_PICKAXE)
 					{
 						nbtItem.setInteger(MiningManager.TOOL_TIER, 9);
 					}
-					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, 2474L);
 				}
 				case COBALT_AXE, COBALT_HOE, COBALT_PICKAXE, COBALT_SHOVEL, COBALT_SWORD ->
 				{
-					nbtItem.setFloat(MiningManager.TOOL_SPEED, customMaterial != CustomMaterial.COBALT_SWORD ? 250f : 600f);
+					nbtItem.setDouble(MiningManager.TOOL_SPEED, customMaterial != CustomMaterial.COBALT_SWORD ? 250d : 600d);
 					if (customMaterial == CustomMaterial.COBALT_PICKAXE)
 					{
 						nbtItem.setInteger(MiningManager.TOOL_TIER, 6);
 					}
-					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, 318L);
 				}
 				case MITHRIL_PICKAXE, MITHRIL_SWORD, MITHRIL_AXE, MITHRIL_HOE, MITHRIL_SHOVEL ->
 				{
-					nbtItem.setFloat(MiningManager.TOOL_SPEED, customMaterial != CustomMaterial.MITHRIL_SWORD ? 550f : 800f);
+					nbtItem.setDouble(MiningManager.TOOL_SPEED, customMaterial != CustomMaterial.MITHRIL_SWORD ? 550d : 800d);
 					if (customMaterial == CustomMaterial.MITHRIL_PICKAXE)
 					{
 						nbtItem.setInteger(MiningManager.TOOL_TIER, 7);
 					}
-					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, 1824L);
 				}
 				case MITHRIL_PICKAXE_REFINED ->
 				{
-					nbtItem.setFloat(MiningManager.TOOL_SPEED, 2350f);
+					nbtItem.setDouble(MiningManager.TOOL_SPEED, 2350d);
 					nbtItem.setInteger(MiningManager.TOOL_TIER, 6);
 					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, 3800L);
 					duraTag.setDouble(CucumberyTag.CUSTOM_DURABILITY_CHANCE_NOT_TO_CONSUME_DURABILITY, 5d);
 				}
 				case TITANIUM_PICKAXE, TITANIUM_SWORD, TITANIUM_AXE, TITANIUM_HOE, TITANIUM_SHOVEL ->
 				{
-					nbtItem.setFloat(MiningManager.TOOL_SPEED, customMaterial != CustomMaterial.TITANIUM_SWORD ? 650f : 900f);
+					nbtItem.setDouble(MiningManager.TOOL_SPEED, customMaterial != CustomMaterial.TITANIUM_SWORD ? 650d : 900d);
 					if (customMaterial == CustomMaterial.TITANIUM_PICKAXE)
 					{
 						nbtItem.setInteger(MiningManager.TOOL_TIER, 9);
 					}
-					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, 3710L);
 				}
 				case TITANIUM_PICKAXE_REFINED ->
 				{
-					nbtItem.setFloat(MiningManager.TOOL_SPEED, 2850f);
+					nbtItem.setDouble(MiningManager.TOOL_SPEED, 2850d);
 					nbtItem.setInteger(MiningManager.TOOL_TIER, 7);
-					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, 4500L);
-					duraTag.setDouble(CucumberyTag.CUSTOM_DURABILITY_CHANCE_NOT_TO_CONSUME_DURABILITY, 10d);
-				}
-				case SANS_HELMET, SANS_CHESTPLATE, SANS_LEGGINGS, SANS_BOOTS, RAINBOW_HELMET, RAINBOW_CHESTPLATE, RAINBOW_LEGGINGS, RAINBOW_BOOTS, SPIDER_BOOTS ->
-				{
-					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, 500L);
-				}
-				case FROG_CHESTPLATE, FROG_LEGGINGS, FROG_BOOTS ->
-				{
-					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, 400L);
-				}
-				case FROG_HELMET -> nbtItem.addCompound(CucumberyTag.KEY_MAIN).removeKey(CucumberyTag.CUSTOM_DURABILITY_KEY);
-				case MINER_HELMET, MINER_CHESTPLATE, MINER_LEGGINGS, MINER_BOOTS ->
-				{
-					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, 450L);
 				}
 				case MINDAS_CHESTPLATE, MINDAS_LEGGINGS, MINDAS_BOOTS ->
 				{
 					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, 100000L);
 					duraTag.setDouble(CucumberyTag.CUSTOM_DURABILITY_CHANCE_NOT_TO_CONSUME_DURABILITY, 50d);
 				}
 				case TITANIUM_DRILL_R266 ->
 				{
-					nbtItem.setFloat(MiningManager.TOOL_SPEED, 3500f);
+					nbtItem.setDouble(MiningManager.TOOL_SPEED, 3500d);
 					nbtItem.setInteger(MiningManager.TOOL_TIER, 7);
-					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, 5000L);
-					if (!nbtItem.hasTag("uuid"))
-					{
-						nbtItem.setString("uuid", UUID.randomUUID().toString());
-					}
 				}
 				case TITANIUM_DRILL_R366 ->
 				{
-					nbtItem.setFloat(MiningManager.TOOL_SPEED, 4000f);
+					nbtItem.setDouble(MiningManager.TOOL_SPEED, 4000d);
 					nbtItem.setInteger(MiningManager.TOOL_TIER, 7);
-					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, 7000L);
-					if (!nbtItem.hasTag("uuid"))
-					{
-						nbtItem.setString("uuid", UUID.randomUUID().toString());
-					}
 				}
 				case TITANIUM_DRILL_R466 ->
 				{
-					nbtItem.setFloat(MiningManager.TOOL_SPEED, 4500f);
+					nbtItem.setDouble(MiningManager.TOOL_SPEED, 4500d);
 					nbtItem.setInteger(MiningManager.TOOL_TIER, 8);
-					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, 9000L);
-					if (!nbtItem.hasTag("uuid"))
-					{
-						nbtItem.setString("uuid", UUID.randomUUID().toString());
-					}
 				}
 				case TITANIUM_DRILL_R566 ->
 				{
-					nbtItem.setFloat(MiningManager.TOOL_SPEED, 5000f);
+					nbtItem.setDouble(MiningManager.TOOL_SPEED, 5000d);
 					nbtItem.setInteger(MiningManager.TOOL_TIER, 9);
-					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, 12000L);
-					if (!nbtItem.hasTag("uuid"))
-					{
-						nbtItem.setString("uuid", UUID.randomUUID().toString());
-					}
 				}
 				case MINDAS_DRILL ->
 				{
-					nbtItem.setFloat(MiningManager.TOOL_SPEED, 6000f);
+					nbtItem.setDouble(MiningManager.TOOL_SPEED, 6000d);
 					nbtItem.setInteger(MiningManager.TOOL_TIER, 10);
-					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, 15000L);
-					if (!nbtItem.hasTag("uuid"))
-					{
-						nbtItem.setString("uuid", UUID.randomUUID().toString());
-					}
-				}
-				case FLINT_SHOVEL ->
-				{
-					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, 600L);
 				}
 				case IQ_CHOOK_CHUCK ->
 				{
@@ -653,10 +568,6 @@ public class ItemLoreCustomItem
 					else
 					{
 						nbtItem.setInteger("IQ", nbtItem.getInteger("IQ") - 1);
-					}
-					if (!nbtItem.hasTag("uuid"))
-					{
-						nbtItem.setString("uuid", UUID_1_0.toString());
 					}
 				}
 				case EXPERIENCE_BOTTLE_GRAND ->
@@ -717,20 +628,12 @@ public class ItemLoreCustomItem
 				nbtCompound.setString("type", "item");
 				nbtCompound.setString("value", customMaterial.getDisplayMaterial().toString().toLowerCase());
 			}
-			// 내구도 초기 설정
-			if (nbtItem.hasTag(CucumberyTag.KEY_MAIN) && nbtItem.getCompound(CucumberyTag.KEY_MAIN).hasTag(CucumberyTag.CUSTOM_DURABILITY_KEY))
-			{
-				NBTCompound duraTag = nbtItem.getCompound(CucumberyTag.KEY_MAIN).getCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-				if (!duraTag.hasTag(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY))
-				{
-					duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY, 0L);
-				}
-			}
 			if (nbtItem.getCompound(CucumberyTag.KEY_MAIN).getKeys().isEmpty())
 			{
 				nbtItem.removeKey(CucumberyTag.KEY_MAIN);
 			}
 		}
+		itemStack.setItemMeta(nbtItem.getItem().getItemMeta());
 		itemStack.setType(displayMaterial);
 		ItemMeta itemMeta = itemStack.getItemMeta();
 		itemMeta.itemName(customMaterial.getDisplayName());
@@ -769,7 +672,7 @@ public class ItemLoreCustomItem
 				case ARROW_MOUNT_INFINITE -> itemMeta.setCustomModelData(25208);
 			}
 		}
-		// 기타 NBT 설정
+		// ItemMeta NBT 설정
 		{
 			if (itemMeta.hasAttributeModifiers())
 			{
@@ -821,7 +724,6 @@ public class ItemLoreCustomItem
 				}
 
 				// 곡괭이
-
 				case PLATINUM_PICKAXE ->
 				{
 					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
@@ -1236,7 +1138,6 @@ public class ItemLoreCustomItem
 					itemMeta.addEnchant(Enchantment.MENDING, 1, true);
 					itemMeta.addEnchant(Enchantment.DEPTH_STRIDER, 3, true);
 				}
-
 				// 겉날개
 
 				case DIAMOND_CHESTPLATE_WITH_ELYTRA ->
@@ -1255,6 +1156,50 @@ public class ItemLoreCustomItem
 					itemMeta.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE,
 							new AttributeModifier(UUID_2_2, customMaterial.toString(), 0.5, Operation.ADD_NUMBER, EquipmentSlot.CHEST));
 				}
+
+				// 던질 수 있는 아이템 (눈덩이)
+				case BRICK_THROWABLE, COPPER_INGOT_THROWABLE, GOLD_INGOT_THROWABLE, IRON_INGOT_THROWABLE, NETHER_BRICK_THROWABLE, NETHERITE_INGOT_THROWABLE ->
+						itemMeta.setMaxStackSize(64);
+			}
+
+		}
+		if (itemMeta instanceof Damageable damageable)
+		{
+			switch (customMaterial)
+			{
+				case TEST_PICKAXE -> damageable.setMaxDamage(12345678);
+				case TODWOT_PICKAXE -> damageable.setMaxDamage(1000);
+				case COPPER_AXE, COPPER_HOE, COPPER_PICKAXE, COPPER_SHOVEL, COPPER_SWORD -> damageable.setMaxDamage(76);
+				case PLATINUM_AXE, PLATINUM_HOE, PLATINUM_PICKAXE, PLATINUM_SHOVEL, PLATINUM_SWORD -> damageable.setMaxDamage(34);
+				case TIN_AXE, TIN_HOE, TIN_PICKAXE, TIN_SHOVEL, TIN_SWORD -> damageable.setMaxDamage(142);
+				case LEAD_AXE, LEAD_HOE, LEAD_PICKAXE, LEAD_SHOVEL, LEAD_SWORD -> damageable.setMaxDamage(176);
+				case PLASTIC_AXE, PLASTIC_HOE, PLASTIC_PICKAXE, PLASTIC_SHOVEL, PLASTIC_SWORD -> damageable.setMaxDamage(185);
+				case BRONZE_AXE, BRONZE_HOE, BRONZE_PICKAXE, BRONZE_SHOVEL, BRONZE_SWORD -> damageable.setMaxDamage(209);
+				case CEMENTED_CARBIDE_AXE, CEMENTED_CARBIDE_HOE, CEMENTED_CARBIDE_PICKAXE, CEMENTED_CARBIDE_SHOVEL, CEMENTED_CARBIDE_SWORD ->
+						damageable.setMaxDamage(5876);
+				case NAUTILITE_AXE, NAUTILITE_HOE, NAUTILITE_PICKAXE, NAUTILITE_SHOVEL, NAUTILITE_SWORD -> damageable.setMaxDamage(3413);
+				case TUNGSTEN_AXE, TUNGSTEN_HOE, TUNGSTEN_PICKAXE, TUNGSTEN_SHOVEL, TUNGSTEN_SWORD -> damageable.setMaxDamage(2474);
+				case COBALT_AXE, COBALT_HOE, COBALT_PICKAXE, COBALT_SHOVEL, COBALT_SWORD -> damageable.setMaxDamage(318);
+				case MITHRIL_AXE, MITHRIL_HOE, MITHRIL_PICKAXE, MITHRIL_SHOVEL, MITHRIL_SWORD -> damageable.setMaxDamage(1824);
+				case TITANIUM_AXE, TITANIUM_HOE, TITANIUM_PICKAXE, TITANIUM_SHOVEL, TITANIUM_SWORD -> damageable.setMaxDamage(3710);
+				case MITHRIL_PICKAXE_REFINED -> damageable.setMaxDamage(3800);
+				case TITANIUM_PICKAXE_REFINED -> damageable.setMaxDamage(4500);
+				case SANS_BOOTS, SANS_CHESTPLATE, SANS_HELMET, SANS_LEGGINGS, RAINBOW_BOOTS, RAINBOW_CHESTPLATE, RAINBOW_HELMET, RAINBOW_LEGGINGS, SPIDER_BOOTS ->
+						damageable.setMaxDamage(500);
+				case FROG_BOOTS, FROG_CHESTPLATE, FROG_HELMET, FROG_LEGGINGS -> damageable.setMaxDamage(400);
+				case MINER_BOOTS, MINER_CHESTPLATE, MINER_HELMET, MINER_LEGGINGS -> damageable.setMaxDamage(450);
+				case MINDAS_BOOTS, MINDAS_CHESTPLATE, MINDAS_HELMET, MINDAS_LEGGINGS -> damageable.setMaxDamage(100000);
+				case TITANIUM_DRILL_R266 -> damageable.setMaxDamage(5000);
+				case TITANIUM_DRILL_R366 -> damageable.setMaxDamage(7000);
+				case TITANIUM_DRILL_R466 -> damageable.setMaxDamage(9000);
+				case TITANIUM_DRILL_R566 -> damageable.setMaxDamage(12000);
+				case MINDAS_DRILL -> damageable.setMaxDamage(15000);
+				case FLINT_SHOVEL -> damageable.setMaxDamage(600);
+
+			}
+			if (damageable.hasMaxDamage() && !damageable.hasMaxStackSize())
+			{
+				damageable.setMaxStackSize(1);
 			}
 		}
 		if (itemMeta instanceof SkullMeta skullMeta)
@@ -1279,10 +1224,8 @@ public class ItemLoreCustomItem
 				}
 			}
 		}
-		if (CustomEnchant.isEnabled() && customMaterial.isGlow())
-		{
-			itemMeta.addEnchant(CustomEnchant.GLOW, 1, true);
-		}
+		// 모든 아이템 등급 COMMON으로
+		itemMeta.setRarity(ItemRarity.COMMON);
 		itemStack.setItemMeta(itemMeta);
 		if (itemMeta instanceof SkullMeta skullMeta && !skullMeta.hasOwner())
 		{
@@ -1383,14 +1326,15 @@ public class ItemLoreCustomItem
 			{
 				throw new NullPointerException("display name cannot be null! CustomItem.yml - " + id);
 			}
-			itemMeta.displayName(ComponentUtil.create(MessageUtil.n2s(displayName)));
+			itemMeta.itemName(ComponentUtil.create(MessageUtil.n2s(displayName)));
 			List<String> enchants = section.getStringList("enchants");
 			enchants.forEach(s ->
 			{
 				try
 				{
 					String[] split = s.split("\\|");
-					Enchantment enchantment = Enchantment.getByKey(NamespacedKey.minecraft(split[0]));
+					String[] split2 = split[0].split(":");
+					Enchantment enchantment = Registry.ENCHANTMENT.get(new NamespacedKey(split2[0], split2[1]));
 					int level = Integer.parseInt(split[1]);
 					if (enchantment != null)
 					{

@@ -34,7 +34,7 @@ public class ItemLore2BlockState
 	{
 		if (itemMeta instanceof BlockStateMeta blockStateMeta)
 		{
-			itemMeta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS);
+			itemMeta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
 			if (!hideBlockState && blockStateMeta.hasBlockState())
 			{
 				NBTCompound blockEntityTag = nbtItem.getCompound("BlockEntityTag");

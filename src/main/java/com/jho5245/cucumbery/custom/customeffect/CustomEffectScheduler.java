@@ -90,6 +90,13 @@ public class CustomEffectScheduler
 									&& Math.abs(potionEffect.getDuration() - customEffect.getDuration()) > 1)
 							{
 								// 새로운 효과는 지속 시간이 짧으므로 기존 효과를 없애고 새로 지급 (농도 레벨이 다른 모든 효과가 전부 사라짐)
+/*								List<PotionEffect> hiddenEffects = new ArrayList<>();
+								PotionEffect hiddenEffect = potionEffect.getHiddenPotionEffect();
+								while (hiddenEffect != null)
+								{
+									hiddenEffects.add(hiddenEffect);
+									hiddenEffect = hiddenEffect.getHiddenPotionEffect();
+								}*/
 								livingEntity.removePotionEffect(potionEffectType);
 								new PotionEffect(potionEffectType, Math.max(1, remain - 1), potionEffect.getAmplifier(), potionEffect.isAmbient(), potionEffect.hasParticles(),
 										potionEffect.hasIcon()).apply(livingEntity);

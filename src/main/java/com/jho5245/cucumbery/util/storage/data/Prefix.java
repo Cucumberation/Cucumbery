@@ -117,7 +117,7 @@ public enum Prefix
     if (!this.color.isEmpty())
     {
       return ComponentUtil.translate(color + BRACKET, n2s,
-              ComponentUtil.translate(text)).hoverEvent(HoverEvent.showText(Component.text(Method.getCurrentTime(Calendar.getInstance(), true, false))));
+              ComponentUtil.translate(text));
     }
     return ComponentUtil.translate(text, n2s);
   }
