@@ -17,7 +17,6 @@ import com.jho5245.cucumbery.util.storage.no_groups.CreateItemStack;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
-import de.tr7zw.changeme.nbtapi.NBTContainer;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.NBTList;
 import io.papermc.paper.inventory.tooltip.TooltipContext;
@@ -27,7 +26,6 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.format.TextDecoration.State;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
@@ -268,21 +266,6 @@ public class RecipeInventoryCategory
 					}
 					NBTItem ingredientNBTItem = new NBTItem(ingredient, true);
 					ingredientNBTItem.mergeCompound(merge);
-					ingredientNBTItem = new NBTItem(ingredient, true);
-					Long bonusDurability = resultNBTItem.getLong("BonusDurability");
-					if (bonusDurability != null)
-					{
-						NBTCompound itemTag = ingredientNBTItem.getCompound(CucumberyTag.KEY_MAIN);
-						if (itemTag != null)
-						{
-							NBTCompound duraTag = itemTag.getCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-							if (duraTag != null && duraTag.hasTag(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY))
-							{
-								long cur = duraTag.getLong(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY) - bonusDurability;
-								duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY, Math.max(cur, 0));
-							}
-						}
-					}
 					String setType = resultNBTItem.getString("SetType");
 					if (!setType.isEmpty())
 					{

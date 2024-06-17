@@ -12,6 +12,7 @@ import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Constant.RestrictionType;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
+import com.jho5245.cucumbery.util.storage.no_groups.PlayerHeadInfo.PlayerHeadInfoType;
 import de.tr7zw.changeme.nbtapi.NBTCompoundList;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import net.kyori.adventure.text.Component;
@@ -216,9 +217,9 @@ public class ItemInfo
 			switch (type)
 			{
 				case PLAYER_HEAD:
-					String name = PlayerHeadInfo.getPlayerHeadInfo(item, PlayerHeadInfo.PlayerHeadInfoType.NAME);
-					String uuid = PlayerHeadInfo.getPlayerHeadInfo(item, PlayerHeadInfo.PlayerHeadInfoType.UUID);
-					String url = PlayerHeadInfo.getPlayerHeadInfo(item, PlayerHeadInfo.PlayerHeadInfoType.URL);
+					String name = PlayerHeadInfo.getPlayerHeadInfo(item, PlayerHeadInfoType.NAME);
+					String uuid = PlayerHeadInfo.getPlayerHeadInfo(item, PlayerHeadInfoType.UUID);
+					String url = PlayerHeadInfo.getPlayerHeadInfo(item, PlayerHeadInfoType.URL);
 					MessageUtil.sendMessage(sender, Prefix.INFO_ITEMSTORAGE, "&9[플레이어 머리 정보]");
 					MessageUtil.sendMessage(sender, Prefix.INFO_ITEMSTORAGE, Constant.THE_COLOR_HEX + "닉네임 : rg255,204;" + (name != null ? name : "&c없음"));
 					MessageUtil.sendMessage(sender, Prefix.INFO_ITEMSTORAGE, Constant.THE_COLOR_HEX + "UUID : rg255,204;" + (uuid != null ? uuid : "&c없음"));
@@ -233,34 +234,7 @@ public class ItemInfo
 				case TIPPED_ARROW:
 					PotionMeta potionMeta = (PotionMeta) itemMeta;
 					boolean isExtended;
-					if (!potionMeta.hasCustomEffects())
-					{
-						MessageUtil.sendMessage(sender, Prefix.INFO_ITEMSTORAGE, "&c커스텀 포션 효과 없음 &r(기본값 : rg255,204;" + item + "&r)");
-						PotionEffectType potionEffectType = potionMeta.getBasePotionData().getType().getEffectType();
-						int maxLevel = potionMeta.getBasePotionData().getType().getMaxLevel();
-						isExtended = potionMeta.getBasePotionData().isExtended();
-						boolean isUpgraded = potionMeta.getBasePotionData().isUpgraded();
-						if (potionMeta.getBasePotionData().getType().getEffectType() != null)
-						{
-							Color color = potionMeta.getBasePotionData().getType().getEffectType().getColor();
-							int r = color.getRed();
-							int g = color.getGreen();
-							int b = color.getBlue();
-							MessageUtil.sendMessage(sender, Prefix.INFO_ITEMSTORAGE, "포션 색상 : &c빨강 " + r + "&r, &a초록 " + g + "&r, &9파랑 " + b);
-							MessageUtil.sendMessage(sender, Prefix.INFO_ITEMSTORAGE,
-									"포션 효과 : rg255,204;" + potionEffectType + "&r (rg255,204;내부 이름 : rg255,204;" + potionEffectType.getName() + "&r)");
-							MessageUtil.sendMessage(sender, Prefix.INFO_ITEMSTORAGE, "포션 최대 레벨 : rg255,204;" + maxLevel);
-							if (isExtended)
-							{
-								MessageUtil.sendMessage(sender, Prefix.INFO_ITEMSTORAGE, "지속 시간 증가 적용 (레드스톤 사용)");
-							}
-							if (isUpgraded)
-							{
-								MessageUtil.sendMessage(sender, Prefix.INFO_ITEMSTORAGE, "효과 증폭 적용 (발광석 가루 사용)");
-							}
-						}
-					}
-					else
+					if (potionMeta.hasCustomEffects())
 					{
 						MessageUtil.sendMessage(sender, Prefix.INFO_ITEMSTORAGE, "커스텀 포션 효과 개수 : rg255,204;" + potionMeta.getCustomEffects().size() + "개");
 						MessageUtil.sendMessage(sender, Prefix.INFO_ITEMSTORAGE, "---커스텀 포션 효과 목록---");

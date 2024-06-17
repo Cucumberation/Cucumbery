@@ -39,6 +39,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.BlockProjectileSource;
@@ -52,1267 +53,1251 @@ import java.util.UUID;
 
 public class EntityDamageByEntity implements Listener
 {
-  private static final Material[] RANGED_WEAPONS = new Material[]{Material.BOW, Material.CROSSBOW, Material.TRIDENT};
+	private static final Material[] RANGED_WEAPONS = new Material[] {
+			Material.BOW,
+			Material.CROSSBOW,
+			Material.TRIDENT
+	};
 
-  @EventHandler(priority = EventPriority.HIGHEST)
-  public void onEntityDamageByEntity(EntityDamageByEntityEvent event)
-  {
-    if (event.isCancelled())
-    {
-      return;
-    }
-    Entity victim = event.getEntity();
-    Entity damager = event.getDamager();
-    if (victim instanceof ArmorStand || victim instanceof Hanging)
-    {
-      if (damager instanceof Player player && CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE) &&
-              !CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_2_NO_RESTORE) && player.getGameMode() != GameMode.CREATIVE ||
-              damager instanceof Projectile projectile &&
-                      projectile.getShooter() instanceof Player player2 && CustomEffectManager.hasEffect(player2, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE) &&
-                      !CustomEffectManager.hasEffect(player2, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_2_NO_RESTORE) && player2.getGameMode() != GameMode.CREATIVE)
-      {
-        event.setCancelled(true);
-        return;
-      }
-    }
-    UUID victimUUID = victim.getUniqueId(), damagerUUID = damager.getUniqueId();
-    if (DeathManager.deathMessageApplicable(victim))
-    {
-      if (!(damager instanceof LivingEntity) && !(damager instanceof Projectile) && !(damager instanceof AreaEffectCloud))
-      {
-        DamageCause cause = event.getCause();
-        switch (cause)
-        {
-          case CUSTOM, ENTITY_ATTACK, ENTITY_SWEEP_ATTACK ->
-          {
-            Variable.victimAndDamager.put(victimUUID, damager);
-            Variable.damagerAndCurrentTime.put(damagerUUID, System.currentTimeMillis());
-            if (damager instanceof EvokerFangs evokerFangs)
-            {
-              LivingEntity owner = evokerFangs.getOwner();
-              if (owner != null)
-              {
-                Variable.victimAndDamager.put(victimUUID, owner);
-                Variable.damagerAndCurrentTime.put(owner.getUniqueId(), System.currentTimeMillis());
-              }
-            }
-          }
-        }
-      }
-      if (damager instanceof LivingEntity livingEntity)
-      {
-        Variable.victimAndDamager.put(victimUUID, damager);
-        Variable.damagerAndCurrentTime.put(damagerUUID, System.currentTimeMillis());
-        EntityEquipment entityEquipment = livingEntity.getEquipment();
-        if (entityEquipment != null)
-        {
-          ItemStack weapon = entityEquipment.getItemInMainHand();
-          if (ItemStackUtil.itemExists(weapon))
-          {
-            final ItemStack weaponClone = weapon.clone();
-            Variable.attackerAndWeapon.put(damagerUUID, weaponClone);
-            Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-            {
-              if (Variable.attackerAndWeapon.containsKey(damagerUUID))
-              {
-                ItemStack w = Variable.attackerAndWeapon.get(damagerUUID);
-                if (w.getType() == weaponClone.getType())
-                {
-                  Variable.attackerAndWeapon.remove(damagerUUID);
-                }
-              }
-            }, 200L);
-          }
-          else
-          {
-            Variable.attackerAndWeapon.remove(damagerUUID);
-          }
-        }
-        else
-        {
-          Variable.attackerAndWeapon.remove(damagerUUID);
-        }
-      }
-      if (damager instanceof Projectile projectile && event.getCause() != EntityDamageEvent.DamageCause.FALL)
-      {
-        ProjectileSource projectileSource = projectile.getShooter();
-        if (projectileSource instanceof LivingEntity livingEntity)
-        {
-          Variable.victimAndDamager.put(victimUUID, livingEntity);
-          Variable.damagerAndCurrentTime.put(livingEntity.getUniqueId(), System.currentTimeMillis());
-        }
-        else if (projectileSource instanceof BlockProjectileSource blockProjectileSource)
-        {
-          if (Variable.entityAndSourceLocation.containsKey(projectile.getUniqueId()))
-          {
-            ItemStack sourceAsItem = Variable.blockAttackerAndBlock.get(Variable.entityAndSourceLocation.get(projectile.getUniqueId()));
-            Variable.victimAndBlockDamager.put(victimUUID, sourceAsItem);
-            Variable.blockDamagerAndCurrentTime.put(ItemSerializer.serialize(sourceAsItem), System.currentTimeMillis());
-          }
-          else
-          {
-            ItemStack sourceAsItem = ItemStackUtil.getItemStackFromBlock(blockProjectileSource.getBlock());
-            Variable.victimAndBlockDamager.put(victimUUID, sourceAsItem);
-            Variable.blockDamagerAndCurrentTime.put(ItemSerializer.serialize(sourceAsItem), System.currentTimeMillis());
-          }
-        }
-        else
-        {
-          if (Variable.entityAndSourceLocation.containsKey(projectile.getUniqueId()))
-          {
-            ItemStack sourceAsItem = Variable.blockAttackerAndBlock.get(Variable.entityAndSourceLocation.get(projectile.getUniqueId()));
-            Variable.victimAndBlockDamager.put(victimUUID, sourceAsItem);
-            Variable.blockDamagerAndCurrentTime.put(ItemSerializer.serialize(sourceAsItem), System.currentTimeMillis());
-          }
-          else
-          {
-            Variable.victimAndDamager.put(victimUUID, projectile);
-            Variable.damagerAndCurrentTime.put(projectile.getUniqueId(), System.currentTimeMillis());
-          }
-        }
-      }
-      if (damager instanceof AreaEffectCloud areaEffectCloud)
-      {
-        ProjectileSource projectileSource = areaEffectCloud.getSource();
-        if (projectileSource == null)
-        {
-          if (Variable.entityAndSourceLocation.containsKey(areaEffectCloud.getUniqueId()))
-          {
-            ItemStack sourceAsItem = Variable.blockAttackerAndBlock.get(Variable.entityAndSourceLocation.get(areaEffectCloud.getUniqueId()));
-            Variable.victimAndBlockDamager.put(victimUUID, sourceAsItem);
-            Variable.blockDamagerAndCurrentTime.put(ItemSerializer.serialize(sourceAsItem), System.currentTimeMillis());
-          }
-          else
-          {
-            Variable.victimAndDamager.put(victimUUID, areaEffectCloud);
-            Variable.damagerAndCurrentTime.put(areaEffectCloud.getUniqueId(), System.currentTimeMillis());
-          }
-        }
-        else if (projectileSource instanceof LivingEntity livingEntity)
-        {
-          Variable.victimAndDamager.put(victimUUID, livingEntity);
-          Variable.damagerAndCurrentTime.put(livingEntity.getUniqueId(), System.currentTimeMillis());
-        }
-        else if (projectileSource instanceof BlockProjectileSource blockProjectileSource)
-        {
-          ItemStack sourceAsItem = ItemStackUtil.getItemStackFromBlock(blockProjectileSource.getBlock());
-          Variable.victimAndBlockDamager.put(victimUUID, sourceAsItem);
-          Variable.blockDamagerAndCurrentTime.put(ItemSerializer.serialize(sourceAsItem), System.currentTimeMillis());
-        }
-      }
-    }
-    if (damager instanceof Player player)
-    {
-      UUID uuid = player.getUniqueId();
-      CustomEffectManager.addEffect(player, CustomEffectType.IGNORE_ARM_SWING);
-      if (!Cucumbery.config.getBoolean("grant-default-permission-to-players") && !Permission.EVENT_HURT_ENTITY.has(player))
-      {
-        event.setCancelled(true);
-        if (!Permission.EVENT_ERROR_HIDE.has(player) && !Variable.playerHurtEntityAlertCooldown.contains(uuid))
-        {
-          SoundPlay.playSound(player, Constant.ERROR_SOUND);
-          MessageUtil.sendTitle(player, "&c행동 불가!", "&r개체에게 피해를 입힐 권한이 없습니다", 5, 80, 15);
-          Variable.playerHurtEntityAlertCooldown.add(uuid);
-          Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> Variable.playerHurtEntityAlertCooldown.remove(uuid), 100L);
-        }
-        return;
-      }
-      ItemStack mainHand = player.getInventory().getItemInMainHand();
-      if (ItemStackUtil.itemExists(mainHand) && event.getEntity() instanceof LivingEntity && event.getEntity().getType() != EntityType.ARMOR_STAND)
-      {
-        if (NBTAPI.isRestricted(player, mainHand, Constant.RestrictionType.NO_ATTACK))
-        {
-          event.setCancelled(true);
-          if (!Permission.EVENT_ERROR_HIDE.has(player) && !Variable.playerHurtEntityAlertCooldown.contains(uuid))
-          {
-            SoundPlay.playSound(player, Constant.ERROR_SOUND);
-            MessageUtil.sendTitle(player, "&c공격 불가!", "&r사용할 수 없는 아이템입니다", 5, 80, 15);
-            Variable.playerHurtEntityAlertCooldown.add(uuid);
-            Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> Variable.playerHurtEntityAlertCooldown.remove(uuid), 100L);
-          }
-          return;
-        }
-      }
-    }
-    if (damager instanceof Projectile)
-    {
-      if (((Projectile) damager).getShooter() instanceof Player player)
-      {
-        UUID uuid = Objects.requireNonNull(player).getUniqueId();
-        if (!Cucumbery.config.getBoolean("grant-default-permission-to-players") && !Permission.EVENT_HURT_ENTITY.has(player))
-        {
-          event.setCancelled(true);
-          if (!Permission.EVENT_ERROR_HIDE.has(player) && !Variable.playerHurtEntityAlertCooldown.contains(uuid))
-          {
-            SoundPlay.playSound(player, Constant.ERROR_SOUND);
-            MessageUtil.sendTitle(player, "&c행동 불가!", "&r개체에게 피해를 입힐 권한이 없습니다", 5, 80, 15);
-            Variable.playerHurtEntityAlertCooldown.add(uuid);
-            Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> Variable.playerHurtEntityAlertCooldown.remove(uuid), 100L);
-          }
-          return;
-        }
-      }
-    }
-    // 커스텀 인챈트
-    if (CustomEnchant.isEnabled())
-    {
-      // Cleaving, 방패 가시
-      if (victim instanceof Player player && player.isBlocking())
-      {
-        if (damager instanceof LivingEntity livingEntity)
-        {
-          EntityEquipment equipment = livingEntity.getEquipment();
-          if (equipment != null)
-          {
-            ItemStack weapon = equipment.getItemInMainHand();
-            if (weapon.hasItemMeta() && weapon.getItemMeta().hasEnchant(CustomEnchant.CLEAVING))
-            {
-              int level = weapon.getItemMeta().getEnchantLevel(CustomEnchant.CLEAVING);
-              player.setCooldown(Material.SHIELD, level * 10 + player.getCooldown(Material.SHIELD));
-            }
-          }
-          ItemStack victimShield = ItemStackUtil.getPlayerUsingItem(player, Material.SHIELD);
-          if (ItemStackUtil.itemExists(victimShield) && victimShield.hasItemMeta() && victimShield.getItemMeta().hasEnchant(Enchantment.THORNS))
-          {
-            int level = victimShield.getItemMeta().getEnchantLevel(Enchantment.THORNS);
-            int chance = level * 15;
-            double damage = level <= 10 ? Math.random() * 3 + 1 : level - 10;
-            if (Math.random() * 100d < chance)
-            {
-              livingEntity.damage(damage, player);
-            }
-          }
-        }
-      }
-      // 우연한 방어
-      if (victim instanceof Player player && !player.isBlocking())
-      {
-        ItemStack victimShield = ItemStackUtil.getPlayerUsingItem(player, Material.SHIELD);
-        if (ItemStackUtil.itemExists(victimShield) && victimShield.hasItemMeta() && victimShield.getItemMeta().hasEnchant(CustomEnchant.DEFENSE_CHANCE))
-        {
-          int level = victimShield.getItemMeta().getEnchantLevel(CustomEnchant.DEFENSE_CHANCE);
-          double damage = event.getFinalDamage();
-          if (damage > 1)
-          {
-            int durabilityLoss = (int) Math.round(damage / 6 * level);
-            if (durabilityLoss > 0)
-            {
-              boolean breaking = false;
-              NBTCompound duraTag = NBTAPI.getCompound(NBTAPI.getMainCompound(victimShield), CucumberyTag.CUSTOM_DURABILITY_KEY);
-              if (duraTag == null)
-              {
-                org.bukkit.inventory.meta.Damageable itemMeta = (org.bukkit.inventory.meta.Damageable) victimShield.getItemMeta();
-                itemMeta.setDamage(itemMeta.getDamage() + durabilityLoss);
-                victimShield.setItemMeta(itemMeta);
-                if (itemMeta.getDamage() >= victimShield.getType().getMaxDurability())
-                {
-                  breaking = true;
-                }
-              }
-              else
-              {
-                duraTag = new NBTItem(victimShield,  true).getCompound(CucumberyTag.KEY_MAIN).getCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-                long curDura = duraTag.getLong(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY);
-                duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY, curDura + durabilityLoss);
-                breaking = curDura + durabilityLoss >= duraTag.getLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY);
-              }
-              if (breaking)
-              {
-                if (UserData.SHOW_ITEM_BREAK_TITLE.getBoolean(player) && Cucumbery.config.getBoolean("send-title-on-item-break"))
-                {
-                  if (!Method.configContainsLocation(player.getLocation(), Cucumbery.getPlugin().getConfig().getStringList("no-send-title-on-item-break-worlds")))
-                  {
-                    MessageUtil.sendTitle(player, ComponentUtil.translate("&c장비 파괴됨!"),
-                            ComponentUtil.translate("rg255,204;인벤토리 아이템 중 %s이(가) 파괴되었습니다", victimShield), 5, 100, 15);
-                  }
-                }
-                victimShield.setAmount(victimShield.getAmount() - 1);
-              }
-            }
-          }
-          if (Math.random() * 100d < level * 6)
-          {
-            MessageUtil.broadcastDebug("피해 가드함");
-            event.setCancelled(true);
-            return;
-          }
-        }
-      }
-    }
-    Player attcker = null;
-    if (damager instanceof Player)
-    {
-      attcker = (Player) damager;
-    }
-    else if (damager instanceof Projectile && (((Projectile) damager).getShooter() instanceof Player))
-    {
-      attcker = (Player) ((Projectile) damager).getShooter();
-    }
-    if (attcker != null && !CustomEffectManager.hasEffect(victim, CustomEffectType.NO_CUCUMBERY_ITEM_USAGE_ATTACK))
-    {
-      boolean isMelee = damager instanceof Player;
-      boolean isPvP = event.getEntity() instanceof Player;
-      boolean isSneaking = attcker.isSneaking();
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onEntityDamageByEntity(EntityDamageByEntityEvent event)
+	{
+		if (event.isCancelled())
+		{
+			return;
+		}
+		Entity victim = event.getEntity();
+		Entity damager = event.getDamager();
+		if (victim instanceof ArmorStand || victim instanceof Hanging)
+		{
+			if (damager instanceof Player player && CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE)
+					&& !CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_2_NO_RESTORE)
+					&& player.getGameMode() != GameMode.CREATIVE
+					|| damager instanceof Projectile projectile && projectile.getShooter() instanceof Player player2 && CustomEffectManager.hasEffect(player2,
+					CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE) && !CustomEffectManager.hasEffect(player2,
+					CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_2_NO_RESTORE) && player2.getGameMode() != GameMode.CREATIVE)
+			{
+				event.setCancelled(true);
+				return;
+			}
+		}
+		UUID victimUUID = victim.getUniqueId(), damagerUUID = damager.getUniqueId();
+		if (DeathManager.deathMessageApplicable(victim))
+		{
+			if (!(damager instanceof LivingEntity) && !(damager instanceof Projectile) && !(damager instanceof AreaEffectCloud))
+			{
+				DamageCause cause = event.getCause();
+				switch (cause)
+				{
+					case CUSTOM, ENTITY_ATTACK, ENTITY_SWEEP_ATTACK ->
+					{
+						Variable.victimAndDamager.put(victimUUID, damager);
+						Variable.damagerAndCurrentTime.put(damagerUUID, System.currentTimeMillis());
+						if (damager instanceof EvokerFangs evokerFangs)
+						{
+							LivingEntity owner = evokerFangs.getOwner();
+							if (owner != null)
+							{
+								Variable.victimAndDamager.put(victimUUID, owner);
+								Variable.damagerAndCurrentTime.put(owner.getUniqueId(), System.currentTimeMillis());
+							}
+						}
+					}
+				}
+			}
+			if (damager instanceof LivingEntity livingEntity)
+			{
+				Variable.victimAndDamager.put(victimUUID, damager);
+				Variable.damagerAndCurrentTime.put(damagerUUID, System.currentTimeMillis());
+				EntityEquipment entityEquipment = livingEntity.getEquipment();
+				if (entityEquipment != null)
+				{
+					ItemStack weapon = entityEquipment.getItemInMainHand();
+					if (ItemStackUtil.itemExists(weapon))
+					{
+						final ItemStack weaponClone = weapon.clone();
+						Variable.attackerAndWeapon.put(damagerUUID, weaponClone);
+						Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+						{
+							if (Variable.attackerAndWeapon.containsKey(damagerUUID))
+							{
+								ItemStack w = Variable.attackerAndWeapon.get(damagerUUID);
+								if (w.getType() == weaponClone.getType())
+								{
+									Variable.attackerAndWeapon.remove(damagerUUID);
+								}
+							}
+						}, 200L);
+					}
+					else
+					{
+						Variable.attackerAndWeapon.remove(damagerUUID);
+					}
+				}
+				else
+				{
+					Variable.attackerAndWeapon.remove(damagerUUID);
+				}
+			}
+			if (damager instanceof Projectile projectile && event.getCause() != EntityDamageEvent.DamageCause.FALL)
+			{
+				ProjectileSource projectileSource = projectile.getShooter();
+				if (projectileSource instanceof LivingEntity livingEntity)
+				{
+					Variable.victimAndDamager.put(victimUUID, livingEntity);
+					Variable.damagerAndCurrentTime.put(livingEntity.getUniqueId(), System.currentTimeMillis());
+				}
+				else if (projectileSource instanceof BlockProjectileSource blockProjectileSource)
+				{
+					if (Variable.entityAndSourceLocation.containsKey(projectile.getUniqueId()))
+					{
+						ItemStack sourceAsItem = Variable.blockAttackerAndBlock.get(Variable.entityAndSourceLocation.get(projectile.getUniqueId()));
+						Variable.victimAndBlockDamager.put(victimUUID, sourceAsItem);
+						Variable.blockDamagerAndCurrentTime.put(ItemSerializer.serialize(sourceAsItem), System.currentTimeMillis());
+					}
+					else
+					{
+						ItemStack sourceAsItem = ItemStackUtil.getItemStackFromBlock(blockProjectileSource.getBlock());
+						Variable.victimAndBlockDamager.put(victimUUID, sourceAsItem);
+						Variable.blockDamagerAndCurrentTime.put(ItemSerializer.serialize(sourceAsItem), System.currentTimeMillis());
+					}
+				}
+				else
+				{
+					if (Variable.entityAndSourceLocation.containsKey(projectile.getUniqueId()))
+					{
+						ItemStack sourceAsItem = Variable.blockAttackerAndBlock.get(Variable.entityAndSourceLocation.get(projectile.getUniqueId()));
+						Variable.victimAndBlockDamager.put(victimUUID, sourceAsItem);
+						Variable.blockDamagerAndCurrentTime.put(ItemSerializer.serialize(sourceAsItem), System.currentTimeMillis());
+					}
+					else
+					{
+						Variable.victimAndDamager.put(victimUUID, projectile);
+						Variable.damagerAndCurrentTime.put(projectile.getUniqueId(), System.currentTimeMillis());
+					}
+				}
+			}
+			if (damager instanceof AreaEffectCloud areaEffectCloud)
+			{
+				ProjectileSource projectileSource = areaEffectCloud.getSource();
+				if (projectileSource == null)
+				{
+					if (Variable.entityAndSourceLocation.containsKey(areaEffectCloud.getUniqueId()))
+					{
+						ItemStack sourceAsItem = Variable.blockAttackerAndBlock.get(Variable.entityAndSourceLocation.get(areaEffectCloud.getUniqueId()));
+						Variable.victimAndBlockDamager.put(victimUUID, sourceAsItem);
+						Variable.blockDamagerAndCurrentTime.put(ItemSerializer.serialize(sourceAsItem), System.currentTimeMillis());
+					}
+					else
+					{
+						Variable.victimAndDamager.put(victimUUID, areaEffectCloud);
+						Variable.damagerAndCurrentTime.put(areaEffectCloud.getUniqueId(), System.currentTimeMillis());
+					}
+				}
+				else if (projectileSource instanceof LivingEntity livingEntity)
+				{
+					Variable.victimAndDamager.put(victimUUID, livingEntity);
+					Variable.damagerAndCurrentTime.put(livingEntity.getUniqueId(), System.currentTimeMillis());
+				}
+				else if (projectileSource instanceof BlockProjectileSource blockProjectileSource)
+				{
+					ItemStack sourceAsItem = ItemStackUtil.getItemStackFromBlock(blockProjectileSource.getBlock());
+					Variable.victimAndBlockDamager.put(victimUUID, sourceAsItem);
+					Variable.blockDamagerAndCurrentTime.put(ItemSerializer.serialize(sourceAsItem), System.currentTimeMillis());
+				}
+			}
+		}
+		if (damager instanceof Player player)
+		{
+			UUID uuid = player.getUniqueId();
+			CustomEffectManager.addEffect(player, CustomEffectType.IGNORE_ARM_SWING);
+			if (!Cucumbery.config.getBoolean("grant-default-permission-to-players") && !Permission.EVENT_HURT_ENTITY.has(player))
+			{
+				event.setCancelled(true);
+				if (!Permission.EVENT_ERROR_HIDE.has(player) && !Variable.playerHurtEntityAlertCooldown.contains(uuid))
+				{
+					SoundPlay.playSound(player, Constant.ERROR_SOUND);
+					MessageUtil.sendTitle(player, "&c행동 불가!", "&r개체에게 피해를 입힐 권한이 없습니다", 5, 80, 15);
+					Variable.playerHurtEntityAlertCooldown.add(uuid);
+					Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> Variable.playerHurtEntityAlertCooldown.remove(uuid), 100L);
+				}
+				return;
+			}
+			ItemStack mainHand = player.getInventory().getItemInMainHand();
+			if (ItemStackUtil.itemExists(mainHand) && event.getEntity() instanceof LivingEntity && event.getEntity().getType() != EntityType.ARMOR_STAND)
+			{
+				if (NBTAPI.isRestricted(player, mainHand, Constant.RestrictionType.NO_ATTACK))
+				{
+					event.setCancelled(true);
+					if (!Permission.EVENT_ERROR_HIDE.has(player) && !Variable.playerHurtEntityAlertCooldown.contains(uuid))
+					{
+						SoundPlay.playSound(player, Constant.ERROR_SOUND);
+						MessageUtil.sendTitle(player, "&c공격 불가!", "&r사용할 수 없는 아이템입니다", 5, 80, 15);
+						Variable.playerHurtEntityAlertCooldown.add(uuid);
+						Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> Variable.playerHurtEntityAlertCooldown.remove(uuid), 100L);
+					}
+					return;
+				}
+			}
+		}
+		if (damager instanceof Projectile)
+		{
+			if (((Projectile) damager).getShooter() instanceof Player player)
+			{
+				UUID uuid = Objects.requireNonNull(player).getUniqueId();
+				if (!Cucumbery.config.getBoolean("grant-default-permission-to-players") && !Permission.EVENT_HURT_ENTITY.has(player))
+				{
+					event.setCancelled(true);
+					if (!Permission.EVENT_ERROR_HIDE.has(player) && !Variable.playerHurtEntityAlertCooldown.contains(uuid))
+					{
+						SoundPlay.playSound(player, Constant.ERROR_SOUND);
+						MessageUtil.sendTitle(player, "&c행동 불가!", "&r개체에게 피해를 입힐 권한이 없습니다", 5, 80, 15);
+						Variable.playerHurtEntityAlertCooldown.add(uuid);
+						Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> Variable.playerHurtEntityAlertCooldown.remove(uuid), 100L);
+					}
+					return;
+				}
+			}
+		}
+		// 커스텀 인챈트
+		if (CustomEnchant.isEnabled())
+		{
+			// Cleaving, 방패 가시
+			if (victim instanceof Player player && player.isBlocking())
+			{
+				if (damager instanceof LivingEntity livingEntity)
+				{
+					EntityEquipment equipment = livingEntity.getEquipment();
+					if (equipment != null)
+					{
+						ItemStack weapon = equipment.getItemInMainHand();
+						if (weapon.hasItemMeta() && weapon.getItemMeta().hasEnchant(CustomEnchant.CLEAVING))
+						{
+							int level = weapon.getItemMeta().getEnchantLevel(CustomEnchant.CLEAVING);
+							player.setCooldown(Material.SHIELD, level * 10 + player.getCooldown(Material.SHIELD));
+						}
+					}
+					ItemStack victimShield = ItemStackUtil.getPlayerUsingItem(player, Material.SHIELD);
+					if (ItemStackUtil.itemExists(victimShield) && victimShield.hasItemMeta() && victimShield.getItemMeta().hasEnchant(Enchantment.THORNS))
+					{
+						int level = victimShield.getItemMeta().getEnchantLevel(Enchantment.THORNS);
+						int chance = level * 15;
+						double damage = level <= 10 ? Math.random() * 3 + 1 : level - 10;
+						if (Math.random() * 100d < chance)
+						{
+							livingEntity.damage(damage, player);
+						}
+					}
+				}
+			}
+			// 우연한 방어
+			if (victim instanceof Player player && !player.isBlocking())
+			{
+				ItemStack victimShield = ItemStackUtil.getPlayerUsingItem(player, Material.SHIELD);
+				if (ItemStackUtil.itemExists(victimShield) && victimShield.hasItemMeta() && victimShield.getItemMeta().hasEnchant(CustomEnchant.DEFENSE_CHANCE))
+				{
+					int level = victimShield.getItemMeta().getEnchantLevel(CustomEnchant.DEFENSE_CHANCE);
+					double damage = event.getFinalDamage();
+					if (damage > 1)
+					{
+						int durabilityLoss = (int) Math.round(damage / 6 * level);
+						if (durabilityLoss > 0)
+						{
+							boolean breaking = false;
+							org.bukkit.inventory.meta.Damageable itemMeta = (org.bukkit.inventory.meta.Damageable) victimShield.getItemMeta();
+							itemMeta.setDamage(itemMeta.getDamage() + durabilityLoss);
+							victimShield.setItemMeta(itemMeta);
+							if (itemMeta.getDamage() >= victimShield.getType().getMaxDurability())
+							{
+								PlayerItemBreakEvent playerItemBreakEvent = new PlayerItemBreakEvent(player, victimShield);
+								Bukkit.getPluginManager().callEvent(playerItemBreakEvent);
+								victimShield.setAmount(victimShield.getAmount() - 1);
+							}
+						}
+					}
+					if (Math.random() * 100d < level * 6)
+					{
+						MessageUtil.broadcastDebug("피해 가드함");
+						event.setCancelled(true);
+						return;
+					}
+				}
+			}
+		}
+		Player attcker = null;
+		if (damager instanceof Player)
+		{
+			attcker = (Player) damager;
+		}
+		else if (damager instanceof Projectile && (((Projectile) damager).getShooter() instanceof Player))
+		{
+			attcker = (Player) ((Projectile) damager).getShooter();
+		}
+		if (attcker != null && !CustomEffectManager.hasEffect(victim, CustomEffectType.NO_CUCUMBERY_ITEM_USAGE_ATTACK))
+		{
+			boolean isMelee = damager instanceof Player;
+			boolean isPvP = event.getEntity() instanceof Player;
+			boolean isSneaking = attcker.isSneaking();
 
-      this.attackCommand(event, attcker, isMelee);
-      this.attackPlayerCommand(event, attcker, isMelee, isPvP);
-      this.attackEntityCommand(event, attcker, isMelee, isPvP);
+			this.attackCommand(event, attcker, isMelee);
+			this.attackPlayerCommand(event, attcker, isMelee, isPvP);
+			this.attackEntityCommand(event, attcker, isMelee, isPvP);
 
-      this.attackMeleeCommand(event, attcker, isMelee);
-      this.attackPlayerMeleeCommand(event, attcker, isMelee, isPvP);
-      this.attackEntityMeleeCommand(event, attcker, isMelee, isPvP);
+			this.attackMeleeCommand(event, attcker, isMelee);
+			this.attackPlayerMeleeCommand(event, attcker, isMelee, isPvP);
+			this.attackEntityMeleeCommand(event, attcker, isMelee, isPvP);
 
-      this.attackRangedCommand(event, attcker, isMelee);
-      this.attackPlayerRangedCommand(event, attcker, isMelee, isPvP);
-      this.attackEntityRangedCommand(event, attcker, isMelee, isPvP);
+			this.attackRangedCommand(event, attcker, isMelee);
+			this.attackPlayerRangedCommand(event, attcker, isMelee, isPvP);
+			this.attackEntityRangedCommand(event, attcker, isMelee, isPvP);
 
-      this.sneakAttackCommand(event, attcker, isMelee, isSneaking);
-      this.sneakAttackPlayerCommand(event, attcker, isMelee, isPvP, isSneaking);
-      this.sneakAttackEntityCommand(event, attcker, isMelee, isPvP, isSneaking);
+			this.sneakAttackCommand(event, attcker, isMelee, isSneaking);
+			this.sneakAttackPlayerCommand(event, attcker, isMelee, isPvP, isSneaking);
+			this.sneakAttackEntityCommand(event, attcker, isMelee, isPvP, isSneaking);
 
-      this.sneakAttackMeleeCommand(event, attcker, isMelee, isSneaking);
-      this.sneakAttackPlayerMeleeCommand(event, attcker, isMelee, isPvP, isSneaking);
-      this.sneakAttackEntityMeleeCommand(event, attcker, isMelee, isPvP, isSneaking);
+			this.sneakAttackMeleeCommand(event, attcker, isMelee, isSneaking);
+			this.sneakAttackPlayerMeleeCommand(event, attcker, isMelee, isPvP, isSneaking);
+			this.sneakAttackEntityMeleeCommand(event, attcker, isMelee, isPvP, isSneaking);
 
-      this.sneakAttackRangedCommand(event, attcker, isMelee, isSneaking);
-      this.sneakAttackPlayerRangedCommand(event, attcker, isMelee, isPvP, isSneaking);
-      this.sneakAttackEntityRangedCommand(event, attcker, isMelee, isPvP, isSneaking);
-    }
-    this.damageActionbar(event);
-    this.cancelFireworkDamage(event);
-  }
+			this.sneakAttackRangedCommand(event, attcker, isMelee, isSneaking);
+			this.sneakAttackPlayerRangedCommand(event, attcker, isMelee, isPvP, isSneaking);
+			this.sneakAttackEntityRangedCommand(event, attcker, isMelee, isPvP, isSneaking);
+		}
+		this.damageActionbar(event);
+		this.cancelFireworkDamage(event);
+	}
 
-  private void attackCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee)
-  {
-    ItemStack attackerWeapon = isMelee ? attacker.getInventory().getItemInMainHand() : ItemStackUtil.getPlayerUsingItem(attacker, RANGED_WEAPONS);
-    NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
-    NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
-    NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_ATTACK_KEY);
-    NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
-    String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
-    if (permission != null && !attacker.hasPermission(permission))
-    {
-      return;
-    }
-    if (commandsTag != null)
-    {
-      try
-      {
-        NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
-        long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
-        String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
-        UUID uuid = attacker.getUniqueId();
-        YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
-        long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
-        long currentTime = System.currentTimeMillis();
-        if (currentTime < nextAvailable)
-        {
-          return;
-        }
-        if (configPlayerCooldown == null)
-        {
-          configPlayerCooldown = new YamlConfiguration();
-        }
-        configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
-        Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
-      }
-      catch (Exception e)
-      {
-        // DO NOTHING
-      }
-      Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-      {
-        for (String command : commandsTag)
-        {
-          Method.performCommand(attacker, command, true, true, event);
-        }
-      }, 0L);
-    }
-  }
+	private void attackCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee)
+	{
+		ItemStack attackerWeapon = isMelee ? attacker.getInventory().getItemInMainHand() : ItemStackUtil.getPlayerUsingItem(attacker, RANGED_WEAPONS);
+		NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
+		NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
+		NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_ATTACK_KEY);
+		NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
+		String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
+		if (permission != null && !attacker.hasPermission(permission))
+		{
+			return;
+		}
+		if (commandsTag != null)
+		{
+			try
+			{
+				NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
+				long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
+				String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
+				UUID uuid = attacker.getUniqueId();
+				YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
+				long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
+				long currentTime = System.currentTimeMillis();
+				if (currentTime < nextAvailable)
+				{
+					return;
+				}
+				if (configPlayerCooldown == null)
+				{
+					configPlayerCooldown = new YamlConfiguration();
+				}
+				configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
+				Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
+			}
+			catch (Exception e)
+			{
+				// DO NOTHING
+			}
+			Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+			{
+				for (String command : commandsTag)
+				{
+					Method.performCommand(attacker, command, true, true, event);
+				}
+			}, 0L);
+		}
+	}
 
-  private void attackPlayerCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isPvP)
-  {
-    if (!isPvP)
-    {
-      return;
-    }
-    ItemStack attackerWeapon = isMelee ? attacker.getInventory().getItemInMainHand() : ItemStackUtil.getPlayerUsingItem(attacker, RANGED_WEAPONS);
-    NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
-    NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
-    NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_ATTACK_PLAYER_KEY);
-    NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
-    String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
-    if (permission != null && !attacker.hasPermission(permission))
-    {
-      return;
-    }
-    if (commandsTag != null)
-    {
-      try
-      {
-        NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
-        long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
-        String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
-        UUID uuid = attacker.getUniqueId();
-        YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
-        long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
-        long currentTime = System.currentTimeMillis();
-        if (currentTime < nextAvailable)
-        {
-          return;
-        }
-        if (configPlayerCooldown == null)
-        {
-          configPlayerCooldown = new YamlConfiguration();
-        }
-        configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
-        Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
-      }
-      catch (Exception e)
-      {
-        // DO NOTHING
-      }
-      Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-      {
-        for (String command : commandsTag)
-        {
-          Method.performCommand(attacker, command, true, true, event);
-        }
-      }, 0L);
-    }
-  }
+	private void attackPlayerCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isPvP)
+	{
+		if (!isPvP)
+		{
+			return;
+		}
+		ItemStack attackerWeapon = isMelee ? attacker.getInventory().getItemInMainHand() : ItemStackUtil.getPlayerUsingItem(attacker, RANGED_WEAPONS);
+		NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
+		NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
+		NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_ATTACK_PLAYER_KEY);
+		NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
+		String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
+		if (permission != null && !attacker.hasPermission(permission))
+		{
+			return;
+		}
+		if (commandsTag != null)
+		{
+			try
+			{
+				NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
+				long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
+				String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
+				UUID uuid = attacker.getUniqueId();
+				YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
+				long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
+				long currentTime = System.currentTimeMillis();
+				if (currentTime < nextAvailable)
+				{
+					return;
+				}
+				if (configPlayerCooldown == null)
+				{
+					configPlayerCooldown = new YamlConfiguration();
+				}
+				configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
+				Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
+			}
+			catch (Exception e)
+			{
+				// DO NOTHING
+			}
+			Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+			{
+				for (String command : commandsTag)
+				{
+					Method.performCommand(attacker, command, true, true, event);
+				}
+			}, 0L);
+		}
+	}
 
-  private void attackEntityCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isPvP)
-  {
-    if (isPvP)
-    {
-      return;
-    }
-    ItemStack attackerWeapon = isMelee ? attacker.getInventory().getItemInMainHand() : ItemStackUtil.getPlayerUsingItem(attacker, RANGED_WEAPONS);
-    NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
-    NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
-    NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_ATTACK_ENTITY_KEY);
-    NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
-    String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
-    if (permission != null && !attacker.hasPermission(permission))
-    {
-      return;
-    }
-    if (commandsTag != null)
-    {
-      try
-      {
-        NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
-        long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
-        String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
-        UUID uuid = attacker.getUniqueId();
-        YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
-        long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
-        long currentTime = System.currentTimeMillis();
-        if (currentTime < nextAvailable)
-        {
-          return;
-        }
-        if (configPlayerCooldown == null)
-        {
-          configPlayerCooldown = new YamlConfiguration();
-        }
-        configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
-        Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
-      }
-      catch (Exception e)
-      {
-        // DO NOTHING
-      }
-      Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-      {
-        for (String command : commandsTag)
-        {
-          Method.performCommand(attacker, command, true, true, event);
-        }
-      }, 0L);
-    }
-  }
+	private void attackEntityCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isPvP)
+	{
+		if (isPvP)
+		{
+			return;
+		}
+		ItemStack attackerWeapon = isMelee ? attacker.getInventory().getItemInMainHand() : ItemStackUtil.getPlayerUsingItem(attacker, RANGED_WEAPONS);
+		NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
+		NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
+		NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_ATTACK_ENTITY_KEY);
+		NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
+		String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
+		if (permission != null && !attacker.hasPermission(permission))
+		{
+			return;
+		}
+		if (commandsTag != null)
+		{
+			try
+			{
+				NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
+				long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
+				String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
+				UUID uuid = attacker.getUniqueId();
+				YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
+				long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
+				long currentTime = System.currentTimeMillis();
+				if (currentTime < nextAvailable)
+				{
+					return;
+				}
+				if (configPlayerCooldown == null)
+				{
+					configPlayerCooldown = new YamlConfiguration();
+				}
+				configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
+				Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
+			}
+			catch (Exception e)
+			{
+				// DO NOTHING
+			}
+			Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+			{
+				for (String command : commandsTag)
+				{
+					Method.performCommand(attacker, command, true, true, event);
+				}
+			}, 0L);
+		}
+	}
 
-  private void attackMeleeCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee)
-  {
-    if (!isMelee)
-    {
-      return;
-    }
-    ItemStack attackerWeapon = attacker.getInventory().getItemInMainHand();
-    NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
-    NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
-    NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_ATTACK_MELEE_KEY);
-    NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
-    String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
-    if (permission != null && !attacker.hasPermission(permission))
-    {
-      return;
-    }
-    if (commandsTag != null)
-    {
-      try
-      {
-        NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
-        long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
-        String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
-        UUID uuid = attacker.getUniqueId();
-        YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
-        long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
-        long currentTime = System.currentTimeMillis();
-        if (currentTime < nextAvailable)
-        {
-          return;
-        }
-        if (configPlayerCooldown == null)
-        {
-          configPlayerCooldown = new YamlConfiguration();
-        }
-        configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
-        Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
-      }
-      catch (Exception e)
-      {
-        // DO NOTHING
-      }
-      Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-      {
-        for (String command : commandsTag)
-        {
-          Method.performCommand(attacker, command, true, true, event);
-        }
-      }, 0L);
-    }
-  }
+	private void attackMeleeCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee)
+	{
+		if (!isMelee)
+		{
+			return;
+		}
+		ItemStack attackerWeapon = attacker.getInventory().getItemInMainHand();
+		NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
+		NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
+		NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_ATTACK_MELEE_KEY);
+		NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
+		String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
+		if (permission != null && !attacker.hasPermission(permission))
+		{
+			return;
+		}
+		if (commandsTag != null)
+		{
+			try
+			{
+				NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
+				long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
+				String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
+				UUID uuid = attacker.getUniqueId();
+				YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
+				long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
+				long currentTime = System.currentTimeMillis();
+				if (currentTime < nextAvailable)
+				{
+					return;
+				}
+				if (configPlayerCooldown == null)
+				{
+					configPlayerCooldown = new YamlConfiguration();
+				}
+				configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
+				Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
+			}
+			catch (Exception e)
+			{
+				// DO NOTHING
+			}
+			Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+			{
+				for (String command : commandsTag)
+				{
+					Method.performCommand(attacker, command, true, true, event);
+				}
+			}, 0L);
+		}
+	}
 
-  private void attackPlayerMeleeCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isPvP)
-  {
-    if (!isMelee || !isPvP)
-    {
-      return;
-    }
-    ItemStack attackerWeapon = attacker.getInventory().getItemInMainHand();
-    NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
-    NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
-    NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_ATTACK_PLAYER_MELEE_KEY);
-    NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
-    String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
-    if (permission != null && !attacker.hasPermission(permission))
-    {
-      return;
-    }
-    if (commandsTag != null)
-    {
-      try
-      {
-        NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
-        long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
-        String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
-        UUID uuid = attacker.getUniqueId();
-        YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
-        long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
-        long currentTime = System.currentTimeMillis();
-        if (currentTime < nextAvailable)
-        {
-          return;
-        }
-        if (configPlayerCooldown == null)
-        {
-          configPlayerCooldown = new YamlConfiguration();
-        }
-        configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
-        Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
-      }
-      catch (Exception e)
-      {
-        // DO NOTHING
-      }
-      Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-      {
-        for (String command : commandsTag)
-        {
-          Method.performCommand(attacker, command, true, true, event);
-        }
-      }, 0L);
-    }
-  }
+	private void attackPlayerMeleeCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isPvP)
+	{
+		if (!isMelee || !isPvP)
+		{
+			return;
+		}
+		ItemStack attackerWeapon = attacker.getInventory().getItemInMainHand();
+		NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
+		NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
+		NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_ATTACK_PLAYER_MELEE_KEY);
+		NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
+		String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
+		if (permission != null && !attacker.hasPermission(permission))
+		{
+			return;
+		}
+		if (commandsTag != null)
+		{
+			try
+			{
+				NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
+				long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
+				String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
+				UUID uuid = attacker.getUniqueId();
+				YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
+				long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
+				long currentTime = System.currentTimeMillis();
+				if (currentTime < nextAvailable)
+				{
+					return;
+				}
+				if (configPlayerCooldown == null)
+				{
+					configPlayerCooldown = new YamlConfiguration();
+				}
+				configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
+				Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
+			}
+			catch (Exception e)
+			{
+				// DO NOTHING
+			}
+			Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+			{
+				for (String command : commandsTag)
+				{
+					Method.performCommand(attacker, command, true, true, event);
+				}
+			}, 0L);
+		}
+	}
 
-  private void attackEntityMeleeCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isPvP)
-  {
-    if (!isMelee || isPvP)
-    {
-      return;
-    }
-    ItemStack attackerWeapon = attacker.getInventory().getItemInMainHand();
-    NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
-    NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
-    NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_ATTACK_ENTITY_MELEE_KEY);
-    NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
-    String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
-    if (permission != null && !attacker.hasPermission(permission))
-    {
-      return;
-    }
-    if (commandsTag != null)
-    {
-      try
-      {
-        NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
-        long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
-        String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
-        UUID uuid = attacker.getUniqueId();
-        YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
-        long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
-        long currentTime = System.currentTimeMillis();
-        if (currentTime < nextAvailable)
-        {
-          return;
-        }
-        if (configPlayerCooldown == null)
-        {
-          configPlayerCooldown = new YamlConfiguration();
-        }
-        configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
-        Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
-      }
-      catch (Exception e)
-      {
-        // DO NOTHING
-      }
-      Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-      {
-        for (String command : commandsTag)
-        {
-          Method.performCommand(attacker, command, true, true, event);
-        }
-      }, 0L);
-    }
-  }
+	private void attackEntityMeleeCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isPvP)
+	{
+		if (!isMelee || isPvP)
+		{
+			return;
+		}
+		ItemStack attackerWeapon = attacker.getInventory().getItemInMainHand();
+		NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
+		NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
+		NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_ATTACK_ENTITY_MELEE_KEY);
+		NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
+		String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
+		if (permission != null && !attacker.hasPermission(permission))
+		{
+			return;
+		}
+		if (commandsTag != null)
+		{
+			try
+			{
+				NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
+				long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
+				String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
+				UUID uuid = attacker.getUniqueId();
+				YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
+				long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
+				long currentTime = System.currentTimeMillis();
+				if (currentTime < nextAvailable)
+				{
+					return;
+				}
+				if (configPlayerCooldown == null)
+				{
+					configPlayerCooldown = new YamlConfiguration();
+				}
+				configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
+				Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
+			}
+			catch (Exception e)
+			{
+				// DO NOTHING
+			}
+			Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+			{
+				for (String command : commandsTag)
+				{
+					Method.performCommand(attacker, command, true, true, event);
+				}
+			}, 0L);
+		}
+	}
 
-  private void attackRangedCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee)
-  {
-    if (isMelee)
-    {
-      return;
-    }
-    ItemStack attackerWeapon = ItemStackUtil.getPlayerUsingItem(attacker, RANGED_WEAPONS);
-    NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
-    NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
-    NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_ATTACK_RANGED_KEY);
-    NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
-    String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
-    if (permission != null && !attacker.hasPermission(permission))
-    {
-      return;
-    }
-    if (commandsTag != null)
-    {
-      try
-      {
-        NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
-        long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
-        String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
-        UUID uuid = attacker.getUniqueId();
-        YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
-        long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
-        long currentTime = System.currentTimeMillis();
-        if (currentTime < nextAvailable)
-        {
-          return;
-        }
-        if (configPlayerCooldown == null)
-        {
-          configPlayerCooldown = new YamlConfiguration();
-        }
-        configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
-        Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
-      }
-      catch (Exception e)
-      {
-        // DO NOTHING
-      }
-      Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-      {
-        for (String command : commandsTag)
-        {
-          Method.performCommand(attacker, command, true, true, event);
-        }
-      }, 0L);
-    }
-  }
+	private void attackRangedCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee)
+	{
+		if (isMelee)
+		{
+			return;
+		}
+		ItemStack attackerWeapon = ItemStackUtil.getPlayerUsingItem(attacker, RANGED_WEAPONS);
+		NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
+		NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
+		NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_ATTACK_RANGED_KEY);
+		NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
+		String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
+		if (permission != null && !attacker.hasPermission(permission))
+		{
+			return;
+		}
+		if (commandsTag != null)
+		{
+			try
+			{
+				NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
+				long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
+				String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
+				UUID uuid = attacker.getUniqueId();
+				YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
+				long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
+				long currentTime = System.currentTimeMillis();
+				if (currentTime < nextAvailable)
+				{
+					return;
+				}
+				if (configPlayerCooldown == null)
+				{
+					configPlayerCooldown = new YamlConfiguration();
+				}
+				configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
+				Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
+			}
+			catch (Exception e)
+			{
+				// DO NOTHING
+			}
+			Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+			{
+				for (String command : commandsTag)
+				{
+					Method.performCommand(attacker, command, true, true, event);
+				}
+			}, 0L);
+		}
+	}
 
-  private void attackPlayerRangedCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isPvP)
-  {
-    if (isMelee || !isPvP)
-    {
-      return;
-    }
-    ItemStack attackerWeapon = ItemStackUtil.getPlayerUsingItem(attacker, RANGED_WEAPONS);
-    NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
-    NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
-    NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_ATTACK_PLAYER_RANGED_KEY);
-    NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
-    String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
-    if (permission != null && !attacker.hasPermission(permission))
-    {
-      return;
-    }
-    if (commandsTag != null)
-    {
-      try
-      {
-        NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
-        long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
-        String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
-        UUID uuid = attacker.getUniqueId();
-        YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
-        long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
-        long currentTime = System.currentTimeMillis();
-        if (currentTime < nextAvailable)
-        {
-          return;
-        }
-        if (configPlayerCooldown == null)
-        {
-          configPlayerCooldown = new YamlConfiguration();
-        }
-        configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
-        Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
-      }
-      catch (Exception e)
-      {
-        // DO NOTHING
-      }
-      Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-      {
-        for (String command : commandsTag)
-        {
-          Method.performCommand(attacker, command, true, true, event);
-        }
-      }, 0L);
-    }
-  }
+	private void attackPlayerRangedCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isPvP)
+	{
+		if (isMelee || !isPvP)
+		{
+			return;
+		}
+		ItemStack attackerWeapon = ItemStackUtil.getPlayerUsingItem(attacker, RANGED_WEAPONS);
+		NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
+		NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
+		NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_ATTACK_PLAYER_RANGED_KEY);
+		NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
+		String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
+		if (permission != null && !attacker.hasPermission(permission))
+		{
+			return;
+		}
+		if (commandsTag != null)
+		{
+			try
+			{
+				NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
+				long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
+				String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
+				UUID uuid = attacker.getUniqueId();
+				YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
+				long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
+				long currentTime = System.currentTimeMillis();
+				if (currentTime < nextAvailable)
+				{
+					return;
+				}
+				if (configPlayerCooldown == null)
+				{
+					configPlayerCooldown = new YamlConfiguration();
+				}
+				configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
+				Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
+			}
+			catch (Exception e)
+			{
+				// DO NOTHING
+			}
+			Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+			{
+				for (String command : commandsTag)
+				{
+					Method.performCommand(attacker, command, true, true, event);
+				}
+			}, 0L);
+		}
+	}
 
-  private void attackEntityRangedCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isPvP)
-  {
-    if (isMelee || isPvP)
-    {
-      return;
-    }
-    ItemStack attackerWeapon = ItemStackUtil.getPlayerUsingItem(attacker, RANGED_WEAPONS);
-    NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
-    NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
-    NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_ATTACK_ENTITY_RANGED_KEY);
-    NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
-    String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
-    if (permission != null && !attacker.hasPermission(permission))
-    {
-      return;
-    }
-    if (commandsTag != null)
-    {
-      try
-      {
-        NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
-        long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
-        String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
-        UUID uuid = attacker.getUniqueId();
-        YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
-        long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
-        long currentTime = System.currentTimeMillis();
-        if (currentTime < nextAvailable)
-        {
-          return;
-        }
-        if (configPlayerCooldown == null)
-        {
-          configPlayerCooldown = new YamlConfiguration();
-        }
-        configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
-        Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
-      }
-      catch (Exception e)
-      {
-        // DO NOTHING
-      }
-      Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-      {
-        for (String command : commandsTag)
-        {
-          Method.performCommand(attacker, command, true, true, event);
-        }
-      }, 0L);
-    }
-  }
+	private void attackEntityRangedCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isPvP)
+	{
+		if (isMelee || isPvP)
+		{
+			return;
+		}
+		ItemStack attackerWeapon = ItemStackUtil.getPlayerUsingItem(attacker, RANGED_WEAPONS);
+		NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
+		NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
+		NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_ATTACK_ENTITY_RANGED_KEY);
+		NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
+		String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
+		if (permission != null && !attacker.hasPermission(permission))
+		{
+			return;
+		}
+		if (commandsTag != null)
+		{
+			try
+			{
+				NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
+				long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
+				String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
+				UUID uuid = attacker.getUniqueId();
+				YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
+				long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
+				long currentTime = System.currentTimeMillis();
+				if (currentTime < nextAvailable)
+				{
+					return;
+				}
+				if (configPlayerCooldown == null)
+				{
+					configPlayerCooldown = new YamlConfiguration();
+				}
+				configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
+				Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
+			}
+			catch (Exception e)
+			{
+				// DO NOTHING
+			}
+			Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+			{
+				for (String command : commandsTag)
+				{
+					Method.performCommand(attacker, command, true, true, event);
+				}
+			}, 0L);
+		}
+	}
 
-  private void sneakAttackCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isSneaking)
-  {
-    if (!isSneaking)
-    {
-      return;
-    }
-    ItemStack attackerWeapon = isMelee ? attacker.getInventory().getItemInMainHand() : ItemStackUtil.getPlayerUsingItem(attacker, RANGED_WEAPONS);
-    NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
-    NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
-    NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_SNEAK_ATTACK_KEY);
-    NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
-    String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
-    if (permission != null && !attacker.hasPermission(permission))
-    {
-      return;
-    }
-    if (commandsTag != null)
-    {
-      try
-      {
-        NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
-        long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
-        String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
-        UUID uuid = attacker.getUniqueId();
-        YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
-        long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
-        long currentTime = System.currentTimeMillis();
-        if (currentTime < nextAvailable)
-        {
-          return;
-        }
-        if (configPlayerCooldown == null)
-        {
-          configPlayerCooldown = new YamlConfiguration();
-        }
-        configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
-        Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
-      }
-      catch (Exception e)
-      {
-        // DO NOTHING
-      }
-      Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-      {
-        for (String command : commandsTag)
-        {
-          Method.performCommand(attacker, command, true, true, event);
-        }
-      }, 0L);
-    }
-  }
+	private void sneakAttackCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isSneaking)
+	{
+		if (!isSneaking)
+		{
+			return;
+		}
+		ItemStack attackerWeapon = isMelee ? attacker.getInventory().getItemInMainHand() : ItemStackUtil.getPlayerUsingItem(attacker, RANGED_WEAPONS);
+		NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
+		NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
+		NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_SNEAK_ATTACK_KEY);
+		NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
+		String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
+		if (permission != null && !attacker.hasPermission(permission))
+		{
+			return;
+		}
+		if (commandsTag != null)
+		{
+			try
+			{
+				NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
+				long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
+				String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
+				UUID uuid = attacker.getUniqueId();
+				YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
+				long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
+				long currentTime = System.currentTimeMillis();
+				if (currentTime < nextAvailable)
+				{
+					return;
+				}
+				if (configPlayerCooldown == null)
+				{
+					configPlayerCooldown = new YamlConfiguration();
+				}
+				configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
+				Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
+			}
+			catch (Exception e)
+			{
+				// DO NOTHING
+			}
+			Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+			{
+				for (String command : commandsTag)
+				{
+					Method.performCommand(attacker, command, true, true, event);
+				}
+			}, 0L);
+		}
+	}
 
-  private void sneakAttackPlayerCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isPvP, boolean isSneaking)
-  {
-    if (!isSneaking || !isPvP)
-    {
-      return;
-    }
-    ItemStack attackerWeapon = isMelee ? attacker.getInventory().getItemInMainHand() : ItemStackUtil.getPlayerUsingItem(attacker, RANGED_WEAPONS);
-    NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
-    NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
-    NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_SNEAK_ATTACK_PLAYER_KEY);
-    NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
-    String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
-    if (permission != null && !attacker.hasPermission(permission))
-    {
-      return;
-    }
-    if (commandsTag != null)
-    {
-      try
-      {
-        NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
-        long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
-        String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
-        UUID uuid = attacker.getUniqueId();
-        YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
-        long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
-        long currentTime = System.currentTimeMillis();
-        if (currentTime < nextAvailable)
-        {
-          return;
-        }
-        if (configPlayerCooldown == null)
-        {
-          configPlayerCooldown = new YamlConfiguration();
-        }
-        configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
-        Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
-      }
-      catch (Exception e)
-      {
-        // DO NOTHING
-      }
-      Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-      {
-        for (String command : commandsTag)
-        {
-          Method.performCommand(attacker, command, true, true, event);
-        }
-      }, 0L);
-    }
-  }
+	private void sneakAttackPlayerCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isPvP, boolean isSneaking)
+	{
+		if (!isSneaking || !isPvP)
+		{
+			return;
+		}
+		ItemStack attackerWeapon = isMelee ? attacker.getInventory().getItemInMainHand() : ItemStackUtil.getPlayerUsingItem(attacker, RANGED_WEAPONS);
+		NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
+		NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
+		NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_SNEAK_ATTACK_PLAYER_KEY);
+		NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
+		String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
+		if (permission != null && !attacker.hasPermission(permission))
+		{
+			return;
+		}
+		if (commandsTag != null)
+		{
+			try
+			{
+				NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
+				long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
+				String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
+				UUID uuid = attacker.getUniqueId();
+				YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
+				long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
+				long currentTime = System.currentTimeMillis();
+				if (currentTime < nextAvailable)
+				{
+					return;
+				}
+				if (configPlayerCooldown == null)
+				{
+					configPlayerCooldown = new YamlConfiguration();
+				}
+				configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
+				Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
+			}
+			catch (Exception e)
+			{
+				// DO NOTHING
+			}
+			Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+			{
+				for (String command : commandsTag)
+				{
+					Method.performCommand(attacker, command, true, true, event);
+				}
+			}, 0L);
+		}
+	}
 
-  private void sneakAttackEntityCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isPvP, boolean isSneaking)
-  {
-    if (!isSneaking || isPvP)
-    {
-      return;
-    }
-    ItemStack attackerWeapon = isMelee ? attacker.getInventory().getItemInMainHand() : ItemStackUtil.getPlayerUsingItem(attacker, RANGED_WEAPONS);
-    NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
-    NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
-    NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_SNEAK_ATTACK_ENTITY_KEY);
-    NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
-    String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
-    if (permission != null && !attacker.hasPermission(permission))
-    {
-      return;
-    }
-    if (commandsTag != null)
-    {
-      try
-      {
-        NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
-        long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
-        String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
-        UUID uuid = attacker.getUniqueId();
-        YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
-        long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
-        long currentTime = System.currentTimeMillis();
-        if (currentTime < nextAvailable)
-        {
-          return;
-        }
-        if (configPlayerCooldown == null)
-        {
-          configPlayerCooldown = new YamlConfiguration();
-        }
-        configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
-        Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
-      }
-      catch (Exception e)
-      {
-        // DO NOTHING
-      }
-      Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-      {
-        for (String command : commandsTag)
-        {
-          Method.performCommand(attacker, command, true, true, event);
-        }
-      }, 0L);
-    }
-  }
+	private void sneakAttackEntityCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isPvP, boolean isSneaking)
+	{
+		if (!isSneaking || isPvP)
+		{
+			return;
+		}
+		ItemStack attackerWeapon = isMelee ? attacker.getInventory().getItemInMainHand() : ItemStackUtil.getPlayerUsingItem(attacker, RANGED_WEAPONS);
+		NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
+		NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
+		NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_SNEAK_ATTACK_ENTITY_KEY);
+		NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
+		String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
+		if (permission != null && !attacker.hasPermission(permission))
+		{
+			return;
+		}
+		if (commandsTag != null)
+		{
+			try
+			{
+				NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
+				long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
+				String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
+				UUID uuid = attacker.getUniqueId();
+				YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
+				long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
+				long currentTime = System.currentTimeMillis();
+				if (currentTime < nextAvailable)
+				{
+					return;
+				}
+				if (configPlayerCooldown == null)
+				{
+					configPlayerCooldown = new YamlConfiguration();
+				}
+				configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
+				Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
+			}
+			catch (Exception e)
+			{
+				// DO NOTHING
+			}
+			Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+			{
+				for (String command : commandsTag)
+				{
+					Method.performCommand(attacker, command, true, true, event);
+				}
+			}, 0L);
+		}
+	}
 
-  private void sneakAttackMeleeCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isSneaking)
-  {
-    if (!isSneaking || !isMelee)
-    {
-      return;
-    }
-    ItemStack attackerWeapon = attacker.getInventory().getItemInMainHand();
-    NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
-    NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
-    NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_SNEAK_ATTACK_MELEE_KEY);
-    NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
-    String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
-    if (permission != null && !attacker.hasPermission(permission))
-    {
-      return;
-    }
-    if (commandsTag != null)
-    {
-      try
-      {
-        NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
-        long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
-        String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
-        UUID uuid = attacker.getUniqueId();
-        YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
-        long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
-        long currentTime = System.currentTimeMillis();
-        if (currentTime < nextAvailable)
-        {
-          return;
-        }
-        if (configPlayerCooldown == null)
-        {
-          configPlayerCooldown = new YamlConfiguration();
-        }
-        configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
-        Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
-      }
-      catch (Exception e)
-      {
-        // DO NOTHING
-      }
-      Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-      {
-        for (String command : commandsTag)
-        {
-          Method.performCommand(attacker, command, true, true, event);
-        }
-      }, 0L);
-    }
-  }
+	private void sneakAttackMeleeCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isSneaking)
+	{
+		if (!isSneaking || !isMelee)
+		{
+			return;
+		}
+		ItemStack attackerWeapon = attacker.getInventory().getItemInMainHand();
+		NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
+		NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
+		NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_SNEAK_ATTACK_MELEE_KEY);
+		NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
+		String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
+		if (permission != null && !attacker.hasPermission(permission))
+		{
+			return;
+		}
+		if (commandsTag != null)
+		{
+			try
+			{
+				NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
+				long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
+				String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
+				UUID uuid = attacker.getUniqueId();
+				YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
+				long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
+				long currentTime = System.currentTimeMillis();
+				if (currentTime < nextAvailable)
+				{
+					return;
+				}
+				if (configPlayerCooldown == null)
+				{
+					configPlayerCooldown = new YamlConfiguration();
+				}
+				configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
+				Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
+			}
+			catch (Exception e)
+			{
+				// DO NOTHING
+			}
+			Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+			{
+				for (String command : commandsTag)
+				{
+					Method.performCommand(attacker, command, true, true, event);
+				}
+			}, 0L);
+		}
+	}
 
-  private void sneakAttackPlayerMeleeCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isPvP, boolean isSneaking)
-  {
-    if (!isSneaking || !isMelee || !isPvP)
-    {
-      return;
-    }
-    ItemStack attackerWeapon = attacker.getInventory().getItemInMainHand();
-    NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
-    NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
-    NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_SNEAK_ATTACK_PLAYER_MELEE_KEY);
-    NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
-    String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
-    if (permission != null && !attacker.hasPermission(permission))
-    {
-      return;
-    }
-    if (commandsTag != null)
-    {
-      try
-      {
-        NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
-        long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
-        String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
-        UUID uuid = attacker.getUniqueId();
-        YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
-        long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
-        long currentTime = System.currentTimeMillis();
-        if (currentTime < nextAvailable)
-        {
-          return;
-        }
-        if (configPlayerCooldown == null)
-        {
-          configPlayerCooldown = new YamlConfiguration();
-        }
-        configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
-        Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
-      }
-      catch (Exception e)
-      {
-        // DO NOTHING
-      }
-      Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-      {
-        for (String command : commandsTag)
-        {
-          Method.performCommand(attacker, command, true, true, event);
-        }
-      }, 0L);
-    }
-  }
+	private void sneakAttackPlayerMeleeCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isPvP, boolean isSneaking)
+	{
+		if (!isSneaking || !isMelee || !isPvP)
+		{
+			return;
+		}
+		ItemStack attackerWeapon = attacker.getInventory().getItemInMainHand();
+		NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
+		NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
+		NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_SNEAK_ATTACK_PLAYER_MELEE_KEY);
+		NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
+		String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
+		if (permission != null && !attacker.hasPermission(permission))
+		{
+			return;
+		}
+		if (commandsTag != null)
+		{
+			try
+			{
+				NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
+				long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
+				String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
+				UUID uuid = attacker.getUniqueId();
+				YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
+				long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
+				long currentTime = System.currentTimeMillis();
+				if (currentTime < nextAvailable)
+				{
+					return;
+				}
+				if (configPlayerCooldown == null)
+				{
+					configPlayerCooldown = new YamlConfiguration();
+				}
+				configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
+				Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
+			}
+			catch (Exception e)
+			{
+				// DO NOTHING
+			}
+			Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+			{
+				for (String command : commandsTag)
+				{
+					Method.performCommand(attacker, command, true, true, event);
+				}
+			}, 0L);
+		}
+	}
 
-  private void sneakAttackEntityMeleeCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isPvP, boolean isSneaking)
-  {
-    if (!isSneaking || !isMelee || isPvP)
-    {
-      return;
-    }
-    ItemStack attackerWeapon = attacker.getInventory().getItemInMainHand();
-    NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
-    NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
-    NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_SNEAK_ATTACK_ENTITY_MELEE_KEY);
-    NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
-    String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
-    if (permission != null && !attacker.hasPermission(permission))
-    {
-      return;
-    }
-    if (commandsTag != null)
-    {
-      try
-      {
-        NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
-        long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
-        String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
-        UUID uuid = attacker.getUniqueId();
-        YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
-        long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
-        long currentTime = System.currentTimeMillis();
-        if (currentTime < nextAvailable)
-        {
-          return;
-        }
-        if (configPlayerCooldown == null)
-        {
-          configPlayerCooldown = new YamlConfiguration();
-        }
-        configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
-        Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
-      }
-      catch (Exception e)
-      {
-        // DO NOTHING
-      }
-      Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-      {
-        for (String command : commandsTag)
-        {
-          Method.performCommand(attacker, command, true, true, event);
-        }
-      }, 0L);
-    }
-  }
+	private void sneakAttackEntityMeleeCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isPvP, boolean isSneaking)
+	{
+		if (!isSneaking || !isMelee || isPvP)
+		{
+			return;
+		}
+		ItemStack attackerWeapon = attacker.getInventory().getItemInMainHand();
+		NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
+		NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
+		NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_SNEAK_ATTACK_ENTITY_MELEE_KEY);
+		NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
+		String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
+		if (permission != null && !attacker.hasPermission(permission))
+		{
+			return;
+		}
+		if (commandsTag != null)
+		{
+			try
+			{
+				NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
+				long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
+				String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
+				UUID uuid = attacker.getUniqueId();
+				YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
+				long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
+				long currentTime = System.currentTimeMillis();
+				if (currentTime < nextAvailable)
+				{
+					return;
+				}
+				if (configPlayerCooldown == null)
+				{
+					configPlayerCooldown = new YamlConfiguration();
+				}
+				configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
+				Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
+			}
+			catch (Exception e)
+			{
+				// DO NOTHING
+			}
+			Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+			{
+				for (String command : commandsTag)
+				{
+					Method.performCommand(attacker, command, true, true, event);
+				}
+			}, 0L);
+		}
+	}
 
-  private void sneakAttackRangedCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isSneaking)
-  {
-    if (!isSneaking || isMelee)
-    {
-      return;
-    }
-    ItemStack attackerWeapon = ItemStackUtil.getPlayerUsingItem(attacker, RANGED_WEAPONS);
-    NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
-    NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
-    NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_SNEAK_ATTACK_RANGED_KEY);
-    NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
-    String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
-    if (permission != null && !attacker.hasPermission(permission))
-    {
-      return;
-    }
-    if (commandsTag != null)
-    {
-      try
-      {
-        NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
-        long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
-        String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
-        UUID uuid = attacker.getUniqueId();
-        YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
-        long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
-        long currentTime = System.currentTimeMillis();
-        if (currentTime < nextAvailable)
-        {
-          return;
-        }
-        if (configPlayerCooldown == null)
-        {
-          configPlayerCooldown = new YamlConfiguration();
-        }
-        configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
-        Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
-      }
-      catch (Exception e)
-      {
-        // DO NOTHING
-      }
-      Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-      {
-        for (String command : commandsTag)
-        {
-          Method.performCommand(attacker, command, true, true, event);
-        }
-      }, 0L);
-    }
-  }
+	private void sneakAttackRangedCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isSneaking)
+	{
+		if (!isSneaking || isMelee)
+		{
+			return;
+		}
+		ItemStack attackerWeapon = ItemStackUtil.getPlayerUsingItem(attacker, RANGED_WEAPONS);
+		NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
+		NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
+		NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_SNEAK_ATTACK_RANGED_KEY);
+		NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
+		String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
+		if (permission != null && !attacker.hasPermission(permission))
+		{
+			return;
+		}
+		if (commandsTag != null)
+		{
+			try
+			{
+				NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
+				long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
+				String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
+				UUID uuid = attacker.getUniqueId();
+				YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
+				long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
+				long currentTime = System.currentTimeMillis();
+				if (currentTime < nextAvailable)
+				{
+					return;
+				}
+				if (configPlayerCooldown == null)
+				{
+					configPlayerCooldown = new YamlConfiguration();
+				}
+				configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
+				Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
+			}
+			catch (Exception e)
+			{
+				// DO NOTHING
+			}
+			Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+			{
+				for (String command : commandsTag)
+				{
+					Method.performCommand(attacker, command, true, true, event);
+				}
+			}, 0L);
+		}
+	}
 
-  private void sneakAttackPlayerRangedCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isPvP, boolean isSneaking)
-  {
-    if (!isSneaking || isMelee || !isPvP)
-    {
-      return;
-    }
-    ItemStack attackerWeapon = ItemStackUtil.getPlayerUsingItem(attacker, RANGED_WEAPONS);
-    NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
-    NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
-    NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_SNEAK_ATTACK_PLAYER_RANGED_KEY);
-    NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
-    String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
-    if (permission != null && !attacker.hasPermission(permission))
-    {
-      return;
-    }
-    if (commandsTag != null)
-    {
-      try
-      {
-        NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
-        long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
-        String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
-        UUID uuid = attacker.getUniqueId();
-        YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
-        long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
-        long currentTime = System.currentTimeMillis();
-        if (currentTime < nextAvailable)
-        {
-          return;
-        }
-        if (configPlayerCooldown == null)
-        {
-          configPlayerCooldown = new YamlConfiguration();
-        }
-        configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
-        Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
-      }
-      catch (Exception e)
-      {
-        // DO NOTHING
-      }
-      Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-      {
-        for (String command : commandsTag)
-        {
-          Method.performCommand(attacker, command, true, true, event);
-        }
-      }, 0L);
-    }
-  }
+	private void sneakAttackPlayerRangedCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isPvP, boolean isSneaking)
+	{
+		if (!isSneaking || isMelee || !isPvP)
+		{
+			return;
+		}
+		ItemStack attackerWeapon = ItemStackUtil.getPlayerUsingItem(attacker, RANGED_WEAPONS);
+		NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
+		NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
+		NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_SNEAK_ATTACK_PLAYER_RANGED_KEY);
+		NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
+		String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
+		if (permission != null && !attacker.hasPermission(permission))
+		{
+			return;
+		}
+		if (commandsTag != null)
+		{
+			try
+			{
+				NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
+				long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
+				String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
+				UUID uuid = attacker.getUniqueId();
+				YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
+				long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
+				long currentTime = System.currentTimeMillis();
+				if (currentTime < nextAvailable)
+				{
+					return;
+				}
+				if (configPlayerCooldown == null)
+				{
+					configPlayerCooldown = new YamlConfiguration();
+				}
+				configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
+				Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
+			}
+			catch (Exception e)
+			{
+				// DO NOTHING
+			}
+			Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+			{
+				for (String command : commandsTag)
+				{
+					Method.performCommand(attacker, command, true, true, event);
+				}
+			}, 0L);
+		}
+	}
 
-  private void sneakAttackEntityRangedCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isPvP, boolean isSneaking)
-  {
-    if (!isSneaking || isMelee || isPvP)
-    {
-      return;
-    }
-    ItemStack attackerWeapon = ItemStackUtil.getPlayerUsingItem(attacker, RANGED_WEAPONS);
-    NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
-    NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
-    NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_SNEAK_ATTACK_ENTITY_RANGED_KEY);
-    NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
-    String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
-    if (permission != null && !attacker.hasPermission(permission))
-    {
-      return;
-    }
-    if (commandsTag != null)
-    {
-      try
-      {
-        NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
-        long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
-        String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
-        UUID uuid = attacker.getUniqueId();
-        YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
-        long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
-        long currentTime = System.currentTimeMillis();
-        if (currentTime < nextAvailable)
-        {
-          return;
-        }
-        if (configPlayerCooldown == null)
-        {
-          configPlayerCooldown = new YamlConfiguration();
-        }
-        configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
-        Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
-      }
-      catch (Exception e)
-      {
-        // DO NOTHING
-      }
-      Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-      {
-        for (String command : commandsTag)
-        {
-          Method.performCommand(attacker, command, true, true, event);
-        }
-      }, 0L);
-    }
-  }
+	private void sneakAttackEntityRangedCommand(EntityDamageByEntityEvent event, @NotNull Player attacker, boolean isMelee, boolean isPvP, boolean isSneaking)
+	{
+		if (!isSneaking || isMelee || isPvP)
+		{
+			return;
+		}
+		ItemStack attackerWeapon = ItemStackUtil.getPlayerUsingItem(attacker, RANGED_WEAPONS);
+		NBTCompound itemTag = NBTAPI.getMainCompound(attackerWeapon);
+		NBTCompound usageTag = NBTAPI.getCompound(itemTag, CucumberyTag.USAGE_KEY);
+		NBTCompound usageAttackTag = NBTAPI.getCompound(usageTag, CucumberyTag.USAGE_COMMANDS_SNEAK_ATTACK_ENTITY_RANGED_KEY);
+		NBTList<String> commandsTag = NBTAPI.getStringList(usageAttackTag, CucumberyTag.USAGE_COMMANDS_KEY);
+		String permission = NBTAPI.getString(usageAttackTag, CucumberyTag.PERMISSION_KEY);
+		if (permission != null && !attacker.hasPermission(permission))
+		{
+			return;
+		}
+		if (commandsTag != null)
+		{
+			try
+			{
+				NBTCompound cooldownTag = NBTAPI.getCompound(usageAttackTag, CucumberyTag.COOLDOWN_KEY);
+				long cooldownTime = Objects.requireNonNull(cooldownTag).getLong(CucumberyTag.TIME_KEY);
+				String cooldownTagTag = cooldownTag.getString(CucumberyTag.TAG_KEY);
+				UUID uuid = attacker.getUniqueId();
+				YamlConfiguration configPlayerCooldown = Variable.cooldownsItemUsage.get(uuid);
+				long nextAvailable = configPlayerCooldown == null ? 0 : configPlayerCooldown.getLong(cooldownTagTag);
+				long currentTime = System.currentTimeMillis();
+				if (currentTime < nextAvailable)
+				{
+					return;
+				}
+				if (configPlayerCooldown == null)
+				{
+					configPlayerCooldown = new YamlConfiguration();
+				}
+				configPlayerCooldown.set(cooldownTagTag, currentTime + cooldownTime);
+				Variable.cooldownsItemUsage.put(uuid, configPlayerCooldown);
+			}
+			catch (Exception e)
+			{
+				// DO NOTHING
+			}
+			Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+			{
+				for (String command : commandsTag)
+				{
+					Method.performCommand(attacker, command, true, true, event);
+				}
+			}, 0L);
+		}
+	}
 
 /*  private void rpg(EntityDamageByEntityEvent event)
   {
@@ -1945,180 +1930,182 @@ public class EntityDamageByEntity implements Listener
     }
   }*/
 
-  private void damageActionbar(EntityDamageByEntityEvent event)
-  {
-    double finalDamage = event.getFinalDamage();
-    Entity entity = event.getEntity();
-    Entity damager = event.getDamager();
-    if (entity.isDead())
-    {
-      return;
-    }
-    FileConfiguration config = Cucumbery.config;
-    if (!(entity instanceof LivingEntity livingEntity))
-    {
-      return;
-    }
-    Player player = null;
-    if (damager instanceof Player p)
-    {
-      player = p;
-    }
-    else if (damager instanceof Projectile projectile)
-    {
-      if (projectile.getType() == EntityType.ENDER_PEARL)
-      {
-        return;
-      }
-      if (projectile.getType() == EntityType.EGG)
-      {
-        return;
-      }
-      if (projectile.getType() == EntityType.SNOWBALL)
-      {
-        return;
-      }
-      if (!(projectile.getShooter() instanceof Player p))
-      {
-        return;
-      }
-      player = p;
-    }
-    else if (damager instanceof AreaEffectCloud areaEffectCloud)
-    {
-      if (areaEffectCloud.getSource() instanceof Player p)
-      {
-        player = p;
-      }
-    }
-    if (player == null)
-    {
-      return;
-    }
-    boolean showActionbar = UserData.SHOW_ACTIONBAR_ON_ATTACK.getBoolean(player.getUniqueId());
-    boolean showActionbarPVP = UserData.SHOW_ACTIONBAR_ON_ATTACK_PVP.getBoolean(player.getUniqueId());
-    boolean showActionbarForce = UserData.SHOW_ACTIONBAR_ON_ATTACK_FORCE.getBoolean(player.getUniqueId());
-    boolean showActionbarPVPForce = UserData.SHOW_ACTIONBAR_ON_ATTACK_PVP_FORCE.getBoolean(player.getUniqueId());
-    boolean actionbarConfig = config.getBoolean("show-actionbar-on-attack");
-    if (!actionbarConfig && !showActionbarForce && !showActionbarPVPForce)
-    {
-      return; // 콘픽이 비활성화이며, 강제 액션바 출력, 강제 PVP 액션바 출력 모두 false라면
-    }
-    List<String> noWorlds = config.getStringList("no-show-actionbar-on-attack-worlds");
-    boolean actionbarNoWorld = Method.configContainsLocation(entity.getLocation(), noWorlds);
-    if (actionbarNoWorld && !showActionbarForce && !showActionbarPVPForce)
-    {
-      return; // 기능이 비활성화된 위치에 있으며, 강제 액션바 출력, 강제 PVP 액션바 출력 모두 false라면
-    }
-    if (!showActionbar && !showActionbarForce && !showActionbarPVPForce)
-    {
-      return; // 액션바를 출력 기능이 false이고, 강제 액션바 출력, 강제 PVP 액션바 출력 모두 false라면
-    }
-    if (livingEntity.getType() == EntityType.PLAYER)
-    {
-      if (!config.getBoolean("show-actionbar-on-pvp") && !showActionbarForce && !showActionbarPVPForce)
-      {
-        return; // 콘픽이 비활성화이며, 강제 액션바 출력, 강제 PVP 액션바 출력 모두 false라면
-      }
-      if (Method.configContainsLocation(entity.getLocation(), config.getStringList("no-show-actionbar-on-pvp-worlds")) && !showActionbarForce && !showActionbarPVPForce)
-      {
-        return; // 기능이 비활성화된 위치에 있으며, 강제 액션바 출력, 강제 PVP 액션바 출력 모두 false라면
-      }
-      Player target = (Player) livingEntity;
-      boolean hideActionbar = UserData.HIDE_ACTIONBAR_ON_ATTACK_PVP_TO_OTHERS.getBoolean(target.getUniqueId());
-      if ((!showActionbarPVP || hideActionbar) && !showActionbarForce && !showActionbarPVPForce)
-      {
-        return; // PVP 액션바 출력 기능이 false이거나, 상대방의 PVP 액션바 숨김 기능이 true이면서, 강제 액션바 출력, 강제 PVP 액션바 출력 모두 false라면
-      }
-    }
-    else if ((!actionbarConfig || actionbarNoWorld) && !showActionbarForce)
-    {
-      return; // 콘픽이 비활성화이거나 기능이 비활성화된 월드에 있으면서 강제 액션바 출력이 false라면
-    }
-    int round = config.getInt("actionbar-on-attack-numbers-round-number");
-    DecimalFormat df = Constant.Sosu2;
-    if (round > 0)
-    {
-      df = new DecimalFormat("#,###." + "#".repeat(round));
-    }
+	private void damageActionbar(EntityDamageByEntityEvent event)
+	{
+		double finalDamage = event.getFinalDamage();
+		Entity entity = event.getEntity();
+		Entity damager = event.getDamager();
+		if (entity.isDead())
+		{
+			return;
+		}
+		FileConfiguration config = Cucumbery.config;
+		if (!(entity instanceof LivingEntity livingEntity))
+		{
+			return;
+		}
+		Player player = null;
+		if (damager instanceof Player p)
+		{
+			player = p;
+		}
+		else if (damager instanceof Projectile projectile)
+		{
+			if (projectile.getType() == EntityType.ENDER_PEARL)
+			{
+				return;
+			}
+			if (projectile.getType() == EntityType.EGG)
+			{
+				return;
+			}
+			if (projectile.getType() == EntityType.SNOWBALL)
+			{
+				return;
+			}
+			if (!(projectile.getShooter() instanceof Player p))
+			{
+				return;
+			}
+			player = p;
+		}
+		else if (damager instanceof AreaEffectCloud areaEffectCloud)
+		{
+			if (areaEffectCloud.getSource() instanceof Player p)
+			{
+				player = p;
+			}
+		}
+		if (player == null)
+		{
+			return;
+		}
+		boolean showActionbar = UserData.SHOW_ACTIONBAR_ON_ATTACK.getBoolean(player.getUniqueId());
+		boolean showActionbarPVP = UserData.SHOW_ACTIONBAR_ON_ATTACK_PVP.getBoolean(player.getUniqueId());
+		boolean showActionbarForce = UserData.SHOW_ACTIONBAR_ON_ATTACK_FORCE.getBoolean(player.getUniqueId());
+		boolean showActionbarPVPForce = UserData.SHOW_ACTIONBAR_ON_ATTACK_PVP_FORCE.getBoolean(player.getUniqueId());
+		boolean actionbarConfig = config.getBoolean("show-actionbar-on-attack");
+		if (!actionbarConfig && !showActionbarForce && !showActionbarPVPForce)
+		{
+			return; // 콘픽이 비활성화이며, 강제 액션바 출력, 강제 PVP 액션바 출력 모두 false라면
+		}
+		List<String> noWorlds = config.getStringList("no-show-actionbar-on-attack-worlds");
+		boolean actionbarNoWorld = Method.configContainsLocation(entity.getLocation(), noWorlds);
+		if (actionbarNoWorld && !showActionbarForce && !showActionbarPVPForce)
+		{
+			return; // 기능이 비활성화된 위치에 있으며, 강제 액션바 출력, 강제 PVP 액션바 출력 모두 false라면
+		}
+		if (!showActionbar && !showActionbarForce && !showActionbarPVPForce)
+		{
+			return; // 액션바를 출력 기능이 false이고, 강제 액션바 출력, 강제 PVP 액션바 출력 모두 false라면
+		}
+		if (livingEntity.getType() == EntityType.PLAYER)
+		{
+			if (!config.getBoolean("show-actionbar-on-pvp") && !showActionbarForce && !showActionbarPVPForce)
+			{
+				return; // 콘픽이 비활성화이며, 강제 액션바 출력, 강제 PVP 액션바 출력 모두 false라면
+			}
+			if (Method.configContainsLocation(entity.getLocation(), config.getStringList("no-show-actionbar-on-pvp-worlds")) && !showActionbarForce
+					&& !showActionbarPVPForce)
+			{
+				return; // 기능이 비활성화된 위치에 있으며, 강제 액션바 출력, 강제 PVP 액션바 출력 모두 false라면
+			}
+			Player target = (Player) livingEntity;
+			boolean hideActionbar = UserData.HIDE_ACTIONBAR_ON_ATTACK_PVP_TO_OTHERS.getBoolean(target.getUniqueId());
+			if ((!showActionbarPVP || hideActionbar) && !showActionbarForce && !showActionbarPVPForce)
+			{
+				return; // PVP 액션바 출력 기능이 false이거나, 상대방의 PVP 액션바 숨김 기능이 true이면서, 강제 액션바 출력, 강제 PVP 액션바 출력 모두 false라면
+			}
+		}
+		else if ((!actionbarConfig || actionbarNoWorld) && !showActionbarForce)
+		{
+			return; // 콘픽이 비활성화이거나 기능이 비활성화된 월드에 있으면서 강제 액션바 출력이 false라면
+		}
+		int round = config.getInt("actionbar-on-attack-numbers-round-number");
+		DecimalFormat df = Constant.Sosu2;
+		if (round > 0)
+		{
+			df = new DecimalFormat("#,###." + "#".repeat(round));
+		}
 
-    boolean roundNumber = config.getBoolean("actionbar-on-attack-numbers-round");
+		boolean roundNumber = config.getBoolean("actionbar-on-attack-numbers-round");
 
-    AttributeInstance attributeInstance = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+		AttributeInstance attributeInstance = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH);
 
-    if (attributeInstance == null)
-    {
-      return;
-    }
+		if (attributeInstance == null)
+		{
+			return;
+		}
 
+		double health = Math.max(0d, livingEntity.getHealth() - finalDamage);
+		boolean isBeenKilled = health <= 0;
+		double maxHealth = attributeInstance.getValue();
+		String damageStr = (isBeenKilled ? "&4" : "&6") + (roundNumber ? df.format(finalDamage) : finalDamage);
+		String healthStr = (isBeenKilled ? "&4" : "&6") + (roundNumber ? df.format(health) : health);
+		String maxHealthStr = (isBeenKilled ? "&4" : "&6") + (roundNumber ? df.format(maxHealth) : maxHealth);
 
-    double health = Math.max(0d, livingEntity.getHealth() - finalDamage);
-    boolean isBeenKilled = health <= 0;
-    double maxHealth = attributeInstance.getValue();
-    String damageStr = (isBeenKilled ? "&4" : "&6") + (roundNumber ? df.format(finalDamage) : finalDamage);
-    String healthStr = (isBeenKilled ? "&4" : "&6") + (roundNumber ? df.format(health) : health);
-    String maxHealthStr = (isBeenKilled ? "&4" : "&6") + (roundNumber ? df.format(maxHealth) : maxHealth);
+		//    String keyAttack = config.getString("actionbars-on-attack"), keyDeath = config.getString("actionbars-on-attack-death");
 
-//    String keyAttack = config.getString("actionbars-on-attack"), keyDeath = config.getString("actionbars-on-attack-death");
+		String keyAttack = "#52ee52;%s에게 %s만큼의 대미지를 주었습니다. %s / %s", keyDeath = "&c%s에게 %s만큼의 대미지를 주어 죽였습니다. %s / %s";
 
-    String keyAttack = "#52ee52;%s에게 %s만큼의 대미지를 주었습니다. %s / %s", keyDeath = "&c%s에게 %s만큼의 대미지를 주어 죽였습니다. %s / %s";
+		if (event.getDamage() > 0D)
+		{
+			if (health <= 0D)
+			{
+				MessageUtil.sendActionBar(player,
+						ComponentUtil.translate(keyDeath, SenderComponentUtil.senderComponent(livingEntity, NamedTextColor.DARK_RED), damageStr, healthStr, maxHealthStr));
+			}
+			else
+			{
+				MessageUtil.sendActionBar(player,
+						ComponentUtil.translate(keyAttack, SenderComponentUtil.senderComponent(livingEntity, NamedTextColor.GOLD), damageStr, healthStr, maxHealthStr));
+			}
+		}
+		else if (config.getBoolean("play-sound-on-attack-miss"))
+		{
+			Sound sound;
+			try
+			{
+				sound = Sound.valueOf(config.getString("play-sounds-on-attack-miss.type"));
+			}
+			catch (Exception e)
+			{
+				sound = Sound.ENTITY_ENDERMAN_TELEPORT;
+			}
+			float volume = (float) config.getDouble("play-sounds-on-attack-miss.volume"), pitch = (float) config.getDouble("play-sounds-on-attack-miss.pitch");
+			SoundPlay.playSound(player, sound, volume, pitch);
+			//      String miss = config.getString("actionbars-on-attack-miss");
+			String miss = "&d%s에게 피해를 입힐 수 없습니다. %s / %s";
+			MessageUtil.sendActionBar(player, ComponentUtil.translate(miss, livingEntity, healthStr, maxHealthStr));
+		}
+	}
 
-    if (event.getDamage() > 0D)
-    {
-      if (health <= 0D)
-      {
-        MessageUtil.sendActionBar(player, ComponentUtil.translate(keyDeath, SenderComponentUtil.senderComponent(livingEntity, NamedTextColor.DARK_RED), damageStr, healthStr, maxHealthStr));
-      }
-      else
-      {
-        MessageUtil.sendActionBar(player, ComponentUtil.translate(keyAttack, SenderComponentUtil.senderComponent(livingEntity, NamedTextColor.GOLD), damageStr, healthStr, maxHealthStr));
-      }
-    }
-    else if (config.getBoolean("play-sound-on-attack-miss"))
-    {
-      Sound sound;
-      try
-      {
-        sound = Sound.valueOf(config.getString("play-sounds-on-attack-miss.type"));
-      }
-      catch (Exception e)
-      {
-        sound = Sound.ENTITY_ENDERMAN_TELEPORT;
-      }
-      float volume = (float) config.getDouble("play-sounds-on-attack-miss.volume"), pitch = (float) config.getDouble("play-sounds-on-attack-miss.pitch");
-      SoundPlay.playSound(player, sound, volume, pitch);
-//      String miss = config.getString("actionbars-on-attack-miss");
-      String miss = "&d%s에게 피해를 입힐 수 없습니다. %s / %s";
-      MessageUtil.sendActionBar(player, ComponentUtil.translate(miss, livingEntity, healthStr, maxHealthStr));
-    }
-  }
-
-  private void cancelFireworkDamage(EntityDamageByEntityEvent event)
-  {
-    Entity entity = event.getEntity(), damager = event.getDamager();
-    EntityDamageEvent.DamageCause dc = event.getCause();
-    if (dc == DamageCause.ENTITY_EXPLOSION && damager.getType() == EntityType.FIREWORK_ROCKET)
-    {
-      Firework firework = (Firework) damager;
-      if (firework.hasMetadata("no_damage"))
-      {
-        event.setCancelled(true);
-      }
-    }
-    if (Cucumbery.config.getBoolean("prevent-firework-damage"))
-    {
-      if (!(entity instanceof Damageable))
-      {
-        return;
-      }
-      if (Method.configContainsLocation(damager.getLocation(), Cucumbery.config.getStringList("no-prvent-firework-damage-worlds")))
-      {
-        return;
-      }
-      if (dc == DamageCause.ENTITY_EXPLOSION && damager.getType() == EntityType.FIREWORK_ROCKET)
-      {
-        event.setCancelled(true);
-      }
-    }
-  }
+	private void cancelFireworkDamage(EntityDamageByEntityEvent event)
+	{
+		Entity entity = event.getEntity(), damager = event.getDamager();
+		EntityDamageEvent.DamageCause dc = event.getCause();
+		if (dc == DamageCause.ENTITY_EXPLOSION && damager.getType() == EntityType.FIREWORK_ROCKET)
+		{
+			Firework firework = (Firework) damager;
+			if (firework.hasMetadata("no_damage"))
+			{
+				event.setCancelled(true);
+			}
+		}
+		if (Cucumbery.config.getBoolean("prevent-firework-damage"))
+		{
+			if (!(entity instanceof Damageable))
+			{
+				return;
+			}
+			if (Method.configContainsLocation(damager.getLocation(), Cucumbery.config.getStringList("no-prvent-firework-damage-worlds")))
+			{
+				return;
+			}
+			if (dc == DamageCause.ENTITY_EXPLOSION && damager.getType() == EntityType.FIREWORK_ROCKET)
+			{
+				event.setCancelled(true);
+			}
+		}
+	}
 }

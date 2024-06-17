@@ -220,7 +220,7 @@ public class ComponentUtil
 			}
 			else if (object instanceof PotionEffectType potionEffectType)
 			{
-				String effectKey = TranslatableKeyParser.getKey(potionEffectType);
+				String effectKey = potionEffectType.translationKey();
 				String id = effectKey.substring(17);
 				NamespacedKey namespacedKey = potionEffectType.getKey();
 				Component concat = ComponentUtil.translate(effectKey,
@@ -242,7 +242,7 @@ public class ComponentUtil
 			else if (object instanceof PotionEffect potionEffect)
 			{
 				PotionEffectType potionEffectType = potionEffect.getType();
-				String effectKey = TranslatableKeyParser.getKey(potionEffectType);
+				String effectKey = potionEffectType.translationKey();
 				String id = effectKey.substring(17);
 				NamespacedKey namespacedKey = potionEffectType.getKey();
 				int duration = potionEffect.getDuration(), amplifier = potionEffect.getAmplifier();

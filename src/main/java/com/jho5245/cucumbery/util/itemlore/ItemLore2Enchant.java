@@ -64,6 +64,10 @@ public class ItemLore2Enchant
 							component = ComponentUtil.translate("%s %s", ComponentUtil.translate(enchantment.translationKey()),
 									ComponentUtil.translate("enchantment.level." + level).fallback(level + ""));
 						}
+						if (enchantment.getMaxLevel() == level)
+						{
+							component = component.decoration(TextDecoration.BOLD, State.TRUE);
+						}
 						component = component.color(enchantment.isCursed() ? TextColor.color(255, 85, 85) : TextColor.color(154, 84, 255));
 						if (enchantment instanceof CustomEnchant customEnchant && customEnchant.isUltimate())
 						{
@@ -159,6 +163,10 @@ public class ItemLore2Enchant
 						{
 							component = ComponentUtil.translate("%s %s", ComponentUtil.translate(enchantment.translationKey()),
 									ComponentUtil.translate("enchantment.level." + level).fallback(level + ""));
+						}
+						if (enchantment.getMaxLevel() == level)
+						{
+							component = component.decoration(TextDecoration.BOLD, State.TRUE);
 						}
 						component = component.color(enchantment.isCursed() ? TextColor.color(255, 85, 85) : TextColor.color(154, 84, 255));
 						if (enchantment instanceof CustomEnchant customEnchant && customEnchant.isUltimate())

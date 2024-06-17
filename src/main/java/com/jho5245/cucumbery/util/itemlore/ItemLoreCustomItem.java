@@ -509,8 +509,6 @@ public class ItemLoreCustomItem
 				{
 					nbtItem.setDouble(MiningManager.TOOL_SPEED, 2350d);
 					nbtItem.setInteger(MiningManager.TOOL_TIER, 6);
-					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setDouble(CucumberyTag.CUSTOM_DURABILITY_CHANCE_NOT_TO_CONSUME_DURABILITY, 5d);
 				}
 				case TITANIUM_PICKAXE, TITANIUM_SWORD, TITANIUM_AXE, TITANIUM_HOE, TITANIUM_SHOVEL ->
 				{
@@ -524,11 +522,6 @@ public class ItemLoreCustomItem
 				{
 					nbtItem.setDouble(MiningManager.TOOL_SPEED, 2850d);
 					nbtItem.setInteger(MiningManager.TOOL_TIER, 7);
-				}
-				case MINDAS_CHESTPLATE, MINDAS_LEGGINGS, MINDAS_BOOTS ->
-				{
-					NBTCompound duraTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-					duraTag.setDouble(CucumberyTag.CUSTOM_DURABILITY_CHANCE_NOT_TO_CONSUME_DURABILITY, 50d);
 				}
 				case TITANIUM_DRILL_R266 ->
 				{

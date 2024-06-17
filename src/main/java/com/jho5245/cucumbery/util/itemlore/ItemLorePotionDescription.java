@@ -243,9 +243,9 @@ public class ItemLorePotionDescription
       args.add(Component.text(Constant.Sosu2.format(chance) + "%"));
     }
     args.add(effect);
-    if (level > 1)
+    if (level > 0)
     {
-      args.add(Component.text(level));
+      args.add(Component.text(level + 1));
     }
     if (duration > 0)
     {
@@ -258,15 +258,15 @@ public class ItemLorePotionDescription
   private static @NotNull String getKey(double chance, long duration, int level)
   {
     String key = POTION_DESCRIPTION_COLOR + (chance == 100d ? "" : "%s 확률로 ");
-    if (level > 1 && duration > 0)
+    if (level > 0 && duration > 0)
     {
       key += "%s %s단계 (%s)";
     }
-    else if (level == 1 && duration > 0)
+    else if (level == 0 && duration > 0)
     {
       key += "%s (%s)";
     }
-    else if (level > 1)
+    else if (level > 0)
     {
       if (duration == -1)
       {
@@ -343,6 +343,7 @@ public class ItemLorePotionDescription
       for (PotionEffect potionEffect : potionEffects)
       {
         lore.add(getDescription(getComponent(potionEffect.getType()), potionEffect.getDuration(), potionEffect.getAmplifier()));
+        lore.addAll(ComponentUtil.convertHoverToItemLore(VanillaEffectDescription.getDescription(potionEffect), NamedTextColor.GRAY));
       }
     }
     lore.addAll(customEffects);

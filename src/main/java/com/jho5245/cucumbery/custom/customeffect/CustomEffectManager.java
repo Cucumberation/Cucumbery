@@ -1139,7 +1139,7 @@ public class CustomEffectManager
 			}
 			PotionEffectType effectType = potionEffect.getType();
 			Component effectComponent = ComponentUtil.translate((isVanillaNegative(effectType) ? "&c" : "&a") + (showDuration
-					? TranslatableKeyParser.getKey(effectType)
+					? effectType.translationKey()
 					: getVanillaShortTranslationKey(effectType)));
 			Component create = ComponentUtil.create(potionEffect);
 			effectComponent = effectComponent.hoverEvent(create.hoverEvent()).clickEvent(create.clickEvent());
@@ -1227,7 +1227,7 @@ public class CustomEffectManager
 		{
 			return "마영";
 		}
-		return TranslatableKeyParser.getKey(potionEffectType);
+		return potionEffectType.translationKey();
 	}
 
 	@SuppressWarnings("all")

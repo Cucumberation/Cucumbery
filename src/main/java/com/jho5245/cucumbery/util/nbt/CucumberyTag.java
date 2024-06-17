@@ -14,10 +14,6 @@ public class CucumberyTag
   public static final String PERMISSION_KEY = "Permission";
   public static final String CUSTOM_LORE_KEY = "CustomLore";
   public static final String ABOVE_CUSTOM_LORE_KEY = "AboveCustomLore";
-  public static final String CUSTOM_DURABILITY_KEY = "CustomDurability";
-  public static final String CUSTOM_DURABILITY_CURRENT_KEY = "CurrentDurability";
-  public static final String CUSTOM_DURABILITY_MAX_KEY = "MaximumDurability";
-  public static final String CUSTOM_DURABILITY_CHANCE_NOT_TO_CONSUME_DURABILITY = "ChanceNotToConsumeDurability";
   public static final String HIDE_FLAGS_KEY = "HideFlags";
   public static final String CUSTOM_RARITY_KEY = "CustomRarity";
   public static final String CUSTOM_RARITY_BASE_KEY = "Base";

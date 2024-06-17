@@ -1,20 +1,13 @@
 package com.jho5245.cucumbery.listeners.inventory;
 
 import com.jho5245.cucumbery.Cucumbery;
-import com.jho5245.cucumbery.util.itemlore.ItemLore;
-import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
-import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
-import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Constant.RestrictionType;
 import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
-import com.jho5245.cucumbery.util.storage.data.custom_enchant.CustomEnchant;
 import com.jho5245.cucumbery.util.storage.no_groups.CreateItemStack;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
-import de.tr7zw.changeme.nbtapi.NBTCompound;
-import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -30,7 +23,6 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.Nullable;
 
-import java.security.interfaces.RSAKey;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -265,7 +257,6 @@ public class PrepareAnvil implements Listener
 		{
 			anvilInventory.setMaximumRepairCost(maxRepairCost);
 		}
-		boolean customDuraFix = false;
 		if (ItemStackUtil.itemExists(firstItem) && ItemStackUtil.itemExists(secondItem))
 		{
 			CustomMaterial firstCustomMaterial = CustomMaterial.itemStackOf(firstItem), secondCustomMaterial = CustomMaterial.itemStackOf(secondItem);
@@ -285,33 +276,33 @@ public class PrepareAnvil implements Listener
 						if (repairAmount > 0)
 						{
 							ItemStack result = firstItem.clone();
-							NBTItem resultNBTItem = new NBTItem(result, true);
-							NBTCompound itemTag = resultNBTItem.addCompound(CucumberyTag.KEY_MAIN);
-							NBTCompound duraTag = itemTag.addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-							long current = duraTag.getLong(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY);
-							if (current > 0)
+							ItemMeta resultMeta = result.getItemMeta();
+							if (resultMeta instanceof Damageable damageable)
 							{
-								int fixCount = secondItem.getAmount();
-								long calc = current - (long) fixCount * repairAmount;
-								// 과다 수리 방지(수리된 내구도 - 수리량 <= 최대 내구도)
-								if (calc >= 0)
+								int currentDurability = damageable.hasDamage() ? damageable.getDamage() : 0;
+								if (currentDurability > 0)
 								{
-									duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY, Math.max(current - (long) fixCount * repairAmount, 0));
-									event.setResult(result);
-									event.getInventory().setRepairCost(5 * fixCount);
-									customDuraFix = true;
+									int fixCount = secondItem.getAmount();
+									int calc = currentDurability - fixCount * repairAmount;
+									// 과다 수리 방지(수리된 내구도 - 수리량 <= 최대 내구도)
+									if (calc >= 0)
+									{
+										damageable.setDamage(Math.max(currentDurability - fixCount * repairAmount, 0));
+										result.setItemMeta(damageable);
+										event.setResult(result);
+										event.getInventory().setRepairCost(5 * fixCount);
+									}
 								}
 							}
 						}
 					}
 				}
 			}
-			resultItem = anvilInventory.getItem(2);
 		}
 
 		// 커스텀 인챈트
 		{
-			if (CustomEnchant.isEnabled() && firstItemExists && secondItemExists)
+			if (firstItemExists && secondItemExists)
 			{
 				CustomMaterial firstItemCustomMaterial = CustomMaterial.itemStackOf(firstItem), secondItemCustomMaterial = CustomMaterial.itemStackOf(secondItem);
 				boolean applied = false;
@@ -325,7 +316,7 @@ public class PrepareAnvil implements Listener
 					Map<Enchantment, Integer> firstItemEnchants = firstItemMeta.getEnchants(), secondItemEnchants = secondItemMeta.getStoredEnchants();
 					for (Enchantment enchantment : firstItemEnchants.keySet())
 					{
-						if (enchantment instanceof CustomEnchant)
+						if (!enchantment.getKey().getNamespace().equals("minecraft"))
 						{
 							resultMeta.addEnchant(enchantment, firstItemEnchants.get(enchantment), true);
 							applied = true;
@@ -395,7 +386,7 @@ public class PrepareAnvil implements Listener
 					Map<Enchantment, Integer> firstItemEnchants = firstItemMeta.getEnchants(), secondItemEnchants = secondItemMeta.getEnchants();
 					for (Enchantment enchantment : firstItemEnchants.keySet())
 					{
-						if (enchantment instanceof CustomEnchant)
+						if (!enchantment.getKey().getNamespace().equals("minecraft"))
 						{
 							resultMeta.addEnchant(enchantment, firstItemEnchants.get(enchantment), true);
 							applied = true;
@@ -463,7 +454,7 @@ public class PrepareAnvil implements Listener
 					Map<Enchantment, Integer> firstItemEnchants = firstItemMeta.getStoredEnchants(), secondItemEnchants = secondItemMeta.getStoredEnchants();
 					for (Enchantment enchantment : firstItemEnchants.keySet())
 					{
-						if (enchantment instanceof CustomEnchant)
+						if (!enchantment.getKey().getNamespace().equals("minecraft"))
 						{
 							((EnchantmentStorageMeta) resultMeta).addStoredEnchant(enchantment, firstItemEnchants.get(enchantment), true);
 							applied = true;
@@ -513,53 +504,6 @@ public class PrepareAnvil implements Listener
 					}
 				}
 			}
-		}
-
-		NBTCompound itemTag = NBTAPI.getMainCompound(firstItem);
-		NBTCompound duraTag = NBTAPI.getCompound(itemTag, CucumberyTag.CUSTOM_DURABILITY_KEY);
-		if (!customDuraFix && ItemStackUtil.itemExists(resultItem) && ItemStackUtil.itemExists(secondItem) && duraTag != null)
-		{
-			long maxDura = duraTag.getLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY);
-			long curDura = duraTag.getLong(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY);
-			int firstItemMaxOriginMaxDura = Objects.requireNonNull(firstItem).getType().getMaxDurability();
-			int firstItemOriginDura = firstItem.getType().getMaxDurability() - ((Damageable) firstItem.getItemMeta()).getDamage();
-			int resultDamage = ((Damageable) resultItem.getItemMeta()).getDamage();
-			int resultItemOriginDura = resultItem.getType().getMaxDurability() - resultDamage;
-			double ratio = (resultItemOriginDura - firstItemOriginDura * 1d) / firstItemMaxOriginMaxDura;
-			NBTCompound secondItemDuraTag = NBTAPI.getCompound(NBTAPI.getMainCompound(secondItem), CucumberyTag.CUSTOM_DURABILITY_KEY);
-			if (secondItemDuraTag != null)
-			{
-				long secondItemcurDura = secondItemDuraTag.getLong(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY);
-				curDura -= secondItemcurDura;
-				curDura -= (long) (maxDura * 0.1);
-			}
-			else if (firstItem.getType() == secondItem.getType())
-			{
-				int fixAmount = firstItemMaxOriginMaxDura - ((Damageable) secondItem.getItemMeta()).getDamage();
-				curDura -= fixAmount;
-				curDura -= (long) (maxDura * 0.1);
-			}
-			else
-			{
-				long fixAmount = resultItemOriginDura == resultItem.getType().getMaxDurability() ? (maxDura - curDura) : (long) Math.min(ratio * maxDura, maxDura);
-				curDura -= fixAmount;
-			}
-			if (curDura < 0)
-			{
-				curDura = 0;
-			}
-			NBTItem nbtItem = new NBTItem(resultItem);
-			NBTCompound resultItemTag = nbtItem.getCompound(CucumberyTag.KEY_MAIN);
-			NBTCompound resultDuraTag = NBTAPI.getCompound(resultItemTag, CucumberyTag.CUSTOM_DURABILITY_KEY);
-			if (resultDuraTag != null)
-			{
-				resultDuraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY, curDura);
-			}
-			resultItem = nbtItem.getItem();
-			Damageable duraMeta = (Damageable) resultItem.getItemMeta();
-			duraMeta.setDamage(resultDamage);
-			resultItem.setItemMeta(duraMeta);
-			event.setResult(resultItem);
 		}
 	}
 }

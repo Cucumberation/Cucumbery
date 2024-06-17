@@ -252,6 +252,10 @@ public class ItemLoreUtil
     }
     component = component.decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE);
     component = component.color(enchant.isCursed() ? TextColor.color(255, 85, 85) : TextColor.color(154, 84, 255));
+    if (enchant.getMaxLevel() == enchantLevel)
+    {
+      component = component.decoration(TextDecoration.BOLD, State.TRUE);
+    }
     if (enchant instanceof CustomEnchantUltimate)
     {
       component = component.color(NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.BOLD, State.TRUE);

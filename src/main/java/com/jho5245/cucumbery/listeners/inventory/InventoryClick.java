@@ -2575,21 +2575,6 @@ public class InventoryClick implements Listener
 									ItemStack ingredient = itemStacks == null || itemStacks.isEmpty() ? ingredients.get(0).clone() : itemStacks.get(0).clone();
 									NBTItem ingredientNBTItem = new NBTItem(ingredient, true);
 									ingredientNBTItem.mergeCompound(merge);
-									ingredientNBTItem = new NBTItem(ingredient, true);
-									Long bonusDurability = resultNBTItem.getLong("BonusDurability");
-									if (bonusDurability != null)
-									{
-										NBTCompound itemTag = ingredientNBTItem.getCompound(CucumberyTag.KEY_MAIN);
-										if (itemTag != null)
-										{
-											NBTCompound duraTag = itemTag.getCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-											if (duraTag != null)
-											{
-												long cur = duraTag.getLong(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY) - bonusDurability;
-												duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY, Math.max(cur, 0));
-											}
-										}
-									}
 									String setType = resultNBTItem.getString("SetType");
 									if (!setType.isEmpty())
 									{
@@ -2730,21 +2715,6 @@ public class InventoryClick implements Listener
 						ItemStack ingredient = itemStacks == null || itemStacks.isEmpty() ? ingredients.get(0).clone() : itemStacks.get(0).clone();
 						NBTItem ingredientNBTItem = new NBTItem(ingredient, true);
 						ingredientNBTItem.mergeCompound(merge);
-						ingredientNBTItem = new NBTItem(ingredient, true);
-						Long bonusDurability = resultNBTItem.getLong("BonusDurability");
-						if (bonusDurability != null)
-						{
-							NBTCompound itemTag = ingredientNBTItem.getCompound(CucumberyTag.KEY_MAIN);
-							if (itemTag != null)
-							{
-								NBTCompound duraTag = itemTag.getCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-								if (duraTag != null && duraTag.hasTag(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY))
-								{
-									long cur = duraTag.getLong(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY) + bonusDurability;
-									duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY, Math.max(cur, 0));
-								}
-							}
-						}
 						String setType = resultNBTItem.getString("SetType");
 						if (!setType.isEmpty())
 						{

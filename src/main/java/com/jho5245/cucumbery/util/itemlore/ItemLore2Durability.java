@@ -23,7 +23,7 @@ public class ItemLore2Durability
 {
   protected static void setItemLore(@NotNull ItemStack item, @NotNull Material type,
                                     @Nullable CustomMaterial customMaterial, @NotNull ItemMeta itemMeta,
-                                    @NotNull List<Component> lore, @Nullable NBTCompound duraTag,
+                                    @NotNull List<Component> lore,
                                     boolean isDrill, boolean hideDurability, boolean hideDurabilityChanceNotToConsume)
   {
     if (customMaterial != CustomMaterial.UNBINDING_SHEARS)
@@ -42,18 +42,6 @@ public class ItemLore2Durability
       {
         long currentDurability = 0, maxDurability = item.getType().getMaxDurability();
         double chanceNotToConsumeDura = 0d;
-        boolean duraTagExists = duraTag != null;
-        if (duraTagExists)
-        {
-          try
-          {
-            chanceNotToConsumeDura = duraTag.getDouble(CucumberyTag.CUSTOM_DURABILITY_CHANCE_NOT_TO_CONSUME_DURABILITY);
-          }
-          catch (Exception e)
-          {
-            chanceNotToConsumeDura = 0d;
-          }
-        }
 
         if (itemMeta instanceof Damageable damageable)
         {

@@ -702,7 +702,7 @@ public class CustomEffectType implements Translatable, EnumHideable
               case "DARKNESS_TERROR" -> ComponentUtil.translate("어두운거... 무섭다...")
                       .append(Component.text("\n"))
                       .append(ComponentUtil.translate("%s 효과나 손에 빛을 내는 아이템 없이 어두운 곳에 가면 %s 효과가 걸립니다",
-                              ComponentUtil.translate(TranslatableKeyParser.getKey(PotionEffectType.NIGHT_VISION), NamedTextColor.GREEN), DARKNESS_TERROR_ACTIVATED));
+                              ComponentUtil.translate(PotionEffectType.NIGHT_VISION.translationKey(), NamedTextColor.GREEN), DARKNESS_TERROR_ACTIVATED));
               case "DARKNESS_TERROR_ACTIVATED" -> ComponentUtil.translate("너무 어둡습니다! 피해량이 30% 증가하고 블록을 캘 때마다")
                       .append(Component.text("\n"))
                       .append(ComponentUtil.translate("%s 확률로 받는 피해량 증가에 영향을 받는 1의 피해를 입습니다", "rg255,204;15%"));
@@ -719,9 +719,9 @@ public class CustomEffectType implements Translatable, EnumHideable
               case "FANCY_SPOTLIGHT" -> ComponentUtil.translate("화려한 조명이 나를 비추네~")
                       .append(Component.text("\n"))
                       .append(ComponentUtil.translate("주변에 충분히 밝은 블록이 있으면 %s와(과) %s이(가) 적용됩니다",
-                              ComponentUtil.translate(TranslatableKeyParser.getKey(PotionEffectType.SPEED), NamedTextColor.GREEN), ComponentUtil.translate(TranslatableKeyParser.getKey(PotionEffectType.REGENERATION), NamedTextColor.GREEN)));
+                              ComponentUtil.translate(PotionEffectType.SPEED.translationKey(), NamedTextColor.GREEN), ComponentUtil.translate(PotionEffectType.REGENERATION.translationKey(), NamedTextColor.GREEN)));
               case "FANCY_SPOTLIGHT_ACTIVATED" -> ComponentUtil.translate("주변에 충분히 밝은 블록이 있어 %s와(과) %s이(가) 적용됩니다",
-                      ComponentUtil.translate(TranslatableKeyParser.getKey(PotionEffectType.SPEED), NamedTextColor.GREEN), ComponentUtil.translate(TranslatableKeyParser.getKey(PotionEffectType.REGENERATION), NamedTextColor.GREEN));
+                      ComponentUtil.translate(PotionEffectType.SPEED.translationKey(), NamedTextColor.GREEN), ComponentUtil.translate(PotionEffectType.REGENERATION.translationKey(), NamedTextColor.GREEN));
               case "WA_SANS" -> ComponentUtil.translate("스켈레톤 유형의 개체에게 받는")
                       .append(Component.text("\n"))
                       .append(ComponentUtil.translate("피해량이 감소하고, 대미지가 증가합니다"));
@@ -780,7 +780,7 @@ public class CustomEffectType implements Translatable, EnumHideable
               case "COMBAT_MODE_MELEE_COOLDOWN", "COMBAT_MODE_RANGED_COOLDOWN" -> ComponentUtil.translate("전투 모드를 변경할 수 없는 상태입니다");
               case "ENDER_SLAYER" -> ComponentUtil.translate("%s, %s 또는 %s 공격 시 대미지가 증가합니다", EntityType.ENDERMAN, EntityType.ENDERMITE, EntityType.ENDER_DRAGON);
               case "BOSS_SLAYER" -> ComponentUtil.translate("보스 몬스터 공격 시 대미지가 증가합니다");
-              case "TOWN_SHIELD" -> ComponentUtil.translate("평화로운 마을입니다! %s 효과가 적용되며", ComponentUtil.translate("&a" + TranslatableKeyParser.getKey(PotionEffectType.SATURATION)))
+              case "TOWN_SHIELD" -> ComponentUtil.translate("평화로운 마을입니다! %s 효과가 적용되며", ComponentUtil.translate("&a" + PotionEffectType.SATURATION.translationKey()))
                       .append(Component.text("\n"))
                       .append(ComponentUtil.translate("이동 속도가 30% 증가하고 받는 피해량이 50% 감소합니다"));
               case "CONTINUAL_SPECTATING_EXEMPT" -> ComponentUtil.translate("지속시간 동안은 강제 관전이 되지 않습니다");

@@ -150,7 +150,7 @@ public class ItemNameUtil
           if (potionMeta != null)
           {
             PotionType potionType = potionMeta.getBasePotionType();
-            String potionId = potionType != null ? potionType.getKey().getKey().toLowerCase() : "empty";
+            String potionId = potionType != null ? potionType.getKey().getKey().toLowerCase().replace("strong_", "").replace("long_", "") : "empty";
             component = ComponentUtil.translate(id + ".effect." + potionId);
           }
         }

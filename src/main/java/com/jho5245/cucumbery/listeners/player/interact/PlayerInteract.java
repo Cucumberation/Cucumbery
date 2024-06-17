@@ -44,6 +44,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -1888,80 +1889,28 @@ public class PlayerInteract implements Listener
 			return;
 		}
 		ItemMeta itemMeta = item.getItemMeta();
-		if (player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR && !itemMeta.isUnbreakable())
+		if (player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR && !itemMeta.isUnbreakable() && itemMeta instanceof Damageable damageable)
 		{
-			boolean breaking = false;
-			try
-			{
-				NBTItem nbtItem = new NBTItem(item);
-				NBTCompound itemTag = nbtItem.getCompound(CucumberyTag.KEY_MAIN);
-				NBTCompound duraTag = NBTAPI.getCompound(itemTag, CucumberyTag.CUSTOM_DURABILITY_KEY);
-				long curDura = duraTag.getLong(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY);
-				curDura += damage;
-				breaking = curDura >= duraTag.getLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY);
-				duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY, curDura);
-				switch (Objects.requireNonNull(event.getHand()))
-				{
-					case HAND:
-						player.getInventory().setItemInMainHand(nbtItem.getItem());
-						break;
-					case OFF_HAND:
-						player.getInventory().setItemInOffHand(nbtItem.getItem());
-						break;
-					default:
-						break;
-				}
-			}
-			catch (Exception e)
-			{
-				Damageable duraMeta = (Damageable) itemMeta;
-				duraMeta.setDamage(duraMeta.getDamage() + damage);
-				item.setItemMeta((ItemMeta) duraMeta);
-			}
-			Damageable duraMeta = (Damageable) itemMeta;
-			if (breaking || duraMeta.getDamage() >= item.getType().getMaxDurability())
+			damageable.setDamage(damageable.getDamage() + damage);
+			item.setItemMeta((ItemMeta) damageable);
+			if (damageable.getDamage() >= item.getType().getMaxDurability())
 			{
 				if (UserData.SHOW_ITEM_BREAK_TITLE.getBoolean(uuid) && Cucumbery.config.getBoolean("send-title-on-item-break"))
 				{
-					if (!Method.configContainsLocation(player.getLocation(), Cucumbery.getPlugin().getConfig().getStringList("no-send-title-on-item-break-worlds")))
-					{
-						MessageUtil.sendTitle(player, ComponentUtil.translate("&c장비 파괴됨!"), ComponentUtil.translate("rg255,204;인벤토리 아이템 중 %s이(가) 파괴되었습니다", item), 5, 100,
-								15);
-					}
+					PlayerItemBreakEvent playerItemBreakEvent = new PlayerItemBreakEvent(player, item);
+					Bukkit.getPluginManager().callEvent(playerItemBreakEvent);
 				}
-				//        Method.itemBreakParticle(player, item);
-				//        Method.playSoundLocation(player.getLocation(), Sound.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, Math.random() / 3d + 0.8);
 				item.setAmount(item.getAmount() - 1);
 				if (item.getAmount() > 0)
 				{
-					duraMeta.setDamage(0);
-					item.setItemMeta((ItemMeta) duraMeta);
-					try
-					{
-						ItemStack itemClone = item.clone();
-						NBTItem nbtItem = new NBTItem(itemClone);
-						NBTCompound itemTag = nbtItem.getCompound(CucumberyTag.KEY_MAIN);
-						NBTCompound duraTag = NBTAPI.getCompound(itemTag, CucumberyTag.CUSTOM_DURABILITY_KEY);
-						long maxDura = duraTag.getLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY);
-						duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY, maxDura);
-						itemClone = nbtItem.getItem();
-						item.setItemMeta(itemClone.getItemMeta());
-					}
-					catch (Exception ignored)
-					{
-
-					}
+					damageable.setDamage(0);
+					item.setItemMeta(damageable);
 				}
-				switch (Objects.requireNonNull(event.getHand()))
+				switch (event.getHand())
 				{
-					case HAND:
-						player.getInventory().setItemInMainHand(item);
-						break;
-					case OFF_HAND:
-						player.getInventory().setItemInOffHand(item);
-						break;
-					default:
-						break;
+					case HAND -> player.getInventory().setItemInMainHand(item);
+					case OFF_HAND -> player.getInventory().setItemInOffHand(item);
+					case null, default -> {}
 				}
 			}
 		}

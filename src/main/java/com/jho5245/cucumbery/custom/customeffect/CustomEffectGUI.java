@@ -169,7 +169,7 @@ public class CustomEffectGUI
 				ItemStack itemStack = new ItemStack(Material.POTION, Math.min(64, potionEffect.getAmplifier() + 1));
 				PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
 				potionMeta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP, ItemFlag.HIDE_ENCHANTS);
-				String effectKey = TranslatableKeyParser.getKey(effectType);
+				String effectKey = effectType.translationKey();
 				int id = potionEffect.getType().getId() + 15200;
 				potionMeta.setCustomModelData(id);
 				potionMeta.displayName(ComponentUtil.translate((CustomEffectManager.isVanillaNegative(effectType) ? "&c" : "&a") + effectKey));
@@ -308,7 +308,7 @@ public class CustomEffectGUI
 		List<Component> lore = new ArrayList<>();
 
 		PotionEffectType potionEffectType = potionEffect.getType();
-		String effectKey = TranslatableKeyParser.getKey(potionEffectType);
+		String effectKey = potionEffectType.translationKey();
 		String id = effectKey.substring(17);
 		Component description = VanillaEffectDescription.getDescription(potionEffect, player);
 		if (!description.equals(Component.empty()))

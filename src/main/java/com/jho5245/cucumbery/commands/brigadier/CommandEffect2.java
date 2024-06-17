@@ -7,7 +7,6 @@ import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.sendercomponent.SenderComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
-import com.jho5245.cucumbery.util.storage.data.TranslatableKeyParser;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.*;
@@ -38,11 +37,11 @@ public class CommandEffect2 extends CommandBase
 
   private final Argument<Double> DURATION_SECOND = new DoubleArgument("지속 시간(초)", 0.05, Integer.MAX_VALUE / 20d);
 
-  private final Argument<String> INFINITE_DURATION = new MultiLiteralArgument("infinite", List.of("infinite"));
+  private final Argument<String> INFINITE_DURATION = new MultiLiteralArgument("infinite", "infinite");
 
   private final Argument<Integer> AMPLIFIER = new IntegerArgument("농도 레벨", 0, 255);
 
-  private final Argument<String> PROPERTY = new MultiLiteralArgument("args", List.of("default", "hide-all", "hide-particle", "show-all"));
+  private final Argument<String> PROPERTY = new MultiLiteralArgument("property", "default", "hide-all", "hide-particle", "show-all");
 
   private final Argument<Boolean> HIDE_PARTICLE = new BooleanArgument("입자 숨김");
 
@@ -176,7 +175,7 @@ public class CommandEffect2 extends CommandBase
           Entity entity = failureEntities.iterator().next();
           hover = hover.append(Component.text("\n"));
           hover = hover.append(Component.text("\n"));
-          hover = hover.append(ComponentUtil.translate("&7" + TranslatableKeyParser.getKey(potionEffectType)));
+          hover = hover.append(ComponentUtil.translate("&7" + potionEffectType.translationKey()));
           LivingEntity livingEntity = entity instanceof LivingEntity ? (LivingEntity) entity : null;
           PotionEffect applied = livingEntity != null ? livingEntity.getPotionEffect(potionEffectType) : null;
           hover = hover.append(Component.text("\n"));

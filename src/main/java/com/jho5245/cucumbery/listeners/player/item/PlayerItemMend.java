@@ -20,32 +20,6 @@ public class PlayerItemMend implements Listener
   @EventHandler
   public void onPlayerItemMend(PlayerItemMendEvent event)
   {
-    if (event.isCancelled())
-    {
-      return;
-    }
-    ItemStack item = event.getItem();
-    NBTItem nbtItem = new NBTItem(item);
-    NBTCompound itemTag = nbtItem.getCompound(CucumberyTag.KEY_MAIN);
-    NBTCompound duraTag = NBTAPI.getCompound(itemTag, CucumberyTag.CUSTOM_DURABILITY_KEY);
-    if (duraTag != null)
-    {
-      long maxDura = duraTag.getLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY);
-      long curDura = duraTag.getLong(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY);
-      if (maxDura != 0)
-      {
-        curDura -= event.getRepairAmount();
-        if (curDura < 0)
-        {
-          curDura = 0;
-        }
-        duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY, curDura);
-        duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, maxDura);
-        ItemStack itemClone = nbtItem.getItem();
-        ItemMeta itemMeta = itemClone.getItemMeta();
-        event.getItem().setItemMeta(itemMeta);
-        Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemLore.setItemLore(item), 0L);
-      }
-    }
+
   }
 }

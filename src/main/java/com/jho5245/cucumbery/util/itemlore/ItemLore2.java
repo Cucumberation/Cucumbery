@@ -26,7 +26,9 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.enginehub.linbus.stream.token.LinToken.Int;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -62,7 +64,7 @@ public class ItemLore2
 			lore = new ArrayList<>();
 		}
 		// 기본 내구도 커스텀
-		long defaultConfigDura = Cucumbery.config.getLong("custom-item-durability." + type);
+		int defaultConfigDura = Cucumbery.config.getInt("custom-item-durability." + type);
 		if (defaultConfigDura == 0)
 		{
 			String defaultConfigDuraStr = Cucumbery.config.getString("custom-item-durability." + type);
@@ -72,7 +74,7 @@ public class ItemLore2
 				defaultConfigDuraStr = PlaceHolderUtil.evalString(defaultConfigDuraStr);
 				try
 				{
-					defaultConfigDura = Long.parseLong(defaultConfigDuraStr);
+					defaultConfigDura = Integer.parseInt(defaultConfigDuraStr);
 				}
 				catch (Exception ignored)
 				{
@@ -81,17 +83,9 @@ public class ItemLore2
 			}
 		}
 		// 기본 내구도 커스텀 태그 추가
-		NBTCompound duraTag = itemTag != null ? itemTag.getCompound(CucumberyTag.CUSTOM_DURABILITY_KEY) : null;
-		if (defaultConfigDura > 0 && duraTag == null)
+		if (defaultConfigDura > 0 && itemMeta instanceof Damageable damageable)
 		{
-			if (itemTag == null)
-			{
-				itemTag = nbtItem.addCompound(CucumberyTag.KEY_MAIN);
-			}
-			duraTag = itemTag.addCompound(CucumberyTag.CUSTOM_DURABILITY_KEY);
-			duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_CURRENT_KEY, 0L);
-			duraTag.setLong(CucumberyTag.CUSTOM_DURABILITY_MAX_KEY, defaultConfigDura);
-			itemMeta = nbtItem.getItem().getItemMeta();
+			damageable.setMaxDamage(defaultConfigDura);
 		}
 		// 아이템 이름 새기기
 		NBTList<String> extraTags = NBTAPI.getStringList(itemTag, CucumberyTag.EXTRA_TAGS_KEY);
@@ -145,7 +139,7 @@ public class ItemLore2
 		boolean hideBlockData = hideFlagsTagExists && NBTAPI.arrayContainsValue(hideFlags, CucumberyHideFlag.BLOCK_DATA);
 		boolean hideBlockState = hideFlagsTagExists && NBTAPI.arrayContainsValue(hideFlags, CucumberyHideFlag.BLOCK_STATE);
 		// 내구도 설명
-		ItemLore2Durability.setItemLore(item, type, customMaterial, itemMeta, lore, duraTag, isDrill, hideDurability, hideDurabilityChanceNotToConsume);
+		ItemLore2Durability.setItemLore(item, type, customMaterial, itemMeta, lore, isDrill, hideDurability, hideDurabilityChanceNotToConsume);
 		// 모루 사용 횟수 설명
 		ItemLore2Anvil.setItemLore(item, type, itemMeta, lore);
 		// 커스텀 채광 - 채광 등급/속도/행운 설명

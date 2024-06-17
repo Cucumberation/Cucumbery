@@ -8,8 +8,6 @@ import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCustomMini
 import com.jho5245.cucumbery.events.block.CustomBlockBreakEvent;
 import com.jho5245.cucumbery.util.additemmanager.AddItemUtil;
 import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
-import com.jho5245.cucumbery.util.itemlore.ItemLore;
-import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.TPSMeter;
 import com.jho5245.cucumbery.util.storage.data.Constant;
@@ -18,8 +16,6 @@ import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
-import de.tr7zw.changeme.nbtapi.NBTCompound;
-import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -445,9 +441,9 @@ public class MiningScheduler
 				return;
 			}
 			List<ItemStack> drops = miningResult.drops();
-			CustomMaterial customMaterial = drops.isEmpty() ? null : CustomMaterial.itemStackOf(drops.get(0));
+			CustomMaterial customMaterial = drops.isEmpty() ? null : CustomMaterial.itemStackOf(drops.getFirst());
 			// sus
-			boolean isSUS = !drops.isEmpty() && CustomMaterial.itemStackOf(drops.get(0)) == CustomMaterial.SUS;
+			boolean isSUS = !drops.isEmpty() && CustomMaterial.itemStackOf(drops.getFirst()) == CustomMaterial.SUS;
 			if (miningResult.blockTier() > miningResult.miningTier())
 			{
 				if (miningResult.miningTier() > 0 && !Variable.customMiningTierAlertCooldown.contains(uuid))
@@ -455,7 +451,7 @@ public class MiningScheduler
 					Object blockInfo = null;
 					if (!drops.isEmpty())
 					{
-						blockInfo = drops.get(0);
+						blockInfo = drops.getFirst();
 					}
 					else if (BlockPlaceDataConfig.getItem(location) != null)
 					{
@@ -763,7 +759,7 @@ public class MiningScheduler
 							Variable.customMiningExtraBlocks.remove(locationClone);
 							customMining();
 						}
-						else if (!drops.isEmpty() && !drops.get(0).getType().isAir())
+						else if (!drops.isEmpty() && !drops.getFirst().getType().isAir())
 						{
 							if (customMaterial != null)
 							{
@@ -872,35 +868,16 @@ public class MiningScheduler
 				boolean dropDura = false;
 				if (!instaBreak && ItemStackUtil.itemExists(toolItemStack) && !toolItemStack.getItemMeta().isUnbreakable())
 				{
-					NBTItem nbtItem = new NBTItem(toolItemStack, true);
-					NBTCompound itemTag = nbtItem.getCompound(CucumberyTag.KEY_MAIN);
-					NBTCompound duraTag = itemTag != null ? itemTag.getCompound(CucumberyTag.CUSTOM_DURABILITY_KEY) : null;
-					boolean duraTagExists = duraTag != null;
 					int currentDurability = ((Damageable) toolItemStack.getItemMeta()).getDamage();
 					int maxDurability = toolItemStack.getType().getMaxDurability();
 					if (toolItemStack.getItemMeta() instanceof Damageable damageable && damageable.hasMaxDamage())
 					{
 						maxDurability = damageable.getMaxDamage();
 					}
-					double chanceNotLoseDura = 0d;
-					if (duraTagExists)
-					{
-						try
-						{
-							if (duraTag.hasTag(CucumberyTag.CUSTOM_DURABILITY_CHANCE_NOT_TO_CONSUME_DURABILITY))
-							{
-								chanceNotLoseDura = duraTag.getDouble(CucumberyTag.CUSTOM_DURABILITY_CHANCE_NOT_TO_CONSUME_DURABILITY);
-							}
-						}
-						catch (Exception ignored)
-						{
-
-						}
-					}
 					if (maxDurability > 0)
 					{
 						int unbreakingLevel = toolItemStack.getEnchantmentLevel(Enchantment.UNBREAKING);
-						if (Math.random() >= 1d * unbreakingLevel / (unbreakingLevel + 1) && Math.random() > chanceNotLoseDura / 100d)
+						if (Math.random() >= 1d * unbreakingLevel / (unbreakingLevel + 1))
 						{
 							currentDurability++;
 							dropDura = true;
