@@ -13,6 +13,7 @@ import com.jho5245.cucumbery.util.no_groups.TPSMeter;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.Variable;
+import com.jho5245.cucumbery.util.storage.data.custom_enchant.CustomEnchant;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
@@ -641,7 +642,7 @@ public class MiningScheduler
 				// 블록 드롭 처리(염력 인챈트나 효과가 있으면 인벤토리에 지급 혹은 블록 위치에 아이템 떨굼
 				{
 					boolean hasTelekinesis =
-							/*CustomEnchant.isEnabled() && itemMeta != null && itemMeta.getEnchantLevel(CustomEnchant.TELEKINESIS) > 0 || */CustomEffectManager.hasEffect(
+							CustomEnchant.isEnabled() && itemMeta != null && itemMeta.hasEnchant(CustomEnchant.TELEKINESIS) || CustomEffectManager.hasEffect(
 							player, CustomEffectType.TELEKINESIS);
 					if (hasTelekinesis)
 					{

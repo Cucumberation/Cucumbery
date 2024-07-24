@@ -205,19 +205,6 @@ public class CommandCucumbery implements CucumberyCommandExecutor
         PluginLoader.load(Cucumbery.file);
         MessageUtil.info(sender, "플러그인을 리로드했습니다");
       }
-      case "reload-custom-enchants" -> {
-        MessageUtil.broadcastDebug(ComponentUtil.translate("%s이(가) /cucumbery reload-custom-enchants 명령어 사용", sender));
-        CustomEnchant.onDisable();
-        CustomEnchant.onEnable();
-        MessageUtil.info(sender, "커스텀 인챈트를 리로드했습니다");
-      }
-//      case "reloadplugin2" ->
-//      {
-//        MessageUtil.broadcastDebug(ComponentUtil.translate("%s이(가) /cucumbery reloadplugin2 명령어 사용", sender));
-//        Bukkit.getServer().getPluginManager().disablePlugin(Cucumbery.getPlugin());
-//        Bukkit.getServer().getPluginManager().enablePlugin(Cucumbery.getPlugin());
-//        MessageUtil.info(sender, "플러그인을 리로드했습니다. 2");
-//      }
       case "version" ->
       {
         String version = Cucumbery.getPlugin().getDescription().getVersion();

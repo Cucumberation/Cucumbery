@@ -21,6 +21,7 @@ import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.net.CookiePolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,207 +29,25 @@ import java.util.List;
 
 public class ItemLorePotionDescription
 {
-  public static final Component ABSORPTION = ComponentUtil.translate("effect.minecraft.absorption");
-
-  public static final Component BAD_OMEN = ComponentUtil.translate("effect.minecraft.bad_omen");
-
-  public static final Component BLINDNESS = ComponentUtil.translate("effect.minecraft.blindness");
-
-  public static final Component CONDUIT_POWER = ComponentUtil.translate("effect.minecraft.conduit_power");
-
-  public static final Component DOLPHINS_GRACE = ComponentUtil.translate("effect.minecraft.dolphins_grace");
-
-  public static final Component FIRE_RESISTANCE = ComponentUtil.translate("effect.minecraft.fire_resistance");
-
-  public static final Component GLOWING = ComponentUtil.translate("effect.minecraft.glowing");
-
-  public static final Component HASTE = ComponentUtil.translate("effect.minecraft.haste");
-
-  public static final Component HEALTH_BOOST = ComponentUtil.translate("effect.minecraft.health_boost");
-
-  public static final Component HERO_OF_THE_VILLAGE = ComponentUtil.translate("effect.minecraft.hero_of_the_village");
-
-  public static final Component HUNGER = ComponentUtil.translate("effect.minecraft.hunger");
-
-  public static final Component INSTANT_DAMAGE = ComponentUtil.translate("effect.minecraft.instant_damage");
-
-  public static final Component INSTANT_HEALTH = ComponentUtil.translate("effect.minecraft.instant_health");
-
-  public static final Component INVISIBILTY = ComponentUtil.translate("effect.minecraft.invisibility");
-
-  public static final Component JUMP_BOOST = ComponentUtil.translate("effect.minecraft.jump_boost");
-
-  public static final Component LEVITATION = ComponentUtil.translate("effect.minecraft.levitation");
-
-  public static final Component LUCK = ComponentUtil.translate("effect.minecraft.luck");
-
-  public static final Component MINING_FATIGUE = ComponentUtil.translate("effect.minecraft.mining_fatigue");
-
-  public static final Component NAUSEA = ComponentUtil.translate("effect.minecraft.nausea");
-
-  public static final Component NIGHT_VISION = ComponentUtil.translate("effect.minecraft.night_vision");
-
-  public static final Component POISON = ComponentUtil.translate("effect.minecraft.poison");
-
-  public static final Component REGENERATION = ComponentUtil.translate("effect.minecraft.regeneration");
-
-  public static final Component RESISTANCE = ComponentUtil.translate("effect.minecraft.resistance");
-
-  public static final Component SATURATION = ComponentUtil.translate("effect.minecraft.saturation");
-
-  public static final Component SLOW_FALLING = ComponentUtil.translate("effect.minecraft.slow_falling");
-
-  public static final Component SLOWNESS = ComponentUtil.translate("effect.minecraft.slowness");
-
-  public static final Component SPEED = ComponentUtil.translate("effect.minecraft.speed");
-
-  public static final Component STRENGTH = ComponentUtil.translate("effect.minecraft.strength");
-
-  public static final Component UNLUCK = ComponentUtil.translate("effect.minecraft.unluck");
-
-  public static final Component WATER_BREATHING = ComponentUtil.translate("effect.minecraft.water_breathing");
-
-  public static final Component WEAKNESS = ComponentUtil.translate("effect.minecraft.weakness");
-
-  public static final Component WITHER = ComponentUtil.translate("effect.minecraft.wither");
-
   public static final Component NONE = ComponentUtil.translate("&7effect.none");
 
   @NotNull
   public static Component getComponent(@NotNull PotionEffectType potionEffectType)
   {
-    if (potionEffectType.equals(PotionEffectType.ABSORPTION))
-    {
-      return ABSORPTION;
-    }
-    if (potionEffectType.equals(PotionEffectType.BAD_OMEN))
-    {
-      return BAD_OMEN;
-    }
-    if (potionEffectType.equals(PotionEffectType.BLINDNESS))
-    {
-      return BLINDNESS;
-    }
-    if (potionEffectType.equals(PotionEffectType.CONDUIT_POWER))
-    {
-      return CONDUIT_POWER;
-    }
-    if (potionEffectType.equals(PotionEffectType.NAUSEA))
-    {
-      return NAUSEA;
-    }
-    if (potionEffectType.equals(PotionEffectType.RESISTANCE))
-    {
-      return RESISTANCE;
-    }
-    if (potionEffectType.equals(PotionEffectType.DOLPHINS_GRACE))
-    {
-      return DOLPHINS_GRACE;
-    }
-    if (potionEffectType.equals(PotionEffectType.HASTE))
-    {
-      return HASTE;
-    }
-    if (potionEffectType.equals(PotionEffectType.FIRE_RESISTANCE))
-    {
-      return FIRE_RESISTANCE;
-    }
-    if (potionEffectType.equals(PotionEffectType.GLOWING))
-    {
-      return GLOWING;
-    }
-    if (potionEffectType.equals(PotionEffectType.INSTANT_DAMAGE))
-    {
-      return INSTANT_DAMAGE;
-    }
-    if (potionEffectType.equals(PotionEffectType.INSTANT_HEALTH))
-    {
-      return INSTANT_HEALTH;
-    }
-    if (potionEffectType.equals(PotionEffectType.HEALTH_BOOST))
-    {
-      return HEALTH_BOOST;
-    }
-    if (potionEffectType.equals(PotionEffectType.HERO_OF_THE_VILLAGE))
-    {
-      return HERO_OF_THE_VILLAGE;
-    }
-    if (potionEffectType.equals(PotionEffectType.HUNGER))
-    {
-      return HUNGER;
-    }
-    if (potionEffectType.equals(PotionEffectType.STRENGTH))
-    {
-      return STRENGTH;
-    }
-    if (potionEffectType.equals(PotionEffectType.INVISIBILITY))
-    {
-      return INVISIBILTY;
-    }
-    if (potionEffectType.equals(PotionEffectType.JUMP_BOOST))
-    {
-      return JUMP_BOOST;
-    }
-    if (potionEffectType.equals(PotionEffectType.LEVITATION))
-    {
-      return LEVITATION;
-    }
-    if (potionEffectType.equals(PotionEffectType.LUCK))
-    {
-      return LUCK;
-    }
-    if (potionEffectType.equals(PotionEffectType.NIGHT_VISION))
-    {
-      return NIGHT_VISION;
-    }
-    if (potionEffectType.equals(PotionEffectType.POISON))
-    {
-      return POISON;
-    }
-    if (potionEffectType.equals(PotionEffectType.REGENERATION))
-    {
-      return REGENERATION;
-    }
-    if (potionEffectType.equals(PotionEffectType.SATURATION))
-    {
-      return SATURATION;
-    }
-    if (potionEffectType.equals(PotionEffectType.SLOWNESS))
-    {
-      return SLOWNESS;
-    }
-    if (potionEffectType.equals(PotionEffectType.MINING_FATIGUE))
-    {
-      return MINING_FATIGUE;
-    }
-    if (potionEffectType.equals(PotionEffectType.SLOW_FALLING))
-    {
-      return SLOW_FALLING;
-    }
-    if (potionEffectType.equals(PotionEffectType.SPEED))
-    {
-      return SPEED;
-    }
-    if (potionEffectType.equals(PotionEffectType.UNLUCK))
-    {
-      return UNLUCK;
-    }
-    if (potionEffectType.equals(PotionEffectType.WATER_BREATHING))
-    {
-      return WATER_BREATHING;
-    }
-    if (potionEffectType.equals(PotionEffectType.WEAKNESS))
-    {
-      return WEAKNESS;
-    }
-    if (potionEffectType.equals(PotionEffectType.WITHER))
-    {
-      return WITHER;
-    }
-    return NONE;
+    return Component.translatable(potionEffectType.translationKey());
   }
 
   public static final String POTION_DESCRIPTION_COLOR = "rgb255,97,144;";
+
+  public static Component getDescription(@NotNull PotionEffect potionEffect)
+  {
+    return getDescription(100d, potionEffect);
+  }
+
+  public static Component getDescription(double chance, @NotNull PotionEffect potionEffect)
+  {
+    return getDescription(chance, Component.translatable(potionEffect.getType().translationKey()), potionEffect.getDuration(), potionEffect.getAmplifier() + 1);
+  }
 
   /**
    * @param level must be amplifier + 1

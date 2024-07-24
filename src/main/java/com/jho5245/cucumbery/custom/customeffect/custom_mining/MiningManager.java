@@ -871,6 +871,15 @@ public class MiningManager
 						drops.clear();
 						drops.add(dataItem);
 					}
+
+					// 일부 CustomMaterial은 Special drop 사용
+					CustomMaterial customMaterial = CustomMaterial.itemStackOf(dataItem);
+					Collection<ItemStack> specialDrops;
+					if (customMaterial != null && !(specialDrops = customMaterial.getSpecialDrops(player, itemStack)).isEmpty())
+					{
+						drops.clear();
+						drops.addAll(specialDrops);
+					}
 				}
 			}
 		}

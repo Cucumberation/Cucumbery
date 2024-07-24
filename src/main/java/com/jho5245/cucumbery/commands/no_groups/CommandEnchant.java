@@ -8,16 +8,14 @@ import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Permission;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
-import com.jho5245.cucumbery.util.storage.data.custom_enchant.ultimate.CustomEnchantUltimate;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.format.TextDecoration.State;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Registry;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
@@ -76,7 +74,7 @@ public class CommandEnchant implements CucumberyCommandExecutor
       MessageUtil.sendError(player, "%s은(는) 잘못된 키입니다.", name);
       return true;
     }
-    Enchantment enchantment = Registry.ENCHANTMENT.get(namespacedKey); // Enchantment.getByKey(namespacedKey);
+    Enchantment enchantment = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).get(namespacedKey); // Enchantment.getByKey(namespacedKey);
     if (enchantment == null)
     {
       MessageUtil.sendError(player, "%s은(는) 알 수 없는 마법입니다.", name);
@@ -175,14 +173,12 @@ public class CommandEnchant implements CucumberyCommandExecutor
     if (args.length == 1)
     {
       List<Completion> list = new ArrayList<>();
-      for (Enchantment enchantment : Registry.ENCHANTMENT)
+      for (Enchantment enchantment : RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT))
       {
-        Component hover =  ComponentUtil.translate(enchantment.translationKey());
-        if (enchantment instanceof CustomEnchantUltimate)
-        {
-          hover = hover.decoration(TextDecoration.BOLD, State.TRUE).color(NamedTextColor.LIGHT_PURPLE);
-        }
-        else if (enchantment.isCursed())
+        NamespacedKey namespacedKey = enchantment.getKey();
+        String namespace = namespacedKey.namespace(), key = namespacedKey.getKey();
+        Component hover =  Component.translatable("enchantment." + namespace + "." + key);
+        if (enchantment.isCursed())
         {
           hover = hover.color(NamedTextColor.RED);
         }
@@ -206,7 +202,7 @@ public class CommandEnchant implements CucumberyCommandExecutor
       {
         String[] split = enchString.split(":");
         namespacedKey = new NamespacedKey(split[0], split[1]);
-        Enchantment enchantment = Registry.ENCHANTMENT.get(namespacedKey);
+        Enchantment enchantment = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).get(namespacedKey);
         if (enchantment == null)
         {
           throw new Exception();

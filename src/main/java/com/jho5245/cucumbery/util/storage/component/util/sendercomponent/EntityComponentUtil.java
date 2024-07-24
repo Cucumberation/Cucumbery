@@ -688,7 +688,7 @@ public class EntityComponentUtil
 			hover = hover.append(Component.text("\n"));
 			hover = hover.append(ComponentUtil.translate("폭발 강도 : %s", Constant.THE_COLOR_HEX + Constant.Sosu2.format(yield)));
 			hover = hover.append(Component.text("\n"));
-			hover = hover.append(ComponentUtil.translate("불 번짐 여부 : %s" + Constant.THE_COLOR_HEX + explosive.isIncendiary()));
+			hover = hover.append(ComponentUtil.translate("불 번짐 여부 : %s", Constant.THE_COLOR_HEX + explosive.isIncendiary()));
 		}
 		if (entity instanceof TNTPrimed tntPrimed)
 		{

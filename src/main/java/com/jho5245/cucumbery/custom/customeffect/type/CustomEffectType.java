@@ -292,7 +292,7 @@ public class CustomEffectType implements Translatable, EnumHideable
 
   THE_CHAOS_INVENTORY = new CustomEffectType("the_chaos_inventory", "key:effect.cucumbery.the_chaos_inventory|혼벤토리", builder().negative().keepOnDeath()),
   
-  HIDE_ITEM_TOOLTIP = new CustomEffectType("hide_item_tooltip", "key:effect.cucumbery.hide_item_tooltip|아이템 툴팁 숨김", builder().description("아이템 설명이 숨겨집니다 ㅅㄱ").negative().keepOnDeath()),
+  HIDE_ITEM_TOOLTIP = new CustomEffectType("hide_item_tooltip", "key:effect.cucumbery.hide_item_tooltip|아이템 툴팁 숨김", builder().description("아이템 설명이 숨겨집니다 ㅅㄱ").icon(new ItemStack(Material.BARRIER)).negative().keepOnDeath()),
 
   /**
    * PlayerArmSwingEvent가 멈췄을때(플레이어가 팔을 흔드는 것을 멈췄을때)를 감지하기 위한 효과
@@ -306,6 +306,8 @@ public class CustomEffectType implements Translatable, EnumHideable
 
   BLANKET_LOVER = new CustomEffectType("blanket_lover", "우와 이불 \uD83D\uDE01 너무 조아", builder().removeOnMilk().description("이불 너무 조아... 안 일어날 거야..")
       .icon(new ItemStack(Material.RED_BED)).defaultDuration(20 * 10).targetFilter(e -> e instanceof Player).customModelData(25201)),
+
+  HIDE_ITEM_INFORMATION = new CustomEffectType("hide_item_information", "아이템 정보 숨김", builder().negative().keepOnDeath().description("정보 모릅니다.").icon(new ItemStack(Material.BARRIER))),
 
   /**/ NOTHING = new CustomEffectType("nothing", "아무것도 아님"),
 
@@ -384,7 +386,7 @@ public class CustomEffectType implements Translatable, EnumHideable
             CUSTOM_DEATH_MESSAGE,
             REMOVE_NO_DAMAGE_TICKS, MASTER_OF_FISHING, MASTER_OF_FISHING_D, ASSASSINATION, ALARM, GAESANS, SUPERIOR_LEVITATION,
             THE_CHAOS_INVENTORY, HIDE_ITEM_TOOLTIP,
-            ARM_SWING, IGNORE_ARM_SWING, BLANKET_LOVER,
+            ARM_SWING, IGNORE_ARM_SWING, BLANKET_LOVER, HIDE_ITEM_INFORMATION,
 
 
 

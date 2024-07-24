@@ -68,7 +68,7 @@ public class SoundPlay
 
   public static void playSound(@NotNull Object audience, @NotNull Sound sound, @NotNull SoundCategory category, double volume, double pitch)
   {
-    if (Cucumbery.using_CommandAPI && audience instanceof NativeProxyCommandSender sender)
+    if (audience instanceof NativeProxyCommandSender sender)
     {
       audience = sender.getCaller();
     }
@@ -96,7 +96,7 @@ public class SoundPlay
 
   public static void playSound(@NotNull Object audience, Location location, @NotNull String sound, @NotNull SoundCategory category, double volume, double pitch)
   {
-    if (Cucumbery.using_CommandAPI && audience instanceof NativeProxyCommandSender proxyCommandSender)
+    if (audience instanceof NativeProxyCommandSender proxyCommandSender)
     {
       audience = proxyCommandSender.getCallee();
     }

@@ -22,10 +22,7 @@ import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
-import de.tr7zw.changeme.nbtapi.NBTCompound;
-import de.tr7zw.changeme.nbtapi.NBTContainer;
-import de.tr7zw.changeme.nbtapi.NBTItem;
-import de.tr7zw.changeme.nbtapi.NBTList;
+import de.tr7zw.changeme.nbtapi.*;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
@@ -64,18 +61,22 @@ public class ItemStackUtil
 	{
 		HIDDEN_ITEM = new ItemStack(Material.TRIAL_SPAWNER);
 		ItemMeta itemMeta = HIDDEN_ITEM.getItemMeta();
-		itemMeta.displayName(ComponentUtil.translate("&ikey:item.cucumbery.hidden_item|???"));
+		itemMeta.itemName(ComponentUtil.translate("key:item.cucumbery.hidden_item|???"));
 		itemMeta.lore(Collections.singletonList(ComponentUtil.translate("&7key:item.cucumbery.hidden_item.description|아이템의 정보가 숨겨져 있습니다!")));
 		itemMeta.addItemFlags(ItemFlag.values());
 		HIDDEN_ITEM.setItemMeta(itemMeta);
 
 		INVALID_ITEM = new ItemStack(Material.BARRIER);
 		itemMeta = INVALID_ITEM.getItemMeta();
-		itemMeta.displayName(ComponentUtil.translate("&c&qkey:item.cucumbery.invalid_item|{오류 아이템}"));
+		itemMeta.itemName(ComponentUtil.translate("key:item.cucumbery.invalid_item|{오류 아이템}"));
 		itemMeta.lore(List.of(ComponentUtil.translate("&7key:item.cucumbery.invalid.description|오류가 발생하여 생성된 아이템입니다!"),
 				ComponentUtil.translate("&7key:item.cucumbery.invalid.description_2|관리자에게 문의해주세요!")));
 		INVALID_ITEM.setItemMeta(itemMeta);
-		new NBTItem(INVALID_ITEM, true).setBoolean(INVALID_ITEM_TAG, true);
+		// TODO: NBTAPI Should fix this
+/*		NBT.modify(INVALID_ITEM, nbt ->
+		{
+			nbt.setBoolean(INVALID_ITEM_TAG, true);
+		});*/
 	}
 
 	/**
@@ -765,7 +766,7 @@ public class ItemStackUtil
 
 	public static boolean isBlockStateMetadatable(@NotNull Material type)
 	{
-		return new ItemStack(type).getItemMeta() instanceof BlockStateMeta;
+		return type.isItem() && new ItemStack(type).getItemMeta() instanceof BlockStateMeta;
 	}
 
 	public static boolean predicateItem(@NotNull ItemStack itemStack, @NotNull String nbt)
@@ -1516,7 +1517,8 @@ public class ItemStackUtil
 		{
 			nbt.append(s);
 		}
-		if (nbt.isEmpty()) return "";
+		if (nbt.isEmpty())
+			return "";
 
 		nbt = new StringBuilder("[" + nbt.substring(0, nbt.length() - 1) + "]");
 		return nbt.toString();

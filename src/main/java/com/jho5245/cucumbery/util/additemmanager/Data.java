@@ -94,7 +94,7 @@ public class Data
         Component message = ComponentUtil.translate("받은 아이템 개수 상태 (마우스를 올려서 보기)");
         MessageUtil.info(player, message.hoverEvent(hover));
       }
-      else if (Cucumbery.using_CommandAPI && sender instanceof NativeProxyCommandSender proxyCommandSender && proxyCommandSender.getCallee() instanceof Player player)
+      else if (sender instanceof NativeProxyCommandSender proxyCommandSender && proxyCommandSender.getCallee() instanceof Player player)
       {
         Component message = ComponentUtil.translate("받은 아이템 개수 상태 (마우스를 올려서 보기)");
         MessageUtil.info(player, message.hoverEvent(hover));

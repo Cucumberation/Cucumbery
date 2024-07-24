@@ -24,22 +24,19 @@ public class BlockExplode implements Listener
 
   public void blockPlaceData(BlockExplodeEvent event)
   {
-    int defaultExplosionPower = Cucumbery.config.getInt("custom-mining.default-explosion-power.default");
+    int defaultExplosionPower;
     BlockState blockState = event.getExplodedBlockState();
-    if (blockState != null)
-    {
-      Material blockType = blockState.getType();
-      if (Tag.BEDS.isTagged(blockType))
-      {
-        defaultExplosionPower = Cucumbery.config.getInt("custom-mining.default-explosion-power.BEDS");
-      }
-      else
-      {
+		Material blockType = blockState.getType();
+		if (Tag.BEDS.isTagged(blockType))
+		{
+			defaultExplosionPower = Cucumbery.config.getInt("custom-mining.default-explosion-power.BEDS");
+		}
+		else
+		{
 
-        defaultExplosionPower = Cucumbery.config.getInt("custom-mining.default-explosion-power." + blockType);
-      }
-    }
-    List<Block> removeList = new ArrayList<>();
+			defaultExplosionPower = Cucumbery.config.getInt("custom-mining.default-explosion-power." + blockType);
+		}
+		List<Block> removeList = new ArrayList<>();
     List<Block> removeListButNobreak = new ArrayList<>();
     ExplodeEventManager.manage(defaultExplosionPower, event.getYield(), event.blockList(), removeList, removeListButNobreak);
     event.blockList().removeAll(removeList);

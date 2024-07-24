@@ -36,7 +36,6 @@ public class ItemLore2Enchant
 				itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 				List<Component> enchantLore = new ArrayList<>();
 				Map<Enchantment, Integer> enchants = new HashMap<>(itemMeta.getEnchants());
-				enchants.keySet().removeIf(enchantment -> enchantment.equals(CustomEnchant.GLOW));
 				int size = enchants.size();
 				if (size >= 8)
 				{
@@ -62,14 +61,10 @@ public class ItemLore2Enchant
 						else
 						{
 							component = ComponentUtil.translate("%s %s", ComponentUtil.translate(enchantment.translationKey()),
-									ComponentUtil.translate("enchantment.level." + level).fallback(level + ""));
-						}
-						if (enchantment.getMaxLevel() == level)
-						{
-							component = component.decoration(TextDecoration.BOLD, State.TRUE);
+									ComponentUtil.translate("enchantment.level." + level).fallback(level + "").decoration(TextDecoration.BOLD, level >= enchantment.getMaxLevel() ? State.TRUE : State.NOT_SET));
 						}
 						component = component.color(enchantment.isCursed() ? TextColor.color(255, 85, 85) : TextColor.color(154, 84, 255));
-						if (enchantment instanceof CustomEnchant customEnchant && customEnchant.isUltimate())
+						if (CustomEnchant.isUltimate(enchantment))
 						{
 							component = component.color(NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.BOLD, State.TRUE);
 						}
@@ -92,10 +87,6 @@ public class ItemLore2Enchant
 				{
 					for (Enchantment enchantment : itemMeta.getEnchants().keySet())
 					{
-						if (enchantment.equals(CustomEnchant.GLOW))
-						{
-							continue;
-						}
 						int level = itemMeta.getEnchantLevel(enchantment);
 						if (level > 255)
 						{
@@ -136,7 +127,6 @@ public class ItemLore2Enchant
 				itemMeta.addItemFlags(ItemFlag.HIDE_STORED_ENCHANTS);
 				List<Component> enchantLore = new ArrayList<>();
 				Map<Enchantment, Integer> enchants = new HashMap<>(storageMeta.getStoredEnchants());
-				enchants.keySet().removeIf(enchantment -> enchantment.equals(CustomEnchant.GLOW));
 				int size = enchants.size();
 				if (size >= 8)
 				{
@@ -162,14 +152,10 @@ public class ItemLore2Enchant
 						else
 						{
 							component = ComponentUtil.translate("%s %s", ComponentUtil.translate(enchantment.translationKey()),
-									ComponentUtil.translate("enchantment.level." + level).fallback(level + ""));
-						}
-						if (enchantment.getMaxLevel() == level)
-						{
-							component = component.decoration(TextDecoration.BOLD, State.TRUE);
+									ComponentUtil.translate("enchantment.level." + level).fallback(level + "").decoration(TextDecoration.BOLD, level >= enchantment.getMaxLevel() ? State.TRUE : State.NOT_SET));
 						}
 						component = component.color(enchantment.isCursed() ? TextColor.color(255, 85, 85) : TextColor.color(154, 84, 255));
-						if (enchantment instanceof CustomEnchant customEnchant && customEnchant.isUltimate())
+						if (CustomEnchant.isUltimate(enchantment))
 						{
 							component = component.color(NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.BOLD, State.TRUE);
 						}

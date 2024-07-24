@@ -44,6 +44,7 @@ public class RecipeManager
     register(new FurnaceRecipe(of("tnt_from_furnace"), new ItemStack(Material.TNT), new ExactChoice(CustomMaterial.WNYNYA_ORE.create()), 2f, 100));
     register(new BlastingRecipe(of("tnt_from_blast_furnace"), new ItemStack(Material.TNT), new ExactChoice(CustomMaterial.WNYNYA_ORE.create()), 2f, 50));
 
+    registerShapelessRecipes();
     registerVerticalSlabs();
 
     register(new PotionMix(of("test_jade_to_tnt"), new ItemStack(Material.TNT), INPUT_WATER_BOTTLE,
@@ -57,6 +58,27 @@ public class RecipeManager
 
     register(new PotionMix(of("test_amber_to_tnt"), new ItemStack(Material.TNT), INPUT_WATER_BOTTLE,
         PotionMix.createPredicateChoice(itemStack -> isAdminOnline() && CustomMaterial.itemStackOf(itemStack) == CustomMaterial.AMBER && Bukkit.getOnlinePlayers().size() > 1)));
+  }
+
+  private static void registerShapelessRecipes()
+  {
+    ShapelessRecipe re_pper_ld_rald_amon_yst_rganite_block = new ShapelessRecipe(of("re_pper_ld_rald_amon_yst_rganite_block"), CustomMaterial.RE_PPER_LD_RALD_AMON_YST_RGANITE_BLOCK.create());
+    re_pper_ld_rald_amon_yst_rganite_block.addIngredient(Material.REDSTONE_BLOCK);
+    re_pper_ld_rald_amon_yst_rganite_block.addIngredient(Material.COPPER_BLOCK);
+    re_pper_ld_rald_amon_yst_rganite_block.addIngredient(Material.GOLD_BLOCK);
+    re_pper_ld_rald_amon_yst_rganite_block.addIngredient(Material.EMERALD_BLOCK);
+    re_pper_ld_rald_amon_yst_rganite_block.addIngredient(Material.DIAMOND_BLOCK);
+    re_pper_ld_rald_amon_yst_rganite_block.addIngredient(Material.AMETHYST_BLOCK);
+    register(re_pper_ld_rald_amon_yst_rganite_block);
+
+    ShapelessRecipe dia_ron_lapi_red_coal_gold_ore = new ShapelessRecipe(of("dia_ron_lapi_red_coal_gold_ore"), CustomMaterial.DIA_RON_LAPI_RED_COAL_GOLD_ORE.create());
+    dia_ron_lapi_red_coal_gold_ore.addIngredient(Material.DIAMOND_ORE);
+    dia_ron_lapi_red_coal_gold_ore.addIngredient(Material.IRON_ORE);
+    dia_ron_lapi_red_coal_gold_ore.addIngredient(Material.LAPIS_ORE);
+    dia_ron_lapi_red_coal_gold_ore.addIngredient(Material.REDSTONE_ORE);
+    dia_ron_lapi_red_coal_gold_ore.addIngredient(Material.COAL_ORE);
+    dia_ron_lapi_red_coal_gold_ore.addIngredient(Material.GOLD_ORE);
+    register(dia_ron_lapi_red_coal_gold_ore);
   }
 
   private static void registerVerticalSlabs()

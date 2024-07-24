@@ -1,41 +1,33 @@
 package com.jho5245.cucumbery.util.storage.data.custom_enchant;
 
 import com.jho5245.cucumbery.Cucumbery;
-import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
-import com.jho5245.cucumbery.util.storage.data.custom_enchant.touch.*;
-import com.jho5245.cucumbery.util.storage.data.custom_enchant.ultimate.CustomEnchantUltimate;
-import com.jho5245.cucumbery.util.storage.data.custom_enchant.ultimate.EnchantCloseCall;
-import com.jho5245.cucumbery.util.storage.data.custom_enchant.ultimate.EnchantHighRiskHighReturn;
-import io.papermc.paper.enchantments.EnchantmentRarity;
-import net.kyori.adventure.text.Component;
+import com.jho5245.cucumbery.util.no_groups.MessageUtil;
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.enchantments.EnchantmentTarget;
-import org.bukkit.enchantments.EnchantmentWrapper;
-import org.bukkit.entity.EntityCategory;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.BlockInventoryHolder;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Field;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
-/**
- * @deprecated no longer allows custom enchantments.
- */
-@Deprecated
 public abstract class CustomEnchant extends Enchantment
 {
-	/**
-	 * A decorative enchant for glowing items.
-	 */
-	public static Enchantment GLOW;
+	private static final HashMap<NamespacedKey, Enchantment> CUSTOM_ENCHANTS = new HashMap<>();
 
+	/**
+	 * 데이터팩을 통해 등록을 하지 못한 인챈트 키
+	 */
+	private static final Set<NamespacedKey> NOT_REGISTERED_ENCHANTS = new HashSet<>();
+	
 	/**
 	 * If an {@link ItemStack} has this enchant, it is never dropped upon death.
 	 */
@@ -161,258 +153,82 @@ public abstract class CustomEnchant extends Enchantment
 	 */
 	public static Enchantment CLOSE_CALL;
 
-	private static final Map<NamespacedKey, Enchantment> byKey = new HashMap<>();
-
-	private static final Map<String, Enchantment> byName = new HashMap<>();
+	public static boolean isUltimate(Enchantment enchantment)
+	{
+		return enchantment == HIGH_RISK_HIGH_RETURN || enchantment == CLOSE_CALL;
+	}
 
 	public static void registerEnchants()
 	{
-		GLOW = registerEnchant(new EnchantGlow("glow"));
+		KEEP_INVENTORY = registerEnchant(new NamespacedKey(Cucumbery.getPlugin(), "keep_inventory"));
+		TELEKINESIS = registerEnchant(new NamespacedKey(Cucumbery.getPlugin(), "telekinesis"));
+		TELEKINESIS_PVP = registerEnchant(new NamespacedKey(Cucumbery.getPlugin(), "telekinesis_pvp"));
 
-		KEEP_INVENTORY = registerEnchant(new EnchantKeepInventory("keep_inventory"));
-		TELEKINESIS = registerEnchant(new EnchantTelekinesis("telekinesis"));
-		TELEKINESIS_PVP = registerEnchant(new EnchantTelekinesisPVP("telekinesis_pvp"));
+		COLD_TOUCH = registerEnchant(new NamespacedKey(Cucumbery.getPlugin(), "cold_touch"));
+		JUSTIFICATION = registerEnchant(new NamespacedKey(Cucumbery.getPlugin(), "justification"));
+		JUSTIFICATION_BOW = registerEnchant(new NamespacedKey(Cucumbery.getPlugin(), "justification_bow"));
+		SMELTING_TOUCH = registerEnchant(new NamespacedKey(Cucumbery.getPlugin(), "smelting_touch"));
+		WARM_TOUCH = registerEnchant(new NamespacedKey(Cucumbery.getPlugin(), "warm_touch"));
 
-		COLD_TOUCH = registerEnchant(new EnchantColdTouch("cold_touch"));
-		JUSTIFICATION = registerEnchant(new EnchantJustification("justification"));
-		JUSTIFICATION_BOW = registerEnchant(new EnchantJustificationBow("justification_bow"));
-		SMELTING_TOUCH = registerEnchant(new EnchantSmeltingTouch("smelting_touch"));
-		WARM_TOUCH = registerEnchant(new EnchantWarmTouch("warm_touch"));
+		COARSE_TOUCH = registerEnchant(new NamespacedKey(Cucumbery.getPlugin(), "coarse_touch"));
+		DULL_TOUCH = registerEnchant(new NamespacedKey(Cucumbery.getPlugin(), "dull_touch"));
+		UNSKILLED_TOUCH = registerEnchant(new NamespacedKey(Cucumbery.getPlugin(), "unskilled_touch"));
+		VANISHING_TOUCH = registerEnchant(new NamespacedKey(Cucumbery.getPlugin(), "vanishing_touch"));
 
-		COARSE_TOUCH = registerEnchant(new EnchantCoarseTouch("coarse_touch"));
-		DULL_TOUCH = registerEnchant(new EnchantDullTouch("dull_touch"));
-		UNSKILLED_TOUCH = registerEnchant(new EnchantUnskilledTouch("unskilled_touch"));
-		VANISHING_TOUCH = registerEnchant(new EnchantVanishingTouch("vanishing_touch"));
+		FRANTIC_FORTUNE = registerEnchant(new NamespacedKey(Cucumbery.getPlugin(), "frantic_fortune"));
+		FRANTIC_LUCK_OF_THE_SEA = registerEnchant(new NamespacedKey(Cucumbery.getPlugin(), "frantic_luck_of_the_sea"));
 
-		FRANTIC_FORTUNE = registerEnchant(new EnchantFranticFortune("frantic_fortune"));
-		FRANTIC_LUCK_OF_THE_SEA = registerEnchant(new EnchantFranticLuckOfTheSea("frantic_luck_of_the_sea"));
+		ASSASSINATION = registerEnchant(new NamespacedKey(Cucumbery.getPlugin(), "assassination"));
+		ASSASSINATION_BOW = registerEnchant(new NamespacedKey(Cucumbery.getPlugin(), "assassination_bow"));
 
-		ASSASSINATION = registerEnchant(new EnchantAssassination("assassination"));
-		ASSASSINATION_BOW = registerEnchant(new EnchantAssassinationBow("assassination_bow"));
+		IDIOT_SHOOTER = registerEnchant(new NamespacedKey(Cucumbery.getPlugin(), "idiot_shooter"));
 
-		IDIOT_SHOOTER = registerEnchant(new EnchantIdiotShooter("idiot_shooter"));
+		CLEAVING = registerEnchant(new NamespacedKey(Cucumbery.getPlugin(), "cleaving"));
 
-		CLEAVING = registerEnchant(new EnchantCleaving("cleaving"));
+		DEFENSE_CHANCE = registerEnchant(new NamespacedKey(Cucumbery.getPlugin(), "defense_chance"));
 
-		DEFENSE_CHANCE = registerEnchant(new EnchantDefenseChance("defense_chance"));
+		HARVESTING = registerEnchant(new NamespacedKey(Cucumbery.getPlugin(), "harvesting"));
 
-		HARVESTING = registerEnchant(new EnchantHarvesting("harvesting"));
+		SUNDER = registerEnchant(new NamespacedKey(Cucumbery.getPlugin(), "sunder"));
 
-		SUNDER = registerEnchant(new EnchantSunder("sunder"));
+		DELICATE = registerEnchant(new NamespacedKey(Cucumbery.getPlugin(), "delicate"));
 
-		DELICATE = registerEnchant(new EnchantDelicate("delicate"));
-
-		FARMERS_GRACE = registerEnchant(new EnchantFarmersGrace("farmers_grace"));
+		FARMERS_GRACE = registerEnchant(new NamespacedKey(Cucumbery.getPlugin(), "farmers_grace"));
 
 		// Ulitmate Enchants
 
-		HIGH_RISK_HIGH_RETURN = registerEnchant(new EnchantHighRiskHighReturn("high_risk_high_return"));
+		HIGH_RISK_HIGH_RETURN = registerEnchant(new NamespacedKey(Cucumbery.getPlugin(), "high_risk_high_return"));
 
-		CLOSE_CALL = registerEnchant(new EnchantCloseCall("close_call"));
+		CLOSE_CALL = registerEnchant(new NamespacedKey(Cucumbery.getPlugin(), "close_call"));
 	}
 
-	private static CustomEnchant registerEnchant(@NotNull CustomEnchant enchant)
+
+	@Nullable
+	private static Enchantment registerEnchant(@NotNull NamespacedKey namespacedKey)
 	{
-		// Enchantment.registerEnchantment(enchant);
-		byKey.put(enchant.getKey(), enchant);
-		byName.put(enchant.getName(), enchant);
-		return enchant;
+		Enchantment enchantment = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT).get(namespacedKey);
+		if (enchantment == null)
+		{
+			NOT_REGISTERED_ENCHANTS.add(namespacedKey);
+		}
+		else
+		{
+			CUSTOM_ENCHANTS.put(namespacedKey, enchantment);
+		}
+		return enchantment;
 	}
 
 	public static boolean isEnabled()
 	{
-		return GLOW != null;
-	}
-
-	private final NamespacedKey key;
-
-	public CustomEnchant(@NotNull NamespacedKey namespacedKey)
-	{
-//		super(namespacedKey);
-		this.key = namespacedKey;
-	}
-
-	public CustomEnchant(@NotNull String name)
-	{
-		// super(Objects.requireNonNull(NamespacedKey.fromString(name, Cucumbery.getPlugin())));
-		this.key = NamespacedKey.fromString(name, Cucumbery.getPlugin());
-	}
-
-	@Override
-	public int getMaxLevel()
-	{
-		return 1;
-	}
-
-	@Override
-	public int getStartLevel()
-	{
-		return 1;
-	}
-
-	@Override
-	@NotNull
-	@SuppressWarnings("deprecation")
-	public EnchantmentTarget getItemTarget()
-	{
-		return EnchantmentTarget.ALL;
-	}
-
-	@Override
-	public boolean canEnchantItem(@NotNull ItemStack itemStack)
-	{
-		return true;
-	}
-
-	@Override
-	@NotNull
-	public final String getName()
-	{
-		return translationKey();
-	}
-
-	@Override
-	public boolean isTreasure()
-	{
-		return false;
-	}
-
-	@Override
-	public boolean isCursed()
-	{
-		return false;
-	}
-
-	@Override
-	public boolean conflictsWith(@NotNull Enchantment other)
-	{
-		return false;
-	}
-
-	@Override
-	@NotNull
-	public Component displayName(int level)
-	{
-		return ComponentUtil.translate("%s %s", ComponentUtil.translate(translationKey()), level);
-	}
-
-	@Override
-	@NotNull
-	public abstract String translationKey();
-
-	@Override
-	public boolean isTradeable()
-	{
-		return false;
-	}
-
-	@Override
-	public boolean isDiscoverable()
-	{
-		return true;
-	}
-
-	@Override
-	@NotNull
-	public EnchantmentRarity getRarity()
-	{
-		return EnchantmentRarity.COMMON;
-	}
-
-	@Override
-	public float getDamageIncrease(int level, @NotNull EntityCategory entityCategory)
-	{
-		return 0f;
-	}
-
-	@Override
-	@NotNull
-	public Set<EquipmentSlot> getActiveSlots()
-	{
-		return new HashSet<>(Arrays.asList(EquipmentSlot.values()));
-	}
-
-	@Override
-	public float getDamageIncrease(int level, @NotNull EntityType entityType)
-	{
-		return 0;
-	}
-
-	@Override
-	public int getAnvilCost()
-	{
-		return 0;
-	}
-
-	/**
-	 * @return true if this custom enchant is ultimate enchant.
-	 */
-	public boolean isUltimate()
-	{
-		return this instanceof CustomEnchantUltimate;
-	}
-
-  public int getMinModifiedCost(int i)
-  {
-    return 0;
-  }
-
-  public int getMaxModifiedCost(int i)
-  {
-    return 0;
-  }
-
-	@Override
-	public @NotNull NamespacedKey getKey()
-	{
-		return key;
+		return Cucumbery.config.getBoolean("use-custom-enchant") && NOT_REGISTERED_ENCHANTS.isEmpty() && !CUSTOM_ENCHANTS.keySet().isEmpty();
 	}
 
 	public static void onEnable()
 	{
-		if (true)
-			return;
-		try
-		{
-			Field f = Enchantment.class.getDeclaredField("acceptingNew");
-			f.setAccessible(true);
-			f.set(null, true);
-		}
-		catch (Exception e)
-		{
-			Cucumbery.getPlugin().getLogger().warning(e.getMessage());
-		}
 		registerEnchants();
-	}
-
-	@SuppressWarnings("unchecked")
-	public static void onDisable()
-	{
-		if (true)
-			return;
-		try
+		if (!isEnabled())
 		{
-			Field byKeyField = Enchantment.class.getDeclaredField("byKey");
-			Field byNameField = Enchantment.class.getDeclaredField("byName");
-
-			byKeyField.setAccessible(true);
-			byNameField.setAccessible(true);
-
-			HashMap<NamespacedKey, Enchantment> byKey = (HashMap<NamespacedKey, Enchantment>) byKeyField.get(null);
-			HashMap<String, Enchantment> byName = (HashMap<String, Enchantment>) byNameField.get(null);
-
-			byKey.keySet().removeIf(CustomEnchant.byKey::containsKey);
-			byName.keySet().removeIf(CustomEnchant.byName::containsKey);
+			MessageUtil.sendWarn(Bukkit.getConsoleSender(), "커스텀 인챈트 기능을 사용하려 했으나 데이터 팩이 존재하지 않거나 일부 인챈트가 정상적으로 등록되지 않아 커스텀 인챈트 기능이 비활성화됩니다");
 		}
-		catch (Exception e)
-		{
-			Cucumbery.getPlugin().getLogger().warning(e.getMessage());
-		}
-	}
-
-	@Override
-	public String getTranslationKey()
-	{
-		return this.toString();
 	}
 }

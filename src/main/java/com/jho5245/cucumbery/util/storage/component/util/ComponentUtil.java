@@ -15,8 +15,10 @@ import com.jho5245.cucumbery.util.no_groups.SelectorUtil;
 import com.jho5245.cucumbery.util.storage.component.ItemStackComponent;
 import com.jho5245.cucumbery.util.storage.component.LocationComponent;
 import com.jho5245.cucumbery.util.storage.component.util.sendercomponent.SenderComponentUtil;
-import com.jho5245.cucumbery.util.storage.data.*;
-import com.jho5245.cucumbery.util.storage.data.custom_enchant.ultimate.CustomEnchantUltimate;
+import com.jho5245.cucumbery.util.storage.data.Constant;
+import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
+import com.jho5245.cucumbery.util.storage.data.Prefix;
+import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.xxmicloxx.NoteBlockAPI.model.Song;
@@ -555,10 +557,6 @@ public class ComponentUtil
 				if (enchantment.isCursed())
 				{
 					concat = concat.color(NamedTextColor.RED);
-				}
-				else if (enchantment instanceof CustomEnchantUltimate)
-				{
-					concat = concat.color(NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.BOLD, State.TRUE);
 				}
 				else
 				{

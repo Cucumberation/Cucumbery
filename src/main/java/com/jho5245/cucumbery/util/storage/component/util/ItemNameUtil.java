@@ -224,6 +224,25 @@ public class ItemNameUtil
           case null, default -> textColor = hasEnchants ? NamedTextColor.AQUA : null;
         }
         component = component.color(textColor);
+        if (itemRarity == null)
+        {
+          // TODO: Default item doesn't have itemmeta for rarity - use deprecated API instead
+          try
+          {
+            switch (material.getItemRarity())
+            {
+              case UNCOMMON -> textColor = hasEnchants ? NamedTextColor.AQUA : NamedTextColor.YELLOW;
+              case RARE -> textColor = hasEnchants ? NamedTextColor.LIGHT_PURPLE : NamedTextColor.AQUA;
+              case EPIC -> textColor = NamedTextColor.LIGHT_PURPLE;
+              default -> textColor = hasEnchants ? NamedTextColor.AQUA : null;
+            }
+            component = component.color(textColor);
+          }
+          catch (IllegalStateException ignored)
+          {
+
+          }
+        }
       }
     }
     if (textColor == null && defaultColor != null)

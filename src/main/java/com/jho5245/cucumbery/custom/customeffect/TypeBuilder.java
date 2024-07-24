@@ -4,6 +4,7 @@ import com.jho5245.cucumbery.custom.customeffect.CustomEffect.DisplayType;
 import com.jho5245.cucumbery.events.entity.EntityCustomEffectPreApplyEvent;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -214,6 +215,16 @@ public class TypeBuilder
   public TypeBuilder description(@NotNull String description, @NotNull Object... args)
   {
     this.description = ComponentUtil.translate(description, args);
+    return this;
+  }
+
+  /**
+   * 효과 아이콘 지정
+   */
+  @NotNull
+  public TypeBuilder icon(@Nullable Material icon)
+  {
+    this.icon = icon != null ? new ItemStack(icon) : null;
     return this;
   }
 

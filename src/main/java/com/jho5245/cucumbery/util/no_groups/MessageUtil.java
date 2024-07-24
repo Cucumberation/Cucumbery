@@ -560,7 +560,7 @@ public class MessageUtil
 			collection.removeAll(exception);
 		}
 		collection.removeIf(c -> !c.hasPermission("minecraft.admin.command_feedback"));
-		if (Cucumbery.using_CommandAPI && commandSender instanceof NativeProxyCommandSender proxyCommandSender)
+		if (commandSender instanceof NativeProxyCommandSender proxyCommandSender)
 		{
 			commandSender = proxyCommandSender.getCallee();
 		}

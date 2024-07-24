@@ -1,20 +1,13 @@
 package com.jho5245.cucumbery.listeners.player.no_groups;
 
-import com.jho5245.cucumbery.util.itemlore.ItemLore;
-import com.jho5245.cucumbery.util.no_groups.ItemSerializer;
-import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
-import org.bukkit.Statistic;
 import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
-import org.bukkit.inventory.ItemStack;
 
 public class PlayerPickupArrow implements Listener
 {
@@ -49,7 +42,6 @@ public class PlayerPickupArrow implements Listener
 			}
 		}
 		AbstractArrow abstractArrow = event.getArrow();
-		event.setCancelled(true);
 		Variable.entityShootBowConsumableMap.remove(abstractArrow.getUniqueId());
 	}
 }

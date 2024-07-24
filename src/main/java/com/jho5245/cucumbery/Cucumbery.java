@@ -116,15 +116,10 @@ import java.util.UUID;
 
 public class Cucumbery extends JavaPlugin
 {
-	public static final int CONFIG_VERSION = 47, DEATH_MESSAGES_CONFIG_VERSION = 13, LANG_CONFIG_VERSION = 7;
+	public static final int CONFIG_VERSION = 49, DEATH_MESSAGES_CONFIG_VERSION = 13, LANG_CONFIG_VERSION = 7;
 
 	//  private static final ExecutorService brigadierService = Executors.newFixedThreadPool(1);
 	public static YamlConfiguration config;
-
-	/**
-	 * Shaded since 2022.07.04 so always true
-	 */
-	public static boolean using_CommandAPI = true;
 
 	public static boolean using_Vault_Economy;
 
@@ -433,17 +428,6 @@ public class Cucumbery extends JavaPlugin
 			}
 		}
 		Updater.onDisable();
-		if (config.getBoolean("use-custom-enchant-features"))
-		{
-			try
-			{
-				CustomEnchant.onDisable();
-			}
-			catch (Exception e)
-			{
-				Cucumbery.getPlugin().getLogger().warning(e.getMessage());
-			}
-		}
 		// 채광 모드 2 블록 복구 모드
 		if (Cucumbery.config.getBoolean("custom-mining.restore-mining-mode-2-blocks-on-plugin-disable"))
 		{
@@ -480,6 +464,17 @@ public class Cucumbery extends JavaPlugin
 		this.registerConfig();
 		try
 		{
+			if (config.getBoolean("use-custom-enchant"))
+			{
+				CustomEnchant.onEnable();
+			}
+		}
+		catch (Throwable t)
+		{
+			t.printStackTrace();
+		}
+		try
+		{
 			RecipeChecker.setRecipes();
 			RecipeManager.registerRecipe();
 		}
@@ -496,57 +491,45 @@ public class Cucumbery extends JavaPlugin
 		{
 			Cucumbery.getPlugin().getLogger().warning(e.getMessage());
 		}
-		if (config.getBoolean("use-custom-enchant-features"))
-		{
-			try
-			{
-				CustomEnchant.onEnable();
-			}
-			catch (Exception ignored)
-			{
 
-			}
-		}
-		if (using_CommandAPI)
+		try
 		{
-			try
-			{
-				CommandAPI.onEnable();
-				new ExtraExecuteArgument().registerArgument();
-				new CommandRide().registerCommand("ride2", "cucumbery.command.ride", "cride");
-				new CommandSudo2().registerCommand("sudo2", "cucumbery.command.sudo2", "csudo2");
-				new CommandGive2().registerCommand("cgive", "cucumbery.command.cgive", "cgive", "give2");
-				new CommandVelocity().registerCommand("velocity", "cucumbery.command.velocity2", "velo", "날리기", "cvelo", "cvelocity");
-				new CommandHealthPoint().registerCommand("healthpoint", "cucumbery.command.healthpoint", "hp", "chp");
-				new CommandKill2().registerCommand("ckill", "cucumbery.command.ckill", "ckill", "kill2");
-				new CommandSetItem().registerCommand("setitem", "cucumbery.command.setitem", "csetitem");
-				new CommandConsoleSudo2().registerCommand("consolesudo2", "cucumbery.command.consolesudo", "consolesudo2");
-				new CommandSendActionbar().registerCommand("sendactionbar", "cucumbery.command.sendactionbar", "csendactionbar");
-				new CommandSendTitle().registerCommand("sendtitle", "cucumbery.command.sendtitle", "csendtitle");
-				new CommandUpdateItem().registerCommand("updateitem", "cucumbery.command.updateitem", "cupdateitem");
-				new CommandEffect2().registerCommand("ceffect", "cucumbery.command.effect", "ceffect", "effect2");
-				new CommandDamage().registerCommand("damage2", "cucumbery.command.damage", "cdamage");
-				new CommandSummon2().registerCommand("csummon", "cucumbery.command.summon", "csummon", "summon2");
-				new CommandSetBlock2().registerCommand("csetblock", "cucumbery.command.setblock", "csetblock", "setblock2");
-				new CommandReplaceEntity().registerCommand("replaceentity", "cucumbery.command.replaceentity", "creplaceentity");
-				new CommandRepeat2().registerCommand("crepeat", "cucumbery.command.repeat", "repeat2");
-				new CommandData2().registerCommand("cdata", "cucumbery.command.data", "data2");
-				new CommandTeleport2().registerCommand("teleport2", "cucumbery.command.teleport", "tp2");
-				new CommandExplode().registerCommand("explode", "cucumbery.command.explode", "cexplode");
-				new CommandVanillaTeleport().registerCommand("teleport", "minecraft.command.teleport", "tp");
-				new CommandSellItem().registerCommand("sellitem", "cucumbery.command.sellitem", "csellitem");
-				new CommandClear2().registerCommand("clear2", "cucumbery.command.clear2", "cclear");
-				new CommandSearchChestItem().registerCommand("search-container-item", "cucumbey.command.search_container_item", "search-container-item");
-				new CommandBreak().registerCommand("cbreak", "cucumbery.command.break", "cbreak");
-				new CommandFakeBlock().registerCommand("fakeblock", "cucumbery.command.fakeblock", "cfakeblock");
-				new CommandTag().registerCommand("tag", "minecraft.command.tag", "tag");
-				//        brigadierService.submit(this::registerBrigadierCommands);
-			}
-			catch (Throwable e)
-			{
-				Cucumbery.getPlugin().getLogger().warning(e.getMessage());
-			}
+			CommandAPI.onEnable();
+			new ExtraExecuteArgument().registerArgument();
+			new CommandRide().registerCommand("ride2", "cucumbery.command.ride", "cride");
+			new CommandSudo2().registerCommand("sudo2", "cucumbery.command.sudo2", "csudo2");
+			new CommandGive2().registerCommand("cgive", "cucumbery.command.cgive", "cgive", "give2");
+			new CommandVelocity().registerCommand("velocity", "cucumbery.command.velocity2", "velo", "날리기", "cvelo", "cvelocity");
+			new CommandHealthPoint().registerCommand("healthpoint", "cucumbery.command.healthpoint", "hp", "chp");
+			new CommandKill2().registerCommand("ckill", "cucumbery.command.ckill", "ckill", "kill2");
+			new CommandSetItem().registerCommand("setitem", "cucumbery.command.setitem", "csetitem");
+			new CommandConsoleSudo2().registerCommand("consolesudo2", "cucumbery.command.consolesudo", "consolesudo2");
+			new CommandSendActionbar().registerCommand("sendactionbar", "cucumbery.command.sendactionbar", "csendactionbar");
+			new CommandSendTitle().registerCommand("sendtitle", "cucumbery.command.sendtitle", "csendtitle");
+			new CommandUpdateItem().registerCommand("updateitem", "cucumbery.command.updateitem", "cupdateitem");
+			new CommandEffect2().registerCommand("ceffect", "cucumbery.command.effect", "ceffect", "effect2");
+			new CommandDamage().registerCommand("damage2", "cucumbery.command.damage", "cdamage");
+			new CommandSummon2().registerCommand("csummon", "cucumbery.command.summon", "csummon", "summon2");
+			new CommandSetBlock2().registerCommand("csetblock", "cucumbery.command.setblock", "csetblock", "setblock2");
+			new CommandReplaceEntity().registerCommand("replaceentity", "cucumbery.command.replaceentity", "creplaceentity");
+			new CommandRepeat2().registerCommand("crepeat", "cucumbery.command.repeat", "repeat2");
+			new CommandData2().registerCommand("cdata", "cucumbery.command.data", "data2");
+			new CommandTeleport2().registerCommand("teleport2", "cucumbery.command.teleport", "tp2");
+			new CommandExplode().registerCommand("explode", "cucumbery.command.explode", "cexplode");
+			new CommandVanillaTeleport().registerCommand("teleport", "minecraft.command.teleport", "tp");
+			new CommandSellItem().registerCommand("sellitem", "cucumbery.command.sellitem", "csellitem");
+			new CommandClear2().registerCommand("clear2", "cucumbery.command.clear2", "cclear");
+			new CommandSearchChestItem().registerCommand("search-container-item", "cucumbey.command.search_container_item", "search-container-item");
+			new CommandBreak().registerCommand("cbreak", "cucumbery.command.break", "cbreak");
+			new CommandFakeBlock().registerCommand("fakeblock", "cucumbery.command.fakeblock", "cfakeblock");
+			new CommandTag().registerCommand("tag", "minecraft.command.tag", "tag");
+			//        brigadierService.submit(this::registerBrigadierCommands);
 		}
+		catch (Throwable e)
+		{
+			Cucumbery.getPlugin().getLogger().warning(e.getMessage());
+		}
+
 		try
 		{
 			this.registerCommands();
@@ -591,9 +574,9 @@ public class Cucumbery extends JavaPlugin
 
 		if (using_Residence)
 		{
-		Plugin plugin = pluginManager.getPlugin("Residence");
-		using_Residence = plugin != null && plugin.getClass().getName().equals("com.bekvon.bukkit.residence.Residence");
-	}
+			Plugin plugin = pluginManager.getPlugin("Residence");
+			using_Residence = plugin != null && plugin.getClass().getName().equals("com.bekvon.bukkit.residence.Residence");
+		}
 		if (using_WorldEdit)
 		{
 			Plugin plugin = this.pluginManager.getPlugin("WorldEdit");

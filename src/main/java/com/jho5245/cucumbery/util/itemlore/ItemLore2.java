@@ -154,8 +154,7 @@ public class ItemLore2
 		// Attribute 설명
 		ItemLore2Attribute.setItemLore(type, item, itemMeta, lore, hideAttributes);
 		// 음식 추가 상태 효과
-		NBTCompound foodTag = NBTAPI.getCompound(itemTag, CucumberyTag.FOOD_KEY);
-		ItemLore2Food.setItemLore(item, type, lore, foodTag, viewer, hideStatusEffects);
+		ItemLore2Food.setItemLore(item, type, lore, viewer, hideStatusEffects);
 		// Custom Material이 아닌 경우에만 추가할 아이템 설명
 		if (customMaterial == null)
 		{
@@ -209,7 +208,7 @@ public class ItemLore2
 			}
 		}
 		// 설치 가능/양조 가능/제련 가능 등등 설명
-		ItemLore2Ables.setItemLore(nbtItem, foodTag, hideFlags, item, lore, params);
+		ItemLore2Ables.setItemLore(nbtItem, hideFlags, item, lore, params);
 		// 강화 태그 설명
 		NBTCompound reinforceTag = NBTAPI.getCompound(itemTag, CucumberyTag.REINFORCE_TAG);
 		if (reinforceTag != null)

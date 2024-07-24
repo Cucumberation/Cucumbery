@@ -372,14 +372,6 @@ public class CommandItemTagTabCompleter implements TabCompleter
               return CommandTabUtil.customItemTabCompleter(player, args);
             }
             break;
-          case "customenchant":
-            switch (args[1])
-            {
-              case "add":
-              case "remove":
-                return Method.tabCompleterIntegerRadius(args, 1, Integer.MAX_VALUE, "[레벨]");
-            }
-            break;
           case "customdurability":
             if ("durability".equals(args[1]))
             {

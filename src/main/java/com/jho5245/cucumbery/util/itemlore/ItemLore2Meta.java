@@ -73,7 +73,7 @@ public class ItemLore2Meta
 			{
 				lore.add(Component.empty());
 				lore.add(ComponentUtil.translate(Constant.ITEM_LORE_STATUS_EFFECT));
-				lore.add(ItemLorePotionDescription.getDescription(ItemLorePotionDescription.GLOWING, 10 * 20));
+				lore.add(ItemLorePotionDescription.getDescription(Component.translatable(PotionEffectType.GLOWING.translationKey()), 10 * 20));
 			}
 			case WRITABLE_BOOK ->
 			{

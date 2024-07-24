@@ -126,7 +126,7 @@ public class GUIManager
 
     inv.setItem(47, CreateItemStack
           .toggleItem(getBool(player, UserData.SHOW_ENCHANTED_ITEM_GLINTS), "&b마법이 부여된 아이템 반짝임 표시",
-              Arrays.asList("&7마법이 부여된 아이템의 반짝임 여부를 전환합니다", "&7기본 마인크래프트의 접근성 설정에서 조절할 수도 있습니다", "&e단, 크리에이티브 모드에서는 설정에 관계없이 켜짐으로", "&e고정되며, 표시 미사용 시 일부 아이템은 이상하게 바뀔 수 있습니다", "&e알아서 하세요."), trueLore, falseLore));
+              Arrays.asList("&7마법이 부여된 아이템의 반짝임 여부를 전환합니다", "&7기본 마인크래프트의 접근성 설정에서 조절할 수도 있습니다", "&e단, 크리에이티브 모드에서는 설정에 관계없이 켜짐으로 고정됩니다"), trueLore, falseLore));
 
 
     inv.setItem(15, CreateItemStack.toggleItem(UserData.TRAMPLE_SOIL_ALERT.getBoolean(player.getUniqueId()), "&b경작지 파괴 방지 기능 타이틀 띄움",

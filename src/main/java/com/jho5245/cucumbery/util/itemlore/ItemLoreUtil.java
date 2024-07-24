@@ -10,7 +10,6 @@ import com.jho5245.cucumbery.util.no_groups.PlaceHolderUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.custom_enchant.CustomEnchant;
-import com.jho5245.cucumbery.util.storage.data.custom_enchant.ultimate.CustomEnchantUltimate;
 import com.jho5245.cucumbery.util.storage.no_groups.ColorCode;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import net.kyori.adventure.text.Component;
@@ -38,6 +37,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.naming.Name;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -233,30 +233,27 @@ public class ItemLoreUtil
    *
    * @param itemMeta     아이템 메타
    * @param material     아이템의 종류
-   * @param enchant      마법
-   * @param enchantLevel 마법 레벨
+   * @param enchantment      마법
+   * @param level 마법 레벨
    * @return 설명
    */
   @NotNull
-  public static List<Component> enchantTMIDescription(@Nullable Player player, @NotNull ItemStack itemStack, @NotNull ItemMeta itemMeta, @NotNull Material material, @NotNull Enchantment enchant, int enchantLevel, boolean tmi)
+  public static List<Component> enchantTMIDescription(@Nullable Player player, @NotNull ItemStack itemStack, @NotNull ItemMeta itemMeta, @NotNull Material material, @NotNull Enchantment enchantment, int level, boolean tmi)
   {
     List<Component> lore = new ArrayList<>();
     Component component;
-    if (enchant.getMaxLevel() == 1 && enchantLevel == 1)
+    if (enchantment.getMaxLevel() == 1 && level == 1)
     {
-      component = ComponentUtil.translate(enchant.translationKey());
+      component = ComponentUtil.translate(enchantment.translationKey());
     }
     else
     {
-      component = ComponentUtil.translate("%s %s", ComponentUtil.translate(enchant.translationKey()), ComponentUtil.translate("enchantment.level." + enchantLevel).fallback(enchantLevel + ""));
+      component = ComponentUtil.translate("%s %s", ComponentUtil.translate(enchantment.translationKey()),
+          ComponentUtil.translate("enchantment.level." + level).fallback(level + "").decoration(TextDecoration.BOLD, level >= enchantment.getMaxLevel() ? State.TRUE : State.NOT_SET));
     }
     component = component.decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE);
-    component = component.color(enchant.isCursed() ? TextColor.color(255, 85, 85) : TextColor.color(154, 84, 255));
-    if (enchant.getMaxLevel() == enchantLevel)
-    {
-      component = component.decoration(TextDecoration.BOLD, State.TRUE);
-    }
-    if (enchant instanceof CustomEnchantUltimate)
+    component = component.color(enchantment.isCursed() ? TextColor.color(255, 85, 85) : TextColor.color(154, 84, 255));
+    if (CustomEnchant.isUltimate(enchantment))
     {
       component = component.color(NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.BOLD, State.TRUE);
     }
@@ -267,110 +264,110 @@ public class ItemLoreUtil
       boolean isEnchantedBook = material == Material.ENCHANTED_BOOK;
       // 얼티메이트 인챈트
       {
-        if (enchant.equals(CustomEnchant.CLOSE_CALL) && (isEnchantedBook || CustomEnchant.CLOSE_CALL.canEnchantItem(itemStack)))
+        if (enchantment.equals(CustomEnchant.CLOSE_CALL) && (isEnchantedBook || CustomEnchant.CLOSE_CALL.canEnchantItem(itemStack)))
         {
-          lore.add(ComponentUtil.translate("&7사망에 이르는 피해를 입을 시 %s 확률로 생존함", "&a" + enchantLevel + "%"));
+          lore.add(ComponentUtil.translate("&7사망에 이르는 피해를 입을 시 %s 확률로 생존함", "&a" + level + "%"));
         }
-        if (enchant.equals(CustomEnchant.HIGH_RISK_HIGH_RETURN) && (isEnchantedBook || CustomEnchant.HIGH_RISK_HIGH_RETURN.canEnchantItem(itemStack)))
+        if (enchantment.equals(CustomEnchant.HIGH_RISK_HIGH_RETURN) && (isEnchantedBook || CustomEnchant.HIGH_RISK_HIGH_RETURN.canEnchantItem(itemStack)))
         {
           lore.add(ComponentUtil.translate("&7대미지가 500% 증가하는 대신 받는 피해도 500% 증가합니다"));
         }
       }
       // 일반 인챈트
       {
-        if (enchant.equals(Enchantment.POWER) && (isEnchantedBook || material == Material.BOW))
+        if (enchantment.equals(Enchantment.POWER) && (isEnchantedBook || material == Material.BOW))
         {
           String msg = "&7화살의 대미지 %s 증가";
-          lore.add(ComponentUtil.translate(msg, "&a" + Constant.Sosu2.format(25L * (1 + enchantLevel)) + "%p"));
+          lore.add(ComponentUtil.translate(msg, "&a" + Constant.Sosu2.format(25L * (1 + level)) + "%p"));
         }
-        if (enchant.equals(Enchantment.FLAME) && (isEnchantedBook || material == Material.BOW))
+        if (enchantment.equals(Enchantment.FLAME) && (isEnchantedBook || material == Material.BOW))
         {
           String msg = "&7화살로 맞춘 대상에게 %s 부여";
           lore.add(ComponentUtil.translate(msg, ComponentUtil.translate("&a%s간 화염", ComponentUtil.translate("%s초", "5"))));
         }
-        if (enchant.equals(Enchantment.INFINITY) && (isEnchantedBook || material == Material.BOW))
+        if (enchantment.equals(Enchantment.INFINITY) && (isEnchantedBook || material == Material.BOW))
         {
           String msg = "&7화살이 1개 이상 있으면 화살을 소비하지";
           lore.add(ComponentUtil.translate(msg));
           lore.add(ComponentUtil.translate("&7않고 %s (%s)",
                   ComponentUtil.translate("&a계속 사용 가능"), ComponentUtil.translate("&e일부 화살은 제외")));
         }
-        if (enchant.equals(Enchantment.PUNCH) && (isEnchantedBook || material == Material.BOW))
+        if (enchantment.equals(Enchantment.PUNCH) && (isEnchantedBook || material == Material.BOW))
         {
           String msg = "&7화살로 맞춘 대상이 %s 더 뒤로 밀려남";
-          lore.add(ComponentUtil.translate(msg, ComponentUtil.translate("&a%s 블록", Constant.Jeongsu.format(3L * enchantLevel))));
+          lore.add(ComponentUtil.translate(msg, ComponentUtil.translate("&a%s 블록", Constant.Jeongsu.format(3L * level))));
         }
-        if (enchant.equals(CustomEnchant.ASSASSINATION) && (isEnchantedBook || CustomEnchant.ASSASSINATION.canEnchantItem(itemStack)) ||
-                enchant.equals(CustomEnchant.ASSASSINATION_BOW) && (isEnchantedBook || CustomEnchant.ASSASSINATION_BOW.canEnchantItem(itemStack)))
+        if (enchantment.equals(CustomEnchant.ASSASSINATION) && (isEnchantedBook || CustomEnchant.ASSASSINATION.canEnchantItem(itemStack)) ||
+                enchantment.equals(CustomEnchant.ASSASSINATION_BOW) && (isEnchantedBook || CustomEnchant.ASSASSINATION_BOW.canEnchantItem(itemStack)))
         {
           lore.addAll(Arrays.asList(
                   ComponentUtil.translate("&7다른 플레이어나 동물을 잡아서 뜨는 데스 메시지에"),
                   ComponentUtil.translate("&7자신의 이름이 나타나지 않고 감춰짐"))
           );
         }
-        if (enchant.equals(Enchantment.BINDING_CURSE))
+        if (enchantment.equals(Enchantment.BINDING_CURSE))
         {
           String msg = "&7해당 아이템을 장착하면 ";
           lore.add(ComponentUtil.translate(msg).append(ComponentUtil.translate("&c절대로 탈착할 수 없음")));
         }
-        if (enchant.equals(Enchantment.CHANNELING) && (isEnchantedBook || material == Material.TRIDENT))
+        if (enchantment.equals(Enchantment.CHANNELING) && (isEnchantedBook || material == Material.TRIDENT))
         {
           String msg = "&7폭풍우때 적을 맞추면 ";
           lore.add(ComponentUtil.translate(msg).append(ComponentUtil.translate("&a번개를 내려침")));
         }
-        if (enchant.equals(CustomEnchant.CLEAVING) && (isEnchantedBook || CustomEnchant.CLEAVING.canEnchantItem(itemStack)))
+        if (enchantment.equals(CustomEnchant.CLEAVING) && (isEnchantedBook || CustomEnchant.CLEAVING.canEnchantItem(itemStack)))
         {
-          lore.add(ComponentUtil.translate("&7도끼의 대미지가 %s 증가하고 상대방 공격 시", "&a" + (enchantLevel + 1)));
-          lore.add(ComponentUtil.translate("&7상대방의 방패 사용 불가 시간 %s 증가", ComponentUtil.translate("&a%s초", Constant.Sosu2.format(enchantLevel * 0.5))));
+          lore.add(ComponentUtil.translate("&7도끼의 대미지가 %s 증가하고 상대방 공격 시", "&a" + (level + 1)));
+          lore.add(ComponentUtil.translate("&7상대방의 방패 사용 불가 시간 %s 증가", ComponentUtil.translate("&a%s초", Constant.Sosu2.format(level * 0.5))));
         }
-        if (enchant.equals(CustomEnchant.COARSE_TOUCH))
+        if (enchantment.equals(CustomEnchant.COARSE_TOUCH))
         {
           lore.add(ComponentUtil.translate("&7블록을 캐거나 적을 잡았을 때 ").append(ComponentUtil.translate("&c아이템을 드롭하지 않음")));
         }
-        if (enchant.equals(CustomEnchant.COLD_TOUCH))
+        if (enchantment.equals(CustomEnchant.COLD_TOUCH))
         {
           lore.add(ComponentUtil.translate("&7얼음을 캘 경우 등급에 따른 종류의 얼음이 나옴"));
         }
-        if (enchant.equals(Enchantment.SHARPNESS))
+        if (enchantment.equals(Enchantment.SHARPNESS))
         {
           String msg = "&7아이템의 대미지 %s 증가";
-          lore.add(ComponentUtil.translate(msg, "&a" + Constant.Sosu2.format(0.5 + 0.5 * enchantLevel)));
+          lore.add(ComponentUtil.translate(msg, "&a" + Constant.Sosu2.format(0.5 + 0.5 * level)));
         }
-        if (enchant.equals(Enchantment.BANE_OF_ARTHROPODS))
+        if (enchantment.equals(Enchantment.BANE_OF_ARTHROPODS))
         {
           String msg = "&7절지동물류 개체에게 가하는 대미지 %s 증가";
-          lore.add(ComponentUtil.translate(msg, "&a" + Constant.Sosu2.format(2.5 * enchantLevel)));
+          lore.add(ComponentUtil.translate(msg, "&a" + Constant.Sosu2.format(2.5 * level)));
           lore.add(ComponentUtil.translate("&7및 %s 확률로 %s %s (%s) 적용",
                   ComponentUtil.create("&e100%"), ComponentUtil.translate("rgb255,97,144;effect.minecraft.slowness"),
                   ComponentUtil.translate("rgb255,97,144;4단계"),
-                  ComponentUtil.translate("&a1~%s초", Constant.Sosu2.format(1 + 0.5 * enchantLevel))));
+                  ComponentUtil.translate("&a1~%s초", Constant.Sosu2.format(1 + 0.5 * level))));
         }
-        if (enchant.equals(Enchantment.SMITE))
+        if (enchantment.equals(Enchantment.SMITE))
         {
           String msg = "&7언데드 개체에게 가하는 대미지 %s 증가";
-          lore.add(ComponentUtil.translate(msg, "&a" + Constant.Sosu2.format(2.5 * enchantLevel)));
+          lore.add(ComponentUtil.translate(msg, "&a" + Constant.Sosu2.format(2.5 * level)));
         }
-        if (enchant.equals(CustomEnchant.DEFENSE_CHANCE) && (isEnchantedBook || CustomEnchant.DEFENSE_CHANCE.canEnchantItem(itemStack)))
+        if (enchantment.equals(CustomEnchant.DEFENSE_CHANCE) && (isEnchantedBook || CustomEnchant.DEFENSE_CHANCE.canEnchantItem(itemStack)))
         {
-          lore.add(ComponentUtil.translate("&7방패를 들고 있을 때 가드를 하지 않는 도중 피격 시 %s 확률로", "&a" + (enchantLevel * 6) + "%"));
-          lore.add(ComponentUtil.translate("&7해당 피해를 방어하고 방패의 내구도가 피해량의 %s만큼 감소", "&a" + Constant.Sosu2.format(1d / (6d / enchantLevel))));
+          lore.add(ComponentUtil.translate("&7방패를 들고 있을 때 가드를 하지 않는 도중 피격 시 %s 확률로", "&a" + (level * 6) + "%"));
+          lore.add(ComponentUtil.translate("&7해당 피해를 방어하고 방패의 내구도가 피해량의 %s만큼 감소", "&a" + Constant.Sosu2.format(1d / (6d / level))));
           lore.add(ComponentUtil.translate("&7단, 피해량이 1 이하일 경우 내구도가 깎이지 않음"));
         }
-        if (enchant.equals(CustomEnchant.DELICATE) && (isEnchantedBook || CustomEnchant.DELICATE.canEnchantItem(itemStack)))
+        if (enchantment.equals(CustomEnchant.DELICATE) && (isEnchantedBook || CustomEnchant.DELICATE.canEnchantItem(itemStack)))
         {
           lore.add(ComponentUtil.translate("&7덜 자란 작물과 호박, 수박 줄기를 실수로 부수지 않게 해줌"));
         }
-        if (enchant.equals(Enchantment.DEPTH_STRIDER))
+        if (enchantment.equals(Enchantment.DEPTH_STRIDER))
         {
-          int level = Math.min(enchantLevel, 3);
+          level = Math.min(level, 3);
           String msg = "&7물 속에서 이동 속도 감소량 %s 감소";
           lore.add(ComponentUtil.translate(msg, "&a" + Constant.Sosu2.format(level * 100d / 3) + "%"));
         }
-        if (enchant.equals(Enchantment.EFFICIENCY) && (isEnchantedBook || Constant.TOOLS.contains(material) || customMiningMode))
+        if (enchantment.equals(Enchantment.EFFICIENCY) && (isEnchantedBook || Constant.TOOLS.contains(material) || customMiningMode))
         {
           if (customMiningMode)
           {
-            String formula = Cucumbery.config.getString("custom-mining.efficiency", "50*(1+%level%^2)").replace("%level%", enchantLevel + "");
+            String formula = Cucumbery.config.getString("custom-mining.efficiency", "50*(1+%level%^2)").replace("%level%", level + "");
             float value = 0f;
             try
             {
@@ -406,101 +403,101 @@ public class ItemLoreUtil
           else
           {
             String msg = "&7블록을 캐는 속도 %s 증가";
-            lore.add(ComponentUtil.translate(msg, "&a" + Constant.Jeongsu.format((long) enchantLevel * enchantLevel + 1)));
+            lore.add(ComponentUtil.translate(msg, "&a" + Constant.Jeongsu.format((long) level * level + 1)));
           }
         }
-        if (enchant.equals(CustomEnchant.DULL_TOUCH))
+        if (enchantment.equals(CustomEnchant.DULL_TOUCH))
         {
-          lore.add(ComponentUtil.translate("&7블록을 캘 경우 %s 확률로 부싯돌이 대신 나옴", Constant.THE_COLOR_HEX + Math.min(100, enchantLevel) + "%"));
+          lore.add(ComponentUtil.translate("&7블록을 캘 경우 %s 확률로 부싯돌이 대신 나옴", Constant.THE_COLOR_HEX + Math.min(100, level) + "%"));
         }
-        if (enchant.equals(Enchantment.UNBREAKING) && (isEnchantedBook || Constant.DURABLE_ITEMS.contains(material)))
+        if (enchantment.equals(Enchantment.UNBREAKING) && (isEnchantedBook || Constant.DURABLE_ITEMS.contains(material)))
         {
           String msg = "&7내구도가 감소할 확률 %s 감소";
           if (Constant.ARMORS.contains(material))
           {
-            lore.add(ComponentUtil.translate(msg, "&a" + Constant.Sosu2.format(100d - (60d + (40d / (enchantLevel + 1)))) + "%"));
+            lore.add(ComponentUtil.translate(msg, "&a" + Constant.Sosu2.format(100d - (60d + (40d / (level + 1)))) + "%"));
           }
           else
           {
             if (material == Material.ENCHANTED_BOOK)
             {
               lore.add(ComponentUtil.translate(msg, ComponentUtil.translate("%s(갑옷의 경우 %s)",
-                      ComponentUtil.create("&a" + Constant.Sosu2.format(100d - 100d / (enchantLevel + 1)) + "%"),
-                      ComponentUtil.create("&a" + Constant.Sosu2.format(100d - (60d + (40d / (enchantLevel + 1)))) + "%"))));
+                      ComponentUtil.create("&a" + Constant.Sosu2.format(100d - 100d / (level + 1)) + "%"),
+                      ComponentUtil.create("&a" + Constant.Sosu2.format(100d - (60d + (40d / (level + 1)))) + "%"))));
             }
             else
             {
-              lore.add(ComponentUtil.translate(msg, "&a" + Constant.Sosu2.format(100d - 100d / (enchantLevel + 1)) + "%"));
+              lore.add(ComponentUtil.translate(msg, "&a" + Constant.Sosu2.format(100d - 100d / (level + 1)) + "%"));
             }
           }
         }
-        if (enchant.equals(CustomEnchant.FARMERS_GRACE) && (isEnchantedBook || CustomEnchant.FARMERS_GRACE.canEnchantItem(itemStack)))
+        if (enchantment.equals(CustomEnchant.FARMERS_GRACE) && (isEnchantedBook || CustomEnchant.FARMERS_GRACE.canEnchantItem(itemStack)))
         {
           lore.add(ComponentUtil.translate("&7경작지에 착지해도 흙으로 바뀌지 않음"));
         }
-        if (enchant.equals(Enchantment.FIRE_ASPECT))
+        if (enchantment.equals(Enchantment.FIRE_ASPECT))
         {
           String msg = "&7공격받은 개체에게 %s간 화염 부여";
-          lore.add(ComponentUtil.translate(msg, ComponentUtil.translate("&a%s초", Constant.Jeongsu.format(enchantLevel * 4L))));
+          lore.add(ComponentUtil.translate(msg, ComponentUtil.translate("&a%s초", Constant.Jeongsu.format(level * 4L))));
         }
-        if (enchant.equals(CustomEnchant.FRANTIC_FORTUNE))
+        if (enchantment.equals(CustomEnchant.FRANTIC_FORTUNE))
         {
           lore.addAll(Arrays.asList(
                   ComponentUtil.translate("&7블록을 캤을 때 드롭하는 아이템이"),
                   ComponentUtil.translate("&a'뭐든지' 2배가 됩니다. 말 그대로 2배요!"))
           );
         }
-        if (enchant.equals(CustomEnchant.FRANTIC_LUCK_OF_THE_SEA))
+        if (enchantment.equals(CustomEnchant.FRANTIC_LUCK_OF_THE_SEA))
         {
           lore.addAll(Arrays.asList(
                   ComponentUtil.translate("&7낚시를 할 때 나오는 아이템이"),
                   ComponentUtil.translate("&a'뭐든지' 2배가 됩니다. 말 그대로 2배요!"))
           );
         }
-        if (enchant.equals(Enchantment.FROST_WALKER))
+        if (enchantment.equals(Enchantment.FROST_WALKER))
         {
           String msg = "&7지면에 서 있는 경우 주변 %s 이내의 물이 살얼음으로 바뀜";
-          lore.add(ComponentUtil.translate(msg, ComponentUtil.translate("&a%s 블록", Constant.Jeongsu.format(enchantLevel + 2))));
+          lore.add(ComponentUtil.translate(msg, ComponentUtil.translate("&a%s 블록", Constant.Jeongsu.format(level + 2))));
         }
-        if (enchant.equals(CustomEnchant.IDIOT_SHOOTER) && (isEnchantedBook || CustomEnchant.IDIOT_SHOOTER.canEnchantItem(itemStack)))
+        if (enchantment.equals(CustomEnchant.IDIOT_SHOOTER) && (isEnchantedBook || CustomEnchant.IDIOT_SHOOTER.canEnchantItem(itemStack)))
         {
           lore.add(CustomEffectType.IDIOT_SHOOTER.getDescription().color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, State.FALSE));
         }
-        if (enchant.equals(CustomEnchant.HARVESTING) && (isEnchantedBook || CustomEnchant.HARVESTING.canEnchantItem(itemStack)))
+        if (enchantment.equals(CustomEnchant.HARVESTING) && (isEnchantedBook || CustomEnchant.HARVESTING.canEnchantItem(itemStack)))
         {
-          lore.add(ComponentUtil.translate("&7농업 행운 %s 증가", "&a" + Constant.Sosu2.format(12.5 * enchantLevel)));
+          lore.add(ComponentUtil.translate("&7농업 행운 %s 증가", "&a" + Constant.Sosu2.format(12.5 * level)));
         }
-        if (enchant.equals(CustomEnchant.SUNDER) && (isEnchantedBook || CustomEnchant.SUNDER.canEnchantItem(itemStack)))
+        if (enchantment.equals(CustomEnchant.SUNDER) && (isEnchantedBook || CustomEnchant.SUNDER.canEnchantItem(itemStack)))
         {
-          lore.add(ComponentUtil.translate("&7농업 행운 %s 증가", "&a" + Constant.Sosu2.format(12.5 * enchantLevel)));
+          lore.add(ComponentUtil.translate("&7농업 행운 %s 증가", "&a" + Constant.Sosu2.format(12.5 * level)));
         }
-        if (enchant.equals(Enchantment.IMPALING) && (isEnchantedBook || material == Material.TRIDENT))
+        if (enchantment.equals(Enchantment.IMPALING) && (isEnchantedBook || material == Material.TRIDENT))
         {
           String msg = "&7수상 개체에게 가하는 대미지 %s 증가";
-          lore.add(ComponentUtil.translate(msg, "&a" + Constant.Sosu2.format(2.5 * enchantLevel)));
+          lore.add(ComponentUtil.translate(msg, "&a" + Constant.Sosu2.format(2.5 * level)));
         }
-        if (enchant.equals(CustomEnchant.JUSTIFICATION) && (isEnchantedBook || CustomEnchant.JUSTIFICATION.canEnchantItem(itemStack)) ||
-                enchant.equals(CustomEnchant.JUSTIFICATION_BOW) && (isEnchantedBook || CustomEnchant.JUSTIFICATION_BOW.canEnchantItem(itemStack)))
+        if (enchantment.equals(CustomEnchant.JUSTIFICATION) && (isEnchantedBook || CustomEnchant.JUSTIFICATION.canEnchantItem(itemStack)) ||
+                enchantment.equals(CustomEnchant.JUSTIFICATION_BOW) && (isEnchantedBook || CustomEnchant.JUSTIFICATION_BOW.canEnchantItem(itemStack)))
         {
           lore.addAll(Arrays.asList(
                   ComponentUtil.translate("&7적에게 피해를 입혔을 때 해당 적에게"),
                   ComponentUtil.translate("&7피격 시 무적 시간이 %s", ComponentUtil.translate("&a적용되지 않음")))
           );
         }
-        if (enchant.equals(CustomEnchant.KEEP_INVENTORY))
+        if (enchantment.equals(CustomEnchant.KEEP_INVENTORY))
         {
           lore.add(ComponentUtil.translate("&7사망해도 이 아이템은 떨어트리지 않음"));
         }
-        if (enchant.equals(Enchantment.KNOCKBACK))
+        if (enchantment.equals(Enchantment.KNOCKBACK))
         {
           String msg = "&7공격받은 대상이 %s 더 뒤로 밀려남";
-          lore.add(ComponentUtil.translate(msg, ComponentUtil.translate("&a%s 블록", Constant.Jeongsu.format(3L * enchantLevel))));
+          lore.add(ComponentUtil.translate(msg, ComponentUtil.translate("&a%s 블록", Constant.Jeongsu.format(3L * level))));
         }
-        if (enchant.equals(Enchantment.FORTUNE))
+        if (enchantment.equals(Enchantment.FORTUNE))
         {
           if (customMiningMode)
           {
-            String formula = Cucumbery.config.getString("custom-mining.fortune", "100*((1/(%level%+2)+(%level%+1)/2)-1)").replace("%level%", enchantLevel + "");
+            String formula = Cucumbery.config.getString("custom-mining.fortune", "100*((1/(%level%+2)+(%level%+1)/2)-1)").replace("%level%", level + "");
             float value = 0f;
             try
             {
@@ -515,28 +512,28 @@ public class ItemLoreUtil
           else
           {
             String msg = "&7레드스톤 광석, 작물의 최대 드롭 개수 %s 증가 및";
-            lore.add(ComponentUtil.translate(msg, "&a" + Constant.Jeongsu.format(enchantLevel)));
+            lore.add(ComponentUtil.translate(msg, "&a" + Constant.Jeongsu.format(level)));
             lore.add(ComponentUtil.translate("&7다른 광석의 아이템 드롭율 %s 증가",
-                    "&a" + Constant.Sosu2.format(((1d / (enchantLevel + 2) + (enchantLevel + 1) / 2d) - 1D) * 100D) + "%"));
+                    "&a" + Constant.Sosu2.format(((1d / (level + 2) + (level + 1) / 2d) - 1D) * 100D) + "%"));
           }
         }
-        if (enchant.equals(Enchantment.LOOTING))
+        if (enchantment.equals(Enchantment.LOOTING))
         {
           String msg = "&7몬스터의 전리품 최대 드롭 개수 %s 증가 및 희귀";
-          lore.add(ComponentUtil.translate(msg, "&a" + Constant.Jeongsu.format(enchantLevel)));
-          lore.add(ComponentUtil.translate("&7아이템, 몬스터가 장착 중인 갑옷의 드롭율 %s 증가", "&a" + Constant.Jeongsu.format(enchantLevel) + "%"));
+          lore.add(ComponentUtil.translate(msg, "&a" + Constant.Jeongsu.format(level)));
+          lore.add(ComponentUtil.translate("&7아이템, 몬스터가 장착 중인 갑옷의 드롭율 %s 증가", "&a" + Constant.Jeongsu.format(level) + "%"));
         }
-        if (enchant.equals(Enchantment.LOYALTY) && (isEnchantedBook || material == Material.TRIDENT))
+        if (enchantment.equals(Enchantment.LOYALTY) && (isEnchantedBook || material == Material.TRIDENT))
         {
           String msg = "&7삼지창이 대상을 맞추거나 블록에";
           lore.add(ComponentUtil.translate(msg));
           lore.add(ComponentUtil.translate("&7박히면 레벨이 높을 수록 더 빠르게 ").append(ComponentUtil.translate("&a주인에게 돌아옴")));
         }
-        if (enchant.equals(Enchantment.LUCK_OF_THE_SEA) && (isEnchantedBook || material == Material.FISHING_ROD))
+        if (enchantment.equals(Enchantment.LUCK_OF_THE_SEA) && (isEnchantedBook || material == Material.FISHING_ROD))
         {
           String treasure = "&85%&7 ➜ &a";
           String junk = "&810%&7 ➜ &a";
-          switch (enchantLevel)
+          switch (level)
           {
             case 0 ->
             {
@@ -570,9 +567,9 @@ public class ItemLoreUtil
             }
             default ->
             {
-              if (enchantLevel <= 45)
+              if (level <= 45)
               {
-                treasure += Constant.Sosu1.format(2.1 * enchantLevel + 5.0) + "%";
+                treasure += Constant.Sosu1.format(2.1 * level + 5.0) + "%";
               }
               else
               {
@@ -587,12 +584,12 @@ public class ItemLoreUtil
           lore.add(ComponentUtil.translate(msg, treasure));
           lore.add(ComponentUtil.translate("&7및 쓰레기 획득 확률 %s로 감소", junk));
         }
-        if (enchant.equals(Enchantment.LURE) && (isEnchantedBook || material == Material.FISHING_ROD))
+        if (enchantment.equals(Enchantment.LURE) && (isEnchantedBook || material == Material.FISHING_ROD))
         {
-          if (enchantLevel <= 5)
+          if (level <= 5)
           {
             String msg = "&7낚시에 필요한 시간 %s 감소";
-            lore.add(ComponentUtil.translate(msg, ComponentUtil.translate("&a%s초", "" + (5 * enchantLevel))));
+            lore.add(ComponentUtil.translate(msg, ComponentUtil.translate("&a%s초", "" + (5 * level))));
           }
           else
           {
@@ -600,66 +597,66 @@ public class ItemLoreUtil
             lore.add(ComponentUtil.translate(msg));
           }
         }
-        if (enchant.equals(Enchantment.MENDING) && (isEnchantedBook || material.getMaxDurability() > 0))
+        if (enchantment.equals(Enchantment.MENDING) && (isEnchantedBook || material.getMaxDurability() > 0))
         {
           String msg = "&7획득한 경험치 1당 ";
           lore.add(ComponentUtil.translate(msg).append(ComponentUtil.translate("&a내구도를 2만큼 회복")));
         }
-        if (enchant.equals(Enchantment.MULTISHOT) && (isEnchantedBook || material == Material.CROSSBOW))
+        if (enchantment.equals(Enchantment.MULTISHOT) && (isEnchantedBook || material == Material.CROSSBOW))
         {
           String msg = "&7한 번에 ";
           lore.add(ComponentUtil.translate(msg).append(ComponentUtil.translate("&a발사체를 3개 발사")));
         }
-        if (enchant.equals(Enchantment.RESPIRATION))
+        if (enchantment.equals(Enchantment.RESPIRATION))
         {
           String msg = "&7물 속에서 호흡 시간 %s 증가";
-          lore.add(ComponentUtil.translate(msg, ComponentUtil.translate("&a%s초", Constant.Jeongsu.format(enchantLevel * 15L))));
-          lore.add(ComponentUtil.translate("&7추가로, 익사 대미지를 받을 확률 %s 감소", "&a" + Constant.Sosu2.format((enchantLevel * 1d / (enchantLevel + 1)) * 100D) + "%"));
+          lore.add(ComponentUtil.translate(msg, ComponentUtil.translate("&a%s초", Constant.Jeongsu.format(level * 15L))));
+          lore.add(ComponentUtil.translate("&7추가로, 익사 대미지를 받을 확률 %s 감소", "&a" + Constant.Sosu2.format((level * 1d / (level + 1)) * 100D) + "%"));
         }
-        if (enchant.equals(Enchantment.PIERCING) && (isEnchantedBook || material == Material.CROSSBOW))
+        if (enchantment.equals(Enchantment.PIERCING) && (isEnchantedBook || material == Material.CROSSBOW))
         {
           String msg = "&7최대 %s개의 개체 관통 및 개체의 방패 방어력 무시";
-          lore.add(ComponentUtil.translate(msg, "&a" + Constant.Jeongsu.format(enchantLevel + 1)));
+          lore.add(ComponentUtil.translate(msg, "&a" + Constant.Jeongsu.format(level + 1)));
         }
-        if (enchant.equals(Enchantment.PROTECTION))
+        if (enchantment.equals(Enchantment.PROTECTION))
         {
-          int decrease = (enchantLevel < 21 ? enchantLevel * 4 : 80);
+          int decrease = (level < 21 ? level * 4 : 80);
           String msg = "&7받는 피해 %s 감소(%s), 일부 피해는 제외";
           lore.add(ComponentUtil.translate(msg, ComponentUtil.create("&a" + decrease + "%p"), ComponentUtil.translate("&e최대 80%p")));
         }
-        if (enchant.equals(Enchantment.BLAST_PROTECTION))
+        if (enchantment.equals(Enchantment.BLAST_PROTECTION))
         {
-          int decrease = (enchantLevel < 11 ? enchantLevel * 8 : 80);
+          int decrease = (level < 11 ? level * 8 : 80);
           String msg = "&7폭발로 받는 피해 %s 감소(%s)";
           lore.add(ComponentUtil.translate(msg, ComponentUtil.create("&a" + decrease + "%p"), ComponentUtil.translate("&e최대 80%p")));
-          decrease = (enchantLevel < 7 ? enchantLevel * 15 : 100);
+          decrease = (level < 7 ? level * 15 : 100);
           lore.add(ComponentUtil.translate("&7추가로, 폭발로 밀려나는 거리 %s 감소", "&a" + decrease + "%"));
         }
-        if (enchant.equals(Enchantment.FEATHER_FALLING))
+        if (enchantment.equals(Enchantment.FEATHER_FALLING))
         {
-          int decrease = (enchantLevel < 7 ? enchantLevel * 12 : 80);
+          int decrease = (level < 7 ? level * 12 : 80);
           String msg = "&7낙하로 받는 피해 %s 감소(%s)";
           lore.add(ComponentUtil.translate(msg, ComponentUtil.create("&a" + decrease + "%p"), ComponentUtil.translate("&e최대 80%p")));
           lore.add(ComponentUtil.translate("&7또한, 낙하 피해량 감소로는 갑옷의 내구도가 깎이지 않음"));
         }
-        if (enchant.equals(Enchantment.FIRE_PROTECTION))
+        if (enchantment.equals(Enchantment.FIRE_PROTECTION))
         {
-          int decrease = (enchantLevel < 11 ? enchantLevel * 8 : 100);
+          int decrease = (level < 11 ? level * 8 : 100);
           String msg = "&7화염 지속 시간 %s 감소";
           lore.add(ComponentUtil.translate(msg, "&a" + decrease + "%"));
         }
-        if (enchant.equals(Enchantment.PROJECTILE_PROTECTION))
+        if (enchantment.equals(Enchantment.PROJECTILE_PROTECTION))
         {
-          int decrease = (enchantLevel < 11 ? enchantLevel * 8 : 80);
+          int decrease = (level < 11 ? level * 8 : 80);
           String msg = "&7발사체로 받는 피해 %s 감소(%s)";
           lore.add(ComponentUtil.translate(msg, ComponentUtil.create("&a" + decrease + "%p"), ComponentUtil.translate("&e최대 80%p")));
         }
-        if (enchant.equals(Enchantment.QUICK_CHARGE) && (isEnchantedBook || material == Material.CROSSBOW))
+        if (enchantment.equals(Enchantment.QUICK_CHARGE) && (isEnchantedBook || material == Material.CROSSBOW))
         {
-          if (enchantLevel <= 5)
+          if (level <= 5)
           {
             String msg = "&7쇠뇌의 장전 시간 %s 감소";
-            lore.add(ComponentUtil.translate(msg, ComponentUtil.translate("&a%s초", Constant.Sosu2.format(0.25 * enchantLevel))));
+            lore.add(ComponentUtil.translate(msg, ComponentUtil.translate("&a%s초", Constant.Sosu2.format(0.25 * level))));
           }
           else
           {
@@ -667,26 +664,26 @@ public class ItemLoreUtil
             lore.add(ComponentUtil.translate(msg));
           }
         }
-        if (enchant.equals(Enchantment.RIPTIDE) && (isEnchantedBook || material == Material.TRIDENT))
+        if (enchantment.equals(Enchantment.RIPTIDE) && (isEnchantedBook || material == Material.TRIDENT))
         {
           String msg = "&7삼지창을 더 이상 ";
           lore.add(ComponentUtil.translate(msg).append(ComponentUtil.translate("&c던질 수 없는 대신")));
           lore.add(ComponentUtil.translate("&7비가 오거나 물 속에서 사용하면 레벨이 높을 수록"));
           lore.add(ComponentUtil.translate("&7더욱 강한 삼지창의 추진력을 얻어 잠시 동안 ").append(ComponentUtil.translate("&a날 수 있음")));
         }
-        if (enchant.equals(Enchantment.SILK_TOUCH))
+        if (enchantment.equals(Enchantment.SILK_TOUCH))
         {
           String msg = "&7일부 블록을 원형 그대로 ";
           lore.add(ComponentUtil.translate(msg).append(ComponentUtil.translate("&a얻을 수 있음")));
         }
-        if (enchant.equals(CustomEnchant.SMELTING_TOUCH))
+        if (enchantment.equals(CustomEnchant.SMELTING_TOUCH))
         {
           lore.addAll(Arrays.asList(
                   ComponentUtil.translate("&7블록을 캐거나 적을 잡았을 때 "),
                   ComponentUtil.translate("&7드롭하는 아이템을 %s로 바꿔줌", ComponentUtil.translate("&a제련된 형태")))
           );
         }
-        if (enchant.equals(Enchantment.SOUL_SPEED))
+        if (enchantment.equals(Enchantment.SOUL_SPEED))
         {
           double nonArmorChance = 4d, armorChance = 4d;
           if (material == Material.ENCHANTED_BOOK)
@@ -716,37 +713,37 @@ public class ItemLoreUtil
           lore.add(ComponentUtil.translate(msg, "&e" + (Constant.ARMORS.contains(material) || material == Material.ENCHANTED_BOOK ?
                   Constant.Sosu2.format(armorChance) : Constant.Sosu2.format(nonArmorChance)) + "%"));
           lore.add(ComponentUtil.translate("&7내구도가 깎이는 대신 이동 속도 %s 증가",
-                  "&a" + Constant.Sosu2.format((enchantLevel * 0.125 - 0.1) * 100d) + "%"));
+                  "&a" + Constant.Sosu2.format((level * 0.125 - 0.1) * 100d) + "%"));
         }
-        if (enchant.equals(Enchantment.SWEEPING_EDGE) && (isEnchantedBook || Constant.SWORDS.contains(material)))
+        if (enchantment.equals(Enchantment.SWEEPING_EDGE) && (isEnchantedBook || Constant.SWORDS.contains(material)))
         {
           String msg = "&7검을 휘두를 때 주변 개체의";
           lore.add(ComponentUtil.translate(msg));
-          lore.add(ComponentUtil.translate("&7받는 대미지가 검 대미지의 %s 만큼 증가", "&a" + Constant.Sosu2.format(enchantLevel * 1d / (enchantLevel + 1) * 100d) + "%"));
+          lore.add(ComponentUtil.translate("&7받는 대미지가 검 대미지의 %s 만큼 증가", "&a" + Constant.Sosu2.format(level * 1d / (level + 1) * 100d) + "%"));
         }
-        if (enchant.equals(Enchantment.SWIFT_SNEAK))
+        if (enchantment.equals(Enchantment.SWIFT_SNEAK))
         {
-          lore.add(ComponentUtil.translate("&7웅크리고 걷는 속도 %s 증가", "&a" + Math.min(70, enchantLevel * 15) + "%p"));
+          lore.add(ComponentUtil.translate("&7웅크리고 걷는 속도 %s 증가", "&a" + Math.min(70, level * 15) + "%p"));
         }
-        if (enchant.equals(CustomEnchant.TELEKINESIS))
+        if (enchantment.equals(CustomEnchant.TELEKINESIS))
         {
           lore.addAll(Arrays.asList(
                   ComponentUtil.translate("&7블록을 캐거나 적을 잡았을 때"),
                   ComponentUtil.translate("&7드롭하는 아이템이 ").append(ComponentUtil.translate("&a즉시 인벤토리에 들어옴")))
           );
         }
-        if (enchant.equals(CustomEnchant.TELEKINESIS_PVP))
+        if (enchantment.equals(CustomEnchant.TELEKINESIS_PVP))
         {
           lore.addAll(Arrays.asList(
                   ComponentUtil.translate("&7인벤세이브가 꺼져 있는 경우에 플레이어와 싸웠을 때"),
                   ComponentUtil.translate("&7드롭하는 아이템이 ").append(ComponentUtil.translate("&a즉시 인벤토리에 들어옴")))
           );
         }
-        if (enchant.equals(Enchantment.THORNS))
+        if (enchantment.equals(Enchantment.THORNS))
         {
-          int chance = Math.min(enchantLevel * 15, 100);
-          int damage = (enchantLevel <= 10 ? -1 : enchantLevel - 10);
-          String damageStr = (damage == -1 ? "1~4" : (enchantLevel - 10) + "");
+          int chance = Math.min(level * 15, 100);
+          int damage = (level <= 10 ? -1 : level - 10);
+          String damageStr = (damage == -1 ? "1~4" : (level - 10) + "");
           if (material == Material.SHIELD)
           {
             lore.add(ComponentUtil.translate("&7방패로 보호 중일 때 자신을 공격한 대상에게"));
@@ -757,31 +754,31 @@ public class ItemLoreUtil
             lore.add(ComponentUtil.translate("&7자신을 공격한 대상에게 %s 확률로 %s의 대미지를 입힘", "&e" + chance + "%", "&a" + damageStr));
           }
         }
-        if (enchant.equals(CustomEnchant.UNSKILLED_TOUCH))
+        if (enchantment.equals(CustomEnchant.UNSKILLED_TOUCH))
         {
           lore.add(
                   ComponentUtil.translate("&7블록을 캐거나 적을 잡았을 때 ").append(ComponentUtil.translate("&c경험치를 드롭하지 않음"))
           );
         }
-        if (enchant.equals(Enchantment.VANISHING_CURSE))
+        if (enchantment.equals(Enchantment.VANISHING_CURSE))
         {
           String msg = "&7인벤세이브가 꺼져 있을 경우 사망할";
           lore.add(ComponentUtil.translate(msg));
           lore.add(ComponentUtil.translate("&7때 아이템을 떨어트리는 대신 %s함", ComponentUtil.translate("&c아이템이 소멸")));
         }
-        if (enchant.equals(CustomEnchant.VANISHING_TOUCH))
+        if (enchantment.equals(CustomEnchant.VANISHING_TOUCH))
         {
           lore.add(
                   ComponentUtil.translate("&7아이템이 들어있는 컨테이너를 캤을 때 ").append(ComponentUtil.translate("&c아이템을 드롭하지 않음"))
           );
         }
-        if (enchant.equals(CustomEnchant.WARM_TOUCH))
+        if (enchantment.equals(CustomEnchant.WARM_TOUCH))
         {
           lore.add(
                   ComponentUtil.translate("&7선인장을 캘 경우 등급에 따른 종류의 선인장이 나옴")
           );
         }
-        if (enchant.equals(Enchantment.AQUA_AFFINITY))
+        if (enchantment.equals(Enchantment.AQUA_AFFINITY))
         {
           String msg = "&7물 속에서 블록을 캐는 속도가 ";
           lore.add(ComponentUtil.translate(msg).append(ComponentUtil.translate("&a감소하지 않음")));
