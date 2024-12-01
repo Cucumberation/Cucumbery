@@ -11,7 +11,6 @@ import com.jho5245.cucumbery.util.storage.data.Constant.CucumberyHideFlag;
 import com.jho5245.cucumbery.util.storage.data.Constant.RestrictionType;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
-import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.NBTList;
 import de.tr7zw.changeme.nbtapi.NBTType;
@@ -22,7 +21,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.components.FoodComponent;
-import org.bukkit.inventory.meta.components.FoodComponent.FoodEffect;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -191,17 +189,17 @@ public class ItemLore2Ables
 				Player player = params instanceof ItemLoreView loreView ? loreView.player() : null;
 				if (player != null && UserData.SHOW_ITEM_COMPONENTS_INFO.getBoolean(player))
 				{
-					float eatSeconds = foodComponent.getEatSeconds();
-					ItemStack convertsTo = foodComponent.getUsingConvertsTo();
+//					float eatSeconds = foodComponent.getEatSeconds();
+//					ItemStack convertsTo = foodComponent.getUsingConvertsTo();
 					if (foodComponent.canAlwaysEat())
 					{
 						lore.add(ComponentUtil.translate("rgb255,255,60;항상 섭취 가능"));
 					}
-					if (convertsTo != null)
-					{
-						lore.add(ComponentUtil.translate("rgb255,255,60;섭취 시 변환되는 아이템 : %s (%s)", ItemNameUtil.itemName(convertsTo), ItemNameUtil.itemName(convertsTo.getType())));
-					}
-					lore.add(ComponentUtil.translate("rgb255,255,60;섭취 시간 : %s", Constant.Sosu2.format(eatSeconds) + "초"));
+//					if (convertsTo != null)
+//					{
+//						lore.add(ComponentUtil.translate("rgb255,255,60;섭취 시 변환되는 아이템 : %s (%s)", ItemNameUtil.itemName(convertsTo), ItemNameUtil.itemName(convertsTo.getType())));
+//					}
+//					lore.add(ComponentUtil.translate("rgb255,255,60;섭취 시간 : %s", Constant.Sosu2.format(eatSeconds) + "초"));
 				}
 			}
 			else if (nourishment != null && !nourishment.equals("기본"))

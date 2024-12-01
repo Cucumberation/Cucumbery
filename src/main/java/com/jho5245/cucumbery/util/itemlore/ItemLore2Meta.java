@@ -18,17 +18,22 @@ import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.NBTList;
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.*;
 import org.bukkit.block.Banner;
 import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.*;
+import org.bukkit.inventory.meta.BookMeta.Generation;
 import org.bukkit.map.MapView;
+import org.bukkit.map.MapView.Scale;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
@@ -37,6 +42,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class ItemLore2Meta
 {
@@ -102,7 +108,7 @@ public class ItemLore2Meta
 				}
 				int pageCount = bookMeta.getPageCount();
 				ItemLoreUtil.setItemRarityValue(lore, pageCount);
-				BookMeta.Generation g = bookMeta.getGeneration();
+				Generation g = bookMeta.getGeneration();
 				lore.add(Component.empty());
 				lore.add(ComponentUtil.translate("&7저자 : %s", author != null ? author : ComponentUtil.translate("알 수 없음")));
 				lore.add(ComponentUtil.translate("&7출판 : %s", ComponentUtil.translate("&6book.generation." + (g != null ? g.ordinal() : "0"))));
@@ -121,16 +127,17 @@ public class ItemLore2Meta
 					for (Pattern pattern : patterns)
 					{
 						ItemLoreUtil.setItemRarityValue(lore, +10);
-						switch (pattern.getPattern())
+						PatternType patternType = pattern.getPattern();
+						NamespacedKey patternKey = Optional.ofNullable(RegistryAccess.registryAccess().getRegistry(RegistryKey.BANNER_PATTERN).getKey(patternType)).orElse(NamespacedKey.fromString("invalid", Cucumbery.getPlugin()));
+						switch (Objects.requireNonNull(patternKey).getKey().toLowerCase())
 						{
-							case CREEPER, SKULL -> ItemLoreUtil.setItemRarityValue(lore, Rarity.UNIQUE.getRarityValue());
-							case FLOWER -> ItemLoreUtil.setItemRarityValue(lore, Rarity.NORMAL.getRarityValue());
-							case GLOBE -> ItemLoreUtil.setItemRarityValue(lore, Rarity.ELITE.getRarityValue());
-							case MOJANG -> ItemLoreUtil.setItemRarityValue(lore, Rarity.UNIQUE.getRarityValue() + 300);
-							case PIGLIN -> ItemLoreUtil.setItemRarityValue(lore, Rarity.UNIQUE.getRarityValue() + 100);
+							case "creeper" -> ItemLoreUtil.setItemRarityValue(lore, Rarity.UNIQUE.getRarityValue());
+							case "flower" -> ItemLoreUtil.setItemRarityValue(lore, Rarity.NORMAL.getRarityValue());
+							case "globe" -> ItemLoreUtil.setItemRarityValue(lore, Rarity.ELITE.getRarityValue());
+							case "mojang" -> ItemLoreUtil.setItemRarityValue(lore, Rarity.UNIQUE.getRarityValue() + 300);
+							case "piglin" -> ItemLoreUtil.setItemRarityValue(lore, Rarity.UNIQUE.getRarityValue() + 100);
 							default ->
-							{
-							}
+							{}
 						}
 						String patternTranslate =
 								ColorCode.getColorCode(pattern.getColor()) + "block.minecraft.banner." + pattern.getPattern().toString().toLowerCase().replace("_middle", "")
@@ -159,13 +166,17 @@ public class ItemLore2Meta
 					for (Pattern pattern : patterns)
 					{
 						ItemLoreUtil.setItemRarityValue(lore, +10);
-						switch (pattern.getPattern())
+						PatternType patternType = pattern.getPattern();
+						NamespacedKey patternKey = Optional.ofNullable(RegistryAccess.registryAccess().getRegistry(RegistryKey.BANNER_PATTERN).getKey(patternType)).orElse(NamespacedKey.fromString("invalid", Cucumbery.getPlugin()));
+						switch (Objects.requireNonNull(patternKey).getKey().toLowerCase())
 						{
-							case CREEPER, SKULL -> ItemLoreUtil.setItemRarityValue(lore, Rarity.UNIQUE.getRarityValue());
-							case FLOWER -> ItemLoreUtil.setItemRarityValue(lore, Rarity.NORMAL.getRarityValue());
-							case GLOBE -> ItemLoreUtil.setItemRarityValue(lore, Rarity.ELITE.getRarityValue());
-							case MOJANG -> ItemLoreUtil.setItemRarityValue(lore, Rarity.UNIQUE.getRarityValue() + 300);
-							case PIGLIN -> ItemLoreUtil.setItemRarityValue(lore, Rarity.UNIQUE.getRarityValue() + 100);
+							case "creeper" -> ItemLoreUtil.setItemRarityValue(lore, Rarity.UNIQUE.getRarityValue());
+							case "flower" -> ItemLoreUtil.setItemRarityValue(lore, Rarity.NORMAL.getRarityValue());
+							case "globe" -> ItemLoreUtil.setItemRarityValue(lore, Rarity.ELITE.getRarityValue());
+							case "mojang" -> ItemLoreUtil.setItemRarityValue(lore, Rarity.UNIQUE.getRarityValue() + 300);
+							case "piglin" -> ItemLoreUtil.setItemRarityValue(lore, Rarity.UNIQUE.getRarityValue() + 100);
+							default ->
+							{}
 						}
 						String patternTranslate =
 								ColorCode.getColorCode(pattern.getColor()) + "block.minecraft.banner." + pattern.getPattern().toString().toLowerCase().replace("_middle", "")
@@ -246,7 +257,7 @@ public class ItemLore2Meta
 					int centerX = mapView.getCenterX(), centerZ = mapView.getCenterZ();
 					int id = mapView.getId();
 					ItemLoreUtil.setItemRarityValue(lore, id * 2L);
-					MapView.Scale scale = mapView.getScale();
+					Scale scale = mapView.getScale();
 					String scaleString = switch (scale)
 					{
 						case CLOSE -> "1:2";

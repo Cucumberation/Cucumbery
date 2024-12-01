@@ -1,21 +1,17 @@
 package com.jho5245.cucumbery.util.itemlore;
 
 import com.jho5245.cucumbery.custom.customeffect.VanillaEffectDescription;
-import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Constant.RestrictionType;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
-import de.tr7zw.changeme.nbtapi.NBTCompound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.components.FoodComponent;
-import org.bukkit.inventory.meta.components.FoodComponent.FoodEffect;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -32,18 +28,18 @@ public class ItemLore2Food
     List<Component> foodLore = new ArrayList<>();
 
     ItemMeta itemMeta = itemStack.getItemMeta();
-    if (itemMeta.hasFood())
-    {
-      List<FoodEffect> foodEffects = itemMeta.getFood().getEffects();
-      for (FoodEffect foodEffect : foodEffects)
-      {
-        PotionEffect potionEffect = foodEffect.getEffect();
-        float probability = foodEffect.getProbability();
-        foodLore.add(ItemLorePotionDescription.getDescription(probability * 100, Component.translatable(potionEffect.getType().translationKey()), potionEffect.getDuration(), potionEffect.getAmplifier()));
-        foodLore.addAll(ComponentUtil.convertHoverToItemLore(VanillaEffectDescription.getDescription(potionEffect, viewer), NamedTextColor.GRAY));
-      }
-    }
-    else
+//    if (itemMeta.hasFood())
+//    {
+//      List<FoodEffect> foodEffects = itemMeta.getFood().getEffects();
+//      for (FoodEffect foodEffect : foodEffects)
+//      {
+//        PotionEffect potionEffect = foodEffect.getEffect();
+//        float probability = foodEffect.getProbability();
+//        foodLore.add(ItemLorePotionDescription.getDescription(probability * 100, Component.translatable(potionEffect.getType().translationKey()), potionEffect.getDuration(), potionEffect.getAmplifier()));
+//        foodLore.addAll(ComponentUtil.convertHoverToItemLore(VanillaEffectDescription.getDescription(potionEffect, viewer), NamedTextColor.GRAY));
+//      }
+//    }
+//    else
     {
       if (!hideStatusEffects && (!NBTAPI.isRestricted(itemStack, RestrictionType.NO_CONSUME) || NBTAPI.getRestrictionOverridePermission(itemStack, RestrictionType.NO_CONSUME) != null))
       {

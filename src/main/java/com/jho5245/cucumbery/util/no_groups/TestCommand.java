@@ -4,7 +4,6 @@ import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent.Completion;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
-import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
 import com.jho5245.cucumbery.util.storage.data.custom_enchant.CustomEnchant;
@@ -15,14 +14,11 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.components.FoodComponent;
-import org.bukkit.inventory.meta.components.FoodComponent.FoodEffect;
-import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -181,16 +177,16 @@ public class TestCommand implements CucumberyCommandExecutor
 				int nutrition = foodComponent.getNutrition();
 				float saturation = foodComponent.getSaturation();
 				boolean canAlwaysEat = foodComponent.canAlwaysEat();
-				float eatSeconds = foodComponent.getEatSeconds();
-				ItemStack convertsTo = foodComponent.getUsingConvertsTo();
-				List<FoodEffect> foodEffects = foodComponent.getEffects();
-				MessageUtil.sendMessage(player, "nutrition:" + nutrition + ", saturation: " + saturation + ", can_always_eat: " + canAlwaysEat + ", eatSeconds: " + eatSeconds + ", convertsTo: " + convertsTo + ", foodEffects: " + foodEffects.size());
-				for (FoodEffect foodEffect : foodEffects)
-				{
-					PotionEffect potionEffect = foodEffect.getEffect();
-					float probability = foodEffect.getProbability();
-					MessageUtil.sendMessage(player, "ffecttype: " + potionEffect.getType() + ", prob: " + probability);
-				}
+//				float eatSeconds = foodComponent.getEatSeconds();
+//				ItemStack convertsTo = foodComponent.getUsingConvertsTo();
+//				List<FoodEffect> foodEffects = foodComponent.getEffects();
+//				MessageUtil.sendMessage(player, "nutrition:" + nutrition + ", saturation: " + saturation + ", can_always_eat: " + canAlwaysEat + ", eatSeconds: " + eatSeconds + ", convertsTo: " + convertsTo + ", foodEffects: " + foodEffects.size());
+//				for (FoodEffect foodEffect : foodEffects)
+//				{
+//					PotionEffect potionEffect = foodEffect.getEffect();
+//					float probability = foodEffect.getProbability();
+//					MessageUtil.sendMessage(player, "ffecttype: " + potionEffect.getType() + ", prob: " + probability);
+//				}
 			}
 
 			if (args[0].equals("enchant"))
