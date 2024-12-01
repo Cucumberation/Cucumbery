@@ -27,9 +27,6 @@ import java.util.Collection;
  */
 public enum CustomMaterial implements Translatable
 {
-	RE_PPER_LD_RALD_AMON_YST_RGANITE_BLOCK(Material.PLAYER_HEAD, "key:block.cucumbery.re_pper_ld_rald_amon_yst_rganite_block|레드스 톤구리 금메랄 드다이 아몬드 자수정 블록",
-			Rarity.EPIC, CreativeCategory.BUILDING_BLOCKS),
-	DIA_RON_LAPI_RED_COAL_GOLD_ORE(Material.PLAYER_HEAD, "다이아철 청금석레 드스톤석 탄금광석", Rarity.EPIC, "itemGroup.natural"),
 	ACACIA_SLAB_VERTICAL(Material.ACACIA_SLAB, "key:block.cucumbery.acacia_slab_vertical|아카시아나무 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
 	AMBER(Material.ORANGE_DYE, "key:item.cucumbery.amber|호박", Rarity.UNIQUE),
 	ANDESITE_SLAB_VERTICAL(Material.ANDESITE_SLAB, "key:block.cucumbery.andesite_slab_vertical|안산암 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
@@ -43,34 +40,34 @@ public enum CustomMaterial implements Translatable
 	ARROW_MOUNT_INFINITE(Material.ARROW, "key:item.cucumbery.arrow_mount_infinite|라이딩 화살 (무제한)", Rarity.RARE, CreativeCategory.COMBAT),
 	BAD_APPLE(Material.APPLE, "key:item.cucumbery.bad_apple|나쁜 사과", "itemGroup.foodAndDrink"),
 	BAD_APPLE_EXPIRE_1D(Material.APPLE, "key:item.cucumbery.bad_apple|나쁜 사과", "itemGroup.foodAndDrink"),
-
 	BAD_APPLE_EXPIRE_1D_UNTRADEABLE(Material.APPLE, "key:item.cucumbery.bad_apple|나쁜 사과", "itemGroup.foodAndDrink"),
 	BAD_APPLE_EXPIRE_7D(Material.APPLE, "key:item.cucumbery.bad_apple|나쁜 사과", "itemGroup.foodAndDrink"),
+
 	BAD_APPLE_EXPIRE_7D_UNTRADEABLE(Material.APPLE, "key:item.cucumbery.bad_apple_expire_7d_untradeable|나쁜 사과", "itemGroup.foodAndDrink"),
 	BAD_APPLE_UNTRADEABLE(Material.APPLE, "key:item.cucumbery.bad_apple_untradeable|나쁜 사과", "itemGroup.foodAndDrink"),
 	BAMBOO_MOSAIC_SLAB_VERTICAL(Material.BAMBOO_MOSAIC_SLAB, "key:block.cucumbery.bamboo_mosaic_slab_vertical|대나무 모자이크 세로 반 블록",
 			CreativeCategory.BUILDING_BLOCKS),
-
 	BAMBOO_SLAB_VERTICAL(Material.BAMBOO_SLAB, "key:block.cucumbery.bamboo_slab_vertical|대나무 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
 	BAMIL_PABO(Material.PLAYER_HEAD, "key:block.cucumbery.bamil_pabo|머밀의 바리", Rarity.ARTIFACT, "itemGroup.functional"),
+
 	BEACON_DECORATIVE(Material.BEACON, "key:block.cucumbery.beacon_decorative|장식용 신호기", Rarity.EPIC, "itemGroup.functional"),
 	BEACON_HAT(Material.BEACON, "key:item.cucumbery.beacon_hat|신호기 모자", Rarity.EPIC, "key:" + CreativeCategory.DECORATIONS + "|치장 아이템"),
 	BEACON_HAT_EXPIRE_1D(Material.BEACON, "key:item.cucumbery.beacon_hat|신호기 모자", Rarity.EPIC, "key:" + CreativeCategory.DECORATIONS + "|치장 아이템"),
-
 	BEACON_HAT_EXPIRE_1D_UNTRADEABLE(Material.BEACON, "key:item.cucumbery.beacon_hat|신호기 모자", Rarity.EPIC, "key:" + CreativeCategory.DECORATIONS + "|치장 아이템"),
 	BEACON_HAT_EXPIRE_7D(Material.BEACON, "key:item.cucumbery.beacon_hat|신호기 모자", Rarity.EPIC, "key:" + CreativeCategory.DECORATIONS + "|치장 아이템"),
+
 	BEACON_HAT_EXPIRE_7D_UNTRADEABLE(Material.BEACON, "key:item.cucumbery.beacon_hat|신호기 모자", Rarity.EPIC, "key:" + CreativeCategory.DECORATIONS + "|치장 아이템"),
 	BEACON_HAT_UNTRADEABLE(Material.BEACON, "key:item.cucumbery.beacon_hat|신호기 모자", Rarity.EPIC, "key:" + CreativeCategory.DECORATIONS + "|치장 아이템"),
 	BIRCH_SLAB_VERTICAL(Material.BIRCH_SLAB, "key:block.cucumbery.birch_slab_vertical|자작나무 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
-
 	BLACKSTONE_SLAB_VERTICAL(Material.BLACKSTONE_SLAB, "key:block.cucumbery.blackstone_slab_vertical|흑암 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
 	BLUE_NUMBER_BLOCK(Material.PLAYER_HEAD, "key:block.cucumbery.blue_number_block|파란 숫자 블록", Rarity._ADMIN, "key:" + CreativeCategory.DECORATIONS + "|치장 아이템"),
+
 	BOO(Material.TURTLE_SCUTE, "&bkey:item.cucumbery.boo|부우"),
 	BOO_HUNGRY(Material.TURTLE_SCUTE, "&bkey:item.cucumbery.boo_hungry|배고프부우.."),
 	BOW_CRIT(Material.BOW, "key:item.cucumbery.bow_crit|치명적인 활", Rarity.RARE, CreativeCategory.COMBAT),
-
 	BOW_ENDER_PEARL(Material.BOW, "key:item.cucumbery.bow_ender_pearl|엔더 진주 활", Rarity.RARE, CreativeCategory.COMBAT),
 	BOW_EXPLOSIVE(Material.BOW, "key:item.cucumbery.bow_explosive|폭발성 활", Rarity.RARE, CreativeCategory.COMBAT),
+
 	BOW_EXPLOSIVE_DESTRUCTION(Material.BOW, "key:item.cucumbery.bow_explosive_destruction|파괴형 폭발성 활", Rarity.RARE, CreativeCategory.COMBAT),
 	BOW_FLAME(Material.BOW, "key:item.cucumbery.bow_flame|화염 활", Rarity.RARE, CreativeCategory.COMBAT),
 	BOW_INFINITE(Material.BOW, "key:item.cucumbery.bow_infinite|무한의 활", Rarity.ELITE, CreativeCategory.COMBAT),
@@ -79,16 +76,16 @@ public enum CustomMaterial implements Translatable
 	BRICK_SLAB_VERTICAL(Material.BRICK_SLAB, "key:block.cucumbery.brick_slab_vertical|벽돌 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
 	BRICK_THROWABLE(Material.SNOWBALL, "key:item.cucumbery.brick_throwable|던질 수 있는 벽돌", Rarity.RARE, CreativeCategory.COMBAT),
 	BRONZE_AXE(Material.GOLDEN_AXE, "key:item.cucumbery.bronze_axe|청동 도끼", CreativeCategory.TOOLS),
-
 	BRONZE_HOE(Material.GOLDEN_HOE, "key:item.cucumbery.bronze_hoe|청동 괭이", CreativeCategory.TOOLS),
 	BRONZE_INGOT(Material.BRICK, "key:item.cucumbery.bronze_ingot|청동 주괴"),
+
 	BRONZE_PICKAXE(Material.GOLDEN_PICKAXE, "key:item.cucumbery.bronze_pickaxe|청동 곡괭이", CreativeCategory.TOOLS),
 	BRONZE_SHOVEL(Material.GOLDEN_SHOVEL, "key:item.cucumbery.bronze_shovel|청동 삽", CreativeCategory.TOOLS),
 	BRONZE_SWORD(Material.GOLDEN_SWORD, "key:item.cucumbery.bronze_sword|청동 검", CreativeCategory.COMBAT),
 	CEMENTED_CARBIDE_AXE(Material.STONE_AXE, "key:item.cucumbery.cemented_carbide_axe|초경합금 도끼", Rarity.UNIQUE, CreativeCategory.TOOLS),
-
 	CEMENTED_CARBIDE_HOE(Material.STONE_HOE, "key:item.cucumbery.cemented_carbide_hoe|초경합금 괭이", Rarity.UNIQUE, CreativeCategory.TOOLS),
 	CEMENTED_CARBIDE_INGOT(Material.IRON_INGOT, "key:item.cucumbery.cemented_carbide_ingot|초경합금 주괴", Rarity.UNIQUE),
+
 	CEMENTED_CARBIDE_PICKAXE(Material.STONE_PICKAXE, "key:item.cucumbery.cemented_carbide_pickaxe|초경합금 곡괭이", Rarity.UNIQUE, CreativeCategory.TOOLS),
 	CEMENTED_CARBIDE_SHOVEL(Material.STONE_SHOVEL, "key:item.cucumbery.cemented_carbide_shovel|초경합금 삽", Rarity.UNIQUE, CreativeCategory.TOOLS),
 	CEMENTED_CARBIDE_SWORD(Material.STONE_SWORD, "key:item.cucumbery.cemented_carbide_sword|초경합금 검", Rarity.UNIQUE, CreativeCategory.COMBAT),
@@ -132,21 +129,22 @@ public enum CustomMaterial implements Translatable
 	CUT_COPPER_SLAB_VERTICAL(Material.CUT_COPPER_SLAB, "key:block.cucumbery.cut_copper_slab_vertical|깎인 구리 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
 	CUT_RED_SANDSTONE_SLAB_VERTICAL(Material.CUT_RED_SANDSTONE_SLAB, "key:block.cucumbery.cut_red_sandstone_slab_vertical|깎인 붉은 사암 세로 반 블록",
 			CreativeCategory.BUILDING_BLOCKS),
-
 	CUT_SANDSTONE_SLAB_VERTICAL(Material.CUT_SANDSTONE_SLAB, "key:block.cucumbery.cut_sandstone_slab_vertical|깎인 사암 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
 	DARK_OAK_SLAB_VERTICAL(Material.DARK_OAK_SLAB, "key:block.cucumbery.dark_oak_slab_vertical|짙은 참나무 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+
 	DARK_PRISMARINE_SLAB_VERTICAL(Material.DARK_PRISMARINE_SLAB, "key:block.cucumbery.dark_prismarine_slab_vertical|짙은 프리즈머린 세로 반 블록",
 			CreativeCategory.BUILDING_BLOCKS),
 	DEEPSLATE_BRICK_SLAB_VERTICAL(Material.DEEPSLATE_BRICK_SLAB, "key:block.cucumbery.deepslate_brick_slab_vertical|심층암 벽돌 세로 반 블록",
 			CreativeCategory.BUILDING_BLOCKS),
-
 	DEEPSLATE_TILE_SLAB_VERTICAL(Material.DEEPSLATE_TILE_SLAB, "key:block.cucumbery.deepslate_tile_slab_vertical|심층암 타일 세로 반 블록",
 			CreativeCategory.BUILDING_BLOCKS),
 	DIAMOND_BLOCK_DECORATIVE(Material.DIAMOND_BLOCK, "key:item.cucumbery.diamond_block_decorative|장식용 다이아몬드 블록", Rarity.NORMAL, CreativeCategory.BUILDING_BLOCKS),
 
 	DIAMOND_CHESTPLATE_WITH_ELYTRA(Material.ELYTRA, "key:item.cucumbery.diamond_chestplate_with_elytra|다이아몬드 겉날개", Rarity.EXCELLENT, CreativeCategory.TOOLS),
+	DIA_RON_LAPI_RED_COAL_GOLD_ORE(Material.PLAYER_HEAD, "다이아철 청금석레 드스톤석 탄금광석", Rarity.EPIC, "itemGroup.natural"),
 
 	DIORITE_SLAB_VERTICAL(Material.DIORITE_SLAB, "key:block.cucumbery.diorite_slab_vertical|섬록암 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+
 	DOEHAERIM_BABO(Material.PLAYER_HEAD, "key:block.cucumbery.doehaerim_babo|바보의 머리", Rarity.ARTIFACT, "itemGroup.functional"),
 	DRILL_ENGINE(Material.BLAST_FURNACE, "key:item.cucumbery.drill_engine|드릴 엔진", Rarity.RARE),
 	DRILL_FUEL_TANK(Material.BARREL, "key:item.cucumbery.drill_fuel_tank|드릴 연료 탱크", Rarity.UNIQUE),
@@ -158,15 +156,15 @@ public enum CustomMaterial implements Translatable
 	ENCHANTED_APPLE(Material.APPLE, "key:item.cucumbery.enchanted_apple|마법이 부여된 사과", Rarity.RARE),
 	ENCHANTED_BAKED_POTATO(Material.BAKED_POTATO, "key:item.cucumbery.enchanted_baked_potato|마법이 부여된 구운 감자", Rarity.EPIC),
 	ENCHANTED_BEEF(Material.BEEF, "key:item.cucumbery.enchanted_beef|마법이 부여된 익히지 않은 소고기", Rarity.RARE),
-
 	ENCHANTED_BEETROOT(Material.BEETROOT, "key:item.cucumbery.enchanted_beetroot|마법이 부여된 비트", Rarity.RARE),
-	ENCHANTED_BIRCH_LOG(Material.BIRCH_LOG, "key:item.cucumbery.enchanted_birch_log|마법이 부여된 자작나무 원목", Rarity.RARE),
 
+	ENCHANTED_BIRCH_LOG(Material.BIRCH_LOG, "key:item.cucumbery.enchanted_birch_log|마법이 부여된 자작나무 원목", Rarity.RARE),
 	ENCHANTED_BLAZE_ROD(Material.BLAZE_ROD, "key:item.cucumbery.enchanted_blaze_rod|마법이 부여된 블레이즈 막대기", Rarity.EPIC),
 
 	ENCHANTED_BLUE_ICE(Material.BLUE_ICE, "key:item.cucumbery.enchanted_blue_ice|마법이 부여된 푸른얼음", Rarity.ELITE),
 
 	ENCHANTED_BONE(Material.BONE, "key:item.cucumbery.enchanted_bone|마법이 부여된 뼈다귀", Rarity.RARE),
+
 	ENCHANTED_BONE_BLOCK(Material.BONE_BLOCK, "key:item.cucumbery.enchanted_bone_block|마법이 부여된 뼈 블록", Rarity.EPIC),
 	ENCHANTED_BROWN_MUSHROOM(Material.BROWN_MUSHROOM, "key:item.cucumbery.enchanted_brown_mushroom|마법이 부여된 갈색 버섯", Rarity.RARE),
 	ENCHANTED_BROWN_MUSHROOM_BLOCK(Material.BROWN_MUSHROOM_BLOCK, "key:item.cucumbery.enchanted_brown_mushroom_block|마법이 부여된 갈색 버섯 블록", Rarity.EPIC),
@@ -177,8 +175,8 @@ public enum CustomMaterial implements Translatable
 	ENCHANTED_CHORUS_FLOWER(Material.CHORUS_FLOWER, "key:item.cucumbery.enchanted_chorus_flower|마법이 부여된 후렴화", Rarity.ELITE),
 	ENCHANTED_CHORUS_FRUIT(Material.CHORUS_FRUIT, "key:item.cucumbery.enchanted_chorus_fruit|마법이 부여된 후렴과", Rarity.EPIC),
 	ENCHANTED_CLAY_BALL(Material.CLAY_BALL, "key:item.cucumbery.enchanted_clay_ball|마법이 부여된 점토 덩이", Rarity.RARE),
-
 	ENCHANTED_COAL(Material.COAL, "key:item.cucumbery.enchanted_coal|마법이 부여된 석탄", Rarity.RARE),
+
 	ENCHANTED_COAL_BLOCK(Material.COAL_BLOCK, "key:item.cucumbery.enchanted_coal_block|마법이 부여된 석탄 블록", Rarity.EPIC),
 	ENCHANTED_COBBLED_DEEPSLATE(Material.COBBLED_DEEPSLATE, "key:item.cucumbery.enchanted_cobbled_deepslate|마법이 부여된 심층암 조약돌", Rarity.RARE),
 	ENCHANTED_COBBLESTONE(Material.COBBLESTONE, "key:item.cucumbery.enchanted_cobblestone|마법이 부여된 조약돌", Rarity.RARE),
@@ -199,8 +197,8 @@ public enum CustomMaterial implements Translatable
 	ENCHANTED_DIAMOND_BLOCK(Material.DIAMOND_BLOCK, "key:item.cucumbery.enchanted_diamond_block|마법이 부여된 다이아몬드 블록", Rarity.ELITE),
 	ENCHANTED_DRAGON_BREATH(Material.RABBIT_FOOT, "key:item.cucumbery.enchanted_dragon_breath|마법이 부여된 드래곤의 숨결", Rarity.UNIQUE),
 	ENCHANTED_EMERALD(Material.EMERALD, "key:item.cucumbery.enchanted_emerald|마법이 부여된 에메랄드", Rarity.EPIC),
-
 	ENCHANTED_EMERALD_BLOCK(Material.EMERALD_BLOCK, "key:item.cucumbery.enchanted_emerald_block|마법이 부여된 에메랄드 블록", Rarity.ELITE),
+
 	ENCHANTED_ENDER_EYE(Material.ENDER_EYE, "key:item.cucumbery.enchanted_ender_eye|마법이 부여된 엔더의 눈", Rarity.EPIC),
 	ENCHANTED_ENDER_PEARL(Material.ENDER_PEARL, "key:item.cucumbery.enchanted_ender_pearl|마법이 부여된 엔더 진주", Rarity.RARE),
 	ENCHANTED_FEATHER(Material.FEATHER, "key:item.cucumbery.enchanted_feather|마법이 부여된 깃털", Rarity.RARE),
@@ -331,10 +329,10 @@ public enum CustomMaterial implements Translatable
 	MITHRIL_ORE(Material.PRISMARINE_CRYSTALS, "key:item.cucumbery.mithril_ore|미스릴 원석", Rarity.UNIQUE),
 	MITHRIL_PICKAXE(Material.DIAMOND_PICKAXE, "key:item.cucumbery.mithril_pickaxe|미스릴 곡괭이", Rarity.UNIQUE, CreativeCategory.TOOLS),
 	MITHRIL_PICKAXE_REFINED(Material.DIAMOND_PICKAXE, "key:item.cucumbery.mithril_pickaxe_refined|정제된 미스릴 곡괭이", Rarity.UNIQUE, CreativeCategory.TOOLS),
-
 	MITHRIL_REFINED(Material.PLAYER_HEAD, "key:item.cucumbery.mithril_refined|정제된 미스릴", Rarity.LEGENDARY),
 
 	MITHRIL_SHOVEL(Material.DIAMOND_SHOVEL, "key:item.cucumbery.mithril_shovel|미스릴 삽", Rarity.UNIQUE, CreativeCategory.TOOLS),
+
 	MITHRIL_SWORD(Material.DIAMOND_SWORD, "key:item.cucumbery.mithril_sword|미스릴 검", Rarity.UNIQUE, CreativeCategory.TOOLS),
 	MORGANITE(Material.PINK_DYE, "key:item.cucumbery.morganite|홍주석 원석", Rarity.UNIQUE),
 	MOSSY_COBBLESTONE_SLAB_VERTICAL(Material.MOSSY_COBBLESTONE_SLAB, "key:block.cucumbery.mossy_cobblestone_slab_vertical|이끼 낀 조약돌 세로 반 블록",
@@ -363,11 +361,10 @@ public enum CustomMaterial implements Translatable
 	OAK_SLAB_VERTICAL(Material.OAK_SLAB, "key:block.cucumbery.oak_slab_vertical|참나무 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
 	ONYX(Material.COAL, "key:item.cucumbery.onyx|석탄", Rarity.EPIC),
 	OPAL(Material.WHITE_DYE, "key:item.cucumbery.opal|오팔", Rarity.EPIC),
-
 	OXIDIZED_CUT_COPPER_SLAB_VERTICAL(Material.OXIDIZED_CUT_COPPER_SLAB, "key:block.cucumbery.oxidized_cut_copper_slab_vertical|산화된 깎인 구리 세로 반 블록",
 			CreativeCategory.BUILDING_BLOCKS),
-	PETRIFIED_OAK_SLAB_VERTICAL(Material.PETRIFIED_OAK_SLAB, "key:block.cucumbery.petrified_oak_slab_vertical|규화한 참나무 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
 
+	PETRIFIED_OAK_SLAB_VERTICAL(Material.PETRIFIED_OAK_SLAB, "key:block.cucumbery.petrified_oak_slab_vertical|규화한 참나무 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
 	PLASTIC_AXE(Material.DIAMOND_AXE, "key:item.cucumbery.plastic_axe|플라스틱 도끼", CreativeCategory.TOOLS),
 
 	PLASTIC_DEBRIS(Material.LIGHT_BLUE_DYE, "key:item.cucumbery.plastic_debris|플라스틱 파편", Rarity.RARE),
@@ -375,9 +372,10 @@ public enum CustomMaterial implements Translatable
 	PLASTIC_HOE(Material.DIAMOND_HOE, "key:item.cucumbery.plastic_hoe|플라스틱 괭이", CreativeCategory.TOOLS),
 
 	PLASTIC_MATERIAL(Material.LAPIS_LAZULI, "key:item.cucumbery.plastic_material|플라스틱", Rarity.RARE),
-	PLASTIC_PICKAXE(Material.DIAMOND_PICKAXE, "key:item.cucumbery.plastic_pickaxe|플라스틱 곡괭이", CreativeCategory.TOOLS),
 
+	PLASTIC_PICKAXE(Material.DIAMOND_PICKAXE, "key:item.cucumbery.plastic_pickaxe|플라스틱 곡괭이", CreativeCategory.TOOLS),
 	PLASTIC_SHOVEL(Material.DIAMOND_SHOVEL, "key:item.cucumbery.plastic_shovel|플라스틱 삽", CreativeCategory.TOOLS),
+
 	PLASTIC_SWORD(Material.DIAMOND_SWORD, "key:item.cucumbery.plastic_sword|플라스틱 검", CreativeCategory.COMBAT),
 	PLATINUM_AXE(Material.GOLDEN_AXE, "key:item.cucumbery.platinum_axe|백금 도끼", Rarity.RARE, CreativeCategory.TOOLS),
 	PLATINUM_HOE(Material.GOLDEN_HOE, "key:item.cucumbery.platinum_hoe|백금 괭이", Rarity.RARE, CreativeCategory.TOOLS),
@@ -405,16 +403,18 @@ public enum CustomMaterial implements Translatable
 	PRISMARINE_SLAB_VERTICAL(Material.PRISMARINE_SLAB, "key:block.cucumbery.prismarine_slab_vertical|프리즈머린 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
 	PURPUR_SLAB_VERTICAL(Material.PURPUR_SLAB, "key:block.cucumbery.purpur_slab_vertical|퍼퍼 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
 	QUARTZ_SLAB_VERTICAL(Material.QUARTZ_SLAB, "key:block.cucumbery.quartz_slab_vertical|석영 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
-
 	RAINBOW_BOOTS(Material.IRON_BOOTS, "key:item.cucumbery.rainbow_boots|무지개 부츠", Rarity.RARE, CreativeCategory.COMBAT),
+
 	RAINBOW_CHESTPLATE(Material.IRON_CHESTPLATE, "key:item.cucumbery.rainbow_chestplate|무지개 흉갑", Rarity.RARE, CreativeCategory.COMBAT),
 	RAINBOW_HELMET(Material.IRON_HELMET, "key:item.cucumbery.rainbow_helmet|무지개 투구", Rarity.RARE, CreativeCategory.COMBAT),
 	RAINBOW_LEGGINGS(Material.IRON_LEGGINGS, "key:item.cucumbery.rainbow_leggings|무지개 레깅스", Rarity.RARE, CreativeCategory.COMBAT),
 	REDSTONE_BLOCK_INSTA_BREAK(Material.REDSTONE_BLOCK, "key:block.cucumbery.redstone_block_insta_break|즉시 부서지는 레드스톤 블록", Rarity.RARE, CreativeCategory.REDSTONE),
 	RED_NETHER_BRICK_SLAB_VERTICAL(Material.RED_NETHER_BRICK_SLAB, "key:block.cucumbery.red_nether_brick_slab_vertical|붉은 네더 벽돌 세로 반 블록",
 			CreativeCategory.BUILDING_BLOCKS),
-
 	RED_SANDSTONE_SLAB_VERTICAL(Material.RED_SANDSTONE_SLAB, "key:block.cucumbery.red_sandstone_slab_vertical|붉은 사암 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
+
+	RE_PPER_LD_RALD_AMON_YST_RGANITE_BLOCK(Material.PLAYER_HEAD, "key:block.cucumbery.re_pper_ld_rald_amon_yst_rganite_block|레드스 톤구리 금메랄 드다이 아몬드 자수정 블록",
+			Rarity.EPIC, CreativeCategory.BUILDING_BLOCKS),
 	RUBY(Material.RED_DYE, "key:item.cucumbery.ruby|루비 원석", Rarity.UNIQUE),
 	RUNE_DESTRUCTION(Material.TNT_MINECART, "key:item.cucumbery.rune_destruction|파멸의 룬"),
 	RUNE_EARTHQUAKE(Material.TNT_MINECART, "key:item.cucumbery.rune_earthquake|지진의 룬"),
@@ -606,7 +606,7 @@ public enum CustomMaterial implements Translatable
 	public static final String IDENDTIFER = "internal_material_id";
 
 	/**
-	 * @return true if this item should be glow even wihtout any {@link org.bukkit.enchantments.Enchantment} it has otherwise false.
+	 * @return true if this item should be glow even wihtout any {@link Enchantment} it has otherwise false.
 	 */
 	public boolean isGlow()
 	{
@@ -799,7 +799,6 @@ public enum CustomMaterial implements Translatable
 		return MessageUtil.stripColor(MessageUtil.n2s(ComponentUtil.serialize(getDisplayName())));
 	}
 
-
 	@NotNull
 	public Collection<ItemStack> getSpecialDrops()
 	{
@@ -863,7 +862,8 @@ public enum CustomMaterial implements Translatable
 					collection.add(new ItemStack(Material.LAPIS_LAZULI));
 					collection.add(new ItemStack(Material.REDSTONE));
 					collection.add(new ItemStack(Material.COAL));
-					if (CustomEnchant.isEnabled() && ItemStackUtil.itemExists(itemStack) && itemStack.hasItemMeta() && itemStack.getItemMeta().hasEnchant(CustomEnchant.SMELTING_TOUCH))
+					if (CustomEnchant.isEnabled() && ItemStackUtil.itemExists(itemStack) && itemStack.hasItemMeta() && itemStack.getItemMeta()
+							.hasEnchant(CustomEnchant.SMELTING_TOUCH))
 					{
 						collection.add(new ItemStack(Material.IRON_INGOT));
 						collection.add(new ItemStack(Material.GOLD_INGOT));
