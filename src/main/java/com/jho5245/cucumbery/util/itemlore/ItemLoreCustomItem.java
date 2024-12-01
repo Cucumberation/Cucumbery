@@ -758,65 +758,65 @@ public class ItemLoreCustomItem
 				// 곡괭이
 				case PLATINUM_PICKAXE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 2, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -2.8, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case COPPER_PICKAXE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 2.5, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -2.8, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case TIN_PICKAXE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 3, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -2.8, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case LEAD_PICKAXE, BRONZE_PICKAXE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 3.5, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -2.8, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case PLASTIC_PICKAXE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 3, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -2.3, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case COBALT_PICKAXE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 4, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -2.8, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case MITHRIL_PICKAXE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 5, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -2.8, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case TUNGSTEN_PICKAXE, TITANIUM_PICKAXE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 6.5, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -2.8, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case CEMENTED_CARBIDE_PICKAXE, NAUTILITE_PICKAXE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 7, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -2.8, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 
@@ -824,58 +824,58 @@ public class ItemLoreCustomItem
 
 				case PLATINUM_SWORD ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 3, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -2.4, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case COPPER_SWORD ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 3.5, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -2.4, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case TIN_SWORD, LEAD_SWORD, COBALT_SWORD ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 4, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -2.4, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case PLASTIC_SWORD ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 3.5, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -1.9, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case BRONZE_SWORD ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 5, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -2.4, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case MITHRIL_SWORD ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 6, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -2.4, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case TUNGSTEN_SWORD, TITANIUM_SWORD ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 8, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -2.4, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case CEMENTED_CARBIDE_SWORD, NAUTILITE_SWORD ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 9, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -2.4, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 
@@ -883,65 +883,65 @@ public class ItemLoreCustomItem
 
 				case PLATINUM_AXE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 4, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -3.2, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case COPPER_AXE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 4.5, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -3.2, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case TIN_AXE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 5, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -3.2, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case PLASTIC_AXE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 5.5, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -2.7, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case BRONZE_AXE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 5.5, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -3.1, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case COBALT_AXE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 6, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -3.1, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case MITHRIL_AXE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 7, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -3, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case TUNGSTEN_AXE, TITANIUM_AXE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 9, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -2.9, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case CEMENTED_CARBIDE_AXE, NAUTILITE_AXE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 10, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -2.8, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 
@@ -949,65 +949,65 @@ public class ItemLoreCustomItem
 
 				case PLATINUM_SHOVEL ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 2.5, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -3, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case COPPER_SHOVEL ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 3, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -3, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case TIN_SHOVEL ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 3.5, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -3, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case LEAD_SHOVEL, BRONZE_SHOVEL ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 4, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -3, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case PLASTIC_SHOVEL ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 3.5, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -2.5, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case COBALT_SHOVEL ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 4.5, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -3, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case MITHRIL_SHOVEL ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 5.5, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -3, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case TUNGSTEN_SHOVEL, TITANIUM_SHOVEL ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 7, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -3, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case CEMENTED_CARBIDE_SHOVEL, NAUTILITE_SHOVEL ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 7.5, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -3, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 
@@ -1015,100 +1015,100 @@ public class ItemLoreCustomItem
 
 				case PLATINUM_HOE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 1, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -3, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case COPPER_HOE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 1.5, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -3, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case TIN_HOE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 2, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -2, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case LEAD_HOE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 2, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -1.6, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case PLASTIC_HOE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 1.5, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -1.1, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case BRONZE_HOE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 2, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -1.2, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case COBALT_HOE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 3, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -1, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
-				case MITHRIL_HOE -> itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+				case MITHRIL_HOE -> itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 						new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 3, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				case TUNGSTEN_HOE, TITANIUM_HOE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 4, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, 1, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 				case CEMENTED_CARBIDE_HOE, NAUTILITE_HOE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 5, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, 2, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
 
 				// 갑옷
 
-				case SANS_HELMET, FROG_HELMET, MINER_HELMET -> itemMeta.addAttributeModifier(Attribute.GENERIC_ARMOR,
+				case SANS_HELMET, FROG_HELMET, MINER_HELMET -> itemMeta.addAttributeModifier(Attribute.ARMOR,
 						new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 2, Operation.ADD_NUMBER, EquipmentSlotGroup.HEAD));
-				case SANS_CHESTPLATE, FROG_CHESTPLATE, MINER_CHESTPLATE -> itemMeta.addAttributeModifier(Attribute.GENERIC_ARMOR,
+				case SANS_CHESTPLATE, FROG_CHESTPLATE, MINER_CHESTPLATE -> itemMeta.addAttributeModifier(Attribute.ARMOR,
 						new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, 2, Operation.ADD_NUMBER, EquipmentSlotGroup.CHEST));
-				case SANS_LEGGINGS, FROG_LEGGINGS, MINER_LEGGINGS -> itemMeta.addAttributeModifier(Attribute.GENERIC_ARMOR,
+				case SANS_LEGGINGS, FROG_LEGGINGS, MINER_LEGGINGS -> itemMeta.addAttributeModifier(Attribute.ARMOR,
 						new AttributeModifier(ATTRIBUTE_IDENTIFIER_3_0, 2, Operation.ADD_NUMBER, EquipmentSlotGroup.LEGS));
 				case SANS_BOOTS ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ARMOR,
+					itemMeta.addAttributeModifier(Attribute.ARMOR,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_4_0, 2, Operation.ADD_NUMBER, EquipmentSlotGroup.FEET));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED,
+					itemMeta.addAttributeModifier(Attribute.MOVEMENT_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_4_1, 0.3, Operation.ADD_SCALAR, EquipmentSlotGroup.FEET));
 				}
-				case FROG_BOOTS, MINER_BOOTS -> itemMeta.addAttributeModifier(Attribute.GENERIC_ARMOR,
+				case FROG_BOOTS, MINER_BOOTS -> itemMeta.addAttributeModifier(Attribute.ARMOR,
 						new AttributeModifier(ATTRIBUTE_IDENTIFIER_4_0, 1, Operation.ADD_NUMBER, EquipmentSlotGroup.FEET));
 				case MINDAS_HELMET ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ARMOR,
+					itemMeta.addAttributeModifier(Attribute.ARMOR,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 20, Operation.ADD_NUMBER, EquipmentSlotGroup.HEAD));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS,
+					itemMeta.addAttributeModifier(Attribute.ARMOR_TOUGHNESS,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_1, 20, Operation.ADD_NUMBER, EquipmentSlotGroup.HEAD));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_2, 0.5, Operation.MULTIPLY_SCALAR_1, EquipmentSlotGroup.HEAD));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_3, 2, Operation.ADD_NUMBER, EquipmentSlotGroup.HEAD));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_LUCK,
+					itemMeta.addAttributeModifier(Attribute.LUCK,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_4, 5, Operation.ADD_NUMBER, EquipmentSlotGroup.HEAD));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH,
+					itemMeta.addAttributeModifier(Attribute.MAX_HEALTH,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_5, 0.3, Operation.ADD_SCALAR, EquipmentSlotGroup.HEAD));
 					itemMeta.addEnchant(Enchantment.PROTECTION, 20, true);
 					itemMeta.addEnchant(Enchantment.RESPIRATION, 20, true);
@@ -1116,17 +1116,17 @@ public class ItemLoreCustomItem
 				}
 				case MINDAS_CHESTPLATE ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ARMOR,
+					itemMeta.addAttributeModifier(Attribute.ARMOR,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, 20, Operation.ADD_NUMBER, EquipmentSlotGroup.CHEST));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS,
+					itemMeta.addAttributeModifier(Attribute.ARMOR_TOUGHNESS,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_1, 20, Operation.ADD_NUMBER, EquipmentSlotGroup.CHEST));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_2, 0.8, Operation.MULTIPLY_SCALAR_1, EquipmentSlotGroup.CHEST));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_3, 2, Operation.ADD_NUMBER, EquipmentSlotGroup.CHEST));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_LUCK,
+					itemMeta.addAttributeModifier(Attribute.LUCK,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_4, 8, Operation.ADD_NUMBER, EquipmentSlotGroup.CHEST));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH,
+					itemMeta.addAttributeModifier(Attribute.MAX_HEALTH,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_5, 0.5, Operation.ADD_SCALAR, EquipmentSlotGroup.CHEST));
 					itemMeta.addEnchant(Enchantment.PROTECTION, 20, true);
 					itemMeta.addEnchant(Enchantment.UNBREAKING, 10, true);
@@ -1134,17 +1134,17 @@ public class ItemLoreCustomItem
 				}
 				case MINDAS_LEGGINGS ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ARMOR,
+					itemMeta.addAttributeModifier(Attribute.ARMOR,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, 20, Operation.ADD_NUMBER, EquipmentSlotGroup.LEGS));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS,
+					itemMeta.addAttributeModifier(Attribute.ARMOR_TOUGHNESS,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_1, 20, Operation.ADD_NUMBER, EquipmentSlotGroup.LEGS));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_2, 0.6, Operation.MULTIPLY_SCALAR_1, EquipmentSlotGroup.LEGS));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_3, 2, Operation.ADD_NUMBER, EquipmentSlotGroup.LEGS));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_LUCK,
+					itemMeta.addAttributeModifier(Attribute.LUCK,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_4, 6, Operation.ADD_NUMBER, EquipmentSlotGroup.LEGS));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH,
+					itemMeta.addAttributeModifier(Attribute.MAX_HEALTH,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_5, 0.4, Operation.ADD_SCALAR, EquipmentSlotGroup.LEGS));
 					itemMeta.addEnchant(Enchantment.PROTECTION, 20, true);
 					itemMeta.addEnchant(Enchantment.UNBREAKING, 10, true);
@@ -1153,17 +1153,17 @@ public class ItemLoreCustomItem
 				}
 				case MINDAS_BOOTS ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ARMOR,
+					itemMeta.addAttributeModifier(Attribute.ARMOR,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, 20, Operation.ADD_NUMBER, EquipmentSlotGroup.FEET));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS,
+					itemMeta.addAttributeModifier(Attribute.ARMOR_TOUGHNESS,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_1, 20, Operation.ADD_NUMBER, EquipmentSlotGroup.FEET));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_2, 0.55, Operation.MULTIPLY_SCALAR_1, EquipmentSlotGroup.FEET));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
+					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_3, 2, Operation.ADD_NUMBER, EquipmentSlotGroup.FEET));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_LUCK,
+					itemMeta.addAttributeModifier(Attribute.LUCK,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_4, 5, Operation.ADD_NUMBER, EquipmentSlotGroup.FEET));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH,
+					itemMeta.addAttributeModifier(Attribute.MAX_HEALTH,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_5, 0.35, Operation.ADD_SCALAR, EquipmentSlotGroup.FEET));
 					itemMeta.addEnchant(Enchantment.PROTECTION, 20, true);
 					itemMeta.addEnchant(Enchantment.UNBREAKING, 10, true);
@@ -1174,18 +1174,18 @@ public class ItemLoreCustomItem
 
 				case DIAMOND_CHESTPLATE_WITH_ELYTRA ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ARMOR,
+					itemMeta.addAttributeModifier(Attribute.ARMOR,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, 4, Operation.ADD_NUMBER, EquipmentSlotGroup.CHEST));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS,
+					itemMeta.addAttributeModifier(Attribute.ARMOR_TOUGHNESS,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_1, 1, Operation.ADD_NUMBER, EquipmentSlotGroup.CHEST));
 				}
 				case NETHERITE_CHESTPLATE_WITH_ELYTRA ->
 				{
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ARMOR,
+					itemMeta.addAttributeModifier(Attribute.ARMOR,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, 4, Operation.ADD_NUMBER, EquipmentSlotGroup.CHEST));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS,
+					itemMeta.addAttributeModifier(Attribute.ARMOR_TOUGHNESS,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_1, 1.5, Operation.ADD_NUMBER, EquipmentSlotGroup.CHEST));
-					itemMeta.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE,
+					itemMeta.addAttributeModifier(Attribute.KNOCKBACK_RESISTANCE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_2, 0.5, Operation.ADD_NUMBER, EquipmentSlotGroup.CHEST));
 				}
 

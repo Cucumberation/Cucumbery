@@ -39,10 +39,10 @@ public class CommandHeal implements CommandExecutor, TabCompleter
             MessageUtil.commandInfo(sender, label, consoleUsage);
             return true;
           }
-          double maxHealth = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
+          double maxHealth = Objects.requireNonNull(player.getAttribute(Attribute.MAX_HEALTH)).getValue();
           if (maxHealth > player.getHealth())
           {
-            player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
+            player.setHealth(Objects.requireNonNull(player.getAttribute(Attribute.MAX_HEALTH)).getValue());
           }
           MessageUtil.sendMessage(player, Prefix.INFO_HEAL, "HP가 모두 회복되었습니다");
         }
@@ -66,10 +66,10 @@ public class CommandHeal implements CommandExecutor, TabCompleter
           {
             return true;
           }
-          double maxHealth = Objects.requireNonNull(target.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
+          double maxHealth = Objects.requireNonNull(target.getAttribute(Attribute.MAX_HEALTH)).getValue();
           if (maxHealth > target.getHealth())
           {
-            target.setHealth(Objects.requireNonNull(target.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue());
+            target.setHealth(Objects.requireNonNull(target.getAttribute(Attribute.MAX_HEALTH)).getValue());
           }
           if (!hideOutput)
           {

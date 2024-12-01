@@ -94,7 +94,7 @@ public class EntityCustomEffectPreApply implements Listener
         event.setCancelled(true);
         return;
       }
-      AttributeInstance attributeInstance = attributable.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+      AttributeInstance attributeInstance = attributable.getAttribute(Attribute.MAX_HEALTH);
       if (attributeInstance == null)
       {
         event.setCancelled(true);

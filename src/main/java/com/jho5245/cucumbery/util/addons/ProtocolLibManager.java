@@ -13,6 +13,7 @@ import com.comphenix.protocol.reflect.StructureModifier;
 import com.comphenix.protocol.utility.MinecraftReflection;
 import com.comphenix.protocol.wrappers.EnumWrappers.ItemSlot;
 import com.comphenix.protocol.wrappers.*;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
@@ -25,6 +26,7 @@ import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
+import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.no_groups.Method2;
 import com.jho5245.cucumbery.util.storage.component.ItemStackComponent;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
@@ -39,6 +41,8 @@ import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
 import de.tr7zw.changeme.nbtapi.*;
+import it.unimi.dsi.fastutil.objects.ObjectLists;
+import it.unimi.dsi.fastutil.objects.ObjectLists.SynchronizedList;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TextComponent;
@@ -66,10 +70,10 @@ import org.bukkit.potion.PotionEffectType;
 import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import javax.naming.Name;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -84,7 +88,10 @@ public class ProtocolLibManager
 
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("[HH:mm:ss] ");
 
-	private static final Class<?> recipeHolderClass;
+	// ITEM TEXT DISPLAY MOUNT MAP
+	//	private static Map<Integer, List<Integer>> itemTextDisplayMountMap = Collections.synchronizedMap(new HashMap<>());
+
+/*	private static final Class<?> recipeHolderClass;
 
 	private static final Constructor<?> recipeHolderConstructor;
 
@@ -144,9 +151,9 @@ public class ProtocolLibManager
 
 	private static final Constructor<?> stoneCuttingRecipeConstructor;
 
-	private static final Method toBukkitRecipeFromStoneCuttingRecipe;
+	private static final Method toBukkitRecipeFromStoneCuttingRecipe;*/
 
-	static
+/*	static
 	{
 		try
 		{
@@ -191,9 +198,10 @@ public class ProtocolLibManager
 		}
 		catch (ReflectiveOperationException e)
 		{
+			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-	}
+	}*/
 
 	public static void manage()
 	{
@@ -464,7 +472,7 @@ public class ProtocolLibManager
 			}
 		});
 
-		protocolManager.addPacketListener(new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.HIGH, Server.ENTITY_METADATA)
+/*		protocolManager.addPacketListener(new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.NORMAL, Server.MOUNT)
 		{
 			@Override
 			public void onPacketSending(PacketEvent event)
@@ -472,8 +480,58 @@ public class ProtocolLibManager
 				if (!Cucumbery.using_ProtocolLib)
 					return;
 				Player player = event.getPlayer();
+				MessageUtil.broadcastDebug("mount");
 				PacketContainer packet = event.getPacket();
+				MessageUtil.broadcastDebug(packet.getIntegerArrays().read(0) + "");
+				for (int i = 0; i < packet.getModifier().size(); i++)
+				{
+					Object o = packet.getModifier().read(i);
+					MessageUtil.broadcastDebug(o.getClass() + ": " + o);
+					if (o.getClass().isArray())
+					{
+						Arrays.stream((int[]) o).forEach(MessageUtil::broadcastDebug);
+					}
+				}
+			}
+		});*/
+
+/*		protocolManager.addPacketListener(new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.HIGH, Server.ENTITY_DESTROY)
+		{
+			@Override
+			public void onPacketSending(PacketEvent event)
+			{
+				if (!Cucumbery.using_ProtocolLib)
+					return;
+				PacketContainer packet = event.getPacket();
+				List<Integer> integers = packet.getIntLists().read(0);
+				for (int id : integers)
+				{
+					if (ProtocolLibManager.itemTextDisplayMountMap.containsKey(id))
+					{
+						PacketContainer remove = protocolManager.createPacket(Server.ENTITY_DESTROY);
+						remove.getIntLists().write(0, ProtocolLibManager.itemTextDisplayMountMap.get(id));
+						protocolManager.sendServerPacket(event.getPlayer(), remove);
+					}
+				}
+			}
+		});*/
+
+		protocolManager.addPacketListener(new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.HIGH, Server.ENTITY_METADATA)
+		{
+			@Override
+			public void onPacketSending(PacketEvent event)
+			{
+				if (!Cucumbery.using_ProtocolLib)
+					return;
+				PacketContainer packet = event.getPacket();
+				for (int i = 0; i < packet.getModifier().size(); i++)
+				{
+					Object o = packet.getModifier().read(i);
+					//MessageUtil.broadcastDebug(o.getClass() + ": " + o);
+				}
+				Player player = event.getPlayer();
 				Entity entity = packet.getEntityModifier(player.getWorld()).read(0);
+				// System.out.println("metadata: " + entity);
 				if (entity instanceof Item item)
 				{
 					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, item.getItemStack(), player);
@@ -491,6 +549,61 @@ public class ProtocolLibManager
 							Optional.of(WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(component)).getHandle())));
 					wrappedDataValues.add(
 							new WrappedDataValue(3, WrappedDataWatcher.Registry.get(Boolean.class), shouldShowCustomName != null ? shouldShowCustomName : showCustomName));
+					// 아이템 웅크리게 하기
+					if (!UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME_BEHIND_BLOCKS.getBoolean(player))
+						wrappedDataValues.add(new WrappedDataValue(0, WrappedDataWatcher.Registry.get(Byte.class), (byte) 0x02));
+
+					// 아이템이름 엔티티 만들어서 아이템한테 탑승시킬 거임
+/*					Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> {
+						{
+							int entityId = Method.random(1, Integer.MAX_VALUE);
+							PacketContainer spawnEntity = new PacketContainer(Server.SPAWN_ENTITY);
+							spawnEntity.getIntegers().write(0, entityId);
+							spawnEntity.getEntityTypeModifier().write(0, EntityType.TEXT_DISPLAY);
+							// 가끔 엔티티가 여러 번 소환댐 ???? 그래서 기본 위치를 망한 위치로 지정
+							spawnEntity.getDoubles().write(0, 0d);
+							spawnEntity.getDoubles().write(1, -2048d);
+							spawnEntity.getDoubles().write(2, 0d);
+							// Set UUID
+							spawnEntity.getUUIDs().write(0, UUID.randomUUID());
+							protocolManager.sendServerPacket(player, spawnEntity);
+
+							PacketContainer edit = protocolManager.createPacket(Server.ENTITY_METADATA);
+							StructureModifier<List<WrappedDataValue>> modifier = edit.getDataValueCollectionModifier();
+							WrappedChatComponent wrappedChatComponent = WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(component));
+							List<WrappedDataValue> values = Lists.newArrayList(
+									new WrappedDataValue(11, WrappedDataWatcher.Registry.get(Vector3f.class), new Vector3f(0f, 0.3f, 0f)), // Translation
+//									new WrappedDataValue(12, WrappedDataWatcher.Registry.get(Vector3f.class), new Vector3f(2f, 2f, 2f)), // Scale
+									new WrappedDataValue(15, WrappedDataWatcher.Registry.get(Byte.class), (byte) 1), // Billboard
+									new WrappedDataValue(16, WrappedDataWatcher.Registry.get(Integer.class), (15 << 4 | 15 << 20)), // Brightness override
+									new WrappedDataValue(17, WrappedDataWatcher.Registry.get(Float.class), 1f), // view range
+									new WrappedDataValue(19, WrappedDataWatcher.Registry.get(Float.class), 0f), // shadow strength
+									new WrappedDataValue(23, WrappedDataWatcher.Registry.getChatComponentSerializer(), wrappedChatComponent.getHandle()), // text
+									new WrappedDataValue(25, WrappedDataWatcher.Registry.get(Integer.class), 0), // background color
+									new WrappedDataValue(26, WrappedDataWatcher.Registry.get(Byte.class), (byte) -1), // text opacity
+									new WrappedDataValue(27, WrappedDataWatcher.Registry.get(Byte.class), (byte) 0x01) // shadow / see through / default bgcolor / alignment
+							);
+							modifier.write(0, values);
+							edit.getIntegers().write(0, entityId);
+							protocolManager.sendServerPacket(player, edit);
+
+							List<Integer> passengerIDs = ProtocolLibManager.itemTextDisplayMountMap.getOrDefault(entity.getEntityId(), Collections.synchronizedList(new ArrayList<>()));
+							if (!passengerIDs.isEmpty())
+							{
+								PacketContainer remove = protocolManager.createPacket(Server.ENTITY_DESTROY);
+								remove.getIntLists().write(0, passengerIDs);
+								protocolManager.sendServerPacket(player, remove);
+							}
+							passengerIDs.add(entityId);
+							ProtocolLibManager.itemTextDisplayMountMap.put(entity.getEntityId(), passengerIDs);
+							PacketContainer mount = protocolManager.createPacket(Server.MOUNT);
+							mount.getIntegers().write(0, entity.getEntityId());
+							mount.getIntegerArrays().write(0, new int[] { entityId });
+							protocolManager.sendServerPacket(player, mount);
+
+						}
+					}, 0L);*/
+
 					watchableAccessor.write(0, wrappedDataValues);
 				}
 				if (entity instanceof ItemFrame itemFrame)
@@ -498,7 +611,8 @@ public class ProtocolLibManager
 					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, itemFrame.getItem(), player);
 					StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
 					List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-					wrappedDataValues.add(new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
+					wrappedDataValues.add(
+							new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
 					watchableAccessor.write(0, wrappedDataValues);
 				}
 				if (entity instanceof ThrowableProjectile throwableProjectile && !(entity instanceof Trident))
@@ -506,7 +620,8 @@ public class ProtocolLibManager
 					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, throwableProjectile.getItem(), player);
 					StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
 					List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-					wrappedDataValues.add(new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
+					wrappedDataValues.add(
+							new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
 					watchableAccessor.write(0, wrappedDataValues);
 				}
 				if (entity instanceof EnderSignal enderSignal)
@@ -514,7 +629,8 @@ public class ProtocolLibManager
 					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, enderSignal.getItem(), player);
 					StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
 					List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-					wrappedDataValues.add(new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
+					wrappedDataValues.add(
+							new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
 					watchableAccessor.write(0, wrappedDataValues);
 				}
 				if (entity instanceof ItemDisplay itemDisplay && ItemStackUtil.itemExists(itemDisplay.getItemStack()))
@@ -522,7 +638,8 @@ public class ProtocolLibManager
 					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, itemDisplay.getItemStack(), player);
 					StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
 					List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-					wrappedDataValues.add(new WrappedDataValue(7, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
+					wrappedDataValues.add(
+							new WrappedDataValue(7, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
 					watchableAccessor.write(0, wrappedDataValues);
 				}
 				if (entity instanceof Trident)
@@ -531,8 +648,7 @@ public class ProtocolLibManager
 					{
 						StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
 						List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-						wrappedDataValues.add(
-								new WrappedDataValue(11, WrappedDataWatcher.Registry.get(Boolean.class), false));
+						wrappedDataValues.add(new WrappedDataValue(11, WrappedDataWatcher.Registry.get(Boolean.class), false));
 						watchableAccessor.write(0, wrappedDataValues);
 					}
 				}
@@ -1493,17 +1609,20 @@ public class ProtocolLibManager
 
 		if (player.getGameMode() != GameMode.CREATIVE && !player.hasPermission("asdf"))
 		{
-			NBT.modify(clone, nbt -> {
+			NBT.modify(clone, nbt ->
+			{
 				nbt.getKeys().forEach(nbt::removeKey);
 			});
-			NBT.modifyComponents(clone, nbt -> {
+			NBT.modifyComponents(clone, nbt ->
+			{
 				for (String key : nbt.getKeys())
 				{
 					switch (key)
 					{
-						case "minecraft:custom_data",
-								"" -> nbt.removeKey(key);
-						default -> {}
+						case "minecraft:custom_data", "" -> nbt.removeKey(key);
+						default ->
+						{
+						}
 					}
 				}
 			});

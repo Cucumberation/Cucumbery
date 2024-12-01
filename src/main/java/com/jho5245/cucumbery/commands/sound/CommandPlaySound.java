@@ -8,10 +8,7 @@ import com.jho5245.cucumbery.util.storage.data.Permission;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
+import org.bukkit.*;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -374,7 +371,7 @@ public class CommandPlaySound implements CucumberyCommandExecutor
 		{
 			if (length == 1)
 			{
-				return CommandTabUtil.tabCompleterList(args, Sound.values(), "<소리>", true);
+				return CommandTabUtil.tabCompleterList(args, Registry.SOUNDS.iterator(), "<소리>", true);
 			}
 			else if (length == 2)
 			{
@@ -401,7 +398,7 @@ public class CommandPlaySound implements CucumberyCommandExecutor
 			}
 			else if (length == 2)
 			{
-				return CommandTabUtil.tabCompleterList(args, Sound.values(), "<소리>", true);
+				return CommandTabUtil.tabCompleterList(args, Registry.SOUNDS.iterator(), "<소리>", true);
 			}
 			else if (length == 3)
 			{

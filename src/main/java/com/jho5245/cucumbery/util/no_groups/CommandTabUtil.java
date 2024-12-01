@@ -660,6 +660,17 @@ public class CommandTabUtil
   }
 
   @NotNull
+  public static List<Completion> tabCompleterList(@NotNull String[] args, @NotNull Iterator<?> iterator, @NotNull Object key, boolean ignoreEmpty)
+  {
+    List list = new ArrayList<>();
+    while (iterator.hasNext())
+    {
+      list.add(iterator.next());
+    }
+    return tabCompleterList(args, list, key, ignoreEmpty);
+  }
+
+  @NotNull
   public static <T extends Enum<T>> List<Completion> tabCompleterList(@NotNull String[] args, @NotNull Enum<T>[] array, @NotNull Object key)
   {
     return tabCompleterList(args, array, key, false);
@@ -711,10 +722,11 @@ public class CommandTabUtil
           {
             hover = ComponentUtil.translate(userData.getKey().replace("-", " "));
           }
-          else if (e instanceof Sound sound)
-          {
-            hover = ComponentUtil.translate("key:subtitles." + sound.key().value() + "|" + sound.key().value());
-          }
+          // TODO: sound
+//          else if (e instanceof Sound sound)
+//          {
+//            hover = ComponentUtil.translate("key:subtitles." + sound.key().value() + "|" + sound.key().value());
+//          }
           else if (e instanceof Translatable translatable)
           {
             hover = ComponentUtil.translate(translatable.translationKey());

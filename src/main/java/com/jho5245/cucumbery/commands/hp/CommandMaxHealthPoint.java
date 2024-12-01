@@ -60,7 +60,7 @@ public class CommandMaxHealthPoint implements CommandExecutor, TabCompleter
       {
         return true;
       }
-      AttributeInstance maxHealthInstance = attributable.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+      AttributeInstance maxHealthInstance = attributable.getAttribute(Attribute.MAX_HEALTH);
       double mhp = maxHealthInstance != null ? maxHealthInstance.getBaseValue() : 0;
       double shp = -1;
       boolean isPlayer = entity instanceof Player;
@@ -110,7 +110,7 @@ public class CommandMaxHealthPoint implements CommandExecutor, TabCompleter
           MessageUtil.sendMessage(target, Prefix.INFO_HEAL, sender, "이(가) 당신의 순수 최대 HP를 rg255,204;" + Constant.Sosu15.format(value) + "&r으로 설정했습니다 (rg255,204;HP&r : rg255,204;" + Constant.Sosu2
                   .format(target.getHealth()) + "&r / rg255,204;" + Constant.Sosu2.format(maxHealthInstance != null ? maxHealthInstance.getValue() : 0) + "&r, HP바 : rg255,204;" + shpStr + "&r)");
           MessageUtil.sendMessage(sender, Prefix.INFO_HEAL, target, "의 순수 최대 HP를 rg255,204;" + Constant.Sosu15.format(value) + "&r으로 설정했습니다 (rg255,204;HP&r : rg255,204;" + Constant.Sosu2
-                  .format(target.getHealth()) + "&r / rg255,204;" + Method.attributeString(attributable, Attribute.GENERIC_MAX_HEALTH) + "&r, HP바 : rg255,204;" + shpStr + "&r)");
+                  .format(target.getHealth()) + "&r / rg255,204;" + Method.attributeString(attributable, Attribute.MAX_HEALTH) + "&r, HP바 : rg255,204;" + shpStr + "&r)");
         }
       }
       else if (args[0].equalsIgnoreCase("give"))
@@ -128,7 +128,7 @@ public class CommandMaxHealthPoint implements CommandExecutor, TabCompleter
           MessageUtil.sendMessage(target, Prefix.INFO_HEAL, sender, "이(가) 당신의 순수 최대 HP를 rg255,204;" + Constant.Sosu15.format(value) + "&r만큼 증가시켰습니다 (rg255,204;HP&r : rg255,204;" + Constant.Sosu2
                   .format(target.getHealth()) + "&r / rg255,204;" + Constant.Sosu2.format(maxHealthInstance != null ? maxHealthInstance.getValue() : 0) + "&r, HP바 : rg255,204;" + shpStr + "&r)");
           MessageUtil.sendMessage(sender, Prefix.INFO_HEAL, target, "의 순수 최대 HP를 rg255,204;" + Constant.Sosu15.format(value) + "&r만큼 증가시켰습니다 (rg255,204;HP&r : rg255,204;" + Constant.Sosu2
-                  .format(target.getHealth()) + "&r / rg255,204;" + Method.attributeString(attributable, Attribute.GENERIC_MAX_HEALTH) + "&r, HP바 : rg255,204;" + shpStr + "&r)");
+                  .format(target.getHealth()) + "&r / rg255,204;" + Method.attributeString(attributable, Attribute.MAX_HEALTH) + "&r, HP바 : rg255,204;" + shpStr + "&r)");
         }
       }
       else if (args[0].equalsIgnoreCase("take"))
@@ -153,9 +153,9 @@ public class CommandMaxHealthPoint implements CommandExecutor, TabCompleter
             target.setHealth(maxHealthInstance.getValue());
           }
           MessageUtil.sendMessage(target, Prefix.INFO_HEAL, sender, "이 당신의 순수 최대 HP를 rg255,204;" + Constant.Sosu15.format(mhp - 1D) + "&r만큼 차감시켰습니다 (rg255,204;HP&r : rg255,204;" + Constant.Sosu2
-                  .format(target.getHealth()) + "&r / rg255,204;" + Method.attributeString(attributable, Attribute.GENERIC_MAX_HEALTH) + "&r, HP바 : rg255,204;" + shpStr + "&r)");
+                  .format(target.getHealth()) + "&r / rg255,204;" + Method.attributeString(attributable, Attribute.MAX_HEALTH) + "&r, HP바 : rg255,204;" + shpStr + "&r)");
           MessageUtil.sendMessage(sender, Prefix.INFO_HEAL, target, "의 순수 최대 HP를 rg255,204;" + Constant.Sosu15.format(mhp - 1D) + "&r만큼 차감시켰습니다 (rg255,204;HP&r : rg255,204;" + Constant.Sosu2
-                  .format(target.getHealth()) + "&r / rg255,204;" + Method.attributeString(attributable, Attribute.GENERIC_MAX_HEALTH) + "&r, HP바 : rg255,204;" + shpStr + "&r)");
+                  .format(target.getHealth()) + "&r / rg255,204;" + Method.attributeString(attributable, Attribute.MAX_HEALTH) + "&r, HP바 : rg255,204;" + shpStr + "&r)");
         }
         else
         {
@@ -167,9 +167,9 @@ public class CommandMaxHealthPoint implements CommandExecutor, TabCompleter
           if (!hideOutput)
           {
             MessageUtil.sendMessage(target, Prefix.INFO_HEAL, sender, "이 당신의 순수 최대 HP를 rg255,204;" + Constant.Sosu15.format(value) + "&r만큼 차감시켰습니다 (rg255,204;HP&r : rg255,204;" + Constant.Sosu2
-                    .format(target.getHealth()) + "&r / rg255,204;" + Method.attributeString(attributable, Attribute.GENERIC_MAX_HEALTH) + "&r, HP바 : rg255,204;" + shpStr + "&r)");
+                    .format(target.getHealth()) + "&r / rg255,204;" + Method.attributeString(attributable, Attribute.MAX_HEALTH) + "&r, HP바 : rg255,204;" + shpStr + "&r)");
             MessageUtil.sendMessage(sender, Prefix.INFO_HEAL, target, "의 순수 최대 HP를 rg255,204;" + Constant.Sosu15.format(value) + "&r만큼 차감시켰습니다 (rg255,204;HP&r : rg255,204;" + Constant.Sosu2
-                    .format(target.getHealth()) + "&r / rg255,204;" + Method.attributeString(attributable, Attribute.GENERIC_MAX_HEALTH) + "&r, HP바 : rg255,204;" + shpStr + "&r)");
+                    .format(target.getHealth()) + "&r / rg255,204;" + Method.attributeString(attributable, Attribute.MAX_HEALTH) + "&r, HP바 : rg255,204;" + shpStr + "&r)");
           }
         }
       }

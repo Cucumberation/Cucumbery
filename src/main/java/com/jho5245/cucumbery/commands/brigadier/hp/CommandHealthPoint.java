@@ -92,7 +92,7 @@ public class CommandHealthPoint
         }
         Attributable attributable = (Attributable) target;
         double hp = target.getHealth();
-        AttributeInstance maxHealthInstance = attributable.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+        AttributeInstance maxHealthInstance = attributable.getAttribute(Attribute.MAX_HEALTH);
         double maxHealth = Objects.requireNonNull(maxHealthInstance).getValue();
         switch (key)
         {
@@ -180,7 +180,7 @@ public class CommandHealthPoint
         }
         Attributable attributable = (Attributable) target;
         double hp = target.getHealth();
-        AttributeInstance maxHealthInstance = attributable.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+        AttributeInstance maxHealthInstance = attributable.getAttribute(Attribute.MAX_HEALTH);
         double maxHealth = Objects.requireNonNull(maxHealthInstance).getValue();
         double baseMaxHealth = maxHealthInstance.getBaseValue();
         switch (key)
@@ -321,7 +321,7 @@ public class CommandHealthPoint
         }
         Attributable attributable = (Attributable) target;
         double hp = target.getHealth();
-        AttributeInstance maxHealthInstance = attributable.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+        AttributeInstance maxHealthInstance = attributable.getAttribute(Attribute.MAX_HEALTH);
         double maxHealth = Objects.requireNonNull(maxHealthInstance).getValue();
         double baseMaxHealth = maxHealthInstance.getBaseValue();
         switch (key)

@@ -228,7 +228,7 @@ public class EntityCustomEffectRemove implements Listener
 					attributeInstance.removeModifier(attributeModifier);
 				}
 				// update max health
-				if (attribute == Attribute.GENERIC_MAX_HEALTH && entity instanceof Damageable damageable)
+				if (attribute == Attribute.MAX_HEALTH && entity instanceof Damageable damageable)
 				{
 					double maxHealth = attributeInstance.getValue();
 					if (damageable.getHealth() > maxHealth)

@@ -68,7 +68,7 @@ public class CommandHealthScale implements CommandExecutor, TabCompleter
       if (isOnline)
       {
         hpStr = Constant.Sosu2.format(hp);
-        mhpStr = Method.attributeString(target, Attribute.GENERIC_MAX_HEALTH);
+        mhpStr = Method.attributeString(target, Attribute.MAX_HEALTH);
       }
       boolean hideOutput = false;
       if (args.length == 4)

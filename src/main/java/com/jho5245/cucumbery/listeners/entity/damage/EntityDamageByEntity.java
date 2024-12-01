@@ -2030,7 +2030,7 @@ public class EntityDamageByEntity implements Listener
 
 		boolean roundNumber = config.getBoolean("actionbar-on-attack-numbers-round");
 
-		AttributeInstance attributeInstance = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+		AttributeInstance attributeInstance = livingEntity.getAttribute(Attribute.MAX_HEALTH);
 
 		if (attributeInstance == null)
 		{

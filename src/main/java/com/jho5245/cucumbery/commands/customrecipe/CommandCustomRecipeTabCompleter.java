@@ -7,7 +7,10 @@ import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.Material;
+import org.bukkit.Registry;
 import org.bukkit.Statistic;
 import org.bukkit.block.Biome;
 import org.bukkit.command.Command;
@@ -20,10 +23,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class CommandCustomRecipeTabCompleter implements TabCompleter
 {
@@ -172,7 +172,8 @@ public class CommandCustomRecipeTabCompleter implements TabCompleter
                   }
                   return Method.tabCompleterList(args, "<표시 아이템 출처>", hand, "material", "remove");
                 case "biome":
-                  return Method.tabCompleterList(args, Method.addAll(Biome.values(), "--remove"), "<생물 군계>");
+                  // TODO: change tab list
+                  return Method.tabCompleterList(args, Collections.emptyList(), "<생물 군계>", false);
                 case "belowblock", "target-block":
                   List<String> list = new ArrayList<>();
                   for (Material material : Material.values())
@@ -379,7 +380,8 @@ public class CommandCustomRecipeTabCompleter implements TabCompleter
                 case "command":
                   return Method.tabCompleterList(args, "<실행 시점>", "craft", "failure", "success");
                 case "biome":
-                  return Method.tabCompleterList(args, Method.addAll(Biome.values(), "--remove"), "<생물 군계>");
+                  // TODO: change tab list
+                  return Method.tabCompleterList(args, Collections.emptyList(), "<생물 군계>");
                 case "belowblock", "target-block":
                 {
                   List<String> list = new ArrayList<>();

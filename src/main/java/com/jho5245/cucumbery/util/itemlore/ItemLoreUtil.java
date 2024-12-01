@@ -810,12 +810,12 @@ public class ItemLoreUtil
 
   public static int getAttributeScore(Attribute attribute)
   {
-    return switch (attribute)
+    return switch (attribute.getKey().getKey().toUpperCase())
             {
-              case GENERIC_ARMOR, GENERIC_KNOCKBACK_RESISTANCE -> 2;
-              case GENERIC_ARMOR_TOUGHNESS, GENERIC_LUCK -> 4;
-              case GENERIC_ATTACK_DAMAGE, GENERIC_MAX_HEALTH, GENERIC_ATTACK_SPEED -> 3;
-              case GENERIC_FOLLOW_RANGE, ZOMBIE_SPAWN_REINFORCEMENTS, GENERIC_JUMP_STRENGTH, GENERIC_MOVEMENT_SPEED -> 1;
+              case "ARMOR", "KNOCKBACK_RESISTANCE" -> 2;
+              case "ARMOR_TOUGHNESS", "LUCK" -> 4;
+              case "ATTACK_DAMAGE", "MAX_HEALTH", "ATTACK_SPEED" -> 3;
+              case "FOLLOW_RANGE", "SPAWN_REINFORCEMENTS", "JUMP_STRENGTH", "MOVEMENT_SPEED" -> 1;
               default -> 0;
             };
   }

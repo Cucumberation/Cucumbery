@@ -404,7 +404,7 @@ public class CustomRecipeUtil
 		}
 
 		// MHP 비용
-		playerValueDouble = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
+		playerValueDouble = player.getAttribute(Attribute.MAX_HEALTH).getBaseValue();
 		requireCostDouble = config.getDouble(configSection + "maxhealthcost");
 		// MHP 조건
 		requireString = "maxhealth";
@@ -421,7 +421,7 @@ public class CustomRecipeUtil
 		}
 		if (requireMinExists || requireMaxExists)
 		{
-			playerValueDouble = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+			playerValueDouble = player.getAttribute(Attribute.MAX_HEALTH).getValue();
 			double requireMin = config.getDouble(configSection + requireString + ".min");
 			double requireMax = config.getDouble(configSection + requireString + ".max");
 			String display = prefixColor + "최대 HP 조건 : ";

@@ -111,7 +111,15 @@ public class PluginLoader
 					if (c.getPlugin() == plugin)
 					{
 						c.unregister(commandMap);
-						it.remove();
+						// TODO: Fix it later
+						try
+						{
+							it.remove();
+						}
+						catch (Exception ignored)
+						{
+
+						}
 					}
 				}
 				else

@@ -43,7 +43,7 @@ public class PlayerArmSwing implements Listener
 				if (Variable.customMiningFallbackLocation.containsKey(uuid))
 				{
 					Location location = Variable.customMiningFallbackLocation.get(uuid);
-					double playerBlockInteractionRange = Objects.requireNonNull(player.getAttribute(Attribute.PLAYER_BLOCK_INTERACTION_RANGE)).getValue();
+					double playerBlockInteractionRange = Objects.requireNonNull(player.getAttribute(Attribute.BLOCK_INTERACTION_RANGE)).getValue();
 					RayTraceResult rayTraceResult = player.rayTraceBlocks(playerBlockInteractionRange, FluidCollisionMode.NEVER);
 					Block targetBlock = rayTraceResult != null ? rayTraceResult.getHitBlock() : null;
 					Location targetLocation = targetBlock != null ? targetBlock.getLocation() : null;
@@ -75,7 +75,7 @@ public class PlayerArmSwing implements Listener
 				if (!CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PROGRESS) && !CustomEffectManager.hasEffect(player,
 						CustomEffectType.IGNORE_ARM_SWING) && !Variable.customMiningFallbackLocation.containsKey(uuid))
 				{
-					double playerBlockInteractionRange = Objects.requireNonNull(player.getAttribute(Attribute.PLAYER_BLOCK_INTERACTION_RANGE)).getValue();
+					double playerBlockInteractionRange = Objects.requireNonNull(player.getAttribute(Attribute.BLOCK_INTERACTION_RANGE)).getValue();
 					RayTraceResult rayTraceResult = player.rayTraceBlocks(playerBlockInteractionRange, FluidCollisionMode.NEVER);
 					customMining(player, rayTraceResult);
 				}

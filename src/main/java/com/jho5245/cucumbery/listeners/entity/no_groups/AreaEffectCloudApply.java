@@ -78,7 +78,7 @@ public class AreaEffectCloudApply implements Listener
           livingEntity.damage(0);
           continue;
         }
-        AttributeInstance attributeInstance = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+        AttributeInstance attributeInstance = livingEntity.getAttribute(Attribute.MAX_HEALTH);
         if (attributeInstance != null)
         {
           livingEntity.damage(attributeInstance.getValue() * 0.1, projectileSource instanceof Entity entity ? entity : null);

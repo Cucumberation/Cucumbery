@@ -425,7 +425,7 @@ public class EntityComponentUtil
 		}
 		if (entity instanceof AbstractHorse abstractHorse)
 		{
-			AttributeInstance movementSpeedInstance = abstractHorse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
+			AttributeInstance movementSpeedInstance = abstractHorse.getAttribute(Attribute.MOVEMENT_SPEED);
 			if (movementSpeedInstance != null)
 			{
 				hover = hover.append(Component.text("\n"));
@@ -847,7 +847,7 @@ public class EntityComponentUtil
 			if (entity instanceof Damageable damageable && entity instanceof Attributable attributable)
 			{
 				double health = damageable.getHealth();
-				AttributeInstance maxHealthInstance = attributable.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+				AttributeInstance maxHealthInstance = attributable.getAttribute(Attribute.MAX_HEALTH);
 				if (maxHealthInstance != null)
 				{
 					double maxHealth = maxHealthInstance.getValue();

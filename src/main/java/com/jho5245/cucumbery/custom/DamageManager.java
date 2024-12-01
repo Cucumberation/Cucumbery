@@ -419,7 +419,7 @@ public class DamageManager
   @NotNull
   public static CombatInfo getCombatInfo(@NotNull Player player)
   {
-    AttributeInstance attributeInstance = player.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);
+    AttributeInstance attributeInstance = player.getAttribute(Attribute.ATTACK_DAMAGE);
     final double originalDamage = attributeInstance != null ? attributeInstance.getValue() : 1d;
     double bonusDamage = 0d;
     double damageMultiplier = 1d, finalDamageMultiplier = 1d;

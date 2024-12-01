@@ -349,6 +349,7 @@ public class CustomConfig
 		SHOW_DAMAGE_INDICATOR("대미지-숫자-표시", true),
 		SHOW_DAMAGE_INDICATOR_SPECTATING_ENTITY("관전-중인-개체의-대미지-숫자-표시", true),
 		SHOW_DROPPED_ITEM_CUSTOM_NAME("바닥에-떨어진-아이템-이름-표시", true),
+		SHOW_DROPPED_ITEM_CUSTOM_NAME_BEHIND_BLOCKS("바닥에-떨어진-아이템-이름-표시(블록 뒤에 있어도 표시)", true),
 		SHOW_ENCHANTMENT_TMI_DESCRIPTION("부여된-마법-TMI-표시", true),
 		SHOW_GIVE_COMMAND_NBT_ON_ITEM_ON_CHAT("채팅창에-있는-아이템에-nbt-표시", false),
 		SHOW_ITEM_BREAK_TITLE("아이템-파괴-타이틀-띄움", true),
@@ -557,7 +558,8 @@ public class CustomConfig
 			{
 				switch (this)
 				{
-					case EVENT_EXCEPTION_ACCESS, SHOW_ENCHANTMENT_TMI_DESCRIPTION, SHOW_ITEM_LORE, SHOW_ENCHANTED_ITEM_GLINTS, SHOW_ITEM_LORE_IN_CREATIVE_MODE, SHOW_ITEM_COMPONENTS_INFO -> ItemStackUtil.updateInventory(player);
+					case EVENT_EXCEPTION_ACCESS, SHOW_ENCHANTMENT_TMI_DESCRIPTION, SHOW_ITEM_LORE, SHOW_ENCHANTED_ITEM_GLINTS, SHOW_ITEM_LORE_IN_CREATIVE_MODE,
+							 SHOW_ITEM_COMPONENTS_INFO -> ItemStackUtil.updateInventory(player);
 					case ENTITY_AGGRO, SPECTATOR_MODE ->
 					{
 						if (!UserData.ENTITY_AGGRO.getBoolean(uuid) || UserData.SPECTATOR_MODE.getBoolean(uuid))

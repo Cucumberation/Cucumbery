@@ -260,7 +260,7 @@ public class CommandWhoIs implements CucumberyCommandExecutor
                     case CREATIVE -> "크리에이티브";
                   };
           String healthPoint = Constant.Sosu4.format(player.getHealth());
-          String maxHealthPoint = Method.attributeString(player, Attribute.GENERIC_MAX_HEALTH);
+          String maxHealthPoint = Method.attributeString(player, Attribute.MAX_HEALTH);
           String healthScale = Constant.Sosu4.format(player.getHealthScale());
           String lastDamage = Constant.Sosu4.format(player.getLastDamage());
           EntityDamageEvent lastDamageCause = player.getLastDamageCause();
@@ -362,7 +362,7 @@ public class CommandWhoIs implements CucumberyCommandExecutor
           String sleep = isSleeping ? "&a침대에서 자고 있음" : "&c침대에서 자고 있지 않음";
           String sneak = isSneaking ? "&c웅크리고 있음" : "&a웅크리고 있지 않음";
           String sprint = isSprinting ? "&a달리기 중" : "&c달리고 있지 않음";
-          double percentage = player.getHealth() / Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
+          double percentage = player.getHealth() / Objects.requireNonNull(player.getAttribute(Attribute.MAX_HEALTH)).getValue();
           if (percentage < 0.0D)
           {
             percentage = 0.0D;
@@ -452,7 +452,7 @@ public class CommandWhoIs implements CucumberyCommandExecutor
           for (Attribute attrs : Attribute.values())
           {
             AttributeInstance attr = player.getAttribute(attrs);
-            if (attr == null || attrs == Attribute.GENERIC_MAX_HEALTH)
+            if (attr == null || attrs == Attribute.MAX_HEALTH)
             {
               continue;
             }

@@ -23,12 +23,12 @@ public class EntityBreed implements Listener
     LivingEntity baby = event.getEntity(), mother = event.getMother(), father = event.getFather();
     if (baby instanceof Horse babyHorse && mother instanceof Horse motherHorse && father instanceof Horse fatherHorse)
     {
-      double motherHealth = motherHorse.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
-      double fatherHealth = fatherHorse.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
-      double motherSpeed = motherHorse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue();
-      double fatherSpeed = fatherHorse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getBaseValue();
-      double motherJump = motherHorse.getAttribute(Attribute.GENERIC_JUMP_STRENGTH).getBaseValue();
-      double fatherJump = fatherHorse.getAttribute(Attribute.GENERIC_JUMP_STRENGTH).getBaseValue();
+      double motherHealth = motherHorse.getAttribute(Attribute.MAX_HEALTH).getBaseValue();
+      double fatherHealth = fatherHorse.getAttribute(Attribute.MAX_HEALTH).getBaseValue();
+      double motherSpeed = motherHorse.getAttribute(Attribute.MOVEMENT_SPEED).getBaseValue();
+      double fatherSpeed = fatherHorse.getAttribute(Attribute.MOVEMENT_SPEED).getBaseValue();
+      double motherJump = motherHorse.getAttribute(Attribute.JUMP_STRENGTH).getBaseValue();
+      double fatherJump = fatherHorse.getAttribute(Attribute.JUMP_STRENGTH).getBaseValue();
 
       double health = Math.random() * 4 + 25;
       double speed = Math.random() * 0.0625 + 0.275;
@@ -37,9 +37,9 @@ public class EntityBreed implements Listener
       health = (motherHealth + fatherHealth + health) / 3;
       speed = (motherSpeed + fatherSpeed + speed) / 3;
       jump = (motherJump + fatherJump + jump) / 3;
-      babyHorse.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(health);
-      babyHorse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(speed);
-      babyHorse.getAttribute(Attribute.GENERIC_JUMP_STRENGTH).setBaseValue(jump);
+      babyHorse.getAttribute(Attribute.MAX_HEALTH).setBaseValue(health);
+      babyHorse.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(speed);
+      babyHorse.getAttribute(Attribute.JUMP_STRENGTH).setBaseValue(jump);
       babyHorse.setHealth(health);
       babyHorse.setTamed(true);
       babyHorse.setOwner((AnimalTamer) event.getBreeder());

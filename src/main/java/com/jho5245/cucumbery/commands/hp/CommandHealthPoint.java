@@ -81,7 +81,7 @@ public class CommandHealthPoint implements CommandExecutor, TabCompleter
         return true;
       }
       double hp = target.getHealth();
-      AttributeInstance maxHealthInstance = attributable.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+      AttributeInstance maxHealthInstance = attributable.getAttribute(Attribute.MAX_HEALTH);
       double maxHealth = 0;
       if (maxHealthInstance != null)
       {
@@ -99,7 +99,7 @@ public class CommandHealthPoint implements CommandExecutor, TabCompleter
       {
         shp = ((Player) entity).getHealthScale();
       }
-      String mhpStr = Method.attributeString(attributable, Attribute.GENERIC_MAX_HEALTH);
+      String mhpStr = Method.attributeString(attributable, Attribute.MAX_HEALTH);
       String shpStr = Constant.Sosu2.format(shp);
       if (args[0].equalsIgnoreCase("set"))
       {

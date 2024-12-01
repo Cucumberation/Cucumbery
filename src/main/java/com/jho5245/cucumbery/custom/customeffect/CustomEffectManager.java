@@ -170,7 +170,7 @@ public class CustomEffectManager
 		{
 			case "HEALTH_INCREASE" ->
 			{
-				effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.GENERIC_MAX_HEALTH,
+				effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.MAX_HEALTH,
 						Operation.ADD_SCALAR, 0.1);
 			}
 			case "NEWBIE_SHIELD" ->
@@ -182,17 +182,17 @@ public class CustomEffectManager
 			}
 			case "BREAD_KIMOCHI" ->
 			{
-				effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.GENERIC_MOVEMENT_SPEED,
+				effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.MOVEMENT_SPEED,
 						Operation.ADD_SCALAR, 0.1);
 			}
 			case "TOWN_SHIELD" ->
 			{
-				effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.GENERIC_MOVEMENT_SPEED,
+				effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.MOVEMENT_SPEED,
 						Operation.ADD_SCALAR, 0.3);
 			}
 			case "COMBAT_BOOSTER" ->
 			{
-				effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.GENERIC_ATTACK_SPEED,
+				effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.ATTACK_SPEED,
 						Operation.ADD_SCALAR, 0.25);
 			}
 			case "POSITION_MEMORIZE" ->
@@ -541,7 +541,7 @@ public class CustomEffectManager
 						}
 					}
 					// update max health
-					if (attribute == Attribute.GENERIC_MAX_HEALTH && entity instanceof Damageable damageable)
+					if (attribute == Attribute.MAX_HEALTH && entity instanceof Damageable damageable)
 					{
 						double maxHealth = attributeInstance.getValue();
 						if (damageable.getHealth() > maxHealth)

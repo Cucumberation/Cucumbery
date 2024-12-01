@@ -336,7 +336,7 @@ public class Scheduler
       MiningScheduler.customMining(player);
       if (player.getGameMode() != GameMode.CREATIVE && CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE))
       {
-        AttributeInstance instance = player.getAttribute(Attribute.PLAYER_BLOCK_BREAK_SPEED);
+        AttributeInstance instance = player.getAttribute(Attribute.BLOCK_BREAK_SPEED);
         if (instance != null)
         {
           if (instance.getModifier(UUID_CUCUMBERY_CUSTOM_MINING_MODIFIER) != null)
@@ -348,7 +348,7 @@ public class Scheduler
       }
       else
       {
-        AttributeInstance instance = player.getAttribute(Attribute.PLAYER_BLOCK_BREAK_SPEED);
+        AttributeInstance instance = player.getAttribute(Attribute.BLOCK_BREAK_SPEED);
         if (instance != null)
         {
           if (instance.getModifier(UUID_CUCUMBERY_CUSTOM_MINING_MODIFIER) != null)
@@ -750,7 +750,7 @@ public class Scheduler
     }
     if (target instanceof Damageable && target instanceof Attributable attributable)
     {
-      AttributeInstance attributeInstanceMaxHealth = attributable.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+      AttributeInstance attributeInstanceMaxHealth = attributable.getAttribute(Attribute.MAX_HEALTH);
       if (attributeInstanceMaxHealth != null)
       {
         Damageable damageable = (Damageable) target;
@@ -759,8 +759,8 @@ public class Scheduler
         message = message.append(ComponentUtil.create(" | &c" + Constant.Sosu2.format(hp) + "&7/&c" + Constant.Sosu2.format(mhp) + "❤"));
       }
 
-      AttributeInstance attributeInstanceArmor = attributable.getAttribute(Attribute.GENERIC_ARMOR);
-      AttributeInstance attributeInstanceArmorToughness = attributable.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS);
+      AttributeInstance attributeInstanceArmor = attributable.getAttribute(Attribute.ARMOR);
+      AttributeInstance attributeInstanceArmorToughness = attributable.getAttribute(Attribute.ARMOR_TOUGHNESS);
 
       if (attributeInstanceArmor != null && attributeInstanceArmorToughness != null)
       {

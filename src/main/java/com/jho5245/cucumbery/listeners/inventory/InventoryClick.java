@@ -189,8 +189,8 @@ public class InventoryClick implements Listener
 			double maxHealthCost = config.getDouble("recipes." + recipe + ".extra.mhpcost");
 			if (maxHealthCost > 0)
 			{
-				double playerMaxHealth = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getBaseValue();
-				Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(Math.max(0.01, maxHealthCost - playerMaxHealth));
+				double playerMaxHealth = Objects.requireNonNull(player.getAttribute(Attribute.MAX_HEALTH)).getBaseValue();
+				Objects.requireNonNull(player.getAttribute(Attribute.MAX_HEALTH)).setBaseValue(Math.max(0.01, maxHealthCost - playerMaxHealth));
 			}
 		}
 		return itemStacks;
@@ -1509,7 +1509,7 @@ public class InventoryClick implements Listener
 					barHasEmptySlot = true;
 				}
 			}
-			double playerBlockInteractionRange = Objects.requireNonNull(player.getAttribute(Attribute.PLAYER_BLOCK_INTERACTION_RANGE)).getValue();
+			double playerBlockInteractionRange = Objects.requireNonNull(player.getAttribute(Attribute.BLOCK_INTERACTION_RANGE)).getValue();
 			RayTraceResult rayTraceResult = player.rayTraceBlocks(playerBlockInteractionRange, FluidCollisionMode.NEVER);
 			Block targetBlock = rayTraceResult != null ? rayTraceResult.getHitBlock() : null;
 			ItemStack blockplaceDataItemStack = targetBlock != null ? BlockPlaceDataConfig.getItem(targetBlock.getLocation(), player) : null;

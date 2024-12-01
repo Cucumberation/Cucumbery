@@ -225,7 +225,7 @@ public class EntityDamage implements Listener
 						continue;
 					}
 					count++;
-					AttributeInstance attributeInstance = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+					AttributeInstance attributeInstance = livingEntity.getAttribute(Attribute.MAX_HEALTH);
 					double damage = attributeInstance != null ? attributeInstance.getValue() : livingEntity.getHealth();
 					CombatInfo combatInfo = DamageManager.getCombatInfo(new EntityDamageByEntityEvent(victim, livingEntity, DamageCause.CUSTOM,
 							org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.GENERIC).build(), new EnumMap<>(ImmutableMap.of(DamageModifier.BASE, damage)),

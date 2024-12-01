@@ -172,7 +172,7 @@ public class PlaceHolderUtil
     }
     if (entity instanceof Attributable attributeable)
     {
-      AttributeInstance attributeInstance = attributeable.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+      AttributeInstance attributeInstance = attributeable.getAttribute(Attribute.MAX_HEALTH);
       double maxHealth = attributeInstance != null ? attributeInstance.getValue() : 0;
       double baseMaxHealth = attributeInstance != null ? attributeInstance.getBaseValue() : 0;
       cmd = cmd.replace("%" + uuid + "_entity_max_health%", Constant.Sosu2rawFormat.format(maxHealth));
