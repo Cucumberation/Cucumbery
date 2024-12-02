@@ -89,7 +89,7 @@ public class ProtocolLibManager
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("[HH:mm:ss] ");
 
 	// ITEM TEXT DISPLAY MOUNT MAP
-	//	private static Map<Integer, List<Integer>> itemTextDisplayMountMap = Collections.synchronizedMap(new HashMap<>());
+	private static Map<Integer, List<Integer>> itemTextDisplayMountMap = Collections.synchronizedMap(new HashMap<>());
 
 /*	private static final Class<?> recipeHolderClass;
 
@@ -553,56 +553,19 @@ public class ProtocolLibManager
 					byte sneakStatus = UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME_BEHIND_BLOCKS.getBoolean(player) ? (byte) 0 : (byte) 0x02;
 					wrappedDataValues.add(new WrappedDataValue(0, WrappedDataWatcher.Registry.get(Byte.class), sneakStatus));
 
-					// 아이템이름 엔티티 만들어서 아이템한테 탑승시킬 거임
-/*					Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> {
-						{
-							int entityId = Method.random(1, Integer.MAX_VALUE);
-							PacketContainer spawnEntity = new PacketContainer(Server.SPAWN_ENTITY);
-							spawnEntity.getIntegers().write(0, entityId);
-							spawnEntity.getEntityTypeModifier().write(0, EntityType.TEXT_DISPLAY);
-							// 가끔 엔티티가 여러 번 소환댐 ???? 그래서 기본 위치를 망한 위치로 지정
-							spawnEntity.getDoubles().write(0, 0d);
-							spawnEntity.getDoubles().write(1, -2048d);
-							spawnEntity.getDoubles().write(2, 0d);
-							// Set UUID
-							spawnEntity.getUUIDs().write(0, UUID.randomUUID());
-							protocolManager.sendServerPacket(player, spawnEntity);
-
-							PacketContainer edit = protocolManager.createPacket(Server.ENTITY_METADATA);
-							StructureModifier<List<WrappedDataValue>> modifier = edit.getDataValueCollectionModifier();
-							WrappedChatComponent wrappedChatComponent = WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(component));
-							List<WrappedDataValue> values = Lists.newArrayList(
-									new WrappedDataValue(11, WrappedDataWatcher.Registry.get(Vector3f.class), new Vector3f(0f, 0.3f, 0f)), // Translation
-//									new WrappedDataValue(12, WrappedDataWatcher.Registry.get(Vector3f.class), new Vector3f(2f, 2f, 2f)), // Scale
-									new WrappedDataValue(15, WrappedDataWatcher.Registry.get(Byte.class), (byte) 1), // Billboard
-									new WrappedDataValue(16, WrappedDataWatcher.Registry.get(Integer.class), (15 << 4 | 15 << 20)), // Brightness override
-									new WrappedDataValue(17, WrappedDataWatcher.Registry.get(Float.class), 1f), // view range
-									new WrappedDataValue(19, WrappedDataWatcher.Registry.get(Float.class), 0f), // shadow strength
-									new WrappedDataValue(23, WrappedDataWatcher.Registry.getChatComponentSerializer(), wrappedChatComponent.getHandle()), // text
-									new WrappedDataValue(25, WrappedDataWatcher.Registry.get(Integer.class), 0), // background color
-									new WrappedDataValue(26, WrappedDataWatcher.Registry.get(Byte.class), (byte) -1), // text opacity
-									new WrappedDataValue(27, WrappedDataWatcher.Registry.get(Byte.class), (byte) 0x01) // shadow / see through / default bgcolor / alignment
-							);
-							modifier.write(0, values);
-							edit.getIntegers().write(0, entityId);
-							protocolManager.sendServerPacket(player, edit);
-
-							List<Integer> passengerIDs = ProtocolLibManager.itemTextDisplayMountMap.getOrDefault(entity.getEntityId(), Collections.synchronizedList(new ArrayList<>()));
-							if (!passengerIDs.isEmpty())
-							{
-								PacketContainer remove = protocolManager.createPacket(Server.ENTITY_DESTROY);
-								remove.getIntLists().write(0, passengerIDs);
-								protocolManager.sendServerPacket(player, remove);
-							}
-							passengerIDs.add(entityId);
-							ProtocolLibManager.itemTextDisplayMountMap.put(entity.getEntityId(), passengerIDs);
-							PacketContainer mount = protocolManager.createPacket(Server.MOUNT);
-							mount.getIntegers().write(0, entity.getEntityId());
-							mount.getIntegerArrays().write(0, new int[] { entityId });
-							protocolManager.sendServerPacket(player, mount);
-
-						}
-					}, 0L);*/
+					// entity metadata 패킷이 플레이어가 서버 접속 직후 보낸 패킷인지/접속 도중 보낸 패킷인지 구분하여
+					// 만약 서버 접속 직후 보낸 패킷이라면 일정 시간 뒤에 객체를 탑승시킨다.
+					long now = System.currentTimeMillis();
+					long playerJoined = player.getLastLogin();
+					if (now - playerJoined < 100) // 접속 직후인 경우
+					{
+						Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+								mountTextDisplayToItem(protocolManager, player, component, entity), 0L);
+					}
+					else // 이미 접속 중인 경우
+					{
+						mountTextDisplayToItem(protocolManager, player, component, entity);
+					}
 
 					watchableAccessor.write(0, wrappedDataValues);
 				}
@@ -1090,6 +1053,62 @@ public class ProtocolLibManager
 				}
 			}
 		});
+	}
+
+	/**
+	 * 아이템 이름을 보이게 하기 위해 아이템에 Text display 패킷 엔티티를 탑승 시킵니다.
+	 * @param protocolManager Manager
+	 * @param player 이 패킷을 받는 플레이어
+	 * @param component 아이템 이름
+	 * @param entity 아이템 개체
+	 */
+	private static void mountTextDisplayToItem(ProtocolManager protocolManager, Player player, Component component, Entity entity)
+	{
+		int entityId = Method.random(1, Integer.MAX_VALUE);
+		PacketContainer spawnEntity = new PacketContainer(Server.SPAWN_ENTITY);
+		spawnEntity.getIntegers().write(0, entityId);
+		spawnEntity.getEntityTypeModifier().write(0, EntityType.TEXT_DISPLAY);
+		// 가끔 엔티티가 여러 번 소환댐 ???? 그래서 기본 위치를 망한 위치로 지정
+		spawnEntity.getDoubles().write(0, 0d);
+		spawnEntity.getDoubles().write(1, -2048d);
+		spawnEntity.getDoubles().write(2, 0d);
+		// Set UUID
+		spawnEntity.getUUIDs().write(0, UUID.randomUUID());
+		protocolManager.sendServerPacket(player, spawnEntity);
+
+		PacketContainer edit = protocolManager.createPacket(Server.ENTITY_METADATA);
+		StructureModifier<List<WrappedDataValue>> modifier = edit.getDataValueCollectionModifier();
+		WrappedChatComponent wrappedChatComponent = WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(component));
+		List<WrappedDataValue> values = Lists.newArrayList(
+				new WrappedDataValue(11, WrappedDataWatcher.Registry.get(Vector3f.class), new Vector3f(0f, 0.3f, 0f)), // Translation
+				//									new WrappedDataValue(12, WrappedDataWatcher.Registry.get(Vector3f.class), new Vector3f(2f, 2f, 2f)), // Scale
+				new WrappedDataValue(15, WrappedDataWatcher.Registry.get(Byte.class), (byte) 1), // Billboard
+				new WrappedDataValue(16, WrappedDataWatcher.Registry.get(Integer.class), (15 << 4 | 15 << 20)), // Brightness override
+				new WrappedDataValue(17, WrappedDataWatcher.Registry.get(Float.class), 1f), // view range
+				new WrappedDataValue(19, WrappedDataWatcher.Registry.get(Float.class), 0f), // shadow strength
+				new WrappedDataValue(23, WrappedDataWatcher.Registry.getChatComponentSerializer(), wrappedChatComponent.getHandle()), // text
+				new WrappedDataValue(25, WrappedDataWatcher.Registry.get(Integer.class), 0), // background color
+				new WrappedDataValue(26, WrappedDataWatcher.Registry.get(Byte.class), (byte) -1), // text opacity
+				new WrappedDataValue(27, WrappedDataWatcher.Registry.get(Byte.class), (byte) 0x01) // shadow / see through / default bgcolor / alignment
+		);
+		modifier.write(0, values);
+		edit.getIntegers().write(0, entityId);
+		protocolManager.sendServerPacket(player, edit);
+
+		List<Integer> passengerIDs = ProtocolLibManager.itemTextDisplayMountMap.getOrDefault(entity.getEntityId(), Collections.synchronizedList(new ArrayList<>()));
+		if (!passengerIDs.isEmpty())
+		{
+			PacketContainer remove = protocolManager.createPacket(Server.ENTITY_DESTROY);
+			remove.getIntLists().write(0, passengerIDs);
+			protocolManager.sendServerPacket(player, remove);
+		}
+		passengerIDs.add(entityId);
+		ProtocolLibManager.itemTextDisplayMountMap.put(entity.getEntityId(), passengerIDs);
+		PacketContainer mount = protocolManager.createPacket(Server.MOUNT);
+		mount.getIntegers().write(0, entity.getEntityId());
+		mount.getIntegerArrays().write(0, new int[] { entityId });
+		protocolManager.sendServerPacket(player, mount);
+
 	}
 
 	@NotNull
