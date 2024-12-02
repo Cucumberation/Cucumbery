@@ -557,15 +557,16 @@ public class ProtocolLibManager
 					// 만약 서버 접속 직후 보낸 패킷이라면 일정 시간 뒤에 객체를 탑승시킨다.
 					long now = System.currentTimeMillis();
 					long playerJoined = player.getLastLogin();
-					if (now - playerJoined < 100) // 접속 직후인 경우
+					// MessageUtil.broadcast(null, "now : %s, joined : %s, diff : %s", now, playerJoined, now - playerJoined);
+					if (now - playerJoined < 1000) // 접속 직후인 경우
 					{
-						MessageUtil.consoleSendMessage("packet sent right after player has joined");
-						Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> mountTextDisplayToItem(protocolManager, player, component, entity), 0L);
+						// MessageUtil.consoleSendMessage("packet sent right after player has joined");
+						Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> mountTextDisplayToItem(protocolManager, player, component, item), 0L);
 					}
 					else // 이미 접속 중인 경우
 					{
-						MessageUtil.consoleSendMessage("packet sent when player is playing");
-						mountTextDisplayToItem(protocolManager, player, component, entity);
+						// MessageUtil.consoleSendMessage("packet sent when player is playing");
+						mountTextDisplayToItem(protocolManager, player, component, item);
 					}
 
 //					watchableAccessor.write(0, wrappedDataValues);
@@ -1065,19 +1066,27 @@ public class ProtocolLibManager
 	 * 		이 패킷을 받는 플레이어
 	 * @param component
 	 * 		아이템 이름
-	 * @param entity
+	 * @param item
 	 * 		아이템 개체
 	 */
-	private static void mountTextDisplayToItem(ProtocolManager protocolManager, Player player, Component component, Entity entity)
+	private static void mountTextDisplayToItem(ProtocolManager protocolManager, Player player, Component component, Item item)
 	{
 		int entityId = Method.random(1, Integer.MAX_VALUE);
 		PacketContainer spawnEntity = new PacketContainer(Server.SPAWN_ENTITY);
+		Location itemLocation = item.getLocation();
+		ItemStack itemStack = item.getItemStack();
+		int maxStackSize = itemStack.getMaxStackSize();
+		boolean isMaxStackSizeOne = maxStackSize == 1;
+
 		spawnEntity.getIntegers().write(0, entityId);
 		spawnEntity.getEntityTypeModifier().write(0, EntityType.TEXT_DISPLAY);
 		// 가끔 엔티티가 여러 번 소환댐 ???? 그래서 기본 위치를 망한 위치로 지정
-		spawnEntity.getDoubles().write(0, entity.getLocation().getX());
+		spawnEntity.getDoubles().write(0, itemLocation.getX());
 		spawnEntity.getDoubles().write(1, 0d);
-		spawnEntity.getDoubles().write(2, entity.getLocation().getZ());
+		spawnEntity.getDoubles().write(2, itemLocation.getZ());
+		// Set yaw/pitch
+		spawnEntity.getBytes().write(0, (byte) (itemLocation.getPitch() * 256f / 360f));
+		spawnEntity.getBytes().write(1, (byte) (itemLocation.getYaw() * 256f / 360f));
 		// Set UUID
 		spawnEntity.getUUIDs().write(0, UUID.randomUUID());
 		protocolManager.sendServerPacket(player, spawnEntity);
@@ -1086,8 +1095,6 @@ public class ProtocolLibManager
 		StructureModifier<List<WrappedDataValue>> modifier = edit.getDataValueCollectionModifier();
 		WrappedChatComponent wrappedChatComponent = WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(component));
 		List<WrappedDataValue> values = Lists.newArrayList(
-				new WrappedDataValue(11, WrappedDataWatcher.Registry.get(Vector3f.class), new Vector3f(0f, 0.3f, 0f)), // Translation
-				// new WrappedDataValue(12, WrappedDataWatcher.Registry.get(Vector3f.class), new Vector3f(2f, 2f, 2f)), // Scale
 				new WrappedDataValue(15, WrappedDataWatcher.Registry.get(Byte.class), (byte) 3), // Billboard
 				new WrappedDataValue(16, WrappedDataWatcher.Registry.get(Integer.class), (15 << 4 | 15 << 20)), // Brightness override
 				new WrappedDataValue(17, WrappedDataWatcher.Registry.get(Float.class), 1f), // view range
@@ -1097,11 +1104,21 @@ public class ProtocolLibManager
 				new WrappedDataValue(26, WrappedDataWatcher.Registry.get(Byte.class), (byte) -1), // text opacity
 				new WrappedDataValue(27, WrappedDataWatcher.Registry.get(Byte.class), (byte) 0x01) // shadow / see through / default bgcolor / alignment
 		);
+		// 아이템 최대 겹치기 개수가 1일 경우 표시되는 아이템 이름 글자를 좀 더 크게 + 좀 더 위에 보이도록 지정
+		if (isMaxStackSizeOne)
+		{
+			values.add(new WrappedDataValue(11, WrappedDataWatcher.Registry.get(Vector3f.class), new Vector3f(0f, 0.6f, 0f))); // Translation
+			values.add(new WrappedDataValue(12, WrappedDataWatcher.Registry.get(Vector3f.class), new Vector3f(2f, 2f, 2f))); // Scale
+		}
+		else
+		{
+			values.add(new WrappedDataValue(11, WrappedDataWatcher.Registry.get(Vector3f.class), new Vector3f(0f, 0.3f, 0f))); // Translation
+		}
 		modifier.write(0, values);
 		edit.getIntegers().write(0, entityId);
 		protocolManager.sendServerPacket(player, edit);
 
-		List<Integer> passengerIDs = ProtocolLibManager.itemTextDisplayMountMap.getOrDefault(entity.getEntityId(), Collections.synchronizedList(new ArrayList<>()));
+		List<Integer> passengerIDs = ProtocolLibManager.itemTextDisplayMountMap.getOrDefault(item.getEntityId(), Collections.synchronizedList(new ArrayList<>()));
 		if (!passengerIDs.isEmpty())
 		{
 			PacketContainer remove = protocolManager.createPacket(Server.ENTITY_DESTROY);
@@ -1109,9 +1126,9 @@ public class ProtocolLibManager
 			protocolManager.sendServerPacket(player, remove);
 		}
 		passengerIDs.add(entityId);
-		ProtocolLibManager.itemTextDisplayMountMap.put(entity.getEntityId(), passengerIDs);
+		ProtocolLibManager.itemTextDisplayMountMap.put(item.getEntityId(), passengerIDs);
 		PacketContainer mount = protocolManager.createPacket(Server.MOUNT);
-		mount.getIntegers().write(0, entity.getEntityId());
+		mount.getIntegers().write(0, item.getEntityId());
 		mount.getIntegerArrays().write(0, new int[] { entityId });
 		protocolManager.sendServerPacket(player, mount);
 
