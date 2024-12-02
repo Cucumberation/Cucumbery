@@ -495,7 +495,7 @@ public class ProtocolLibManager
 			}
 		});*/
 
-/*		protocolManager.addPacketListener(new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.HIGH, Server.ENTITY_DESTROY)
+		protocolManager.addPacketListener(new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.HIGH, Server.ENTITY_DESTROY)
 		{
 			@Override
 			public void onPacketSending(PacketEvent event)
@@ -514,7 +514,7 @@ public class ProtocolLibManager
 					}
 				}
 			}
-		});*/
+		});
 
 		protocolManager.addPacketListener(new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.HIGH, Server.ENTITY_METADATA)
 		{
@@ -538,20 +538,20 @@ public class ProtocolLibManager
 					Component component = itemStack.getAmount() == 1
 							? ItemNameUtil.itemName(itemStack)
 							: Component.translatable("%s (%s)").arguments(ItemNameUtil.itemName(itemStack), Component.text(itemStack.getAmount(), Constant.THE_COLOR));
-					boolean showCustomName =
-							UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player) && !UserData.FORCE_HIDE_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player);
-					Boolean shouldShowCustomName = ItemStackUtil.shouldShowCustomName(itemStack);
-					StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
-					List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-					wrappedDataValues.add(
-							new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
-					wrappedDataValues.add(new WrappedDataValue(2, WrappedDataWatcher.Registry.getChatComponentSerializer(true),
-							Optional.of(WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(component)).getHandle())));
-					wrappedDataValues.add(
-							new WrappedDataValue(3, WrappedDataWatcher.Registry.get(Boolean.class), shouldShowCustomName != null ? shouldShowCustomName : showCustomName));
-					// 아이템 웅크리게 하기
-					byte sneakStatus = UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME_BEHIND_BLOCKS.getBoolean(player) ? (byte) 0 : (byte) 0x02;
-					wrappedDataValues.add(new WrappedDataValue(0, WrappedDataWatcher.Registry.get(Byte.class), sneakStatus));
+//					boolean showCustomName =
+//							UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player) && !UserData.FORCE_HIDE_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player);
+//					Boolean shouldShowCustomName = ItemStackUtil.shouldShowCustomName(itemStack);
+//					StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
+//					List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
+//					wrappedDataValues.add(
+//							new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
+//					wrappedDataValues.add(new WrappedDataValue(2, WrappedDataWatcher.Registry.getChatComponentSerializer(true),
+//							Optional.of(WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(component)).getHandle())));
+//					wrappedDataValues.add(
+//							new WrappedDataValue(3, WrappedDataWatcher.Registry.get(Boolean.class), shouldShowCustomName != null ? shouldShowCustomName : showCustomName));
+//					// 아이템 웅크리게 하기
+//					byte sneakStatus = UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME_BEHIND_BLOCKS.getBoolean(player) ? (byte) 0 : (byte) 0x02;
+//					wrappedDataValues.add(new WrappedDataValue(0, WrappedDataWatcher.Registry.get(Byte.class), sneakStatus));
 
 					// entity metadata 패킷이 플레이어가 서버 접속 직후 보낸 패킷인지/접속 도중 보낸 패킷인지 구분하여
 					// 만약 서버 접속 직후 보낸 패킷이라면 일정 시간 뒤에 객체를 탑승시킨다.
@@ -568,7 +568,7 @@ public class ProtocolLibManager
 						mountTextDisplayToItem(protocolManager, player, component, entity);
 					}
 
-					watchableAccessor.write(0, wrappedDataValues);
+//					watchableAccessor.write(0, wrappedDataValues);
 				}
 				if (entity instanceof ItemFrame itemFrame)
 				{
@@ -1075,9 +1075,9 @@ public class ProtocolLibManager
 		spawnEntity.getIntegers().write(0, entityId);
 		spawnEntity.getEntityTypeModifier().write(0, EntityType.TEXT_DISPLAY);
 		// 가끔 엔티티가 여러 번 소환댐 ???? 그래서 기본 위치를 망한 위치로 지정
-		spawnEntity.getDoubles().write(0, 0d);
-		spawnEntity.getDoubles().write(1, -2048d);
-		spawnEntity.getDoubles().write(2, 0d);
+		spawnEntity.getDoubles().write(0, entity.getLocation().getX());
+		spawnEntity.getDoubles().write(1, 0d);
+		spawnEntity.getDoubles().write(2, entity.getLocation().getZ());
 		// Set UUID
 		spawnEntity.getUUIDs().write(0, UUID.randomUUID());
 		protocolManager.sendServerPacket(player, spawnEntity);
@@ -1085,15 +1085,15 @@ public class ProtocolLibManager
 		PacketContainer edit = protocolManager.createPacket(Server.ENTITY_METADATA);
 		StructureModifier<List<WrappedDataValue>> modifier = edit.getDataValueCollectionModifier();
 		WrappedChatComponent wrappedChatComponent = WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(component));
-		List<WrappedDataValue> values = Lists.newArrayList(new WrappedDataValue(11, WrappedDataWatcher.Registry.get(Vector3f.class), new Vector3f(0f, 0.3f, 0f)),
-				// Translation
-				//									new WrappedDataValue(12, WrappedDataWatcher.Registry.get(Vector3f.class), new Vector3f(2f, 2f, 2f)), // Scale
-				new WrappedDataValue(15, WrappedDataWatcher.Registry.get(Byte.class), (byte) 1), // Billboard
+		List<WrappedDataValue> values = Lists.newArrayList(
+				new WrappedDataValue(11, WrappedDataWatcher.Registry.get(Vector3f.class), new Vector3f(0f, 0.3f, 0f)), // Translation
+				// new WrappedDataValue(12, WrappedDataWatcher.Registry.get(Vector3f.class), new Vector3f(2f, 2f, 2f)), // Scale
+				new WrappedDataValue(15, WrappedDataWatcher.Registry.get(Byte.class), (byte) 3), // Billboard
 				new WrappedDataValue(16, WrappedDataWatcher.Registry.get(Integer.class), (15 << 4 | 15 << 20)), // Brightness override
 				new WrappedDataValue(17, WrappedDataWatcher.Registry.get(Float.class), 1f), // view range
 				new WrappedDataValue(19, WrappedDataWatcher.Registry.get(Float.class), 0f), // shadow strength
 				new WrappedDataValue(23, WrappedDataWatcher.Registry.getChatComponentSerializer(), wrappedChatComponent.getHandle()), // text
-				new WrappedDataValue(25, WrappedDataWatcher.Registry.get(Integer.class), 0), // background color
+				new WrappedDataValue(25, WrappedDataWatcher.Registry.get(Integer.class), 0x40_00_00_00), // background color ARGB
 				new WrappedDataValue(26, WrappedDataWatcher.Registry.get(Byte.class), (byte) -1), // text opacity
 				new WrappedDataValue(27, WrappedDataWatcher.Registry.get(Byte.class), (byte) 0x01) // shadow / see through / default bgcolor / alignment
 		);
