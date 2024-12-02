@@ -559,11 +559,12 @@ public class ProtocolLibManager
 					long playerJoined = player.getLastLogin();
 					if (now - playerJoined < 100) // 접속 직후인 경우
 					{
-						Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-								mountTextDisplayToItem(protocolManager, player, component, entity), 0L);
+						MessageUtil.consoleSendMessage("packet sent right after player has joined");
+						Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> mountTextDisplayToItem(protocolManager, player, component, entity), 0L);
 					}
 					else // 이미 접속 중인 경우
 					{
+						MessageUtil.consoleSendMessage("packet sent when player is playing");
 						mountTextDisplayToItem(protocolManager, player, component, entity);
 					}
 
@@ -1057,10 +1058,15 @@ public class ProtocolLibManager
 
 	/**
 	 * 아이템 이름을 보이게 하기 위해 아이템에 Text display 패킷 엔티티를 탑승 시킵니다.
-	 * @param protocolManager Manager
-	 * @param player 이 패킷을 받는 플레이어
-	 * @param component 아이템 이름
-	 * @param entity 아이템 개체
+	 *
+	 * @param protocolManager
+	 * 		Manager
+	 * @param player
+	 * 		이 패킷을 받는 플레이어
+	 * @param component
+	 * 		아이템 이름
+	 * @param entity
+	 * 		아이템 개체
 	 */
 	private static void mountTextDisplayToItem(ProtocolManager protocolManager, Player player, Component component, Entity entity)
 	{
@@ -1079,8 +1085,8 @@ public class ProtocolLibManager
 		PacketContainer edit = protocolManager.createPacket(Server.ENTITY_METADATA);
 		StructureModifier<List<WrappedDataValue>> modifier = edit.getDataValueCollectionModifier();
 		WrappedChatComponent wrappedChatComponent = WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(component));
-		List<WrappedDataValue> values = Lists.newArrayList(
-				new WrappedDataValue(11, WrappedDataWatcher.Registry.get(Vector3f.class), new Vector3f(0f, 0.3f, 0f)), // Translation
+		List<WrappedDataValue> values = Lists.newArrayList(new WrappedDataValue(11, WrappedDataWatcher.Registry.get(Vector3f.class), new Vector3f(0f, 0.3f, 0f)),
+				// Translation
 				//									new WrappedDataValue(12, WrappedDataWatcher.Registry.get(Vector3f.class), new Vector3f(2f, 2f, 2f)), // Scale
 				new WrappedDataValue(15, WrappedDataWatcher.Registry.get(Byte.class), (byte) 1), // Billboard
 				new WrappedDataValue(16, WrappedDataWatcher.Registry.get(Integer.class), (15 << 4 | 15 << 20)), // Brightness override
