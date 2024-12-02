@@ -550,8 +550,8 @@ public class ProtocolLibManager
 					wrappedDataValues.add(
 							new WrappedDataValue(3, WrappedDataWatcher.Registry.get(Boolean.class), shouldShowCustomName != null ? shouldShowCustomName : showCustomName));
 					// 아이템 웅크리게 하기
-					if (!UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME_BEHIND_BLOCKS.getBoolean(player))
-						wrappedDataValues.add(new WrappedDataValue(0, WrappedDataWatcher.Registry.get(Byte.class), (byte) 0x02));
+					byte sneakStatus = UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME_BEHIND_BLOCKS.getBoolean(player) ? (byte) 0 : (byte) 0x02;
+					wrappedDataValues.add(new WrappedDataValue(0, WrappedDataWatcher.Registry.get(Byte.class), sneakStatus));
 
 					// 아이템이름 엔티티 만들어서 아이템한테 탑승시킬 거임
 /*					Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> {

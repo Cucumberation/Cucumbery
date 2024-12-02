@@ -1931,7 +1931,6 @@ public class Method extends SoundPlay
 		}
 		if (Cucumbery.using_ProtocolLib)
 		{
-			if (true) return;
 			itemEntity.setCustomNameVisible(false);
 			ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 			try
@@ -1958,6 +1957,13 @@ public class Method extends SoundPlay
 					List<WrappedDataValue> values = Lists.newArrayList(new WrappedDataValue(3, WrappedDataWatcher.Registry.get(Boolean.class), showDrop),
 							new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false),
 									MinecraftReflection.getMinecraftItemStack(ProtocolLibManager.setItemLore(Play.Server.ENTITY_METADATA, itemStack, player))));
+					
+					// 아이템 웅크리게 하기
+					byte sneakStatus = UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME_BEHIND_BLOCKS.getBoolean(player) ? (byte) 0 : (byte) 0x02;
+					values.add(new WrappedDataValue(0, WrappedDataWatcher.Registry.get(Byte.class), sneakStatus));
+
+					
+					
 					watchableAccessor.write(0, values);
 					updateComponent.getIntegers().write(0, itemEntity.getEntityId());
 					protocolManager.sendServerPacket(player, updateComponent);

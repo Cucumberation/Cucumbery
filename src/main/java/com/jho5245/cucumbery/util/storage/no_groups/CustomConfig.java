@@ -628,7 +628,7 @@ public class CustomConfig
 							}
 						}
 					}
-					case SHOW_DROPPED_ITEM_CUSTOM_NAME, FORCE_HIDE_DROPPED_ITEM_CUSTOM_NAME ->
+					case SHOW_DROPPED_ITEM_CUSTOM_NAME, FORCE_HIDE_DROPPED_ITEM_CUSTOM_NAME, SHOW_DROPPED_ITEM_CUSTOM_NAME_BEHIND_BLOCKS ->
 							Bukkit.getScheduler().runTaskLaterAsynchronously(Cucumbery.getPlugin(), () ->
 							{
 								if (!tasks.isEmpty())
@@ -656,8 +656,8 @@ public class CustomConfig
 									items.removeIf(item -> !item.isValid());
 									if (!items.isEmpty())
 									{
-										Method.updateItem(items.get(0));
-										items.remove(0);
+										Method.updateItem(items.getFirst());
+										items.removeFirst();
 									}
 									if (items.isEmpty() && !tasks.isEmpty())
 									{
