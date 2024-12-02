@@ -157,7 +157,7 @@ public class CommandItemStorage implements CommandExecutor, TabCompleter
             boolean success = folder.mkdirs();
             if (!success)
             {
-              System.err.println("[Cucumbery] could not create ItemStorage folder!");
+              MessageUtil.sendError(Bukkit.getConsoleSender(), "[Cucumbery] could not create ItemStorage folder!");
             }
           }
           File file = new File(Cucumbery.getPlugin().getDataFolder() + "/data/ItemStorage/" + args[1] + ".yml");
@@ -253,7 +253,7 @@ Cucumbery.getPlugin().getLogger().warning(              e.getMessage());
             boolean success = file.delete();
             if (!success)
             {
-              System.err.println("[Cucumbery] could not delete " + args[1] + ".yml file!");
+              MessageUtil.sendError(Bukkit.getConsoleSender(), "[Cucumbery] could not delete " + args[1] + ".yml file!");
             }
             Variable.itemStorage.remove(args[1]);
             if (!hideOutput)
@@ -276,7 +276,7 @@ Cucumbery.getPlugin().getLogger().warning(              e.getMessage());
             boolean success = file.delete();
             if (!success)
             {
-              System.err.println("[Cucumbery] could not delete " + args[1] + ".yml file!");
+              MessageUtil.sendError(Bukkit.getConsoleSender(), "[Cucumbery] could not delete " + args[1] + ".yml file!");
             }
             Variable.itemStorage.remove(args[1]);
           }
@@ -654,7 +654,7 @@ Cucumbery.getPlugin().getLogger().warning(              e.getMessage());
             boolean success = folder.mkdirs();
             if (!success)
             {
-              System.err.println("[Cucumbery] could not create ItemStorage folder!");
+              MessageUtil.sendError(Bukkit.getConsoleSender(), "[Cucumbery] could not create ItemStorage folder!");
             }
           }
           File file = new File(Cucumbery.getPlugin().getDataFolder() + "/data/ItemStorage/" + args[1] + ".yml");

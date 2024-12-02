@@ -334,7 +334,7 @@ public class CommandCucumbery implements CucumberyCommandExecutor
                   }
                   else
                   {
-                    System.err.println("[Cucumbery] could not delete " + file.getName() + " file!");
+                    MessageUtil.sendError(Bukkit.getConsoleSender(), "[Cucumbery] could not delete " + file.getName() + " file!");
                   }
                 }
               }

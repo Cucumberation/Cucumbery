@@ -274,7 +274,7 @@ public class CommandWarp implements CommandExecutor, TabCompleter
             boolean success = folder.mkdirs();
             if (!success)
             {
-              System.err.println("[Cucumbery] Could not create Warps folder!");
+              MessageUtil.sendError(Bukkit.getConsoleSender(), "[Cucumbery] Could not create Warps folder!");
             }
           }
           File file = new File(Cucumbery.getPlugin().getDataFolder() + "/data/Warps/" + args[0] + ".yml");
@@ -304,7 +304,7 @@ public class CommandWarp implements CommandExecutor, TabCompleter
               boolean success = file.createNewFile();
               if (!success)
               {
-                System.err.println("[Cucumbery] Could not create Warp file!");
+                MessageUtil.sendError(Bukkit.getConsoleSender(), "[Cucumbery] Could not create Warp file!");
               }
             }
             catch (IOException ignored)
@@ -429,7 +429,7 @@ public class CommandWarp implements CommandExecutor, TabCompleter
             boolean success = file.delete();
             if (!success)
             {
-              System.err.println("[Cucumbery] Could not delete warp file!");
+              MessageUtil.sendError(Bukkit.getConsoleSender(), "[Cucumbery] Could not delete warp file!");
             }
           }
           Variable.warps.remove(args[0]);

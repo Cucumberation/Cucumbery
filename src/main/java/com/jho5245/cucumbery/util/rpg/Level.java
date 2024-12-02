@@ -1,5 +1,7 @@
 package com.jho5245.cucumbery.util.rpg;
 
+import com.jho5245.cucumbery.util.no_groups.MessageUtil;
+
 @SuppressWarnings("all")
 @Deprecated
 public class Level
@@ -17,7 +19,7 @@ public class Level
 	{
 		for (int i = 0; i < 249; i++)
 		{
-			System.out.println((i + 1) + " -> " + (i + 2) + " : " + level_exp[i]);
+			MessageUtil.consoleSendMessage((i + 1) + " -> " + (i + 2) + " : " + level_exp[i]);
 		}
 
 		long total = 0;
@@ -27,7 +29,7 @@ public class Level
 			total += xp;
 		}
 
-		System.out.println("총 경험치 : " + total);
+		MessageUtil.consoleSendMessage("총 경험치 : " + total);
 	}
 
 	static

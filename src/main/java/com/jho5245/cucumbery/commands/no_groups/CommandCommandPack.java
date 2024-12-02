@@ -62,7 +62,7 @@ public class CommandCommandPack implements CucumberyCommandExecutor
           }
           if (!file.delete())
           {
-            System.err.println("[Cucumbery] could not delete " + fileName + ".yml file!");
+            MessageUtil.sendError(Bukkit.getConsoleSender(), "[Cucumbery] could not delete " + fileName + ".yml file!");
           }
           Variable.commandPacks.remove(fileName);
           MessageUtil.info(sender, Constant.THE_COLOR_HEX + fileName + ".yml&r 명령어 팩 파일을 제거했습니다");

@@ -416,7 +416,6 @@ public class PlayerInteract implements Listener
 						if ((itemType == Material.WRITTEN_BOOK || itemType == Material.WRITABLE_BOOK) && clickedBlockType == Material.LECTERN)
 						{
 							event.setCancelled(true);
-							System.out.println("2");
 							if (!Permission.EVENT_ERROR_HIDE.has(player) && !Variable.playerInteractAlertCooldown.contains(uuid))
 							{
 								Variable.playerInteractAlertCooldown.add(uuid);

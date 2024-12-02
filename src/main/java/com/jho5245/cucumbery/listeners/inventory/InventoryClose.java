@@ -99,7 +99,7 @@ public class InventoryClose implements Listener
             boolean success = folder.delete();
             if (!success)
             {
-              System.err.println("[Cucumbery] could not delete " + player.getUniqueId() + " folder!");
+              MessageUtil.sendError(Bukkit.getConsoleSender(), "[Cucumbery] could not delete " + player.getUniqueId() + " folder!");
             }
           }
           return;
@@ -129,7 +129,7 @@ public class InventoryClose implements Listener
             boolean success = folder.delete();
             if (!success)
             {
-              System.err.println("[Cucumbery] could not delete " + player.getUniqueId().toString() + " folder!");
+              MessageUtil.sendError(Bukkit.getConsoleSender(), "[Cucumbery] could not delete " + player.getUniqueId().toString() + " folder!");
             }
           }
           return;

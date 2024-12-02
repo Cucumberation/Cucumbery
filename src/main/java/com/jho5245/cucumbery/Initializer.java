@@ -506,7 +506,7 @@ public class Initializer
 				boolean success = nickNamesFile.getParentFile().mkdirs();
 				if (!success)
 				{
-					System.err.println("[Cucumbery] Could not create data folder!");
+					MessageUtil.sendError(Bukkit.getConsoleSender(), "[Cucumbery] Could not create data folder!");
 				}
 			}
 			CustomConfig nickNamesCustonConfig = CustomConfig.getCustomConfig(nickNamesFile);

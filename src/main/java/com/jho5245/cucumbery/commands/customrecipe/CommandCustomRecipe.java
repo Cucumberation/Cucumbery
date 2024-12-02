@@ -91,7 +91,7 @@ public class CommandCustomRecipe implements CommandExecutor
           boolean success = folder.mkdirs();
           if (!success)
           {
-            System.err.println("[Cucumbery] could not create customrecipes folder!");
+            MessageUtil.sendError(Bukkit.getConsoleSender(), "[Cucumbery] could not create customrecipes folder!");
           }
         }
         if (args.length == 1)
@@ -220,7 +220,7 @@ public class CommandCustomRecipe implements CommandExecutor
           boolean success = folder.mkdirs();
           if (!success)
           {
-            System.err.println("[Cucumbery] could not create CustomRecipe folder!");
+            MessageUtil.sendError(Bukkit.getConsoleSender(), "[Cucumbery] could not create CustomRecipe folder!");
           }
         }
         file = new File(Cucumbery.getPlugin().getDataFolder() + "/data/CustomRecipe/" + args[1] + ".yml");
@@ -240,7 +240,7 @@ public class CommandCustomRecipe implements CommandExecutor
           boolean success = file.delete();
           if (!success)
           {
-            System.err.println("[Cucumbery] could not delete custom recipe file (" + args[1] + ")!");
+            MessageUtil.sendError(Bukkit.getConsoleSender(), "[Cucumbery] could not delete custom recipe file (" + args[1] + ")!");
           }
           MessageUtil.sendMessage(sender, Prefix.INFO_CUSTOM_RECIPE, "커스텀 레시피 목록 rg255,204;" + args[1] + "&r에 있는 모든 레시피를 제거했습니다");
           return true;
@@ -260,7 +260,7 @@ public class CommandCustomRecipe implements CommandExecutor
           boolean success = file.delete();
           if (!success)
           {
-            System.err.println("[Cucumbery] could not delete recipe (" + args[1] + ")file!");
+            MessageUtil.sendError(Bukkit.getConsoleSender(), "[Cucumbery] could not delete recipe (" + args[1] + ")file!");
           }
         }
         else
@@ -298,7 +298,7 @@ public class CommandCustomRecipe implements CommandExecutor
               boolean success = folder.mkdirs();
               if (!success)
               {
-                System.err.println("[Cucumbery] Could not create CustomRecipe folder!");
+                MessageUtil.sendError(Bukkit.getConsoleSender(), "[Cucumbery] Could not create CustomRecipe folder!");
               }
             }
             file = new File(Cucumbery.getPlugin().getDataFolder() + "/data/CustomRecipe/" + args[2] + ".yml");
@@ -674,7 +674,7 @@ public class CommandCustomRecipe implements CommandExecutor
                   boolean success = folder.mkdirs();
                   if (!success)
                   {
-                    System.err.println("[Cucumbery] could not create customrecipe folder!");
+                    MessageUtil.sendError(Bukkit.getConsoleSender(), "[Cucumbery] could not create customrecipe folder!");
                   }
                 }
                 if (!new File(Cucumbery.getPlugin().getDataFolder() + "/data/CustomRecipe/" + args[5] + ".yml").exists())
@@ -1620,7 +1620,7 @@ public class CommandCustomRecipe implements CommandExecutor
               boolean success = folder.mkdirs();
               if (!success)
               {
-                System.err.println("[Cucumbery] could not create CustomRecipe folder!");
+                MessageUtil.sendError(Bukkit.getConsoleSender(), "[Cucumbery] could not create CustomRecipe folder!");
               }
             }
             file = new File(Cucumbery.getPlugin().getDataFolder() + "/data/CustomRecipe/" + args[2] + ".yml");
@@ -2956,7 +2956,7 @@ public class CommandCustomRecipe implements CommandExecutor
                   boolean success = folder.mkdirs();
                   if (!success)
                   {
-                    System.err.println("[Cucumbery] could not create customrecipe folder!");
+                    MessageUtil.sendError(Bukkit.getConsoleSender(), "[Cucumbery] could not create customrecipe folder!");
                   }
                 }
                 if (!new File(Cucumbery.getPlugin().getDataFolder() + "/data/CustomRecipe/" + args[6] + ".yml").exists())

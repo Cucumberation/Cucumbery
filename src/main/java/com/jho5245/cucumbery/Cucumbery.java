@@ -401,7 +401,7 @@ public class Cucumbery extends JavaPlugin
 				}
 				catch (Exception e)
 				{
-					System.out.println("왜 : " + location);
+					MessageUtil.sendError(Bukkit.getConsoleSender(), "왜 : " + location);
 					Cucumbery.getPlugin().getLogger().warning(e.getMessage());
 				}
 			});

@@ -5,6 +5,5 @@ public class ShadingWhat
 {
   public ShadingWhat()
   {
-    System.out.println("Shading!");
   }
 }

@@ -14,7 +14,9 @@ import com.jho5245.cucumbery.util.storage.component.util.sendercomponent.SenderC
 import com.jho5245.cucumbery.util.storage.data.Permission;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
 import com.jho5245.cucumbery.util.storage.data.Variable;
+import io.lumine.mythic.bukkit.entities.BukkitTadpole;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.*;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -159,7 +161,7 @@ public class CommandNickName implements CommandExecutor, TabCompleter
 					boolean success = nickNamesFile.getParentFile().mkdirs();
 					if (!success)
 					{
-						System.err.println("[Cucumbery] could not create NickNames.yml file!");
+						MessageUtil.sendError(Bukkit.getConsoleSender(), "[Cucumbery] could not create NickNames.yml file!");
 					}
 				}
 				CustomConfig nickNamesCustonConfig = CustomConfig.getCustomConfig(nickNamesFile);
@@ -320,7 +322,7 @@ public class CommandNickName implements CommandExecutor, TabCompleter
 				boolean success = nickNamesFile.getParentFile().mkdirs();
 				if (!success)
 				{
-					System.err.println("[Cucumbery] could not create NickNames.yml file!");
+					MessageUtil.sendError(Bukkit.getConsoleSender(), "[Cucumbery] could not create NickNames.yml file!");
 				}
 			}
 			CustomConfig nickNamesCustonConfig = CustomConfig.getCustomConfig(nickNamesFile);
