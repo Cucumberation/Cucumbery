@@ -220,7 +220,7 @@ public abstract class CustomEnchant extends Enchantment
 
 	public static boolean isEnabled()
 	{
-		return Cucumbery.config.getBoolean("use-custom-enchant") && NOT_REGISTERED_ENCHANTS.isEmpty() && !CUSTOM_ENCHANTS.keySet().isEmpty();
+		return Cucumbery.config.getBoolean("use-custom-enchant") && NOT_REGISTERED_ENCHANTS.isEmpty() && !CUSTOM_ENCHANTS.isEmpty();
 	}
 
 	public static void onEnable()
