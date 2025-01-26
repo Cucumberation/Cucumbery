@@ -4,21 +4,12 @@ import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent.Completion;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
-import com.jho5245.cucumbery.util.storage.data.custom_enchant.CustomEnchant;
-import io.papermc.paper.inventory.tooltip.TooltipContext;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.components.FoodComponent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -38,181 +29,14 @@ public class TestCommand implements CucumberyCommandExecutor
 		}
 		try
 		{
-			// foo
-			if (args[0].equals("arrow"))
+			switch (args[0])
 			{
-				for (Entity entity : SelectorUtil.getEntities(sender, args[1]))
+				case "biome" ->
 				{
-					if (entity instanceof LivingEntity livingEntity)
-					{
-						livingEntity.setArrowsInBody(Integer.parseInt(args[2]));
-					}
-				}
-				return true;
-			}
-			if (args[0].equals("bee"))
-			{
-				for (Entity entity : SelectorUtil.getEntities(sender, args[1]))
-				{
-					if (entity instanceof LivingEntity livingEntity)
-					{
-						livingEntity.setBeeStingersInBody(Integer.parseInt(args[2]));
-					}
-				}
-				return true;
-			}
-			if (args[0].equals("show-win-screen"))
-			{
-				for (Entity entity : SelectorUtil.getEntities(sender, args[1]))
-				{
-					if (entity instanceof Player player)
-					{
-						player.showWinScreen();
-					}
-				}
-				return true;
-			}
-			if (args[0].equals("show-demo-screen"))
-			{
-				for (Entity entity : SelectorUtil.getEntities(sender, args[1]))
-				{
-					if (entity instanceof Player player)
-					{
-						player.showDemoScreen();
-					}
-				}
-				return true;
-			}
-			if (args[0].equals("set-walk-speed"))
-			{
-				for (Entity entity : SelectorUtil.getEntities(sender, args[1]))
-				{
-					if (entity instanceof Player player)
-					{
-						player.setWalkSpeed(Float.parseFloat(args[2]));
-					}
-				}
-				return true;
-			}
-			if (args[0].equals("set-fly-speed"))
-			{
-				for (Entity entity : SelectorUtil.getEntities(sender, args[1]))
-				{
-					if (entity instanceof Player player)
-					{
-						player.setFlySpeed(Float.parseFloat(args[2]));
-					}
-				}
-				return true;
-			}
-			if (args[0].equals("show-elder-guardian"))
-			{
-				for (Entity entity : SelectorUtil.getEntities(sender, args[1]))
-				{
-					if (entity instanceof Player player)
-					{
-						player.showElderGuardian(args.length == 3 && args[2].equals("true"));
-					}
-				}
-				return true;
-			}
-			if (args[0].equals("drop-all-custom-materials"))
-			{
-				for (CustomMaterial customMaterial : CustomMaterial.values())
-				{
-					if (customMaterial.isVerticalSlab())
-						((Player) sender).getWorld().dropItemNaturally(((Player) sender).getLocation(), customMaterial.create());
+					Player player = (Player) sender;
+					MessageUtil.info(player, player.getLocation().getBlock().getBiome().getKey());
 				}
 			}
-			if (args[0].equals("tooltip"))
-			{
-				Player player = (Player) sender;
-				ItemStack itemStack = player.getInventory().getItemInMainHand();
-				List<Component> components = itemStack.computeTooltipLines(TooltipContext.create(Boolean.parseBoolean(args[1]), Boolean.parseBoolean(args[2])),
-						SelectorUtil.getPlayer(sender, args[3]));
-				components.forEach(component -> player.sendMessage(component));
-				player.sendMessage(Component.text("-------------------------------------"));
-				itemStack.computeTooltipLines(TooltipContext.create(true, true), null).forEach(component -> player.sendMessage(component));
-			}
-			if (args[0].equals("item"))
-			{
-				Player player = (Player) sender;
-				ItemStack itemStack = player.getInventory().getItemInMainHand();
-				player.sendMessage(Component.text("foo").hoverEvent(itemStack));
-			}
-			if (args[0].equals("tag"))
-			{
-				Player player = (Player) sender;
-				setPlayerNameTag(player, args[1]);
-			}
-
-			if (args[0].equals("nbt"))
-			{
-				Player player = (Player) sender;
-				ItemStack itemStack = player.getInventory().getItemInMainHand();
-				String nbt = ItemSerializer.serialize(itemStack);
-				player.sendMessage("item nbt: " + nbt);
-				ItemStack build = ItemSerializer.deserialize(nbt);
-				player.getInventory().addItem(build);
-			}
-
-			if (args[0].equals("meta"))
-			{
-				Player player = (Player) sender;
-				ItemStack itemStack = player.getInventory().getItemInMainHand();
-				ItemMeta itemMeta = itemStack.hasItemMeta() ? itemStack.getItemMeta() : null;
-				MessageUtil.sendMessage(player, itemMeta + "");
-				if (itemMeta != null)
-				{
-				}
-			}
-
-			if (args[0].equals("food"))
-			{
-				Player player = (Player) sender;
-				ItemStack itemStack = player.getInventory().getItemInMainHand();
-				ItemMeta itemMeta = itemStack.hasItemMeta() ? itemStack.getItemMeta() : null;
-				MessageUtil.sendMessage(player, "hasfood?:" + itemMeta.hasFood());
-				FoodComponent foodComponent = itemMeta.getFood();
-				int nutrition = foodComponent.getNutrition();
-				float saturation = foodComponent.getSaturation();
-				boolean canAlwaysEat = foodComponent.canAlwaysEat();
-//				float eatSeconds = foodComponent.getEatSeconds();
-//				ItemStack convertsTo = foodComponent.getUsingConvertsTo();
-//				List<FoodEffect> foodEffects = foodComponent.getEffects();
-//				MessageUtil.sendMessage(player, "nutrition:" + nutrition + ", saturation: " + saturation + ", can_always_eat: " + canAlwaysEat + ", eatSeconds: " + eatSeconds + ", convertsTo: " + convertsTo + ", foodEffects: " + foodEffects.size());
-//				for (FoodEffect foodEffect : foodEffects)
-//				{
-//					PotionEffect potionEffect = foodEffect.getEffect();
-//					float probability = foodEffect.getProbability();
-//					MessageUtil.sendMessage(player, "ffecttype: " + potionEffect.getType() + ", prob: " + probability);
-//				}
-			}
-
-			if (args[0].equals("enchant"))
-			{
-				MessageUtil.info(sender, "ench: " + CustomEnchant.TELEKINESIS);
-			}
-
-/*			RecipeChoice ingredient = PotionMix.createPredicateChoice(itemStack -> CustomMaterial.itemStackOf(itemStack) == CustomMaterial.JADE);
-			RecipeChoice input = PotionMix.createPredicateChoice(itemStack ->
-			{
-				ItemMeta itemMeta = itemStack.getItemMeta();
-				if (itemMeta instanceof PotionMeta potionMeta)
-				{
-					return potionMeta.getBasePotionData().getType() == PotionType.WATER && potionMeta.getCustomEffects().isEmpty();
-				}
-				return false;
-			});
-
-			PotionMix potionMix = new PotionMix(NamespacedKey.fromString("test", Cucumbery.getPlugin()), ItemStackUtil.loredItemStack(Material.TNT), input, ingredient);
-			Bukkit.getPotionBrewer().addPotionMix(potionMix);
-
-			ShapelessRecipe shapelessRecipe = new ShapelessRecipe(NamespacedKey.fromString("test2", Cucumbery.getPlugin()), new ItemStack(Material.DIAMOND));
-			shapelessRecipe.addIngredient(ingredient);
-			shapelessRecipe.setCategory(CraftingBookCategory.MISC);
-			shapelessRecipe.setGroup("foo");
-			Bukkit.addRecipe(shapelessRecipe);*/
 		}
 		catch (Exception e)
 		{
