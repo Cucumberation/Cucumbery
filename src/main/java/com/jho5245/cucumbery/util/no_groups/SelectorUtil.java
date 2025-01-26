@@ -205,7 +205,7 @@ public class SelectorUtil
 				MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.entity.notfound.player"), selector);
 				return null;
 			}
-			return (Player) entities.get(0);
+			return (Player) entities.getFirst();
 		}
 		catch (IllegalArgumentException e)
 		{
@@ -216,7 +216,7 @@ public class SelectorUtil
 					MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.entity.notfound.player"), selector);
 					return null;
 				}
-				MessageUtil.sendError(sender, errorMessage(selector, e));
+				MessageUtil.sendError(sender, errorMessage(sender, selector, e));
 			}
 		}
 		return null;
@@ -269,7 +269,7 @@ public class SelectorUtil
 				MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.entity.notfound.entity"), selector);
 				return null;
 			}
-			return entities.get(0);
+			return entities.getFirst();
 		}
 		catch (IllegalArgumentException e)
 		{
@@ -280,7 +280,7 @@ public class SelectorUtil
 					MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.entity.notfound.entity"), selector);
 					return null;
 				}
-				MessageUtil.sendError(sender, errorMessage(selector, e));
+				MessageUtil.sendError(sender, errorMessage(sender, selector, e));
 			}
 		}
 		return null;
@@ -353,7 +353,7 @@ public class SelectorUtil
 					MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.entity.notfound.player"), selector);
 					return null;
 				}
-				MessageUtil.sendError(sender, errorMessage(selector, e));
+				MessageUtil.sendError(sender, errorMessage(sender, selector, e));
 			}
 		}
 		return null;
@@ -403,7 +403,7 @@ public class SelectorUtil
 					MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.entity.notfound.entity"), selector);
 					return null;
 				}
-				MessageUtil.sendError(sender, errorMessage(selector, e));
+				MessageUtil.sendError(sender, errorMessage(sender, selector, e));
 			}
 		}
 		return null;
@@ -474,7 +474,7 @@ public class SelectorUtil
 					MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.entity.notfound.player"), selector);
 					return null;
 				}
-				MessageUtil.sendError(sender, errorMessage(selector, e));
+				MessageUtil.sendError(sender, errorMessage(sender, selector, e));
 			}
 		}
 		return null;
@@ -545,7 +545,7 @@ public class SelectorUtil
 				MessageUtil.sendError(sender, ComponentUtil.translate("argument.entity.selector.not_allowed"));
 				return null;
 			}
-			return (Player) entities.get(0);
+			return (Player) entities.getFirst();
 		}
 		catch (IllegalArgumentException e)
 		{
@@ -556,24 +556,25 @@ public class SelectorUtil
 					MessageUtil.sendError(sender, "%s: %s", ComponentUtil.translate("argument.entity.notfound.player"), selector);
 					return null;
 				}
-				MessageUtil.sendError(sender, errorMessage(selector, e));
+				MessageUtil.sendError(sender, errorMessage(sender, selector, e));
 			}
 		}
 		return null;
 	}
 
 	@NotNull
-	public static String getErrorMessage(@NotNull String selector, @NotNull IllegalArgumentException e)
+	public static String getErrorMessage(@NotNull CommandSender sender, @NotNull String selector, @NotNull IllegalArgumentException e)
 	{
-		return ComponentUtil.serialize(errorMessage(selector, e));
+		return ComponentUtil.serialize(errorMessage(sender, selector, e));
 	}
 
 	@NotNull
-	public static TranslatableComponent errorMessage(@NotNull String selector, @NotNull IllegalArgumentException e)
+	public static TranslatableComponent errorMessage(@NotNull CommandSender sender, @NotNull String selector, @NotNull IllegalArgumentException e)
 	{
 		String msg = e.getMessage();
 		if (e.getCause() != null)
 		{
+			Player player = sender instanceof Player p ? p : null;
 			List<Component> args = new ArrayList<>();
 			Component concat = Component.empty();
 			msg = e.getCause().getMessage();
@@ -671,12 +672,12 @@ public class SelectorUtil
 			if (msg.startsWith("Invalid name or UUID"))
 			{
 				msg = "argument.entity.invalid";
-				concat = ComponentUtil.translate("(%s)", selector);
+				concat = ComponentUtil.translate(player, "(%s)", selector);
 			}
 			if (msg.startsWith("Invalid UUID"))
 			{
 				msg = "argument.uuid.invalid";
-				concat = ComponentUtil.translate("(%s)", selector);
+				concat = ComponentUtil.translate(player, "(%s)", selector);
 			}
 			if (msg.startsWith("Expected value or range of values"))
 			{
@@ -838,7 +839,7 @@ public class SelectorUtil
 				concat = Component.text(origin.split(": ")[1].replace("<--[HERE]", ""));
 				concat = concat.append(ComponentUtil.translate("&ccommand.context.here").decoration(TextDecoration.ITALIC, State.TRUE));
 			}
-			TranslatableComponent component = ComponentUtil.translate(msg, args);
+			TranslatableComponent component = ComponentUtil.translate(player, msg, args);
 			if (!concat.equals(Component.empty()))
 			{
 				component = component.append(Component.text(" ")).append(concat.color(NamedTextColor.RED));

@@ -3078,7 +3078,7 @@ public class Method extends SoundPlay
 				{
 					return Collections.singletonList(ComponentUtil.serialize(ComponentUtil.translate("argument.entity.selector.not_allowed")));
 				}
-				return Collections.singletonList(SelectorUtil.getErrorMessage(args[args.length - 1], e));
+				return Collections.singletonList(SelectorUtil.getErrorMessage(sender, args[args.length - 1], e));
 			}
 		}
 		return returnList;
@@ -3135,7 +3135,7 @@ public class Method extends SoundPlay
 				{
 					return Collections.singletonList(ComponentUtil.serialize(ComponentUtil.translate("argument.entity.selector.not_allowed")));
 				}
-				return Collections.singletonList(SelectorUtil.getErrorMessage(args[args.length - 1], e));
+				return Collections.singletonList(SelectorUtil.getErrorMessage(sender, args[args.length - 1], e));
 			}
 		}
 		return returnList;
@@ -3199,7 +3199,7 @@ public class Method extends SoundPlay
 				{
 					return Collections.singletonList(ComponentUtil.serialize(ComponentUtil.translate("argument.entity.selector.not_allowed")));
 				}
-				return Collections.singletonList(SelectorUtil.getErrorMessage(args[args.length - 1], e));
+				return Collections.singletonList(SelectorUtil.getErrorMessage(sender, args[args.length - 1], e));
 			}
 		}
 		return returnList;
