@@ -11,7 +11,6 @@ import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.EnumHideable;
-import com.jho5245.cucumbery.util.storage.data.TranslatableKeyParser;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.translation.Translatable;
@@ -34,7 +33,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.naming.Name;
 import java.util.*;
 import java.util.function.Predicate;
 
