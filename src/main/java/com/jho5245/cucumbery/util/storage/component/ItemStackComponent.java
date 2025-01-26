@@ -25,6 +25,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.format.TextDecoration.State;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -35,15 +36,29 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class ItemStackComponent
 {
+	private static final ItemStack AIR_ITEM;
+
+	static
+	{
+		AIR_ITEM = new ItemStack(Material.STONE);
+		ItemMeta itemMeta = AIR_ITEM.getItemMeta();
+		itemMeta.setItemModel(NamespacedKey.minecraft("air"));
+		itemMeta.setMaxStackSize(99);
+		AIR_ITEM.setItemMeta(itemMeta);
+	}
+
 	@NotNull
 	public static Component itemStackComponent(@NotNull ItemStack itemStack)
 	{
 		return itemStackComponent(itemStack, itemStack.getAmount(), NamedTextColor.GRAY, true);
 	}
+
 	@NotNull
 	public static Component itemStackComponent(@NotNull ItemStack itemStack, @Nullable Player viewer)
 	{
@@ -99,7 +114,9 @@ public class ItemStackComponent
 					!(hideFlagsTagExists && NBTAPI.arrayContainsValue(hideFlags, CucumberyHideFlag.ENCHANTS)) && !cloneMeta.hasItemFlag(ItemFlag.HIDE_ENCHANTS);
 			if (showItemLore) // 아이템 설명을 사용할 경우 큐컴버리의 setItemLore의 설명만 사용하고 모든 ItemFlag 추가
 			{
-				clone = Cucumbery.using_ProtocolLib ? ProtocolLibManager.setItemLore(Server.ABILITIES, clone, viewer) : ItemLore.setItemLore(itemStack, false, ItemLoreView.of(viewer));
+				clone = Cucumbery.using_ProtocolLib
+						? ProtocolLibManager.setItemLore(Server.ABILITIES, clone, viewer)
+						: ItemLore.setItemLore(itemStack, false, ItemLoreView.of(viewer));
 				cloneMeta = clone.getItemMeta();
 				cloneMeta.addItemFlags(ItemFlag.values());
 			}
@@ -115,8 +132,11 @@ public class ItemStackComponent
 			}
 			clone.setItemMeta(cloneMeta);
 			List<Component> tooltip = new ArrayList<>(clone.computeTooltipLines(TooltipContext.create(), viewer));
-			if (!tooltip.isEmpty())
-				tooltip.remove(0);
+
+			// 공백 라인 제거
+			while (!tooltip.isEmpty() && tooltip.getFirst() instanceof TextComponent textComponent && textComponent.content().isEmpty())
+				tooltip.removeFirst();
+
 			if (!showItemLore && !tooltip.isEmpty() && !showEnchants && showAll)
 			{
 				tooltip.add(0, ComponentUtil.translate("&8관리자 권한으로 숨겨진 마법을 참조합니다"));
@@ -157,7 +177,15 @@ public class ItemStackComponent
 			}
 			bundleMeta.lore(tooltip);
 		}
-		bundleMeta.addItem(Cucumbery.using_ProtocolLib && viewer != null ? ProtocolLibManager.setItemLore(Server.ABILITIES, itemStack, viewer) : itemStack);
+		// 꾸러미 아이템 표시 규칙 변경
+		final ItemStack displayItemStack =
+				Cucumbery.using_ProtocolLib && viewer != null ? ProtocolLibManager.setItemLore(Server.ABILITIES, itemStack, viewer) : itemStack;
+		ItemMeta displayItemMeta = displayItemStack.getItemMeta();
+		displayItemMeta.setMaxStackSize(99);
+		displayItemStack.setItemMeta(displayItemMeta);
+		// 첫 번째 아이템은 표시 아이템, 2~4번째 아이템은 공기 아이템으로 설정
+		bundleMeta.setItems(Arrays.asList(displayItemStack, AIR_ITEM, AIR_ITEM, AIR_ITEM));
+
 		bundleMeta.addItemFlags(ItemFlag.values());
 		bundleMeta.removeItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
 		bundleMeta.itemName(ItemNameUtil.itemName(itemStack));
