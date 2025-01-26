@@ -392,7 +392,7 @@ public class CommandTabUtil
   public static List<Completion> tabCompleterEntity(@NotNull CommandSender sender, @NotNull String[] args, @NotNull Object key, boolean multiple)
   {
     String arg = args[args.length - 1];
-    if (Method.equals(arg, "@a", "@e", "@p", "@r", "@s", "@A", "@E", "@R", "@S", "#") && !sender.hasPermission("minecraft.command.selector"))
+    if (Method.equals(arg, "@a", "@e", "@n", "@p", "@r", "@s", "@A", "@E", "@R", "@S", "#") && !sender.hasPermission("minecraft.command.selector"))
     {
       return errorMessage("argument.entity.selector.not_allowed");
     }
@@ -400,6 +400,7 @@ public class CommandTabUtil
     if (sender.hasPermission("minecraft.command.selector"))
     {
       list.add(Completion.completion("@e", ComponentUtil.translate("argument.entity.selector.allEntities")));
+      list.add(Completion.completion("@n", ComponentUtil.translate("argument.entity.selector.nearestEntity")));
       if (arg.startsWith("@"))
       {
         list.add(Completion.completion("@A", ComponentUtil.translate("자신을 제외한 모든 플레이어")));
@@ -441,7 +442,7 @@ public class CommandTabUtil
   public static List<Completion> tabCompleterPlayer(@NotNull CommandSender sender, @NotNull String[] args, @NotNull Object key)
   {
     String arg = args[args.length - 1];
-    if (Method.equals(arg, "@a", "@e", "@p", "@r", "@s", "@A", "@E", "#") && !sender.hasPermission("minecraft.command.selector"))
+    if (Method.equals(arg, "@a", "@e", "@n", "@p", "@r", "@s", "@A", "@E", "#") && !sender.hasPermission("minecraft.command.selector"))
     {
       return errorMessage("argument.entity.selector.not_allowed");
     }
