@@ -121,7 +121,7 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.21.3-R0.1-SNAPSHOT</version>
+            <version>1.21.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -129,14 +129,14 @@
         <dependency>
             <groupId>de.tr7zw</groupId>
             <artifactId>item-nbt-api</artifactId>
-            <version>2.14.0</version>
+            <version>2.14.1</version>
         </dependency>
 
         <!-- CommandAPI Dependency -->
         <dependency>
             <groupId>dev.jorel</groupId>
             <artifactId>commandapi-bukkit-shade</artifactId>
-            <version>9.6.0</version>
+            <version>9.7.0</version>
         </dependency>
 
         <!-- Mojang Brigadier Dependency -->
@@ -259,7 +259,8 @@
                             </mainClass>
                         </manifest>
                     </archive>
-                    <outputDirectory>G:\CucumberyAutoUpdater</outputDirectory>
+<!--                    <outputDirectory>G:\CucumberyAutoUpdater</outputDirectory>-->
+                    <outputDirectory>G:\느아아ㅏㅏ아아ㅏ앙ㄺ\게임\마인크래프트\기타 자료\서버\페이퍼 1.21.4 테스트 서버\plugins</outputDirectory>
                 </configuration>
             </plugin>
             <plugin>
