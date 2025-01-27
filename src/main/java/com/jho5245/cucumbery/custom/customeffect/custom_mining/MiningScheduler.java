@@ -402,6 +402,8 @@ public class MiningScheduler
 		if (CustomEffectManager.getEffectNullable(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PROGRESS) instanceof LocationCustomEffect effect)
 		{
 			final Location location = effect.getLocation();
+			// 블록 채굴 시 아이템을 드롭할 위치
+			final Location dropLocation = new Location(location.getWorld(), location.getBlockX() + 0.5, location.getBlockY() + 0.5, location.getBlockZ() + 0.5);
 			UUID uuid = player.getUniqueId();
 			Block block = location.getBlock();
 			final Material blockType = block.getType();
@@ -652,7 +654,7 @@ public class MiningScheduler
 					{
 						for (ItemStack item : drops)
 						{
-							player.getWorld().dropItemNaturally(location, item);
+							player.getWorld().dropItemNaturally(dropLocation, item);
 						}
 					}
 					if (mode3 && block.getState() instanceof BlockInventoryHolder inventoryHolder && !(inventoryHolder instanceof ShulkerBox))
@@ -676,7 +678,7 @@ public class MiningScheduler
 								//								}
 								//								else
 								{
-									player.getWorld().dropItemNaturally(location, content);
+									player.getWorld().dropItemNaturally(dropLocation, content);
 								}
 							}
 						}
