@@ -93,6 +93,7 @@ public class PlayerChat implements Listener
 					Block block = player.getLocation().add(0, -2, 0).getBlock();
 					switch (block.getType())
 					{
+						case CLAY -> noteBlock.setInstrument(Instrument.FLUTE);
 						case GLOWSTONE -> noteBlock.setInstrument(Instrument.PLING);
 					}
 					belowBlock.setBlockData(noteBlock);
