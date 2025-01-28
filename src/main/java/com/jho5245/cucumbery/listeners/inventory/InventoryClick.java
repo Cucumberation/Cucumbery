@@ -1442,7 +1442,8 @@ public class InventoryClick implements Listener
 		if (player.getGameMode() == GameMode.CREATIVE)
 		{
 			// 픽블록 기능이 크리에이티브 인벤토리에서만 호출되야함
-			if (player.getOpenInventory().getType() != InventoryType.CREATIVE)
+			// TODO: 망함 잠시 비활성화함 2025.01.28
+			if (true || player.getOpenInventory().getType() != InventoryType.CREATIVE)
 			{
 				return;
 			}
