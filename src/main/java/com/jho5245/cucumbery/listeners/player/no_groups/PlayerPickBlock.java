@@ -131,12 +131,13 @@ public class PlayerPickBlock implements Listener
 							}
 							if (!blockStateTag.getKeys().isEmpty())
 							{
+								event.setCancelled(true);
 								player.getInventory().setItemInMainHand(nbtItem.getItem());
 							}
 						}
 						catch (Exception e)
 						{
-							Cucumbery.getPlugin().getLogger().warning(e.getMessage());
+							e.printStackTrace();
 						}
 					}
 				}
@@ -178,11 +179,12 @@ public class PlayerPickBlock implements Listener
 								blockStateTag.setString(key, value);
 							}
 						}
+						event.setCancelled(true);
 						player.getInventory().setItemInMainHand(nbtItem.getItem());
 					}
-					catch (Exception ignored)
+					catch (Exception e)
 					{
-
+						e.printStackTrace();
 					}
 				}
 			}
