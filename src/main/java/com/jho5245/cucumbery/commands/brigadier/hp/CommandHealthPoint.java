@@ -23,7 +23,7 @@ public class CommandHealthPoint
   private final List<Argument<?>> arguments1 = new ArrayList<>();
 
   {
-    arguments1.add(new MultiLiteralArgument("args", List.of("set", "give", "take")));
+    arguments1.add(new MultiLiteralArgument("args", "set", "give", "take"));
     arguments1.add(new EntitySelectorArgument.ManyEntities("개체"));
     arguments1.add(new DoubleArgument("값", 0, Double.MAX_VALUE));
   }
@@ -31,7 +31,7 @@ public class CommandHealthPoint
   private final List<Argument<?>> arguments2 = new ArrayList<>();
 
   {
-    arguments2.add(new MultiLiteralArgument("args", List.of("set", "give", "take")));
+    arguments2.add(new MultiLiteralArgument("args", "set", "give", "take"));
     arguments2.add(new EntitySelectorArgument.ManyEntities("개체"));
     arguments2.add(new DoubleArgument("값", 0, Double.MAX_VALUE));
     arguments2.add(new BooleanArgument("경고 무시"));
@@ -40,7 +40,7 @@ public class CommandHealthPoint
   private final List<Argument<?>> arguments3 = new ArrayList<>();
 
   {
-    arguments3.add(new MultiLiteralArgument("args", List.of("set", "give", "take")));
+    arguments3.add(new MultiLiteralArgument("args", "set", "give", "take"));
     arguments3.add(new EntitySelectorArgument.ManyEntities("개체"));
     arguments3.add(new DoubleArgument("값", 0, Double.MAX_VALUE));
     arguments3.add(new BooleanArgument("경고 무시"));

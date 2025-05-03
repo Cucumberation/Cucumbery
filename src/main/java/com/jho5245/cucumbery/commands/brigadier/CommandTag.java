@@ -20,7 +20,7 @@ public class CommandTag extends CommandBase
   {
     CommandAPICommand commandAPICommand = CommandBase.getCommandBase(command, permission, aliases);
     commandAPICommand = commandAPICommand.withArguments(new EntitySelectorArgument.ManyEntities("targets"),
-        new MultiLiteralArgument("remove", List.of("remove")), new MultiLiteralArgument("*", List.of("*")));
+        new MultiLiteralArgument("remove", "remove"), new MultiLiteralArgument("*", "*"));
     commandAPICommand = commandAPICommand.executesNative((sender, args) ->
     {
       Collection<Entity> entities = new ArrayList<>((Collection<Entity>) args.get(0));

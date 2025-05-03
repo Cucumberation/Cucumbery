@@ -142,7 +142,7 @@ public class CommandFakeBlock extends CommandBase
     commandAPICommand.register();
 
     commandAPICommand = CommandBase.getCommandBase(command, permission, aliases);
-    commandAPICommand = commandAPICommand.withArguments(new LocationArgument("위치", LocationType.BLOCK_POSITION), new MultiLiteralArgument("args", List.of("--remove", "--query")));
+    commandAPICommand = commandAPICommand.withArguments(new LocationArgument("위치", LocationType.BLOCK_POSITION), new MultiLiteralArgument("args", "--remove", "--query"));
     commandAPICommand = commandAPICommand.executesNative((sender, args) ->
     {
       Location location = (Location) args.get(0);
@@ -185,7 +185,7 @@ public class CommandFakeBlock extends CommandBase
     commandAPICommand.register();
 
     commandAPICommand = CommandBase.getCommandBase(command, permission, aliases);
-    commandAPICommand = commandAPICommand.withArguments(new MultiLiteralArgument("list", List.of("list")));
+    commandAPICommand = commandAPICommand.withArguments(new MultiLiteralArgument("list", "list"));
     commandAPICommand = commandAPICommand.executesNative((sender, args) ->
     {
       MessageUtil.info(sender, "총 %s개의 블록 데이터가 있습니다", Variable.fakeBlocks.keySet().size());

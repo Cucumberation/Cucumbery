@@ -39,7 +39,7 @@ public class CommandExplode extends CommandBase
 
   private final Argument LOCATION = ArgumentUtil.LOCATION;
   private final Argument POWER = new FloatArgument("폭발 강도", 0, 500);
-  private final Argument EXPLODE_PROPERTY = new MultiLiteralArgument("args", List.of("none", "fire-only", "break-only", "all"));
+  private final Argument EXPLODE_PROPERTY = new MultiLiteralArgument("args", "none", "fire-only", "break-only", "all");
 
   private final List<Argument<?>> list01 = Arrays.asList(HIDE_OUTPUT);
   private final List<Argument<?>> list02 = Arrays.asList(POWER);

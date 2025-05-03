@@ -25,14 +25,14 @@ public class CommandVelocity extends CommandBase
   {
     arguments2.add(new EntitySelectorArgument.ManyEntities("개체"));
     arguments2.add(new LocationArgument("방향"));
-    arguments2.add(new MultiLiteralArgument("sans", List.of("absolute", "relative")));
+    arguments2.add(new MultiLiteralArgument("sans", "absolute", "relative"));
   }
   private final List<Argument<?>> arguments3 = new ArrayList<>();
 
   {
     arguments3.add(new EntitySelectorArgument.ManyEntities("개체"));
     arguments3.add(new LocationArgument("방향"));
-    arguments3.add(new MultiLiteralArgument("sans", List.of("absolute", "relative")));
+    arguments3.add(new MultiLiteralArgument("sans", "absolute", "relative"));
     arguments3.add(new DoubleArgument("강도"));
   }
 
@@ -40,7 +40,7 @@ public class CommandVelocity extends CommandBase
   {
     arguments4.add(new EntitySelectorArgument.ManyEntities("개체"));
     arguments4.add(new LocationArgument("방향"));
-    arguments4.add(new MultiLiteralArgument("absolute", List.of("absolute")));
+    arguments4.add(new MultiLiteralArgument("absolute", "absolute"));
     arguments4.add(new DoubleArgument("x강도"));
     arguments4.add(new DoubleArgument("y강도"));
     arguments4.add(new DoubleArgument("z강도"));
