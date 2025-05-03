@@ -73,7 +73,6 @@ public class PlayerPickBlock implements Listener
 							inventory.setItemInMainHand(inventoryItemStack);
 							inventory.setItem(i, null);
 						}
-						MessageUtil.sendMessage(player, "아이템 찾음., slot: %s", i);
 						hasItem = true;
 						break;
 					}
