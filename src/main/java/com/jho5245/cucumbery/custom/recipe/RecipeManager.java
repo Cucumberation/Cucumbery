@@ -92,7 +92,7 @@ public class RecipeManager
       ));
       displayItemStack.setItemMeta(displayItemMeta);
       return displayItemStack;
-    }, itemStack -> itemStack.hasItemMeta() && itemStack.getItemMeta().hasEnchants()));
+    }, itemStack -> isAdminOnline() && itemStack.hasItemMeta() && itemStack.getItemMeta().hasEnchants()));
     register(predicateTest);
   }
 
