@@ -67,11 +67,21 @@ public class PlayerPickBlock implements Listener
 						{
 							inventory.setHeldItemSlot(i);
 						}
-						// 아닐 경우 인벤토리에서 아이템을 가져와 mainHand에 지정. 기존 슬롯에 있는 아이템 제거
+						// 아닐 경우 인벤토리에서 아이템을 가져와 mainHand에 있는 아이템과 위치 맞바꾸기
 						else
 						{
-							inventory.setItemInMainHand(inventoryItemStack);
-							inventory.setItem(i, null);
+							// 만약 핫바에 빈 공간이 있고 손에 아이템을 들고 있다면 위치를 맞바꾸는 대신 핫바로 아이템 가져오기
+							if (ItemStackUtil.itemExists(inventory.getItemInMainHand()) && inventory.firstEmpty() >= 0 && inventory.firstEmpty() < 9)
+							{
+								inventory.setItem(i, null);
+								inventory.setHeldItemSlot(inventory.firstEmpty());
+								inventory.setItemInMainHand(inventoryItemStack);
+							}
+							else
+							{
+								inventory.setItem(i, inventory.getItemInMainHand());
+								inventory.setItemInMainHand(inventoryItemStack);
+							}
 						}
 						hasItem = true;
 						break;
