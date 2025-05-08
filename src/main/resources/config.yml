@@ -913,7 +913,6 @@ tag-translation:
   "minecraft:small_flowers": "translate:key:tag.minecraft.small_flowers|아무 작은 꽃"
   "minecraft:beds": "translate:key:tag.minecraft.beds|"
   "minecraft:fences": "translate:key:tag.minecraft.fences|"
-  "minecraft:tall_flowers": "translate:key:tag.minecraft.tall_flowers|아무 큰 꽃"
   "minecraft:flowers": "translate:key:tag.minecraft.flowers|아무 꽃"
   "minecraft:piglin_repellents": "translate:key:tag.minecraft.piglin_repellents|"
   "minecraft:gold_ores": "translate:key:tag.minecraft.gold_ores|"

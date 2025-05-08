@@ -2,8 +2,10 @@ package com.jho5245.cucumbery.custom.recipe;
 
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
+import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import io.papermc.paper.potion.PotionMix;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
@@ -17,6 +19,7 @@ import org.bukkit.inventory.recipe.CraftingBookCategory;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -79,6 +82,18 @@ public class RecipeManager
     dia_ron_lapi_red_coal_gold_ore.addIngredient(Material.COAL_ORE);
     dia_ron_lapi_red_coal_gold_ore.addIngredient(Material.GOLD_ORE);
     register(dia_ron_lapi_red_coal_gold_ore);
+
+    ShapelessRecipe predicateTest = new ShapelessRecipe(of("predicate"), CustomMaterial.WNYNYA_ORE.create());
+    predicateTest.addIngredient(new RecipeChoice.PredicateChoice(() -> {
+      ItemStack displayItemStack = new ItemStack(Material.TNT);
+      ItemMeta displayItemMeta = displayItemStack.getItemMeta();
+      displayItemMeta.itemName(Component.translatable("테스트"));
+      displayItemMeta.lore(Arrays.asList(ComponentUtil.translate("&7테스트 설명"), ComponentUtil.translate("&7테스트 설명 2")
+      ));
+      displayItemStack.setItemMeta(displayItemMeta);
+      return displayItemStack;
+    }, itemStack -> isAdminOnline() && itemStack.hasItemMeta() && itemStack.getItemMeta().hasEnchants()));
+    register(predicateTest);
   }
 
   private static void registerVerticalSlabs()

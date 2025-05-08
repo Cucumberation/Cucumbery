@@ -51,7 +51,7 @@ public class ArgumentUtil
     {
       case BOOLEAN -> new BooleanArgument(key != null ? key : "값");
       case HIDE_OUTPUT -> new BooleanArgument(key != null ? key : "명령어 출력 숨김 여부");
-      case LITERAL -> new MultiLiteralArgument("args", List.of(Arrays.stream(params).map(Object::toString).toArray(String[]::new)));
+      case LITERAL -> new MultiLiteralArgument("args", Arrays.stream(params).map(Object::toString).toArray(String[]::new));
       case INTEGER -> new IntegerArgument(key != null ? key : "값", (int) Math.max(Integer.MIN_VALUE, min), (int) Math.min(Integer.MAX_VALUE, max));
       case LONG -> new LongArgument(key != null ? key : "값", (long) Math.max(Long.MIN_VALUE, min), (long) Math.min(Long.MAX_VALUE, max));
       case FLOAT -> new FloatArgument(key != null ? key : "값", (float) Math.max(-Float.MAX_VALUE, min), (float) Math.min(Float.MAX_VALUE, max));

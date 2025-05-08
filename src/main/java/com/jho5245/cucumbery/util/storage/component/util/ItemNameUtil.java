@@ -31,7 +31,7 @@ public class ItemNameUtil
    */
   public static Component itemName(@NotNull Material type)
   {
-    return itemName(new ItemStack(type), null);
+    return itemName(type, null);
   }
 
   /**
@@ -42,6 +42,11 @@ public class ItemNameUtil
    */
   public static Component itemName(@NotNull Material type, @Nullable TextColor defaultColor)
   {
+    // argument validation
+    if (!type.isItem())
+    {
+      return Component.translatable(type.translationKey(), defaultColor);
+    }
     return itemName(new ItemStack(type), defaultColor);
   }
 

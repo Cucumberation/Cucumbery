@@ -20,14 +20,14 @@ import java.util.List;
 
 	{
 		argument.add(new EntitySelectorArgument.ManyEntities("개체"));
-		argument.add( new MultiLiteralArgument("args", List.of("mainhand", "offhand", "helmet", "chestplate", "leggings", "boots")));
+		argument.add( new MultiLiteralArgument("args", "mainhand", "offhand", "helmet", "chestplate", "leggings", "boots"));
 	}
 
 	private final List<Argument<?>> argument2 = new ArrayList<>();
 
 	{
 		argument2.add( new EntitySelectorArgument.ManyEntities("개체"));
-		argument2.add( new MultiLiteralArgument("args", List.of("mainhand", "offhand", "helmet", "chestplate", "leggings", "boots")));
+		argument2.add( new MultiLiteralArgument("args", "mainhand", "offhand", "helmet", "chestplate", "leggings", "boots"));
 		argument2.add(new BooleanArgument("강제로 변경"));
 	}
 

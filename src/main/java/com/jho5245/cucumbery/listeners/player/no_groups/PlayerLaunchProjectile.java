@@ -60,7 +60,7 @@ public class PlayerLaunchProjectile implements Listener
       }
     }
     EntityType entityType = projectile.getType();
-    if (entityType == EntityType.POTION)
+    if (entityType == EntityType.SPLASH_POTION)
     {
       itemStack = itemStack.clone();
       Variable.projectile.put(projectile.getUniqueId(), itemStack);
