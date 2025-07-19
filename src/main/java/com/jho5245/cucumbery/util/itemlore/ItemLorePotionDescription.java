@@ -50,11 +50,11 @@ public class ItemLorePotionDescription
   }
 
   /**
-   * @param level must be amplifier + 1
+   * @param amplifier the amplifier which starts from 0, NOT 1.
    * @return description
    */
   @NotNull
-  public static Component getDescription(double chance, @NotNull Component effect, long duration, int level)
+  public static Component getDescription(double chance, @NotNull Component effect, long duration, int amplifier)
   {
     List<Component> args = new ArrayList<>();
     if (chance != 100d)
@@ -62,15 +62,15 @@ public class ItemLorePotionDescription
       args.add(Component.text(Constant.Sosu2.format(chance) + "%"));
     }
     args.add(effect);
-    if (level > 0)
+    if (amplifier > 0)
     {
-      args.add(Component.text(level + 1));
+      args.add(Component.text(amplifier + 1));
     }
     if (duration > 0)
     {
       args.add(ComponentUtil.timeFormat(duration * 50L));
     }
-    String key = getKey(chance, duration, level);
+    String key = getKey(chance, duration, amplifier);
     return ComponentUtil.translate(key, args);
   }
 
