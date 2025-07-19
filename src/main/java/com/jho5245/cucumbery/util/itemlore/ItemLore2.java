@@ -15,6 +15,7 @@ import com.jho5245.cucumbery.util.storage.no_groups.ItemCategory;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemCategory.Rarity;
 import de.tr7zw.changeme.nbtapi.*;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
+import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBTList;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TranslatableComponent;
@@ -441,6 +442,20 @@ public class ItemLore2
 		lore.set(2, itemRarityComponent);
 		itemMeta.lore(lore);
 		item.setItemMeta(itemMeta);
+
+		// Bukkit API로 불가능한 작업 NBT API로 처리 시작
+		switch (type)
+		{
+			case OMINOUS_BOTTLE ->
+			{
+				NBT.modifyComponents(item, nbt -> {
+					ReadWriteNBT tooltipDisplay = nbt.getOrCreateCompound("minecraft:tooltip_display");
+					ReadWriteNBTList<String> hiddenCompoents = tooltipDisplay.getStringList("hidden_components");
+					hiddenCompoents.add("minecraft:ominous_bottle_amplifier");
+				});
+			}
+		}
+		// Bukkit API로 불가능한 작업 NBT API로 처리 끝
 		return item;
 	}
 }
