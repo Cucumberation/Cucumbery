@@ -572,6 +572,24 @@ public class ItemLore2Meta
 					}
 				}
 			}
+			case OMINOUS_BOTTLE ->
+			{
+				OminousBottleMeta ominousBottleMeta = (OminousBottleMeta) itemMeta;
+				if (ominousBottleMeta.hasAmplifier())
+				{
+					int amplifier = ominousBottleMeta.getAmplifier();
+					if (!(itemMeta instanceof PotionMeta))
+					{
+						lore.add(Component.empty());
+						lore.add(ComponentUtil.translate(Constant.ITEM_LORE_STATUS_EFFECT));
+					}
+
+					int duration = 20 * 60 * 100; // 100 minutes
+					lore.add(ItemLorePotionDescription.getDescription(100, Component.translatable(""), duration, amplifier));
+					lore.addAll(ComponentUtil.convertHoverToItemLore(VanillaEffectDescription.getDescription(
+							new PotionEffect(PotionEffectType.BAD_OMEN, duration, amplifier, false, false, false), viewer), NamedTextColor.GRAY));
+				}
+			}
 		}
 	}
 }
