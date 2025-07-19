@@ -7,6 +7,7 @@ import com.jho5245.cucumbery.custom.customeffect.children.group.PlayerCustomEffe
 import com.jho5245.cucumbery.custom.customeffect.children.group.RealDurationCustomEffect;
 import com.jho5245.cucumbery.custom.customeffect.children.group.StringCustomEffect;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
+import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeMinecraft;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeReinforce;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeRune;
 import com.jho5245.cucumbery.events.entity.EntityCustomEffectRemoveEvent.RemoveReason;
@@ -413,7 +414,7 @@ public class CustomEffectScheduler
 	{
 		if (CustomEffectManager.hasEffect(player, CustomEffectType.GAESANS) && player.isSneaking() && ((Entity) player).isOnGround())
 		{
-			player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 4, 0, false, false, false));
+			CustomEffectManager.addEffect(player, new CustomEffect(CustomEffectTypeMinecraft.INVISIBILITY,4, 0, DisplayType.NONE));
 		}
 	}
 
@@ -438,7 +439,7 @@ public class CustomEffectScheduler
 			Material mainHand = inventory.getItemInMainHand().getType(), offHand = inventory.getItemInOffHand().getType();
 			if (Constant.OPTIFINE_DYNAMIC_LIGHT_ITEMS.contains(mainHand) || Constant.OPTIFINE_DYNAMIC_LIGHT_ITEMS.contains(offHand))
 			{
-				player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 4, 0, false, false, false));
+				CustomEffectManager.addEffect(player, new CustomEffect(CustomEffectTypeMinecraft.NIGHT_VISION,4, 0, DisplayType.NONE));
 			}
 		}
 	}
@@ -578,7 +579,9 @@ public class CustomEffectScheduler
 	{
 		if (CustomEffectManager.hasEffect(player, CustomEffectType.TOWN_SHIELD))
 		{
-			player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 2, 0, true, false, false));
+
+
+			CustomEffectManager.addEffect(player, new CustomEffect(CustomEffectTypeMinecraft.SATURATION,4, 0, DisplayType.NONE));
 		}
 	}
 

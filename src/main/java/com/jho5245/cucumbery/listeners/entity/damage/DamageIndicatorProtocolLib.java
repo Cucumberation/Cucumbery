@@ -87,13 +87,16 @@ public class DamageIndicatorProtocolLib
 //                          wrappedChatComponent.getHandle()
 //                  )),
 
+      float x = (float) (Math.random() * 0.2 - 0.1);
+      float z = (float) (Math.random() * 0.2 - 0.1);
+
       PacketContainer edit = protocolManager.createPacket(Server.ENTITY_METADATA);
       StructureModifier<List<WrappedDataValue>> watchableAccessor = edit.getDataValueCollectionModifier();
       WrappedChatComponent wrappedChatComponent = WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(finalDisplay));
       List<WrappedDataValue> values = Lists.newArrayList(
-              new WrappedDataValue(11, Registry.get(Vector3f.class), new Vector3f(0f, 0.2f * sizeModifier, 0f)), // Translation
+              new WrappedDataValue(11, Registry.get(Vector3f.class), new Vector3f(x, 0.2f * sizeModifier, z)), // Translation
               new WrappedDataValue(12, Registry.get(Vector3f.class), new Vector3f(1.2f * sizeModifier, 1.2f * sizeModifier, 1.2f * sizeModifier)), // Scale
-              new WrappedDataValue(15, Registry.get(Byte.class), (byte) 3), // Billboard
+              new WrappedDataValue(15, Registry.get(Byte.class), (byte) 1), // Billboard
               new WrappedDataValue(16, Registry.get(Integer.class), (15 << 4 | 15 << 20)), // Brightness override
               new WrappedDataValue(17, Registry.get(Float.class), 2f), // view range
               new WrappedDataValue(19, Registry.get(Float.class), 0f), // shadow strength
@@ -113,7 +116,7 @@ public class DamageIndicatorProtocolLib
         List<WrappedDataValue> values2 = Lists.newArrayList(
                 new WrappedDataValue(8, Registry.get(Integer.class), -1), // interpolation delay
                 new WrappedDataValue(9, Registry.get(Integer.class), 10), // position/rotation interpolation duration
-                new WrappedDataValue(11, Registry.get(Vector3f.class), new Vector3f(0f, 0.4f * sizeModifier, 0f)) // translation
+                new WrappedDataValue(11, Registry.get(Vector3f.class), new Vector3f(x, 0.4f * sizeModifier, z)) // translation
         );
         watchableAccessor2.write(0, values2);
         edit2.getIntegers().write(0, entityId);
@@ -127,7 +130,7 @@ public class DamageIndicatorProtocolLib
         List<WrappedDataValue> values2 = Lists.newArrayList(
                 new WrappedDataValue(8, Registry.get(Integer.class), -1), // interpolation delay
                 new WrappedDataValue(9, Registry.get(Integer.class), 5), // position/rotation interpolation duration
-                new WrappedDataValue(11, Registry.get(Vector3f.class), new Vector3f(0f, 0.5f * sizeModifier, 0f)), // translation
+                new WrappedDataValue(11, Registry.get(Vector3f.class), new Vector3f(x, 0.5f * sizeModifier, z)), // translation
                 new WrappedDataValue(26, Registry.get(Byte.class), (byte) -127) // text opacity
         );
         watchableAccessor2.write(0, values2);
@@ -154,7 +157,7 @@ public class DamageIndicatorProtocolLib
         List<WrappedDataValue> values2 = Lists.newArrayList(
                 new WrappedDataValue(8, Registry.get(Integer.class), -1), // interpolation delay
                 new WrappedDataValue(9, Registry.get(Integer.class), 5), // position/rotation interpolation duration
-                new WrappedDataValue(11, Registry.get(Vector3f.class), new Vector3f(0f, 0.6f * sizeModifier, 0f)), // translation
+                new WrappedDataValue(11, Registry.get(Vector3f.class), new Vector3f(x, 0.6f * sizeModifier, z)), // translation
                 new WrappedDataValue(26, Registry.get(Byte.class), (byte) 5) // text opacity
         );
         watchableAccessor2.write(0, values2);

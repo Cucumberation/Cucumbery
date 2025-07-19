@@ -412,13 +412,13 @@ public class ItemLore2CustomMaterial
       case FROG_BOOTS ->
       {
         lore.add(Component.empty());
-        lore.add(ComponentUtil.translate("&6능력 : %s %s", ComponentUtil.translate("&a개구리 착지")));
+        lore.add(ComponentUtil.translate("&6능력 : %s", ComponentUtil.translate("&a개구리 착지")));
         lore.add(ComponentUtil.translate("&7낙하 대미지 20% 감소"));
       }
       case MINER_HELMET, MINDAS_HELMET ->
       {
         lore.add(Component.empty());
-        lore.add(ComponentUtil.translate("&6능력 : %s %s", ComponentUtil.translate("&a광부의 시야")));
+        lore.add(ComponentUtil.translate("&6능력 : %s", ComponentUtil.translate("&a광부의 시야")));
         lore.add(ComponentUtil.translate("&7영구적으로 %s 효과 적용", PotionEffectType.NIGHT_VISION));
       }
     }

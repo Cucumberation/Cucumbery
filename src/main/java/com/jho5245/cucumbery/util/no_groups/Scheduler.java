@@ -5,6 +5,7 @@ import com.jho5245.cucumbery.Initializer;
 import com.jho5245.cucumbery.commands.reinforce.CommandReinforce;
 import com.jho5245.cucumbery.commands.sound.CommandSong;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffect;
+import com.jho5245.cucumbery.custom.customeffect.CustomEffect.DisplayType;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectScheduler;
 import com.jho5245.cucumbery.custom.customeffect.children.group.EntityCustomEffect;
@@ -15,6 +16,7 @@ import com.jho5245.cucumbery.custom.customeffect.custom_mining.MiningScheduler;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCooldown;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCustomMining;
+import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeMinecraft;
 import com.jho5245.cucumbery.custom.customrecipe.recipeinventory.RecipeInventoryCategory;
 import com.jho5245.cucumbery.custom.customrecipe.recipeinventory.RecipeInventoryMainMenu;
 import com.jho5245.cucumbery.custom.customrecipe.recipeinventory.RecipeInventoryRecipe;
@@ -372,11 +374,11 @@ public class Scheduler
             leggings == CustomMaterial.FROG_LEGGINGS &&
             boots == CustomMaterial.FROG_BOOTS)
     {
-      player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, 2, 3, false, false, false));
+      CustomEffectManager.addEffect(player, new CustomEffect(CustomEffectTypeMinecraft.JUMP_BOOST,4, 3, DisplayType.NONE));
     }
     if (helmet == CustomMaterial.MINER_HELMET || helmet == CustomMaterial.MINDAS_HELMET)
     {
-      player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Cucumbery.using_ProtocolLib ? 2 : 4, 0, false, false, false));
+      CustomEffectManager.addEffect(player, new CustomEffect(CustomEffectTypeMinecraft.NIGHT_VISION,4, 0, DisplayType.NONE));
     }
     if (helmet == CustomMaterial.MINER_HELMET &&
             chestplate == CustomMaterial.MINER_CHESTPLATE &&
@@ -387,7 +389,7 @@ public class Scheduler
       {
         CustomEffectManager.addEffect(player, CustomEffectTypeCustomMining.MINER_ARMOR_SET_EFFECT);
       }
-      player.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, Cucumbery.using_ProtocolLib ? 4 : 11, 0, false, false, false));
+      CustomEffectManager.addEffect(player, new CustomEffect(CustomEffectTypeMinecraft.HASTE,4, 0, DisplayType.NONE));
     }
     else if (CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.MINER_ARMOR_SET_EFFECT))
     {
