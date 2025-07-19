@@ -413,7 +413,7 @@ public class CustomEffectScheduler
 	{
 		if (CustomEffectManager.hasEffect(player, CustomEffectType.GAESANS) && player.isSneaking() && ((Entity) player).isOnGround())
 		{
-			player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 2, 0, false, false, false));
+			player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 4, 0, false, false, false));
 		}
 	}
 
