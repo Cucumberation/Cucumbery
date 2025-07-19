@@ -130,7 +130,7 @@ public class CustomEffectTypeMinecraft extends CustomEffectType
           INFESTED = new CustomEffectType(NamespacedKey.minecraft("infested"), PotionEffectType.INFESTED.translationKey(), builder().removeOnMilk().negative().maxAmplifier(255)),
           OOZING = new CustomEffectType(NamespacedKey.minecraft("oozing"), PotionEffectType.OOZING.translationKey(), builder().removeOnMilk().negative().maxAmplifier(255)),
           RAID_OMEN = new CustomEffectType(NamespacedKey.minecraft("raid_omen"), PotionEffectType.RAID_OMEN.translationKey(), builder().removeOnMilk().negative().maxAmplifier(255)),
-          TRIAL_OMEN = new CustomEffectType(NamespacedKey.minecraft("trial_omen"), PotionEffectType.RAID_OMEN.translationKey(), builder().removeOnMilk().negative().maxAmplifier(255)),
+          TRIAL_OMEN = new CustomEffectType(NamespacedKey.minecraft("trial_omen"), PotionEffectType.TRIAL_OMEN.translationKey(), builder().removeOnMilk().negative().maxAmplifier(255)),
           WEAVING = new CustomEffectType(NamespacedKey.minecraft("weaving"), PotionEffectType.WEAVING.translationKey(), builder().removeOnMilk().negative().maxAmplifier(255)),
           WIND_CHARGED = new CustomEffectType(NamespacedKey.minecraft("wind_charged"), PotionEffectType.WIND_CHARGED.translationKey(), builder().removeOnMilk().negative().maxAmplifier(255))
 
