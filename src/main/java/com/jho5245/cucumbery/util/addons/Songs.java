@@ -37,7 +37,7 @@ public class Songs
 		}
 		else
 		{
-			if (!file.delete())
+			if (file.exists() && !file.delete())
 			{
 				MessageUtil.consoleSendMessage(Prefix.INFO_ERROR, "Could not delete file %s!", file.getName());
 			}
