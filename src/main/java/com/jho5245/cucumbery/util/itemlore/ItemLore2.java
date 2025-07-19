@@ -13,6 +13,7 @@ import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemCategory;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemCategory.Rarity;
+import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import de.tr7zw.changeme.nbtapi.*;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBTList;
@@ -39,7 +40,7 @@ import java.util.Objects;
 
 public class ItemLore2
 {
-	protected static ItemStack setItemLore(@NotNull ItemStack item, ItemMeta itemMeta, List<Component> lore,  @Nullable Object params)
+	protected static ItemStack setItemLore(@NotNull ItemStack item, ItemMeta itemMeta, List<Component> lore, @Nullable Object params)
 	{
 		Player player = params instanceof Player p ? p : null;
 		Player viewer = params instanceof ItemLoreView view ? view.player() : null;
@@ -446,16 +447,27 @@ public class ItemLore2
 		// Bukkit API로 불가능한 작업 NBT API로 처리 시작
 		switch (type)
 		{
-			case OMINOUS_BOTTLE ->
-			{
-				NBT.modifyComponents(item, nbt -> {
-					ReadWriteNBT tooltipDisplay = nbt.getOrCreateCompound("minecraft:tooltip_display");
-					ReadWriteNBTList<String> hiddenCompoents = tooltipDisplay.getStringList("hidden_components");
-					hiddenCompoents.add("minecraft:ominous_bottle_amplifier");
-				});
-			}
+			case OMINOUS_BOTTLE -> hideComponent(item, "minecraft:ominous_bottle_amplifier");
+			case MUSIC_DISC_5, MUSIC_DISC_11, MUSIC_DISC_CAT, MUSIC_DISC_CHIRP, MUSIC_DISC_CREATOR, MUSIC_DISC_CREATOR_MUSIC_BOX, MUSIC_DISC_FAR,
+					 MUSIC_DISC_LAVA_CHICKEN, MUSIC_DISC_13, MUSIC_DISC_BLOCKS, MUSIC_DISC_MALL, MUSIC_DISC_MELLOHI, MUSIC_DISC_OTHERSIDE, MUSIC_DISC_PIGSTEP,
+					 MUSIC_DISC_PRECIPICE, MUSIC_DISC_RELIC, MUSIC_DISC_STAL, MUSIC_DISC_STRAD, MUSIC_DISC_TEARS, MUSIC_DISC_WAIT, MUSIC_DISC_WARD ->
+					hideComponent(item, "minecraft:jukebox_playable");
+		}
+		if (itemMeta.hasJukeboxPlayable())
+		{
+			hideComponent(item, "minecraft:jukebox_playable");
 		}
 		// Bukkit API로 불가능한 작업 NBT API로 처리 끝
 		return item;
+	}
+
+	private static void hideComponent(ItemStack itemStack, String componentName)
+	{
+		NBT.modifyComponents(itemStack, nbt ->
+		{
+			ReadWriteNBT tooltipDisplay = nbt.getOrCreateCompound("minecraft:tooltip_display");
+			ReadWriteNBTList<String> hiddenCompoents = tooltipDisplay.getStringList("hidden_components");
+			hiddenCompoents.add(componentName);
+		});
 	}
 }
