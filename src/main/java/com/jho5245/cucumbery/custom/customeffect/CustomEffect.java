@@ -291,6 +291,12 @@ public class CustomEffect
 			case "MINECRAFT_HERO_OF_THE_VILLAGE" ->
 					VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.HERO_OF_THE_VILLAGE, duration, amplifier));
 			case "MINECRAFT_DARKNESS" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.DARKNESS, duration, amplifier));
+			case "MINECRAFT_INFESTED" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.INFESTED, duration, amplifier));
+			case "MINECRAFT_OOZING" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.OOZING, duration, amplifier));
+			case "MINECRAFT_RAID_OMEN" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.RAID_OMEN, duration, amplifier));
+			case "MINECRAFT_TRAIL_OMEN" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.TRIAL_OMEN, duration, amplifier));
+			case "MINECRAFT_WEAVING" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.WEAVING, duration, amplifier));
+			case "MINECRAFT_WIND_CHARGED" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.WIND_CHARGED, duration, amplifier));
 			default -> effectType.getDescription(viewer);
 		};
 		if (effectType == CustomEffectTypeCustomMining.TITANIUM_FINDER)

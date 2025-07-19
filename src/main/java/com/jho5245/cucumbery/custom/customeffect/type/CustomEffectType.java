@@ -761,7 +761,13 @@ public class CustomEffectType implements Translatable, EnumHideable
 			case "MINECRAFT_DOLPHINS_GRACE" -> VanillaEffectDescription.getDescription(PotionEffectType.DOLPHINS_GRACE);
 			case "MINECRAFT_BAD_OMEN" -> VanillaEffectDescription.getDescription(PotionEffectType.BAD_OMEN);
 			case "MINECRAFT_HERO_OF_THE_VILLAGE" -> VanillaEffectDescription.getDescription(PotionEffectType.HERO_OF_THE_VILLAGE);
-			case "DARKNESS" -> VanillaEffectDescription.getDescription(PotionEffectType.DARKNESS);
+			case "MINECRAFT_DARKNESS" -> VanillaEffectDescription.getDescription(PotionEffectType.DARKNESS);
+			case "MINECRAFT_INFESTED" -> VanillaEffectDescription.getDescription(PotionEffectType.INFESTED);
+			case "MINECRAFT_OOZING" -> VanillaEffectDescription.getDescription(PotionEffectType.OOZING);
+			case "MINECRAFT_RAID_OMEN" -> VanillaEffectDescription.getDescription(PotionEffectType.RAID_OMEN);
+			case "MINECRAFT_TRIAL_OMEN" -> VanillaEffectDescription.getDescription(PotionEffectType.TRIAL_OMEN);
+			case "MINECRAFT_WEAVING" -> VanillaEffectDescription.getDescription(PotionEffectType.WEAVING);
+			case "MINECRAFT_WIND_CHARGED" -> VanillaEffectDescription.getDescription(PotionEffectType.WIND_CHARGED);
 			default -> Component.empty();
 		};
 	}
