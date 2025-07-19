@@ -13,7 +13,6 @@ import com.google.common.collect.Lists;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.util.addons.ProtocolLibManager;
-import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
@@ -792,7 +791,7 @@ public class Method extends SoundPlay
 					playSound(player, Sound.ENTITY_POLAR_BEAR_AMBIENT, 0.5F, Method.random(100, 120) / 100.0F);
 					return;
 				case PUFFERFISH_SPAWN_EGG:
-					playSound(player, Sound.ENTITY_PUFFER_FISH_AMBIENT, 0.5F, Method.random(100, 120) / 100.0F);
+					playSound(player, Sound.ENTITY_PUFFER_FISH_FLOP, 0.5F, Method.random(100, 120) / 100.0F);
 					return;
 				case RABBIT_SPAWN_EGG:
 					playSound(player, Sound.ENTITY_RABBIT_AMBIENT, 0.5F, Method.random(100, 120) / 100.0F);
