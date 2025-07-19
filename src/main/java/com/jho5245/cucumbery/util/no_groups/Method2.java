@@ -122,7 +122,7 @@ public class Method2 extends Method
 			{
 				for (Entity entity : chunk.getEntities())
 				{
-					if (entity.getUniqueId().equals(uuid))
+					if (entity != null && entity.getUniqueId().equals(uuid))
 					{
 						return entity;
 					}
