@@ -197,7 +197,7 @@ public class CommandSong implements CucumberyCommandExecutor
 							}
 							return true;
 						}
-						if (!fileName.endsWith(".nbs"))
+						if (fileName != null && !fileName.endsWith(".nbs"))
 						{
 							fileName += ".nbs";
 						}

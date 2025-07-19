@@ -5,6 +5,9 @@ import com.destroystokyo.paper.profile.PlayerProfile;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
+import de.tr7zw.changeme.nbtapi.NBT;
+import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
+import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBTList;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
@@ -35,6 +38,13 @@ public class TestCommand implements CucumberyCommandExecutor
 				{
 					Player player = (Player) sender;
 					MessageUtil.info(player, player.getLocation().getBlock().getBiome().getKey());
+				}
+				case "bottle" -> {
+					NBT.modifyComponents(((Player) sender).getInventory().getItemInMainHand(), nbt -> {
+						ReadWriteNBT tooltipDisplay = nbt.getOrCreateCompound("minecraft:tooltip_display");
+						ReadWriteNBTList<String> hiddenCompoents = tooltipDisplay.getStringList("hidden_components");
+						hiddenCompoents.add("minecraft:ominous_bottle_amplifier");
+					});
 				}
 			}
 		}

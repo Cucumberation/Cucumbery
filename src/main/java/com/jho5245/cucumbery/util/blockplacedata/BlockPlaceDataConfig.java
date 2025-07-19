@@ -363,9 +363,9 @@ public class BlockPlaceDataConfig extends ChunkConfig
 
 		if ("player_heads".equals(type))
 		{
-			scaleX *= 1.0005f;
-			scaleY *= 1.0005f;
-			scaleZ *= 1.0005f;
+			scaleX *= 1.0001f;
+			scaleY *= 1.0001f;
+			scaleZ *= 1.0001f;
 		}
 
 		NBTList<Float> leftRotation = transformation.getFloatList("left_rotation");

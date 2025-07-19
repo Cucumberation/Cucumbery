@@ -874,6 +874,7 @@ public class Cucumbery extends JavaPlugin
 		Initializer.registerEvent(new EntityDeath());
 		Initializer.registerEvent(new EntityDismount());
 		Initializer.registerEvent(new EntityExplode());
+		Initializer.registerEvent(new EntityInteract());
 		Initializer.registerEvent(new EntityJump());
 		Initializer.registerEvent(new EntityLandOnGround());
 		Initializer.registerEvent(new EntityLoadCrossbow());

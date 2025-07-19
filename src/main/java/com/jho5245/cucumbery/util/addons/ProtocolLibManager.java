@@ -37,6 +37,7 @@ import com.jho5245.cucumbery.util.storage.data.Constant.CucumberyHideFlag;
 import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
 import com.jho5245.cucumbery.util.storage.data.Variable;
+import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.CustomConfigType;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
@@ -66,6 +67,7 @@ import org.bukkit.inventory.RecipeChoice.ExactChoice;
 import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.NotNull;
@@ -89,7 +91,7 @@ public class ProtocolLibManager
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("[HH:mm:ss] ");
 
 	// ITEM TEXT DISPLAY MOUNT MAP
-	private static Map<Integer, List<Integer>> itemTextDisplayMountMap = Collections.synchronizedMap(new HashMap<>());
+	private static final Map<Integer, List<Integer>> itemTextDisplayMountMap = Collections.synchronizedMap(new HashMap<>());
 
 /*	private static final Class<?> recipeHolderClass;
 
@@ -269,6 +271,13 @@ public class ProtocolLibManager
 					int duration = (int) modifier.read(3);
 					if (entity instanceof Player player)
 					{
+						if (CustomEffectManager.hasEffect(player, CustomEffectType.GAESANS) && potionEffectType.equals(PotionEffectType.INVISIBILITY) && duration == 2
+								&& player.isSneaking())
+						{
+							modifier.write(3, PotionEffect.INFINITE_DURATION);
+							event.setPacket(packet);
+						}
+
 						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.SPEED) && potionEffectType.equals(PotionEffectType.SPEED))
 						{
 							modifier.write(3, CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.SPEED).getDuration());
@@ -504,6 +513,7 @@ public class ProtocolLibManager
 					return;
 				PacketContainer packet = event.getPacket();
 				List<Integer> integers = packet.getIntLists().read(0);
+				//				MessageUtil.broadcastDebug("destroy(%s) - %s".formatted(integers.size(), integers));
 				for (int id : integers)
 				{
 					if (ProtocolLibManager.itemTextDisplayMountMap.containsKey(id))
@@ -512,6 +522,27 @@ public class ProtocolLibManager
 						remove.getIntLists().write(0, ProtocolLibManager.itemTextDisplayMountMap.get(id));
 						protocolManager.sendServerPacket(event.getPlayer(), remove);
 					}
+				}
+			}
+		});
+
+		protocolManager.addPacketListener(new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.HIGH, Server.SPAWN_ENTITY)
+		{
+			@Override
+			public void onPacketSending(PacketEvent event)
+			{
+				if (!Cucumbery.using_ProtocolLib)
+					return;
+				PacketContainer packet = event.getPacket();
+				Player player = event.getPlayer();
+				Entity entity = packet.getEntityModifier(player.getWorld()).read(0);
+				if (entity instanceof Item item)
+				{
+					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, item.getItemStack(), player);
+					Component component = itemStack.getAmount() == 1
+							? ItemNameUtil.itemName(itemStack)
+							: Component.translatable("%s (%s)").arguments(ItemNameUtil.itemName(itemStack), Component.text(itemStack.getAmount(), Constant.THE_COLOR));
+					Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> mountTextDisplayToItem(protocolManager, player, component, item), 0L);
 				}
 			}
 		});
@@ -531,56 +562,49 @@ public class ProtocolLibManager
 				}
 				Player player = event.getPlayer();
 				Entity entity = packet.getEntityModifier(player.getWorld()).read(0);
-				// System.out.println("metadata: " + entity);
 				if (entity instanceof Item item)
 				{
 					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, item.getItemStack(), player);
 					Component component = itemStack.getAmount() == 1
 							? ItemNameUtil.itemName(itemStack)
 							: Component.translatable("%s (%s)").arguments(ItemNameUtil.itemName(itemStack), Component.text(itemStack.getAmount(), Constant.THE_COLOR));
-//					boolean showCustomName =
-//							UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player) && !UserData.FORCE_HIDE_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player);
-//					Boolean shouldShowCustomName = ItemStackUtil.shouldShowCustomName(itemStack);
-//					StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
-//					List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-//					wrappedDataValues.add(
-//							new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
-//					wrappedDataValues.add(new WrappedDataValue(2, WrappedDataWatcher.Registry.getChatComponentSerializer(true),
-//							Optional.of(WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(component)).getHandle())));
-//					wrappedDataValues.add(
-//							new WrappedDataValue(3, WrappedDataWatcher.Registry.get(Boolean.class), shouldShowCustomName != null ? shouldShowCustomName : showCustomName));
-//					// 아이템 웅크리게 하기
-//					byte sneakStatus = UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME_BEHIND_BLOCKS.getBoolean(player) ? (byte) 0 : (byte) 0x02;
-//					wrappedDataValues.add(new WrappedDataValue(0, WrappedDataWatcher.Registry.get(Byte.class), sneakStatus));
-
+					//					boolean showCustomName =
+					//							UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player) && !UserData.FORCE_HIDE_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player);
+					//					Boolean shouldShowCustomName = ItemStackUtil.shouldShowCustomName(itemStack);
+					//					StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
+					//					List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
+					//					wrappedDataValues.add(
+					//							new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
+					//					wrappedDataValues.add(new WrappedDataValue(2, WrappedDataWatcher.Registry.getChatComponentSerializer(true),
+					//							Optional.of(WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(component)).getHandle())));
+					//					wrappedDataValues.add(
+					//							new WrappedDataValue(3, WrappedDataWatcher.Registry.get(Boolean.class), shouldShowCustomName != null ? shouldShowCustomName : showCustomName));
+					//					// 아이템 웅크리게 하기
+					//					byte sneakStatus = UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME_BEHIND_BLOCKS.getBoolean(player) ? (byte) 0 : (byte) 0x02;
+					//					wrappedDataValues.add(new WrappedDataValue(0, WrappedDataWatcher.Registry.get(Byte.class), sneakStatus));
 					// entity metadata 패킷이 플레이어가 서버 접속 직후 보낸 패킷인지/접속 도중 보낸 패킷인지 구분하여
 					// 만약 서버 접속 직후 보낸 패킷이라면 일정 시간 뒤에 객체를 탑승시킨다.
 					long now = System.currentTimeMillis();
 					long playerJoined = player.getLastLogin();
-					// MessageUtil.broadcast(null, "now : %s, joined : %s, diff : %s", now, playerJoined, now - playerJoined);
 					if (now - playerJoined < 1000) // 접속 직후인 경우
 					{
-						// MessageUtil.consoleSendMessage("packet sent right after player has joined");
 						Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> mountTextDisplayToItem(protocolManager, player, component, item), 0L);
 					}
 					else // 이미 접속 중인 경우
 					{
-						// MessageUtil.consoleSendMessage("packet sent when player is playing");
 						mountTextDisplayToItem(protocolManager, player, component, item);
 					}
-
-//					watchableAccessor.write(0, wrappedDataValues);
 				}
 				// TODO: 아이템 액자 버그 수정해야함
-//				if (entity instanceof ItemFrame itemFrame)
-//				{
-//					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, itemFrame.getItem(), player);
-//					StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
-//					List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-//					wrappedDataValues.add(
-//							new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
-//					watchableAccessor.write(0, wrappedDataValues);
-//				}
+				//				if (entity instanceof ItemFrame itemFrame)
+				//				{
+				//					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, itemFrame.getItem(), player);
+				//					StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
+				//					List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
+				//					wrappedDataValues.add(
+				//							new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
+				//					watchableAccessor.write(0, wrappedDataValues);
+				//				}
 				if (entity instanceof ThrowableProjectile throwableProjectile && !(entity instanceof Trident))
 				{
 					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, throwableProjectile.getItem(), player);
@@ -609,16 +633,16 @@ public class ProtocolLibManager
 					watchableAccessor.write(0, wrappedDataValues);
 				}
 				// TODO: 삼지창 버그 수정해야함
-//				if (entity instanceof Trident)
-//				{
-//					if (!UserData.SHOW_ENCHANTED_ITEM_GLINTS.getBoolean(player))
-//					{
-//						StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
-//						List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-//						wrappedDataValues.add(new WrappedDataValue(11, WrappedDataWatcher.Registry.get(Boolean.class), false));
-//						watchableAccessor.write(0, wrappedDataValues);
-//					}
-//				}
+				//				if (entity instanceof Trident)
+				//				{
+				//					if (!UserData.SHOW_ENCHANTED_ITEM_GLINTS.getBoolean(player))
+				//					{
+				//						StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
+				//						List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
+				//						wrappedDataValues.add(new WrappedDataValue(11, WrappedDataWatcher.Registry.get(Boolean.class), false));
+				//						watchableAccessor.write(0, wrappedDataValues);
+				//					}
+				//				}
 			}
 		});
 
@@ -1073,6 +1097,8 @@ public class ProtocolLibManager
 	 */
 	private static void mountTextDisplayToItem(ProtocolManager protocolManager, Player player, Component component, Item item)
 	{
+		if (!UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player))
+			return;
 		int entityId = Method.random(1, Integer.MAX_VALUE);
 		PacketContainer spawnEntity = new PacketContainer(Server.SPAWN_ENTITY);
 		Location itemLocation = item.getLocation();
@@ -1096,10 +1122,9 @@ public class ProtocolLibManager
 		PacketContainer edit = protocolManager.createPacket(Server.ENTITY_METADATA);
 		StructureModifier<List<WrappedDataValue>> modifier = edit.getDataValueCollectionModifier();
 		WrappedChatComponent wrappedChatComponent = WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(component));
-		List<WrappedDataValue> values = Lists.newArrayList(
-				new WrappedDataValue(15, WrappedDataWatcher.Registry.get(Byte.class), (byte) 3), // Billboard
+		List<WrappedDataValue> values = Lists.newArrayList(new WrappedDataValue(15, WrappedDataWatcher.Registry.get(Byte.class), (byte) 3), // Billboard
 				new WrappedDataValue(16, WrappedDataWatcher.Registry.get(Integer.class), (15 << 4 | 15 << 20)), // Brightness override
-				new WrappedDataValue(17, WrappedDataWatcher.Registry.get(Float.class), 1f), // view range
+				new WrappedDataValue(17, WrappedDataWatcher.Registry.get(Float.class), 0.25f), // view range
 				new WrappedDataValue(19, WrappedDataWatcher.Registry.get(Float.class), 0f), // shadow strength
 				new WrappedDataValue(23, WrappedDataWatcher.Registry.getChatComponentSerializer(), wrappedChatComponent.getHandle()), // text
 				new WrappedDataValue(25, WrappedDataWatcher.Registry.get(Integer.class), 0x40_00_00_00), // background color ARGB

@@ -153,7 +153,7 @@ public class ItemLorePotionDescription
     {
       potionEffects.addAll(potionType.getPotionEffects());
     }
-    if (potionEffects.isEmpty())
+    if (potionEffects.isEmpty() && getCustomEffectList(viewer, item).isEmpty())
     {
       lore.add(NONE);
     }
