@@ -7,6 +7,7 @@ import com.jho5245.cucumbery.util.gui.GUIManager;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.no_groups.ColorUtil;
 import com.jho5245.cucumbery.util.no_groups.ColorUtil.Type;
+import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil.TimeFormatType;
 import com.jho5245.cucumbery.util.storage.data.Constant;
@@ -120,8 +121,10 @@ public class CustomEffectGUI
 				{
 					itemStack = new ItemStack(Material.POTION);
 				}
-				itemStack.setAmount(Math.min(64, customEffect.getAmplifier() + 1));
 				ItemMeta itemMeta = itemStack.getItemMeta();
+				itemMeta.setMaxStackSize(99);
+				itemStack.setItemMeta(itemMeta);
+				itemStack.setAmount(Math.min(99, customEffect.getAmplifier() + 1));
 				if (customEffect.getIcon() == null && itemStack.getType() == Material.POTION)
 				{
 					ColorUtil colorUtil = new ColorUtil(Type.HSL, ((i * 30) % 255) + ",100,50;");
