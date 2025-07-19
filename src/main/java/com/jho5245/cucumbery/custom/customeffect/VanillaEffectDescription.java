@@ -170,6 +170,30 @@ public class VanillaEffectDescription
 		{
 			return ComponentUtil.translate("주변이 어두워집니다");
 		}
+		if (type.equals(PotionEffectType.INFESTED))
+		{
+			return ComponentUtil.translate("좀벌레");
+		}
+		if (type.equals(PotionEffectType.OOZING))
+		{
+			return ComponentUtil.translate("슬라임");
+		}
+		if (type.equals(PotionEffectType.RAID_OMEN))
+		{
+			return ComponentUtil.translate("습격");
+		}
+		if (type.equals(PotionEffectType.TRIAL_OMEN))
+		{
+			return ComponentUtil.translate("시련");
+		}
+		if (type.equals(PotionEffectType.WEAVING))
+		{
+			return ComponentUtil.translate("거미줄");
+		}
+		if (type.equals(PotionEffectType.WIND_CHARGED))
+		{
+			return ComponentUtil.translate("바람!충전!");
+		}
 		return Component.empty();
 	}
 
