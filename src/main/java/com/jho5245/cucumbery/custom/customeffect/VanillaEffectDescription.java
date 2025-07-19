@@ -159,7 +159,7 @@ public class VanillaEffectDescription
 
 		if (type.equals(PotionEffectType.BAD_OMEN))
 		{
-			return ComponentUtil.translate("우민 대장을 죽였습니다. 마을로 가면 습격이 발생합니다");
+			return ComponentUtil.translate("마을로 가면 습격이 발생합니다. 더욱 어려운 시련 뭐");
 		}
 		if (type.equals(PotionEffectType.HERO_OF_THE_VILLAGE))
 		{

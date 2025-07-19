@@ -83,7 +83,7 @@ public class RecipeManager
     dia_ron_lapi_red_coal_gold_ore.addIngredient(Material.GOLD_ORE);
     register(dia_ron_lapi_red_coal_gold_ore);
 
-    ShapelessRecipe predicateTest = new ShapelessRecipe(of("predicate"), CustomMaterial.WNYNYA_ORE.create());
+/*    ShapelessRecipe predicateTest = new ShapelessRecipe(of("predicate"), CustomMaterial.WNYNYA_ORE.create());
     predicateTest.addIngredient(new RecipeChoice.PredicateChoice(() -> {
       ItemStack displayItemStack = new ItemStack(Material.TNT);
       ItemMeta displayItemMeta = displayItemStack.getItemMeta();
@@ -93,7 +93,7 @@ public class RecipeManager
       displayItemStack.setItemMeta(displayItemMeta);
       return displayItemStack;
     }, itemStack -> isAdminOnline() && itemStack.hasItemMeta() && itemStack.getItemMeta().hasEnchants()));
-    register(predicateTest);
+    register(predicateTest);*/
   }
 
   private static void registerVerticalSlabs()
