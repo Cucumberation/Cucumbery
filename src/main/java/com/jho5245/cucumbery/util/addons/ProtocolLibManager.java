@@ -16,6 +16,8 @@ import com.comphenix.protocol.wrappers.*;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.jho5245.cucumbery.Cucumbery;
+import com.jho5245.cucumbery.custom.customeffect.CustomEffect;
+import com.jho5245.cucumbery.custom.customeffect.CustomEffect.DisplayType;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCooldown;
@@ -92,6 +94,9 @@ public class ProtocolLibManager
 
 	// ITEM TEXT DISPLAY MOUNT MAP
 	private static final Map<Integer, List<Integer>> itemTextDisplayMountMap = Collections.synchronizedMap(new HashMap<>());
+	
+	// WINDOW_ITEMS Packet Listener 쿨타임 UUID 목록(약 0.05초)
+	private static final Set<UUID> WINDOW_ITEMS_COOLDOWN_UUIDS = new HashSet<>();
 
 /*	private static final Class<?> recipeHolderClass;
 
@@ -271,8 +276,7 @@ public class ProtocolLibManager
 					int duration = (int) modifier.read(3);
 					if (entity instanceof Player player)
 					{
-						if (CustomEffectManager.hasEffect(player, CustomEffectType.GAESANS) && potionEffectType.equals(PotionEffectType.INVISIBILITY) && duration == 2
-								&& player.isSneaking())
+						if (CustomEffectManager.hasEffect(player, CustomEffectType.GAESANS) && potionEffectType.equals(PotionEffectType.INVISIBILITY) && player.isSneaking())
 						{
 							modifier.write(3, PotionEffect.INFINITE_DURATION);
 							event.setPacket(packet);
@@ -280,31 +284,298 @@ public class ProtocolLibManager
 
 						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.SPEED) && potionEffectType.equals(PotionEffectType.SPEED))
 						{
-							modifier.write(3, CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.SPEED).getDuration());
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.SPEED);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
 							event.setPacket(packet);
 						}
 
 						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.SLOWNESS) && potionEffectType.equals(PotionEffectType.SLOWNESS))
 						{
-							modifier.write(3, CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.SLOWNESS).getDuration());
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.SLOWNESS);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
 							event.setPacket(packet);
 						}
 
 						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.HASTE) && potionEffectType.equals(PotionEffectType.HASTE))
 						{
-							modifier.write(3, CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.HASTE).getDuration());
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.HASTE);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
 							event.setPacket(packet);
 						}
 
 						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.MINING_FATIGUE) && potionEffectType.equals(PotionEffectType.MINING_FATIGUE))
 						{
-							modifier.write(3, CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.MINING_FATIGUE).getDuration());
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.MINING_FATIGUE);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.STRENGTH) && potionEffectType.equals(PotionEffectType.STRENGTH))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.STRENGTH);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.INSTANT_HEALTH) && potionEffectType.equals(PotionEffectType.INSTANT_HEALTH))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.INSTANT_HEALTH);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.INSTANT_DAMAGE) && potionEffectType.equals(PotionEffectType.INSTANT_DAMAGE))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.INSTANT_DAMAGE);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.JUMP_BOOST) && potionEffectType.equals(PotionEffectType.JUMP_BOOST))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.JUMP_BOOST);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.NAUSEA) && potionEffectType.equals(PotionEffectType.NAUSEA))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.NAUSEA);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.REGENERATION) && potionEffectType.equals(PotionEffectType.REGENERATION))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.REGENERATION);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.RESISTANCE) && potionEffectType.equals(PotionEffectType.RESISTANCE))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.RESISTANCE);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.FIRE_RESISTANCE) && potionEffectType.equals(PotionEffectType.FIRE_RESISTANCE))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.FIRE_RESISTANCE);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.WATER_BREATHING) && potionEffectType.equals(PotionEffectType.WATER_BREATHING))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.WATER_BREATHING);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.INVISIBILITY) && potionEffectType.equals(PotionEffectType.INVISIBILITY))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.INVISIBILITY);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.BLINDNESS) && potionEffectType.equals(PotionEffectType.BLINDNESS))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.BLINDNESS);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
 							event.setPacket(packet);
 						}
 
 						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.NIGHT_VISION) && potionEffectType.equals(PotionEffectType.NIGHT_VISION))
 						{
-							modifier.write(3, CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.NIGHT_VISION).getDuration());
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.NIGHT_VISION);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.HUNGER) && potionEffectType.equals(PotionEffectType.HUNGER))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.HUNGER);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.WEAKNESS) && potionEffectType.equals(PotionEffectType.WEAKNESS))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.WEAKNESS);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.POISON) && potionEffectType.equals(PotionEffectType.POISON))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.POISON);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.WITHER) && potionEffectType.equals(PotionEffectType.WITHER))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.WITHER);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.HEALTH_BOOST) && potionEffectType.equals(PotionEffectType.HEALTH_BOOST))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.HEALTH_BOOST);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.ABSORPTION) && potionEffectType.equals(PotionEffectType.ABSORPTION))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.ABSORPTION);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.SATURATION) && potionEffectType.equals(PotionEffectType.SATURATION))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.SATURATION);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.GLOWING) && potionEffectType.equals(PotionEffectType.GLOWING))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.GLOWING);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.LEVITATION) && potionEffectType.equals(PotionEffectType.LEVITATION))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.LEVITATION);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.LUCK) && potionEffectType.equals(PotionEffectType.LUCK))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.LUCK);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.UNLUCK) && potionEffectType.equals(PotionEffectType.UNLUCK))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.UNLUCK);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.SLOW_FALLING) && potionEffectType.equals(PotionEffectType.SLOW_FALLING))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.SLOW_FALLING);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.CONDUIT_POWER) && potionEffectType.equals(PotionEffectType.CONDUIT_POWER))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.CONDUIT_POWER);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.DOLPHINS_GRACE) && potionEffectType.equals(PotionEffectType.DOLPHINS_GRACE))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.DOLPHINS_GRACE);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.BAD_OMEN) && potionEffectType.equals(PotionEffectType.BAD_OMEN))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.BAD_OMEN);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.HERO_OF_THE_VILLAGE) && potionEffectType.equals(PotionEffectType.HERO_OF_THE_VILLAGE))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.HERO_OF_THE_VILLAGE);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
+							event.setPacket(packet);
+						}
+
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.DARKNESS) && potionEffectType.equals(PotionEffectType.DARKNESS))
+						{
+							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.DARKNESS);
+							DisplayType displayType = customEffect.getDisplayType();
+							// 일부 DisplayType이 None인 효과는 무한 지속으로 표시(주로 아이템 소지 효과)
+							modifier.write(3, displayType == DisplayType.NONE ? PotionEffect.INFINITE_DURATION : customEffect.getDuration());
 							event.setPacket(packet);
 						}
 
@@ -314,7 +585,7 @@ public class ProtocolLibManager
 							Material mainHand = inventory.getItemInMainHand().getType(), offHand = inventory.getItemInOffHand().getType();
 							if (Constant.OPTIFINE_DYNAMIC_LIGHT_ITEMS.contains(mainHand) || Constant.OPTIFINE_DYNAMIC_LIGHT_ITEMS.contains(offHand))
 							{
-								modifier.write(3, Integer.MAX_VALUE);
+								modifier.write(3, PotionEffect.INFINITE_DURATION);
 								event.setPacket(packet);
 							}
 						}
@@ -322,7 +593,7 @@ public class ProtocolLibManager
 						if (CustomEffectManager.hasEffect(player, CustomEffectType.NIGHT_VISION_SPECTATOR) && potionEffectType.equals(PotionEffectType.NIGHT_VISION)
 								&& player.getSpectatorTarget() != null)
 						{
-							modifier.write(3, Integer.MAX_VALUE);
+							modifier.write(3, PotionEffect.INFINITE_DURATION);
 							event.setPacket(packet);
 						}
 
@@ -414,16 +685,13 @@ public class ProtocolLibManager
 				PacketContainer packet = event.getPacket();
 				Player player = event.getPlayer();
 				UUID uuid = player.getUniqueId();
+				// 너무 자주 요청된 패킷은 처리하지 않고 반려
+				if (WINDOW_ITEMS_COOLDOWN_UUIDS.contains(uuid)) return;
+				WINDOW_ITEMS_COOLDOWN_UUIDS.add(uuid);
+				Bukkit.getScheduler().runTaskLaterAsynchronously(Cucumbery.getPlugin(), () -> WINDOW_ITEMS_COOLDOWN_UUIDS.remove(uuid), 0L);
 				// 아이템이 표시될 때 실제 적용되야 하는 nbt는 적용함
 				{
-					Inventory /*top = player.getOpenInventory().getTopInventory(), */bottom = player.getOpenInventory().getBottomInventory();
-/*					for (int i = 0; i < top.getSize(); i++)
-					{
-						ItemStack topItemStack = top.getItem(i);
-						if (!ItemStackUtil.itemExists(topItemStack))
-							continue;
-						top.setItem(i, ItemLore.setItemLore(topItemStack, true, ItemLoreView.of(player)));
-					}*/
+					Inventory bottom = player.getOpenInventory().getBottomInventory();
 					for (int i = 0; i < bottom.getSize(); i++)
 					{
 						ItemStack bottomItemStack = bottom.getItem(i);
@@ -432,7 +700,6 @@ public class ProtocolLibManager
 						bottom.setItem(i, ItemLore.setItemLore(bottomItemStack, true, ItemLoreView.of(player)));
 					}
 				}
-				// MessageUtil.broadcastDebug("Window ID: " + packet.getIntegers().read(0));
 				UserData.WINDOW_ID.set(uuid, packet.getIntegers().read(0));
 				packet.getItemModifier().write(0, setItemLore(packet.getType(), packet.getItemModifier().read(0), player));
 				StructureModifier<List<ItemStack>> modifier = packet.getItemListModifier();
@@ -1122,7 +1389,7 @@ public class ProtocolLibManager
 		PacketContainer edit = protocolManager.createPacket(Server.ENTITY_METADATA);
 		StructureModifier<List<WrappedDataValue>> modifier = edit.getDataValueCollectionModifier();
 		WrappedChatComponent wrappedChatComponent = WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(component));
-		List<WrappedDataValue> values = Lists.newArrayList(new WrappedDataValue(15, WrappedDataWatcher.Registry.get(Byte.class), (byte) 3), // Billboard
+		List<WrappedDataValue> values = Lists.newArrayList(new WrappedDataValue(15, WrappedDataWatcher.Registry.get(Byte.class), (byte) 1), // Billboard
 				new WrappedDataValue(16, WrappedDataWatcher.Registry.get(Integer.class), (15 << 4 | 15 << 20)), // Brightness override
 				new WrappedDataValue(17, WrappedDataWatcher.Registry.get(Float.class), 0.25f), // view range
 				new WrappedDataValue(19, WrappedDataWatcher.Registry.get(Float.class), 0f), // shadow strength
