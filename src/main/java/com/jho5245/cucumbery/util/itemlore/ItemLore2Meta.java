@@ -128,7 +128,8 @@ public class ItemLore2Meta
 					{
 						ItemLoreUtil.setItemRarityValue(lore, +10);
 						PatternType patternType = pattern.getPattern();
-						NamespacedKey patternKey = Optional.ofNullable(RegistryAccess.registryAccess().getRegistry(RegistryKey.BANNER_PATTERN).getKey(patternType)).orElse(NamespacedKey.fromString("invalid", Cucumbery.getPlugin()));
+						NamespacedKey patternKey = Optional.ofNullable(RegistryAccess.registryAccess().getRegistry(RegistryKey.BANNER_PATTERN).getKey(patternType))
+								.orElse(NamespacedKey.fromString("invalid", Cucumbery.getPlugin()));
 						switch (Objects.requireNonNull(patternKey).getKey().toLowerCase())
 						{
 							case "creeper" -> ItemLoreUtil.setItemRarityValue(lore, Rarity.UNIQUE.getRarityValue());
@@ -137,7 +138,8 @@ public class ItemLore2Meta
 							case "mojang" -> ItemLoreUtil.setItemRarityValue(lore, Rarity.UNIQUE.getRarityValue() + 300);
 							case "piglin" -> ItemLoreUtil.setItemRarityValue(lore, Rarity.UNIQUE.getRarityValue() + 100);
 							default ->
-							{}
+							{
+							}
 						}
 						String patternTranslate =
 								ColorCode.getColorCode(pattern.getColor()) + "block.minecraft.banner." + pattern.getPattern().toString().toLowerCase().replace("_middle", "")
@@ -167,7 +169,8 @@ public class ItemLore2Meta
 					{
 						ItemLoreUtil.setItemRarityValue(lore, +10);
 						PatternType patternType = pattern.getPattern();
-						NamespacedKey patternKey = Optional.ofNullable(RegistryAccess.registryAccess().getRegistry(RegistryKey.BANNER_PATTERN).getKey(patternType)).orElse(NamespacedKey.fromString("invalid", Cucumbery.getPlugin()));
+						NamespacedKey patternKey = Optional.ofNullable(RegistryAccess.registryAccess().getRegistry(RegistryKey.BANNER_PATTERN).getKey(patternType))
+								.orElse(NamespacedKey.fromString("invalid", Cucumbery.getPlugin()));
 						switch (Objects.requireNonNull(patternKey).getKey().toLowerCase())
 						{
 							case "creeper" -> ItemLoreUtil.setItemRarityValue(lore, Rarity.UNIQUE.getRarityValue());
@@ -176,7 +179,8 @@ public class ItemLore2Meta
 							case "mojang" -> ItemLoreUtil.setItemRarityValue(lore, Rarity.UNIQUE.getRarityValue() + 300);
 							case "piglin" -> ItemLoreUtil.setItemRarityValue(lore, Rarity.UNIQUE.getRarityValue() + 100);
 							default ->
-							{}
+							{
+							}
 						}
 						String patternTranslate =
 								ColorCode.getColorCode(pattern.getColor()) + "block.minecraft.banner." + pattern.getPattern().toString().toLowerCase().replace("_middle", "")
@@ -391,16 +395,9 @@ public class ItemLore2Meta
 					}
 				}
 			}
-			case CREEPER_BANNER_PATTERN, FLOWER_BANNER_PATTERN, GLOBE_BANNER_PATTERN, MOJANG_BANNER_PATTERN, PIGLIN_BANNER_PATTERN, SKULL_BANNER_PATTERN ->
-			{
-				itemMeta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
-				lore.add(Component.empty());
-				lore.add(ComponentUtil.translate("rg255,204;무늬 : %s", ComponentUtil.translate("&7" + type.translationKey() + ".desc")));
-			}
 			case MUSIC_DISC_11, MUSIC_DISC_13, MUSIC_DISC_BLOCKS, MUSIC_DISC_CAT, MUSIC_DISC_CHIRP, MUSIC_DISC_FAR, MUSIC_DISC_MALL, MUSIC_DISC_MELLOHI,
 					 MUSIC_DISC_PIGSTEP, MUSIC_DISC_STAL, MUSIC_DISC_STRAD, MUSIC_DISC_WAIT, MUSIC_DISC_WARD, MUSIC_DISC_5, MUSIC_DISC_OTHERSIDE, MUSIC_DISC_RELIC ->
 			{
-				itemMeta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
 				lore.add(Component.empty());
 				@SuppressWarnings("all") String composer = switch (type)
 				{
@@ -575,20 +572,17 @@ public class ItemLore2Meta
 			case OMINOUS_BOTTLE ->
 			{
 				OminousBottleMeta ominousBottleMeta = (OminousBottleMeta) itemMeta;
-				if (ominousBottleMeta.hasAmplifier())
+				int amplifier = ominousBottleMeta.hasAmplifier() ? ominousBottleMeta.getAmplifier() : 0;
+				if (!(itemMeta instanceof PotionMeta))
 				{
-					int amplifier = ominousBottleMeta.getAmplifier();
-					if (!(itemMeta instanceof PotionMeta))
-					{
-						lore.add(Component.empty());
-						lore.add(ComponentUtil.translate(Constant.ITEM_LORE_STATUS_EFFECT));
-					}
-
-					int duration = 20 * 60 * 100; // 100 minutes
-					lore.add(ItemLorePotionDescription.getDescription(100, Component.translatable(""), duration, amplifier));
-					lore.addAll(ComponentUtil.convertHoverToItemLore(VanillaEffectDescription.getDescription(
-							new PotionEffect(PotionEffectType.BAD_OMEN, duration, amplifier, false, false, false), viewer), NamedTextColor.GRAY));
+					lore.add(Component.empty());
+					lore.add(ComponentUtil.translate(Constant.ITEM_LORE_STATUS_EFFECT));
 				}
+				int duration = 20 * 60 * 100; // 100 minutes
+				lore.add(ItemLorePotionDescription.getDescription(100, Component.translatable(PotionEffectType.BAD_OMEN.translationKey()), duration, amplifier));
+				lore.addAll(ComponentUtil.convertHoverToItemLore(
+						VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.BAD_OMEN, duration, amplifier, false, false, false), viewer),
+						NamedTextColor.GRAY));
 			}
 		}
 	}
