@@ -571,15 +571,16 @@ public class ProtocolLibManager
 
 //					watchableAccessor.write(0, wrappedDataValues);
 				}
-				if (entity instanceof ItemFrame itemFrame)
-				{
-					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, itemFrame.getItem(), player);
-					StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
-					List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-					wrappedDataValues.add(
-							new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
-					watchableAccessor.write(0, wrappedDataValues);
-				}
+				// TODO: 아이템 액자 버그 수정해야함
+//				if (entity instanceof ItemFrame itemFrame)
+//				{
+//					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, itemFrame.getItem(), player);
+//					StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
+//					List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
+//					wrappedDataValues.add(
+//							new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
+//					watchableAccessor.write(0, wrappedDataValues);
+//				}
 				if (entity instanceof ThrowableProjectile throwableProjectile && !(entity instanceof Trident))
 				{
 					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, throwableProjectile.getItem(), player);
@@ -607,16 +608,17 @@ public class ProtocolLibManager
 							new WrappedDataValue(7, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
 					watchableAccessor.write(0, wrappedDataValues);
 				}
-				if (entity instanceof Trident)
-				{
-					if (!UserData.SHOW_ENCHANTED_ITEM_GLINTS.getBoolean(player))
-					{
-						StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
-						List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-						wrappedDataValues.add(new WrappedDataValue(11, WrappedDataWatcher.Registry.get(Boolean.class), false));
-						watchableAccessor.write(0, wrappedDataValues);
-					}
-				}
+				// TODO: 삼지창 버그 수정해야함
+//				if (entity instanceof Trident)
+//				{
+//					if (!UserData.SHOW_ENCHANTED_ITEM_GLINTS.getBoolean(player))
+//					{
+//						StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
+//						List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
+//						wrappedDataValues.add(new WrappedDataValue(11, WrappedDataWatcher.Registry.get(Boolean.class), false));
+//						watchableAccessor.write(0, wrappedDataValues);
+//					}
+//				}
 			}
 		});
 
