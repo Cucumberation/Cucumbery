@@ -83,7 +83,15 @@ public class CommandCustomEffect implements CucumberyCommandExecutor
 				{
 					return failure;
 				}
-				queryEffect(sender, target, gui);
+				// 명령 블록이나 콘솔에서 /customeffect query <닉네임> 사용 시 해당 플레이어에게 UI 열어주기
+				if (!(sender instanceof Player))
+				{
+					queryEffect(target, target, true);
+				}
+				else
+				{
+					queryEffect(sender, target, gui);
+				}
 				return true;
 			}
 			case "clear" ->
