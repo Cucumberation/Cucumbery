@@ -592,7 +592,7 @@ public class CustomEffectType implements Translatable, EnumHideable
 			case "MUTE" -> ComponentUtil.translate("채팅을 할 수 없는 상태입니다");
 			case "CURSE_OF_MUSHROOM" -> ComponentUtil.translate("농도 레벨 * 0.1% 확률로 5초마다 인벤토리에 버섯이 들어옵니다");
 			case "INVINCIBLE" -> ComponentUtil.translate("어떠한 형태의 피해도 받지 않습니다");
-			case "BUFF_FREEZE" -> ComponentUtil.translate("사망 시 버프를 소모하여 일부 버프를 제외한 버프가 사라지지 않습니다");
+			case "BUFF_FREEZE" -> ComponentUtil.translate("사망해도 일부 효과를 제외하고 효과가 사라지지 않습니다");
 			case "CONFUSION" -> ComponentUtil.translate("방향키가 반대로 작동합니다");
 			case "RESURRECTION" ->
 					ComponentUtil.translate("죽음에 이르는 피해를 입었을 때, 죽지 않고").append(Component.text("\n")).append(ComponentUtil.translate("버프를 소모하여 2초간 무적이 됩니다"));
