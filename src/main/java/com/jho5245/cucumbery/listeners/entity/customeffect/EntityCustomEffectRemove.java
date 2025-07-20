@@ -362,7 +362,7 @@ public class EntityCustomEffectRemove implements Listener
 				throw new NullPointerException("Invalid Potion Effect Type: " + customEffectType.getIdString());
 			}
 			PotionEffect potionEffect = livingEntity.getPotionEffect(potionEffectType);
-			if (potionEffect != null && potionEffect.getAmplifier() == amplifier && Math.abs(customEffect.getDuration() - potionEffect.getDuration()) <= 1)
+			if (potionEffect != null && potionEffect.getAmplifier() == amplifier && Math.abs(customEffect.getDuration() - potionEffect.getDuration()) <= 2)
 				livingEntity.removePotionEffect(potionEffectType);
 		}
 		

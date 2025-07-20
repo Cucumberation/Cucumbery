@@ -414,7 +414,7 @@ public class CustomEffectScheduler
 	{
 		if (CustomEffectManager.hasEffect(player, CustomEffectType.GAESANS) && player.isSneaking() && ((Entity) player).isOnGround())
 		{
-			CustomEffectManager.addEffect(player, new CustomEffect(CustomEffectTypeMinecraft.INVISIBILITY, 6, 0, DisplayType.NONE));
+			CustomEffectManager.addEffect(player, new CustomEffect(CustomEffectTypeMinecraft.INVISIBILITY, 10, 0, DisplayType.NONE));
 		}
 	}
 
@@ -439,7 +439,7 @@ public class CustomEffectScheduler
 			Material mainHand = inventory.getItemInMainHand().getType(), offHand = inventory.getItemInOffHand().getType();
 			if (Constant.OPTIFINE_DYNAMIC_LIGHT_ITEMS.contains(mainHand) || Constant.OPTIFINE_DYNAMIC_LIGHT_ITEMS.contains(offHand))
 			{
-				CustomEffectManager.addEffect(player, new CustomEffect(CustomEffectTypeMinecraft.NIGHT_VISION, 6, 0, DisplayType.NONE));
+				player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 2, 0, true, false, false));
 			}
 		}
 	}
@@ -467,7 +467,7 @@ public class CustomEffectScheduler
 				}
 				PotionEffect potionEffect = livingEntity.getPotionEffect(potionEffectType);
 				if (potionEffect == null || customEffect.getAmplifier() > potionEffect.getAmplifier()
-						|| Math.abs(customEffect.getDuration() - potionEffect.getDuration()) > 1)
+						|| Math.abs(customEffect.getDuration() - potionEffect.getDuration()) > 2)
 				{
 					livingEntity.removePotionEffect(potionEffectType);
 					livingEntity.addPotionEffect(new PotionEffect(potionEffectType, customEffect.getDuration(),
@@ -576,8 +576,7 @@ public class CustomEffectScheduler
 	{
 		if (CustomEffectManager.hasEffect(player, CustomEffectType.TOWN_SHIELD))
 		{
-
-			CustomEffectManager.addEffect(player, new CustomEffect(CustomEffectTypeMinecraft.SATURATION, 6, 0, DisplayType.NONE));
+			player.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION, 2, 0, true, false, false));
 		}
 	}
 

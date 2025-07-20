@@ -44,8 +44,9 @@ public class EntityPotionEffect implements Listener
 			int duration = newEffect.getDuration();
 			PotionEffectType effectType = newEffect.getType();
 			// 커스텀 채광 시스템으로 인한 성급함, 채굴 피로 효과 적용 여부
-			boolean isCustomMiningBaseEffect = duration == 2 && (effectType.equals(PotionEffectType.HASTE) || effectType.equals(PotionEffectType.MINING_FATIGUE))
-					&& CustomEffectManager.hasEffect(entity, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE);
+			boolean isCustomMiningBaseEffect =
+					duration == 2 && (effectType.equals(PotionEffectType.HASTE) || effectType.equals(PotionEffectType.MINING_FATIGUE)) && CustomEffectManager.hasEffect(
+							entity, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE);
 			if (!isCustomMiningBaseEffect)
 			{
 				HashMap<String, Integer> hashMap;
@@ -62,7 +63,7 @@ public class EntityPotionEffect implements Listener
 				CustomEffectType customEffectType = CustomEffectType.getByKey(effectType.getKey());
 				CustomEffect customEffect = customEffectType != null ? CustomEffectManager.getEffectNullable(entity, customEffectType) : null;
 				if (customEffectType != null && (customEffect == null || customEffect.getAmplifier() != newEffect.getAmplifier()
-						|| Math.abs(customEffect.getDuration() - newEffect.getDuration()) >= 2))
+						|| Math.abs(customEffect.getDuration() - newEffect.getDuration()) > 2))
 				{
 					// 바닐라 효과와 유사한 커스텀 효과(예: 우유를 마셔도 안사라지는 독)가 있을 경우 효과를 지급하지 않음
 					boolean hasSimilar = false;
@@ -90,7 +91,9 @@ public class EntityPotionEffect implements Listener
 			if (customEffectType != null && CustomEffectManager.hasEffect(entity, customEffectType))
 			{
 				CustomEffect customEffect = CustomEffectManager.getEffect(entity, customEffectType);
-				// MessageUtil.broadcast(ComponentUtil.translate("CED: %s, PED: %s, CEA: %s, PEA: %s", customEffect.getDuration(), oldEffect.getDuration(), customEffect.getAmplifier(), oldEffect.getAmplifier()));
+//				MessageUtil.broadcastDebug(
+//						ComponentUtil.translate("CED: %s, PED: %s, CEA: %s, PEA: %s", customEffect.getDuration(), oldEffect.getDuration(), customEffect.getAmplifier(),
+//								oldEffect.getAmplifier()));
 				if (Math.abs(customEffect.getDuration() - oldEffect.getDuration()) <= 1 && customEffect.getAmplifier() == oldEffect.getAmplifier())
 				{
 					if (!(cause == Cause.MILK && customEffect.isKeepOnMilk() || cause == Cause.DEATH && customEffect.isKeepOnDeath()))

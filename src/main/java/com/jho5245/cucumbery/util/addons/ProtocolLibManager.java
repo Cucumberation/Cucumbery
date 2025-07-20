@@ -603,23 +603,23 @@ public class ProtocolLibManager
 								chestplate), leggingsType = CustomMaterial.itemStackOf(leggings), bootsType = CustomMaterial.itemStackOf(boots);
 
 						if ((helmetType == CustomMaterial.MINER_HELMET || helmetType == CustomMaterial.MINDAS_HELMET) && potionEffectType.equals(
-								PotionEffectType.NIGHT_VISION) && duration < 3)
+								PotionEffectType.NIGHT_VISION))
 						{
-							modifier.write(3, -1);
+							modifier.write(3, PotionEffect.INFINITE_DURATION);
 							event.setPacket(packet);
 						}
 
 						if (helmetType == CustomMaterial.MINER_HELMET && chestplateType == CustomMaterial.MINER_CHESTPLATE && leggingsType == CustomMaterial.MINER_LEGGINGS
-								&& bootsType == CustomMaterial.MINER_BOOTS && potionEffectType.equals(PotionEffectType.HASTE) && duration < 5)
+								&& bootsType == CustomMaterial.MINER_BOOTS && potionEffectType.equals(PotionEffectType.HASTE))
 						{
-							packet.getModifier().write(3, -1);
+							packet.getModifier().write(3, PotionEffect.INFINITE_DURATION);
 							event.setPacket(packet);
 						}
 
 						if (helmetType == CustomMaterial.FROG_HELMET && chestplateType == CustomMaterial.FROG_CHESTPLATE && leggingsType == CustomMaterial.FROG_LEGGINGS
-								&& bootsType == CustomMaterial.FROG_BOOTS && potionEffectType.equals(PotionEffectType.JUMP_BOOST) && duration < 3)
+								&& bootsType == CustomMaterial.FROG_BOOTS && potionEffectType.equals(PotionEffectType.JUMP_BOOST))
 						{
-							packet.getModifier().write(3, -1);
+							packet.getModifier().write(3, PotionEffect.INFINITE_DURATION);
 							event.setPacket(packet);
 						}
 					}
