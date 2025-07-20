@@ -15,6 +15,7 @@ import com.jho5245.cucumbery.util.storage.data.Permission;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CreateItemStack;
+import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
@@ -81,6 +82,12 @@ public class CommandStash implements CommandExecutor, TabCompleter, AsyncTabComp
 		{
 			ItemStack itemStack = stash.get(i).clone();
 			itemStack = itemStack.clone();
+			// Stash에 표시되는 아이템에 설명 추가 start (설명 기능을 사용한 플레이어일 경우)
+			if (UserData.SHOW_ITEM_LORE.getBoolean(player))
+			{
+				ItemLore.setItemLore(itemStack, false, ItemLoreView.of(player));
+			}
+			// Stash에 표시되는 아이템에 설명 추가 end
 			ItemMeta itemMeta = itemStack.getItemMeta();
 			List<Component> lore = itemMeta.lore();
 			if (lore == null)

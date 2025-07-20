@@ -79,9 +79,16 @@ public class AddItemUtil
 	 * 		아이템을 지급할 플레이어
 	 * @param itemStacks
 	 * 		지급할 아이템
+	 * @throws IllegalArgumentException itemStacks 의 길이가 0일 경우
 	 */
 	public static void addItem(@NotNull Player player, @NotNull ItemStack... itemStacks)
 	{
+		// 인자 검정 start
+		if (itemStacks.length == 0)
+		{
+			throw new IllegalArgumentException("itemStacks length zero");
+		}
+		// 인자 검정 end
 		int lostAmount = 0;
 		for (ItemStack itemStack : itemStacks)
 		{
@@ -93,9 +100,16 @@ public class AddItemUtil
 			}
 		}
 
+		// 마지막으로 인벤토리에 추가된 아이템이 stash에 있는 아이템과 동일한 아이템일 경우 메시지를 보내지 않음
+		ItemStack lastItem = itemStacks[itemStacks.length - 1];
 		UUID uuid = player.getUniqueId();
 		if (lostAmount > 0 && Variable.itemStash.containsKey(uuid) && !Variable.itemStash.get(uuid).isEmpty())
 		{
+			List<ItemStack> stacks = Variable.itemStash.get(uuid);
+			if (ItemStackUtil.itemEquals(stacks.getLast(), lastItem))
+			{
+				return;
+			} // 동일한 아이템일 경우 메시지를 보내지 않고 return
 			if (Permission.CMD_STASH.has(player) && !stashAlertCooldown.contains(uuid) && !GUIManager.isGUITitle(player.getOpenInventory().title()))
 			{
 				MessageUtil.sendWarn(player, "&c인벤토리가 가득 차서 아이템이 보관함에 저장되었습니다. %s 명령어로 확인하세요!", "rg255,204;/stash");
