@@ -76,8 +76,7 @@ public class PlayerDeath implements Listener
 			}
 		}
 
-		boolean hasBuffFreeze =
-				CustomEffectManager.hasEffect(player, CustomEffectType.BUFF_FREEZE) || CustomEffectManager.hasEffect(player, CustomEffectType.BUFF_FREEZE_D);
+		boolean hasBuffFreeze = CustomEffectManager.hasEffect(player, CustomEffectType.BUFF_FREEZE);
 		if (hasBuffFreeze)
 		{
 			Collection<PotionEffect> potionEffects = getPotionEffects(player);

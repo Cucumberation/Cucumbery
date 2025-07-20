@@ -144,8 +144,8 @@ public class CustomEffectType implements Translatable, EnumHideable
 	/**/ KEEP_INVENTORY = new CustomEffectType("keep_inventory", "인벤토리 보존"), ADVANCED_KEEP_INVENTORY = new CustomEffectType("advanced_keep_inventory",
 			"인벤토리 보존 Ver.2", builder().keepOnDeath()),
 
-	/**/ BUFF_FREEZE = new CustomEffectType("buff_freeze", "버프 프리저"), BUFF_FREEZE_D = new CustomEffectType("buff_freeze_d", "버프 프리저",
-			builder().keepOnDeath()), CUCUMBERY_UPDATER = new CustomEffectType("cucumbery_updater", "즉시 큐컴버리 업데이트",
+	/**/BUFF_FREEZE = new CustomEffectType("buff_freeze", "버프 프리저"),
+			CUCUMBERY_UPDATER = new CustomEffectType("cucumbery_updater", "즉시 큐컴버리 업데이트",
 			builder().instant()), CHEESE_EXPERIMENT = new CustomEffectType("cheese_experiment", "치즈 실험",
 			builder().negative().removeOnMilk()), CONFUSION = new CustomEffectType("confusion", "혼란",
 			builder().negative().keepOnDeath().hidden()), DEBUG_WATCHER = new CustomEffectType("debug_watcher", "디버그 염탐",
@@ -349,7 +349,7 @@ public class CustomEffectType implements Translatable, EnumHideable
 
 				KEEP_INVENTORY, ADVANCED_KEEP_INVENTORY,
 
-				BUFF_FREEZE, BUFF_FREEZE_D, CUCUMBERY_UPDATER, CHEESE_EXPERIMENT, CONFUSION, DEBUG_WATCHER, DO_NOT_PICKUP_BUT_THROW_IT, DODGE, ELYTRA_BOOSTER,
+				BUFF_FREEZE, CUCUMBERY_UPDATER, CHEESE_EXPERIMENT, CONFUSION, DEBUG_WATCHER, DO_NOT_PICKUP_BUT_THROW_IT, DODGE, ELYTRA_BOOSTER,
 				FEATHER_FALLING, FROST_WALKER, HEALTH_INCREASE, IDIOT_SHOOTER, MUTE, NEWBIE_SHIELD, NO_ENTITY_AGGRO, PARROTS_CHEER, SERVER_RADIO_LISTENING, STOP,
 				TRUE_INVISIBILITY, BLESS_OF_VILLAGER, TOWN_SHIELD, EXPERIENCE_BOOST, DISAPPEAR, NO_BUFF_REMOVE, NO_REGENERATION, DAMAGE_INDICATOR, FREEZING,
 				NO_CUCUMBERY_ITEM_USAGE_ATTACK, GLIDING, NOTIFY_NO_TRADE_ITEM_DROP, DYNAMIC_LIGHT, CUSTOM_DEATH_MESSAGE, REMOVE_NO_DAMAGE_TICKS, MASTER_OF_FISHING,
@@ -1031,8 +1031,6 @@ public class CustomEffectType implements Translatable, EnumHideable
 			case "heros_echo_others" -> Collections.singletonList(HEROS_ECHO);
 			case "combat_mode_melee" -> Collections.singletonList(COMBAT_MODE_RANGED);
 			case "combat_mode_ranged" -> Collections.singletonList(COMBAT_MODE_MELEE);
-			case "buff_freeze" -> Collections.singletonList(BUFF_FREEZE_D);
-			case "buff_freeze_d" -> Collections.singletonList(BUFF_FREEZE);
 			default -> Collections.emptyList();
 		};
 	}

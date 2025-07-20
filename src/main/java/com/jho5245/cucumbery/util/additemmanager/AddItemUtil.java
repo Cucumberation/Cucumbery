@@ -106,7 +106,7 @@ public class AddItemUtil
 		if (lostAmount > 0 && Variable.itemStash.containsKey(uuid) && !Variable.itemStash.get(uuid).isEmpty())
 		{
 			List<ItemStack> stacks = Variable.itemStash.get(uuid);
-			if (ItemStackUtil.itemEquals(stacks.getLast(), lastItem))
+			if (stacks.size() >= 2 && ItemStackUtil.itemEquals(stacks.get(stacks.size() - 2), lastItem))
 			{
 				return;
 			} // 동일한 아이템일 경우 메시지를 보내지 않고 return

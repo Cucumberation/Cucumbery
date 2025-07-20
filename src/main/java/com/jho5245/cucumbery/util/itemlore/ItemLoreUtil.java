@@ -48,6 +48,8 @@ public class ItemLoreUtil
 
   /**
    * 아이템이 Cucumbery에 의해서 설명이 변경되는지에 대한 여부를 확인합니다.
+   * <p>{@link ItemLore#setItemLore(ItemStack)} 호출 이후 설명을 유지하려면 lore의 첫 번째 요소를 띄어쓰기 하나만 존재하는 component로 변경하면 됩니다.</p>
+   * <p>ex: <code>lore.set(0, Component.text(" "))</code></p>
    *
    * @param itemStack 확인할 아이템
    * @return 아이템의 설명이 없거나,(lore == null) 아이템의 설명이 1개이고 그 설명이 (+NBT) 인 경우거나, 1번째 설명에 큐컴버리 아이템 등급 태그가 있거나, 설명에 mcMMO Ability Tool 이라는 설명이 마지막으로 끝나면 true, 이외의 경우에는 false

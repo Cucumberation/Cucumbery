@@ -81,7 +81,6 @@ public class CommandStash implements CommandExecutor, TabCompleter, AsyncTabComp
 		for (int i = 0; i < Math.min(45, stash.size()); i++)
 		{
 			ItemStack itemStack = stash.get(i).clone();
-			itemStack = itemStack.clone();
 			// Stash에 표시되는 아이템에 설명 추가 start (설명 기능을 사용한 플레이어일 경우)
 			if (UserData.SHOW_ITEM_LORE.getBoolean(player))
 			{
@@ -95,6 +94,7 @@ public class CommandStash implements CommandExecutor, TabCompleter, AsyncTabComp
 				lore = new ArrayList<>();
 			}
 			lore.add(Component.empty());
+			lore.set(0, Component.text(" "));
 			int space = ItemStackUtil.countSpace(player, stash.get(i)), amount = itemStack.getAmount();
 			if (space < amount)
 			{

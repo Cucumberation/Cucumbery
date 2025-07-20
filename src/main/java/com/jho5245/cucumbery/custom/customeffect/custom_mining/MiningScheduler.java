@@ -643,18 +643,22 @@ public class MiningScheduler
 				}
 				// 블록 드롭 처리(염력 인챈트나 효과가 있으면 인벤토리에 지급 혹은 블록 위치에 아이템 떨굼
 				{
-					boolean hasTelekinesis =
-							CustomEnchant.isEnabled() && itemMeta != null && itemMeta.hasEnchant(CustomEnchant.TELEKINESIS) || CustomEffectManager.hasEffect(
-							player, CustomEffectType.TELEKINESIS);
-					if (hasTelekinesis)
+					// 블록 드롭 컬렉션이 비어있지 않을 경우에만 드롭 아이템 지급 작업 수행
+					if (!drops.isEmpty())
 					{
-						AddItemUtil.addItem(player, drops);
-					}
-					else
-					{
-						for (ItemStack item : drops)
+						boolean hasTelekinesis =
+								CustomEnchant.isEnabled() && itemMeta != null && itemMeta.hasEnchant(CustomEnchant.TELEKINESIS) || CustomEffectManager.hasEffect(
+										player, CustomEffectType.TELEKINESIS);
+						if (hasTelekinesis)
 						{
-							player.getWorld().dropItemNaturally(dropLocation, item);
+							AddItemUtil.addItem(player, drops);
+						}
+						else
+						{
+							for (ItemStack item : drops)
+							{
+								player.getWorld().dropItemNaturally(dropLocation, item);
+							}
 						}
 					}
 					if (mode3 && block.getState() instanceof BlockInventoryHolder inventoryHolder && !(inventoryHolder instanceof ShulkerBox))

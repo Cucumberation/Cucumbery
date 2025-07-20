@@ -114,8 +114,6 @@ public class Scheduler
       spectateUpdaterAsync();
       // 인벤토리가 가득 찼을때 타이틀 알림
       inventoryFullNotifyAsync();
-      // 아이템 보관함 gui 업데이트
-      stashGUIAsync();
       // gui 업데이트
       updateGUIAsync();
       // 이름표 - 트래커
@@ -1053,23 +1051,6 @@ public class Scheduler
       }
       MessageUtil.sendActionBar(player, actionbar);
       Variable.playerActionbarCooldownIsShowing.add(uuid);
-    }
-  }
-
-  private static void stashGUIAsync()
-  {
-    for (Player player : Bukkit.getOnlinePlayers())
-    {
-      InventoryView openInventory = player.getOpenInventory();
-      Component title = openInventory.title();
-      if (GUIManager.isGUITitle(title))
-      {
-        String key = GUIManager.getGUIKey(title);
-        if (key.startsWith("stash-"))
-        {
-          GUIManager.openGUI(player, GUIType.ITEM_STASH, false);
-        }
-      }
     }
   }
 

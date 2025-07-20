@@ -91,12 +91,7 @@ public class Data
 				if (itemStash && Permission.CMD_STASH.has(Objects.requireNonNull(Method2.getEntity(target))))
 				{
 					List<ItemStack> stacks = Variable.itemStash.get(target);
-
-					// stash에 추가된 아이템이 가장 나중에 추가된 아이템과 동일할 경우 메시지를 출력하지 않도록 한다.
-					if (!stacks.isEmpty() && !ItemStackUtil.itemEquals(stacks.getLast(), item))
-					{
-						MessageUtil.sendMessage(target, Prefix.INFO_STASH, "보관함에 아이템이 %s개 있습니다. %s 명령어로 확인하세요!", stacks.size(), "rg255,204;/stash");
-					}
+					MessageUtil.sendMessage(target, Prefix.INFO_STASH, "보관함에 아이템이 %s개 있습니다. %s 명령어로 확인하세요!", stacks.size(), "rg255,204;/stash");
 				}
 			}
 			if (sender instanceof Player player)
@@ -146,7 +141,7 @@ public class Data
 			}
 			while (stash.size() > 45)
 			{
-				stash.remove(0);
+				stash.removeFirst();
 			}
 			Variable.itemStash.put(uuid, stash);
 		}
