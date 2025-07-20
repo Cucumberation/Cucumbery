@@ -382,8 +382,8 @@ public class Scheduler
 		if (helmet == CustomMaterial.MINER_HELMET || helmet == CustomMaterial.MINDAS_HELMET)
 		{
 //			if (!CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.NIGHT_VISION))
-				CustomEffectManager.addEffect(player, new CustomEffect(CustomEffectTypeMinecraft.NIGHT_VISION, 10, 0, DisplayType.NONE));
-//						player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 20, 0, true, false, false));
+//				CustomEffectManager.addEffect(player, new CustomEffect(CustomEffectTypeMinecraft.NIGHT_VISION, 10, 0, DisplayType.NONE));
+						player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 2, 0, true, false, false));
 		}
 		if (helmet == CustomMaterial.MINER_HELMET && chestplate == CustomMaterial.MINER_CHESTPLATE && leggings == CustomMaterial.MINER_LEGGINGS
 				&& boots == CustomMaterial.MINER_BOOTS)

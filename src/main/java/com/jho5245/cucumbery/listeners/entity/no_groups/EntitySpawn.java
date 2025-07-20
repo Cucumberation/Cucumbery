@@ -35,7 +35,8 @@ public class EntitySpawn implements Listener
 			{
 				Variable.entityAndSourceLocation.put(projectileUUID, blockProjectileSource.getBlock().getLocation().toString());
 			}
-			if (projectile instanceof ThrowableProjectile throwableProjectile)
+			// 엔더 진주는 무기로 취급하지 않는다
+			if (!(projectile instanceof EnderPearl) && projectile instanceof ThrowableProjectile throwableProjectile)
 			{
 				ItemStack item = throwableProjectile.getItem();
 				if (projectileSource instanceof LivingEntity livingEntity)

@@ -139,13 +139,20 @@ public class EntityDamageByEntity implements Listener
 					Variable.attackerAndWeapon.remove(damagerUUID);
 				}
 			}
-			if (damager instanceof Projectile projectile && event.getCause() != EntityDamageEvent.DamageCause.FALL)
+			if (damager instanceof Projectile projectile)
 			{
 				ProjectileSource projectileSource = projectile.getShooter();
 				if (projectileSource instanceof LivingEntity livingEntity)
 				{
-					Variable.victimAndDamager.put(victimUUID, livingEntity);
-					Variable.damagerAndCurrentTime.put(livingEntity.getUniqueId(), System.currentTimeMillis());
+					if (projectile instanceof EnderPearl enderPearl && victim.equals(enderPearl.getShooter()))
+					{
+
+					}
+					else
+					{
+						Variable.victimAndDamager.put(victimUUID, livingEntity);
+						Variable.damagerAndCurrentTime.put(livingEntity.getUniqueId(), System.currentTimeMillis());
+					}
 				}
 				else if (projectileSource instanceof BlockProjectileSource blockProjectileSource)
 				{

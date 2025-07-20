@@ -921,10 +921,9 @@ public class CustomEffectManager
 	public static List<PotionEffect> removeDisplay(@NotNull Player player, @NotNull Collection<PotionEffect> potionEffects)
 	{
 		potionEffects = new ArrayList<>(potionEffects);
-		// 커스텀 채광 효과
+		// 무한 지속 효과(주로 아이템 장착 시에만 적용되는 효과)는 보스바에 표시하지 않는다
 		potionEffects.removeIf(
-				potionEffect -> potionEffect.getDuration() < 3 && (potionEffect.getType().equals(PotionEffectType.MINING_FATIGUE) || potionEffect.getType()
-						.equals(PotionEffectType.HASTE)));
+				potionEffect -> potionEffect.getDuration() < 3 && !potionEffect.hasIcon() && !potionEffect.hasParticles() && potionEffect.isAmbient());
 		potionEffects.removeIf(potionEffect -> (CustomEffectManager.hasEffect(player, CustomEffectType.FANCY_SPOTLIGHT) || CustomEffectManager.hasEffect(player,
 				CustomEffectType.FANCY_SPOTLIGHT_ACTIVATED)) && potionEffect.getType().equals(PotionEffectType.REGENERATION));
 		List<PotionEffectType> removeList = new ArrayList<>();

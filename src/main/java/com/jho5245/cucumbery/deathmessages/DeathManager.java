@@ -1,5 +1,6 @@
 package com.jho5245.cucumbery.deathmessages;
 
+import com.google.errorprone.annotations.Var;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffect;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
@@ -16,6 +17,7 @@ import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.data.custom_enchant.CustomEnchant;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
+import io.lumine.mythic.core.skills.targeters.EntitiesNearOriginTargeter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -91,7 +93,8 @@ public class DeathManager
 			EntityDamageEvent damageCause = entity.getLastDamageCause();
 			if (damageCause == null)
 			{
-				damageCause = new EntityDamageEvent(entity, EntityDamageEvent.DamageCause.VOID, org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.GENERIC).build(), Double.MAX_VALUE);
+				damageCause = new EntityDamageEvent(entity, DamageCause.KILL, org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.GENERIC).build(),
+						Double.MAX_VALUE);
 			}
 			EntityDamageEvent.DamageCause cause = damageCause.getCause();
 			List<Object> args = new ArrayList<>();
@@ -102,6 +105,12 @@ public class DeathManager
 			String key = "";
 			@Nullable Object damager = getDamager(event);
 			@Nullable ItemStack weapon = getWeapon(event);
+			MessageUtil.broadcastDebug("here - damager=", damager, ", weapon=", weapon);
+			MessageUtil.broadcastDebug("victimDamager=", Variable.victimAndDamager.getOrDefault(entity.getUniqueId(), null) + "");
+			if (damager instanceof Entity e)
+			{
+				MessageUtil.broadcastDebug("attackerWeapon=");
+			}
 			if (damager != null)
 			{
 				long time = 0;
@@ -216,47 +225,43 @@ public class DeathManager
 				{
 					if (damageCause instanceof EntityDamageByEntityEvent damageByEntityEvent)
 					{
-						Entity damagerEntity = damageByEntityEvent.getDamager();
-						if (damagerEntity instanceof Trident)
+						if (damageByEntityEvent.getDamager() instanceof EnderPearl enderPearl && entity.equals(enderPearl.getShooter()))
 						{
-							key = "trident";
-						}
-						else if (damagerEntity instanceof Fireball fireball)
-						{
-							if (!(fireball instanceof SizedFireball))
-							{
-								extraArgs.add(SenderComponentUtil.senderComponent(fireball));
-							}
-							if (fireball instanceof DragonFireball)
-							{
-								key = "dragon_fireball";
-							}
-							else if (fireball instanceof SizedFireball sizedFireball)
-							{
-								key = "fireball";
-								extraArgs.add(ComponentUtil.create(sizedFireball.getDisplayItem().clone()));
-							}
-							else if (fireball instanceof WitherSkull)
-							{
-								key = "wither_skull";
-							}
-							else
-							{
-								key = "fireball";
-							}
-						}
-						else if (damagerEntity instanceof ShulkerBullet shulkerBullet)
-						{
-							key = "shulker_bullet";
-							extraArgs.add(ComponentUtil.create(shulkerBullet));
-						}
-						else if (damagerEntity instanceof AbstractArrow)
-						{
-							key = "arrow";
+							key = "ender_pearl";
+							extraArgs.add(ComponentUtil.create(enderPearl.getItem()));
 						}
 						else
 						{
-							key = "projectile";
+							Entity damagerEntity = damageByEntityEvent.getDamager();
+							switch (damagerEntity)
+							{
+								case Trident ignore -> key = "trident";
+								case Fireball fireball ->
+								{
+									if (!(fireball instanceof SizedFireball))
+									{
+										extraArgs.add(SenderComponentUtil.senderComponent(fireball));
+									}
+									switch (fireball)
+									{
+										case DragonFireball ignored -> key = "dragon_fireball";
+										case SizedFireball sizedFireball ->
+										{
+											key = "fireball";
+											extraArgs.add(ComponentUtil.create(sizedFireball.getDisplayItem().clone()));
+										}
+										case WitherSkull ignored -> key = "wither_skull";
+										default -> key = "fireball";
+									}
+								}
+								case ShulkerBullet shulkerBullet ->
+								{
+									key = "shulker_bullet";
+									extraArgs.add(ComponentUtil.create(shulkerBullet));
+								}
+								case AbstractArrow ignored -> key = "arrow";
+								case null, default -> key = "projectile";
+							}
 						}
 					}
 					else
@@ -287,13 +292,7 @@ public class DeathManager
 				}
 				case FALL ->
 				{
-					if (damageCause instanceof EntityDamageByEntityEvent damageByEntityEvent && damageByEntityEvent.getDamager() instanceof EnderPearl enderPearl
-							&& entity.equals(enderPearl.getShooter()))
-					{
-						key = "ender_pearl";
-						extraArgs.add(ComponentUtil.create(enderPearl.getItem()));
-					}
-					else if (CustomEffectManager.hasEffect(entity, CustomEffectType.GLIDING))
+					if (CustomEffectManager.hasEffect(entity, CustomEffectType.GLIDING))
 					{
 						key = "fall_elytra";
 					}
@@ -710,14 +709,11 @@ public class DeathManager
 			Variable.victimAndBlockDamager.remove(entity.getUniqueId());
 			Variable.lastTrampledBlock.remove(entity.getUniqueId());
 			Variable.lastTrampledBlockType.remove(entity.getUniqueId());
-			if (damager != null)
+
+			if (damager instanceof Entity e)
 			{
-				if (damager instanceof Entity e)
-				{
-					//MessageUtil.broadcastDebug(e);
-					Variable.attackerAndWeapon.remove(e.getUniqueId());
-					Variable.attackerAndWeaponString.remove(e.getUniqueId());
-				}
+				Variable.attackerAndWeapon.remove(e.getUniqueId());
+				Variable.attackerAndWeaponString.remove(e.getUniqueId());
 			}
 			// 모든 플레이어에게 데스메시지 보냄
 			if (event.isCancelled() || !entity.isDead())
@@ -828,7 +824,8 @@ public class DeathManager
 		EntityDamageEvent damageCause = entity.getLastDamageCause();
 		if (damageCause == null)
 		{
-			damageCause = new EntityDamageEvent(entity, DamageCause.KILL, org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.GENERIC).build(), Double.MAX_VALUE);
+			damageCause = new EntityDamageEvent(entity, DamageCause.KILL, org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.GENERIC).build(),
+					Double.MAX_VALUE);
 		}
 		DamageCause cause = damageCause.getCause();
 		if (cause == DamageCause.VOID)
@@ -859,7 +856,7 @@ public class DeathManager
 	{
 		LivingEntity entity = event.getEntity();
 		EntityDamageEvent entityDamageEvent = entity.getLastDamageCause();
-		if (entityDamageEvent instanceof EntityDamageByEntityEvent damageEvent && damageEvent.getCause() != EntityDamageEvent.DamageCause.FALL)
+		if (entityDamageEvent instanceof EntityDamageByEntityEvent damageEvent)
 		{
 			EntityDamageEvent.DamageCause cause = entityDamageEvent.getCause();
 			Entity damager = damageEvent.getDamager();
@@ -887,7 +884,7 @@ public class DeathManager
 					}
 					return damager;
 				}
-				if (projectileSource instanceof LivingEntity)
+				if (!(projectile instanceof EnderPearl) && projectileSource instanceof LivingEntity)
 				{
 					return projectileSource;
 				}
@@ -961,7 +958,7 @@ public class DeathManager
 		if (entityDamageEvent instanceof EntityDamageByEntityEvent damageEvent)
 		{
 			Entity damager = damageEvent.getDamager();
-			if (damager instanceof Projectile projectile)
+			if (damager instanceof Projectile projectile && !(projectile instanceof EnderPearl))
 			{
 				return projectile;
 			}
@@ -1058,11 +1055,6 @@ public class DeathManager
 			{
 				return null;
 			}
-			if (projectile instanceof EnderPearl && event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent damageByEntityEvent
-					&& damageByEntityEvent.getCause() == EntityDamageEvent.DamageCause.FALL)
-			{
-				return null;
-			}
 			if (projectile != null && Variable.projectile.containsKey(projectile.getUniqueId()))
 			{
 				return Variable.projectile.get(projectile.getUniqueId());
@@ -1070,6 +1062,8 @@ public class DeathManager
 
 			if (projectile instanceof ThrowableProjectile throwableProjectile)
 			{
+				if (throwableProjectile instanceof EnderPearl)
+					return null;
 				return throwableProjectile.getItem();
 			}
 			else if (projectile instanceof AbstractArrow abstractArrow)

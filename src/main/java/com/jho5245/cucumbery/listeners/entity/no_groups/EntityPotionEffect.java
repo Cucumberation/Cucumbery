@@ -26,7 +26,8 @@ import java.util.UUID;
 
 public class EntityPotionEffect implements Listener
 {
-	@EventHandler
+	// TODO: 잠시 꺼놔 시발
+//	@EventHandler
 	public void onEntityPotionEffect(EntityPotionEffectEvent event)
 	{
 		if (event.isCancelled())
