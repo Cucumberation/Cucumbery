@@ -414,7 +414,7 @@ public class CustomEffectScheduler
 	{
 		if (CustomEffectManager.hasEffect(player, CustomEffectType.GAESANS) && player.isSneaking() && ((Entity) player).isOnGround())
 		{
-			CustomEffectManager.addEffect(player, new CustomEffect(CustomEffectTypeMinecraft.INVISIBILITY,4, 0, DisplayType.NONE));
+			CustomEffectManager.addEffect(player, new CustomEffect(CustomEffectTypeMinecraft.INVISIBILITY, 6, 0, DisplayType.NONE));
 		}
 	}
 
@@ -439,7 +439,7 @@ public class CustomEffectScheduler
 			Material mainHand = inventory.getItemInMainHand().getType(), offHand = inventory.getItemInOffHand().getType();
 			if (Constant.OPTIFINE_DYNAMIC_LIGHT_ITEMS.contains(mainHand) || Constant.OPTIFINE_DYNAMIC_LIGHT_ITEMS.contains(offHand))
 			{
-				CustomEffectManager.addEffect(player, new CustomEffect(CustomEffectTypeMinecraft.NIGHT_VISION,4, 0, DisplayType.NONE));
+				CustomEffectManager.addEffect(player, new CustomEffect(CustomEffectTypeMinecraft.NIGHT_VISION, 6, 0, DisplayType.NONE));
 			}
 		}
 	}
@@ -470,12 +470,9 @@ public class CustomEffectScheduler
 						|| Math.abs(customEffect.getDuration() - potionEffect.getDuration()) > 1)
 				{
 					livingEntity.removePotionEffect(potionEffectType);
-					livingEntity.addPotionEffect(
-							new PotionEffect(potionEffectType, customEffect.getDuration(),
-									Math.max(customEffect.getAmplifier(), potionEffect != null ? potionEffect.getAmplifier() : 0),
-									potionEffect != null && potionEffect.isAmbient(),
-									potionEffect != null && potionEffect.hasParticles(),
-									potionEffect != null && potionEffect.hasIcon()));
+					livingEntity.addPotionEffect(new PotionEffect(potionEffectType, customEffect.getDuration(),
+							Math.max(customEffect.getAmplifier(), potionEffect != null ? potionEffect.getAmplifier() : 0), potionEffect != null && potionEffect.isAmbient(),
+							potionEffect != null && potionEffect.hasParticles(), potionEffect != null && potionEffect.hasIcon()));
 				}
 			}
 		}
@@ -580,8 +577,7 @@ public class CustomEffectScheduler
 		if (CustomEffectManager.hasEffect(player, CustomEffectType.TOWN_SHIELD))
 		{
 
-
-			CustomEffectManager.addEffect(player, new CustomEffect(CustomEffectTypeMinecraft.SATURATION,4, 0, DisplayType.NONE));
+			CustomEffectManager.addEffect(player, new CustomEffect(CustomEffectTypeMinecraft.SATURATION, 6, 0, DisplayType.NONE));
 		}
 	}
 
