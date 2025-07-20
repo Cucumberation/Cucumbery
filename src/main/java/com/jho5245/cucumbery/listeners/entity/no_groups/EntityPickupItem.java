@@ -245,7 +245,7 @@ public class EntityPickupItem implements Listener
 			}
 			if (!event.isCancelled())
 			{
-				this.actionbarOnItemPickup(player, itemStack, itemStack.getAmount() - event.getRemaining());
+				this.actionbarOnItemPickup(player, itemStack, itemStack.getAmount());
 			}
 		}
 	}
