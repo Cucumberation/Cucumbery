@@ -30,6 +30,7 @@ public class ItemLore2CustomMaterial
 {
   protected static void setItemLore(@Nullable Player viewer, @NotNull CustomMaterial customMaterial, @NotNull ItemStack itemStack, @NotNull ItemMeta itemMeta, @NotNull List<Component> lore)
   {
+    ItemLoreView itemLoreView = viewer != null ? ItemLoreView.of(viewer) : null;
     NBTItem nbtItem = new NBTItem(itemStack);
     switch (customMaterial)
     {
@@ -312,7 +313,7 @@ public class ItemLore2CustomMaterial
       case BOW_CRIT -> {
         lore.add(Component.empty());
         lore.add(ComponentUtil.translate("&7사용 시 화살의 속성이 %s(으)로 변경됨", CustomMaterial.ARROW_CRIT));
-        lore.addAll(ItemStackUtil.getItemInfoAsComponents(CustomMaterial.ARROW_CRIT.create(), null, null, true));
+        lore.addAll(ItemStackUtil.getItemInfoAsComponents(CustomMaterial.ARROW_CRIT.create(), itemLoreView, null, true));
       }
       case BOW_ENDER_PEARL -> {
         lore.add(Component.empty());
@@ -322,17 +323,17 @@ public class ItemLore2CustomMaterial
       case BOW_EXPLOSIVE -> {
         lore.add(Component.empty());
         lore.add(ComponentUtil.translate("&7사용 시 화살의 속성이 %s(으)로 변경됨", CustomMaterial.ARROW_EXPLOSIVE));
-        lore.addAll(ItemStackUtil.getItemInfoAsComponents(CustomMaterial.ARROW_EXPLOSIVE.create(), null, null, true));
+        lore.addAll(ItemStackUtil.getItemInfoAsComponents(CustomMaterial.ARROW_EXPLOSIVE.create(), itemLoreView, null, true));
       }
       case BOW_EXPLOSIVE_DESTRUCTION -> {
         lore.add(Component.empty());
         lore.add(ComponentUtil.translate("&7사용 시 화살의 속성이 %s(으)로 변경됨", CustomMaterial.ARROW_EXPLOSIVE_DESTRUCTION));
-        lore.addAll(ItemStackUtil.getItemInfoAsComponents(CustomMaterial.ARROW_EXPLOSIVE_DESTRUCTION.create(), null, null, true));
+        lore.addAll(ItemStackUtil.getItemInfoAsComponents(CustomMaterial.ARROW_EXPLOSIVE_DESTRUCTION.create(), itemLoreView, null, true));
       }
       case BOW_FLAME -> {
         lore.add(Component.empty());
         lore.add(ComponentUtil.translate("&7사용 시 화살의 속성이 %s(으)로 변경됨", CustomMaterial.ARROW_FLAME));
-        lore.addAll(ItemStackUtil.getItemInfoAsComponents(CustomMaterial.ARROW_FLAME.create(), null, null, true));
+        lore.addAll(ItemStackUtil.getItemInfoAsComponents(CustomMaterial.ARROW_FLAME.create(), itemLoreView, null, true));
       }
       case BOW_INFINITE -> {
         lore.add(Component.empty());
@@ -342,7 +343,7 @@ public class ItemLore2CustomMaterial
       case BOW_MOUNT -> {
         lore.add(Component.empty());
         lore.add(ComponentUtil.translate("&7사용 시 화살의 속성이 %s(으)로 변경됨", ItemNameUtil.itemName(CustomMaterial.ARROW_MOUNT.create())));
-        lore.addAll(ItemStackUtil.getItemInfoAsComponents(CustomMaterial.ARROW_MOUNT.create(), null, null, true));
+        lore.addAll(ItemStackUtil.getItemInfoAsComponents(CustomMaterial.ARROW_MOUNT.create(), itemLoreView, null, true));
       }
       case RAINBOW_HELMET, RAINBOW_BOOTS, RAINBOW_CHESTPLATE, RAINBOW_LEGGINGS -> {
         lore.add(Component.empty());

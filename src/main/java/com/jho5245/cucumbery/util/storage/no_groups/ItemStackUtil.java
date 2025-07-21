@@ -7,6 +7,7 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import com.jho5245.cucumbery.Cucumbery;
+import com.jho5245.cucumbery.commands.no_groups.CommandCgive;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.util.itemlore.ItemLore;
@@ -851,13 +852,18 @@ public class ItemStackUtil
 		List<Component> components = new ArrayList<>();
 		if (separator)
 		{
-			components.add(ComponentUtil.create2("&8" + Constant.SEPARATOR));
+			components.add(ComponentUtil.create("&8" + Constant.SEPARATOR));
 		}
 		if (tag != null)
 		{
 			components.add(tag);
 		}
-		components.add(ItemNameUtil.itemName(itemStack, NamedTextColor.WHITE));
+		Component itemName = ItemNameUtil.itemName(itemStack, NamedTextColor.WHITE);
+		if (itemName.decoration(TextDecoration.ITALIC) == State.NOT_SET)
+		{
+			itemName = itemName.decoration(TextDecoration.ITALIC, State.FALSE);
+		}
+		components.add(itemName);
 		if (itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore())
 		{
 			List<Component> lore = itemStack.getItemMeta().lore();
@@ -876,7 +882,7 @@ public class ItemStackUtil
 		}
 		if (separator)
 		{
-			components.add(ComponentUtil.create2("&8" + Constant.SEPARATOR));
+			components.add(ComponentUtil.create("&8" + Constant.SEPARATOR));
 		}
 		return components;
 	}

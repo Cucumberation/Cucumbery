@@ -121,6 +121,8 @@ public class Cucumbery extends JavaPlugin
 	//  private static final ExecutorService brigadierService = Executors.newFixedThreadPool(1);
 	public static YamlConfiguration config;
 
+	public static boolean using_CommandAPI;
+
 	public static boolean using_Vault_Economy;
 
 	public static boolean using_Vault_Chat;
@@ -194,14 +196,6 @@ public class Cucumbery extends JavaPlugin
 			return;
 		}
 		isLoaded = true;
-		try
-		{
-			CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(false).silentLogs(true).initializeNBTAPI(NBTContainer.class, NBTContainer::new));
-		}
-		catch (Throwable e)
-		{
-			getLogger().warning(e.getMessage());
-		}
 	}
 
 	@Override
@@ -444,7 +438,8 @@ public class Cucumbery extends JavaPlugin
 		{
 			location.getBlock().getState().update();
 		}
-		for (UUID uuid : CommandRide.RIDE_AREA_EFFECT_CLOUDS)
+		// TODO: CommandAPI should be fixed
+/*		for (UUID uuid : CommandRide.RIDE_AREA_EFFECT_CLOUDS)
 		{
 			Entity entity = Method2.getEntity(uuid);
 			if (entity != null)
@@ -454,9 +449,8 @@ public class Cucumbery extends JavaPlugin
 					entity.remove();
 				}
 			}
-		}
+		}*/
 		RecipeManager.unload();
-		CommandAPI.onDisable();
 	}
 
 	private void registerItems()
@@ -494,40 +488,42 @@ public class Cucumbery extends JavaPlugin
 
 		try
 		{
-			CommandAPI.onEnable();
-			new ExtraExecuteArgument().registerArgument();
-			new CommandRide().registerCommand("ride2", "cucumbery.command.ride", "cride");
-			new CommandSudo2().registerCommand("sudo2", "cucumbery.command.sudo2", "csudo2");
-			new CommandGive2().registerCommand("cgive", "cucumbery.command.cgive", "cgive", "give2");
-			new CommandVelocity().registerCommand("velocity", "cucumbery.command.velocity2", "velo", "날리기", "cvelo", "cvelocity");
-			new CommandHealthPoint().registerCommand("healthpoint", "cucumbery.command.healthpoint", "hp", "chp");
-			new CommandKill2().registerCommand("ckill", "cucumbery.command.ckill", "ckill", "kill2");
-			new CommandSetItem().registerCommand("setitem", "cucumbery.command.setitem", "csetitem");
-			new CommandConsoleSudo2().registerCommand("consolesudo2", "cucumbery.command.consolesudo", "consolesudo2");
-			new CommandSendActionbar().registerCommand("sendactionbar", "cucumbery.command.sendactionbar", "csendactionbar");
-			new CommandSendTitle().registerCommand("sendtitle", "cucumbery.command.sendtitle", "csendtitle");
-			new CommandUpdateItem().registerCommand("updateitem", "cucumbery.command.updateitem", "cupdateitem");
-			new CommandEffect2().registerCommand("ceffect", "cucumbery.command.effect", "ceffect", "effect2");
-			new CommandDamage().registerCommand("damage2", "cucumbery.command.damage", "cdamage");
-			new CommandSummon2().registerCommand("csummon", "cucumbery.command.summon", "csummon", "summon2");
-			new CommandSetBlock2().registerCommand("csetblock", "cucumbery.command.setblock", "csetblock", "setblock2");
-			new CommandReplaceEntity().registerCommand("replaceentity", "cucumbery.command.replaceentity", "creplaceentity");
-			new CommandRepeat2().registerCommand("crepeat", "cucumbery.command.repeat", "repeat2");
-			new CommandData2().registerCommand("cdata", "cucumbery.command.data", "data2");
-			new CommandTeleport2().registerCommand("teleport2", "cucumbery.command.teleport", "tp2");
-			new CommandExplode().registerCommand("explode", "cucumbery.command.explode", "cexplode");
-			new CommandVanillaTeleport().registerCommand("teleport", "minecraft.command.teleport", "tp");
-			new CommandSellItem().registerCommand("sellitem", "cucumbery.command.sellitem", "csellitem");
-			new CommandClear2().registerCommand("clear2", "cucumbery.command.clear2", "cclear");
-			new CommandSearchChestItem().registerCommand("search-container-item", "cucumbey.command.search_container_item", "search-container-item");
-			new CommandBreak().registerCommand("cbreak", "cucumbery.command.break", "cbreak");
-			new CommandFakeBlock().registerCommand("fakeblock", "cucumbery.command.fakeblock", "cfakeblock");
-			new CommandTag().registerCommand("tag", "minecraft.command.tag", "tag");
-			//        brigadierService.submit(this::registerBrigadierCommands);
+			if (using_CommandAPI)
+			{
+				new ExtraExecuteArgument().registerArgument();
+				new CommandRide().registerCommand("ride2", "cucumbery.command.ride", "cride");
+				new CommandSudo2().registerCommand("sudo2", "cucumbery.command.sudo2", "csudo2");
+//				new CommandGive2().registerCommand("cgive", "cucumbery.command.cgive", "cgive", "give2");
+				new CommandVelocity().registerCommand("velocity", "cucumbery.command.velocity2", "velo", "날리기", "cvelo", "cvelocity");
+				new CommandHealthPoint().registerCommand("healthpoint", "cucumbery.command.healthpoint", "hp", "chp");
+				new CommandKill2().registerCommand("ckill", "cucumbery.command.ckill", "ckill", "kill2");
+				new CommandSetItem().registerCommand("setitem", "cucumbery.command.setitem", "csetitem");
+				new CommandConsoleSudo2().registerCommand("consolesudo2", "cucumbery.command.consolesudo", "consolesudo2");
+				new CommandSendActionbar().registerCommand("sendactionbar", "cucumbery.command.sendactionbar", "csendactionbar");
+				new CommandSendTitle().registerCommand("sendtitle", "cucumbery.command.sendtitle", "csendtitle");
+				new CommandUpdateItem().registerCommand("updateitem", "cucumbery.command.updateitem", "cupdateitem");
+				new CommandEffect2().registerCommand("ceffect", "cucumbery.command.effect", "ceffect", "effect2");
+				new CommandDamage().registerCommand("damage2", "cucumbery.command.damage", "cdamage");
+				new CommandSummon2().registerCommand("csummon", "cucumbery.command.summon", "csummon", "summon2");
+				new CommandSetBlock2().registerCommand("csetblock", "cucumbery.command.setblock", "csetblock", "setblock2");
+				new CommandReplaceEntity().registerCommand("replaceentity", "cucumbery.command.replaceentity", "creplaceentity");
+				new CommandRepeat2().registerCommand("crepeat", "cucumbery.command.repeat", "repeat2");
+				new CommandData2().registerCommand("cdata", "cucumbery.command.data", "data2");
+				new CommandTeleport2().registerCommand("teleport2", "cucumbery.command.teleport", "tp2");
+				new CommandExplode().registerCommand("explode", "cucumbery.command.explode", "cexplode");
+				new CommandVanillaTeleport().registerCommand("teleport", "minecraft.command.teleport", "tp");
+				new CommandSellItem().registerCommand("sellitem", "cucumbery.command.sellitem", "csellitem");
+				new CommandClear2().registerCommand("clear2", "cucumbery.command.clear2", "cclear");
+				new CommandSearchChestItem().registerCommand("search-container-item", "cucumbey.command.search_container_item", "search-container-item");
+				new CommandBreak().registerCommand("cbreak", "cucumbery.command.break", "cbreak");
+				new CommandFakeBlock().registerCommand("fakeblock", "cucumbery.command.fakeblock", "cfakeblock");
+				new CommandTag().registerCommand("tag", "minecraft.command.tag", "tag");
+				//        brigadierService.submit(this::registerBrigadierCommands);
+			}
 		}
 		catch (Throwable e)
 		{
-			Cucumbery.getPlugin().getLogger().warning(e.getMessage());
+			e.printStackTrace();
 		}
 
 		try
@@ -550,6 +546,7 @@ public class Cucumbery extends JavaPlugin
 
 	private void checkUsingAddons()
 	{
+		Cucumbery.using_CommandAPI = Cucumbery.config.getBoolean("use-hook-plugins.Vault-Economy") && this.pluginManager.getPlugin("CommandAPI") instanceof CommandAPI;
 		Cucumbery.using_Vault_Economy = Cucumbery.config.getBoolean("use-hook-plugins.Vault-Economy") && Initializer.setupEconomy() && eco != null;
 		Cucumbery.using_Vault_Chat = Cucumbery.config.getBoolean("use-hook-plugins.Vault-Chat") && Initializer.setupChat() && chat != null;
 		Cucumbery.using_NoteBlockAPI =
@@ -591,6 +588,10 @@ public class Cucumbery extends JavaPlugin
 		}
 		if (Cucumbery.config.getBoolean("console-messages.hook-plugins"))
 		{
+			if (using_CommandAPI)
+			{
+				MessageUtil.consoleSendMessage(Prefix.INFO, "CommandAPI 플러그인을 연동했습니다");
+			}
 			if (using_Vault_Economy)
 			{
 				MessageUtil.consoleSendMessage(Prefix.INFO, "Vault-Economy 플러그인을 연동했습니다");
@@ -692,7 +693,6 @@ public class Cucumbery extends JavaPlugin
 		}
 	}
 
-	@SuppressWarnings("unused")
 	private void registerBrigadierCommands()
 	{
 		try
@@ -829,6 +829,7 @@ public class Cucumbery extends JavaPlugin
 		Initializer.registerCommand("setrotation", new CommandSetRotation());
 		Initializer.registerCommand("lookat", new CommandLookAt());
 		Initializer.registerCommand("cenchant", new CommandEnchant());
+		Initializer.registerCommand("cgive", new CommandCgive());
 	}
 
 	private void registerEvents()

@@ -4,7 +4,7 @@ api-version: 1.20.6
 main: com.jho5245.cucumbery.Cucumbery
 author: jho5245
 description: 굳검버리 플러그인
-softdepend: [Vault, NoteBlockAPI, QuickShop, PlaceHolderAPI, mcMMO, MythicMobs, ProtocolLib, WorldEdit, WorldGuard, GSit, UltimateTimber, Residence]
+softdepend: [CommandAPI, Vault, NoteBlockAPI, QuickShop, PlaceHolderAPI, mcMMO, MythicMobs, ProtocolLib, WorldEdit, WorldGuard, GSit, UltimateTimber, Residence]
 website: https://cucumbery.com/
 
 commands:
@@ -394,6 +394,10 @@ commands:
     description: 아이템에 마법을 부여하거나 제거합니다
     usage: /<command> <마법> [레벨]
     aliases: [enchant]
+  cgive:
+    description: 아이템 지급 명령어
+    usage: /<command> <플레이어> <아이템> [개수] [명령어 출력 숨김 여부]
+    aliases: [give2]
 
 permissions:
   cucumbery.error.hide:

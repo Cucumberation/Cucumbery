@@ -188,7 +188,7 @@ public class SenderComponentUtil
   @NotNull
   public static Component senderComponent(@Nullable Player player, @NotNull Object object, @Nullable TextColor defaultColor)
   {
-    if (object instanceof NativeProxyCommandSender sender)
+    if (Cucumbery.using_CommandAPI && object instanceof NativeProxyCommandSender sender)
     {
       CommandSender caller = sender.getCaller(), callee = sender.getCallee();
       if (caller.equals(callee))
