@@ -85,18 +85,13 @@ public class CommandSong implements CucumberyCommandExecutor
 				{
 					case "play" ->
 					{
-						if (length < 2)
-						{
-							Bukkit.dispatchCommand(sender, "csong play --random");
-							return true;
-						}
+						String fileName = length < 2 ? "--random" : args[1];
 						if (length > 2)
 						{
 							MessageUtil.longArg(sender, 2, args);
 							MessageUtil.commandInfo(sender, label, "play <파일 이름>");
 							return !(sender instanceof BlockCommandSender);
 						}
-						String fileName = args[1];
 						boolean console = sender instanceof ConsoleCommandSender && fileName.contains("--console");
 						if (console)
 						{
