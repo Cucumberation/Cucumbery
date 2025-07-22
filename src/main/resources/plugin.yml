@@ -4,7 +4,7 @@ api-version: 1.20.6
 main: com.jho5245.cucumbery.Cucumbery
 author: jho5245
 description: 굳검버리 플러그인
-softdepend: [CommandAPI, Vault, NoteBlockAPI, QuickShop, PlaceHolderAPI, mcMMO, MythicMobs, ProtocolLib, WorldEdit, WorldGuard, GSit, UltimateTimber, Residence]
+softdepend: [Vault, NoteBlockAPI, QuickShop, PlaceHolderAPI, mcMMO, MythicMobs, ProtocolLib, WorldEdit, WorldGuard, GSit, UltimateTimber, Residence]
 website: https://cucumbery.com/
 
 commands:
@@ -318,7 +318,6 @@ commands:
   repeat:
     description: 명령어를 반복 실행합니다. %repeat% 플레이스 홀더로 반복된 횟수 수치를 사용할 수 있습니다.
     usage: /<command> <반복 횟수> <딜레이> <명령어>
-    aliases: [crepeat]
   socialmenu:
     description: 소셜 메뉴 명령어입니다.
     usage: /<command> [플레이어]
@@ -394,10 +393,10 @@ commands:
     description: 아이템에 마법을 부여하거나 제거합니다
     usage: /<command> <마법> [레벨]
     aliases: [enchant]
-  cgive:
-    description: 아이템 지급 명령어
-    usage: /<command> <플레이어> <아이템> [개수] [명령어 출력 숨김 여부]
-    aliases: [give2]
+#  cgive:
+#    description: 아이템 지급 명령어
+#    usage: /<command> <플레이어> <아이템> [개수] [명령어 출력 숨김 여부]
+#    aliases: [give2]
 
 permissions:
   cucumbery.error.hide:

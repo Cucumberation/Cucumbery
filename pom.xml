@@ -138,15 +138,14 @@
         <dependency>
             <groupId>de.tr7zw</groupId>
             <artifactId>item-nbt-api</artifactId>
-            <version>2.15.1</version>
+            <version>2.15.2-SNAPSHOT</version>
         </dependency>
 
         <!-- CommandAPI Dependency -->
         <dependency>
             <groupId>dev.jorel</groupId>
-            <artifactId>commandapi-bukkit-core</artifactId>
-            <version>10.1.1</version>
-            <scope>provided</scope>
+            <artifactId>commandapi-bukkit-shade</artifactId>
+            <version>10.1.2</version>
         </dependency>
 
         <!-- Mojang Brigadier Dependency -->
@@ -290,6 +289,10 @@
                     <relocations>
                         <relocation>
                             <pattern>de.tr7zw.changeme.nbtapi</pattern>
+                            <shadedPattern>com.jho5245.cucumbery.util.shading</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>dev.jorel.commandapi</pattern>
                             <shadedPattern>com.jho5245.cucumbery.util.shading</shadedPattern>
                         </relocation>
                         <relocation>

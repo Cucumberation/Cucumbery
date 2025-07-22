@@ -86,6 +86,7 @@ import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.geco.gsit.GSitMain;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
+import dev.jorel.commandapi.CommandAPIConfig;
 import dev.jorel.commandapi.Converter;
 import io.lumine.mythic.bukkit.BukkitAPIHelper;
 import me.clip.placeholderapi.PlaceholderAPIPlugin;
@@ -116,12 +117,12 @@ import java.util.UUID;
 
 public class Cucumbery extends JavaPlugin
 {
-	public static final int CONFIG_VERSION = 49, DEATH_MESSAGES_CONFIG_VERSION = 13, LANG_CONFIG_VERSION = 7;
+	public static final int CONFIG_VERSION = 50, DEATH_MESSAGES_CONFIG_VERSION = 13, LANG_CONFIG_VERSION = 7;
 
 	//  private static final ExecutorService brigadierService = Executors.newFixedThreadPool(1);
 	public static YamlConfiguration config;
 
-	public static boolean using_CommandAPI;
+	public static boolean using_CommandAPI = true;
 
 	public static boolean using_Vault_Economy;
 
@@ -196,6 +197,9 @@ public class Cucumbery extends JavaPlugin
 			return;
 		}
 		isLoaded = true;
+		CommandAPI.onLoad(new CommandAPIBukkitConfig(this)
+				.initializeNBTAPI(NBTContainer.class, NBTContainer::new)
+		);
 	}
 
 	@Override
@@ -438,8 +442,7 @@ public class Cucumbery extends JavaPlugin
 		{
 			location.getBlock().getState().update();
 		}
-		// TODO: CommandAPI should be fixed
-/*		for (UUID uuid : CommandRide.RIDE_AREA_EFFECT_CLOUDS)
+		for (UUID uuid : CommandRide.RIDE_AREA_EFFECT_CLOUDS)
 		{
 			Entity entity = Method2.getEntity(uuid);
 			if (entity != null)
@@ -449,8 +452,9 @@ public class Cucumbery extends JavaPlugin
 					entity.remove();
 				}
 			}
-		}*/
+		}
 		RecipeManager.unload();
+		CommandAPI.onDisable();
 	}
 
 	private void registerItems()
@@ -490,10 +494,11 @@ public class Cucumbery extends JavaPlugin
 		{
 			if (using_CommandAPI)
 			{
+				CommandAPI.onEnable();
 				new ExtraExecuteArgument().registerArgument();
 				new CommandRide().registerCommand("ride2", "cucumbery.command.ride", "cride");
 				new CommandSudo2().registerCommand("sudo2", "cucumbery.command.sudo2", "csudo2");
-//				new CommandGive2().registerCommand("cgive", "cucumbery.command.cgive", "cgive", "give2");
+				new CommandGive2().registerCommand("cgive", "cucumbery.command.cgive", "cgive", "give2");
 				new CommandVelocity().registerCommand("velocity", "cucumbery.command.velocity2", "velo", "날리기", "cvelo", "cvelocity");
 				new CommandHealthPoint().registerCommand("healthpoint", "cucumbery.command.healthpoint", "hp", "chp");
 				new CommandKill2().registerCommand("ckill", "cucumbery.command.ckill", "ckill", "kill2");
@@ -546,7 +551,7 @@ public class Cucumbery extends JavaPlugin
 
 	private void checkUsingAddons()
 	{
-		Cucumbery.using_CommandAPI = Cucumbery.config.getBoolean("use-hook-plugins.Vault-Economy") && this.pluginManager.getPlugin("CommandAPI") instanceof CommandAPI;
+//		Cucumbery.using_CommandAPI = Cucumbery.config.getBoolean("use-hook-plugins.CommandAPI") && this.pluginManager.getPlugin("CommandAPI") != null;
 		Cucumbery.using_Vault_Economy = Cucumbery.config.getBoolean("use-hook-plugins.Vault-Economy") && Initializer.setupEconomy() && eco != null;
 		Cucumbery.using_Vault_Chat = Cucumbery.config.getBoolean("use-hook-plugins.Vault-Chat") && Initializer.setupChat() && chat != null;
 		Cucumbery.using_NoteBlockAPI =
