@@ -10,9 +10,7 @@ import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.Material;
-import org.bukkit.Registry;
 import org.bukkit.Statistic;
-import org.bukkit.block.Biome;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -23,8 +21,10 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 public class CommandCustomRecipeTabCompleter implements TabCompleter
 {
@@ -380,8 +380,7 @@ public class CommandCustomRecipeTabCompleter implements TabCompleter
                 case "command":
                   return Method.tabCompleterList(args, "<실행 시점>", "craft", "failure", "success");
                 case "biome":
-                  // TODO: change tab list
-                  return Method.tabCompleterList(args, Collections.emptyList(), "<생물 군계>");
+                  return Method.tabCompleterList(args, RegistryAccess.registryAccess().getRegistry(RegistryKey.BIOME).stream().map(biome -> biome.toString().toLowerCase()).toList(), "<생물 군계>");
                 case "belowblock", "target-block":
                 {
                   List<String> list = new ArrayList<>();
