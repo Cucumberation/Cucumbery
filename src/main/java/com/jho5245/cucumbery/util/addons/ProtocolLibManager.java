@@ -94,7 +94,7 @@ public class ProtocolLibManager
 
 	// ITEM TEXT DISPLAY MOUNT MAP
 	private static final Map<Integer, List<Integer>> itemTextDisplayMountMap = Collections.synchronizedMap(new HashMap<>());
-	
+
 	// WINDOW_ITEMS Packet Listener 쿨타임 UUID 목록(약 0.05초)
 	private static final Set<UUID> WINDOW_ITEMS_COOLDOWN_UUIDS = new HashSet<>();
 
@@ -276,7 +276,8 @@ public class ProtocolLibManager
 					int duration = (int) modifier.read(3);
 					if (entity instanceof Player player)
 					{
-						if (CustomEffectManager.hasEffect(player, CustomEffectType.GAESANS) && potionEffectType.equals(PotionEffectType.INVISIBILITY) && player.isSneaking())
+						if (CustomEffectManager.hasEffect(player, CustomEffectType.GAESANS) && potionEffectType.equals(PotionEffectType.INVISIBILITY)
+								&& player.isSneaking())
 						{
 							modifier.write(3, PotionEffect.INFINITE_DURATION);
 							event.setPacket(packet);
@@ -561,7 +562,8 @@ public class ProtocolLibManager
 							event.setPacket(packet);
 						}
 
-						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.HERO_OF_THE_VILLAGE) && potionEffectType.equals(PotionEffectType.HERO_OF_THE_VILLAGE))
+						if (CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.HERO_OF_THE_VILLAGE) && potionEffectType.equals(
+								PotionEffectType.HERO_OF_THE_VILLAGE))
 						{
 							CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectTypeMinecraft.HERO_OF_THE_VILLAGE);
 							DisplayType displayType = customEffect.getDisplayType();
@@ -686,7 +688,8 @@ public class ProtocolLibManager
 				Player player = event.getPlayer();
 				UUID uuid = player.getUniqueId();
 				// 너무 자주 요청된 패킷은 처리하지 않고 반려
-				if (WINDOW_ITEMS_COOLDOWN_UUIDS.contains(uuid)) return;
+				if (WINDOW_ITEMS_COOLDOWN_UUIDS.contains(uuid))
+					return;
 				WINDOW_ITEMS_COOLDOWN_UUIDS.add(uuid);
 				Bukkit.getScheduler().runTaskLaterAsynchronously(Cucumbery.getPlugin(), () -> WINDOW_ITEMS_COOLDOWN_UUIDS.remove(uuid), 0L);
 				// 아이템이 표시될 때 실제 적용되야 하는 nbt는 적용함
@@ -862,16 +865,15 @@ public class ProtocolLibManager
 						mountTextDisplayToItem(protocolManager, player, component, item);
 					}
 				}
-				// TODO: 아이템 액자 버그 수정해야함
-				//				if (entity instanceof ItemFrame itemFrame)
-				//				{
-				//					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, itemFrame.getItem(), player);
-				//					StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
-				//					List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-				//					wrappedDataValues.add(
-				//							new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
-				//					watchableAccessor.write(0, wrappedDataValues);
-				//				}
+				if (entity instanceof ItemFrame itemFrame)
+				{
+					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, itemFrame.getItem(), player);
+					StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
+					List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
+					wrappedDataValues.add(
+							new WrappedDataValue(9, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
+					watchableAccessor.write(0, wrappedDataValues);
+				}
 				if (entity instanceof ThrowableProjectile throwableProjectile && !(entity instanceof Trident))
 				{
 					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, throwableProjectile.getItem(), player);
