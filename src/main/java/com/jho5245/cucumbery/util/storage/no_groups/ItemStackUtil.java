@@ -1499,7 +1499,6 @@ public class ItemStackUtil
 		List<String> strings = new ArrayList<>();
 		map.forEach((key, dataComponentValue) ->
 		{
-			strings.add(key.asString() + "=");
 			try
 			{
 				Class<?> clazz = dataComponentValue.getClass();
@@ -1509,8 +1508,10 @@ public class ItemStackUtil
 					{
 						Method method = clazz.getDeclaredMethod("element");
 						method.setAccessible(true);
+						strings.add(key.asString() + "=");
 						strings.add(method.invoke(dataComponentValue).toString() + ",");
 					}
+					case "net.kyori.adventure.text.event.RemovedDataComponentValueImpl" -> strings.add("!" + key.asString() + ",");
 					case "io.papermc.paper.adventure.PaperAdventure$DataComponentValueImpl" ->
 					{
 					}

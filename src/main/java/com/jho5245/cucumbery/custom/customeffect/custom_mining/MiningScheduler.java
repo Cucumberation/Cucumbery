@@ -17,6 +17,8 @@ import com.jho5245.cucumbery.util.storage.data.custom_enchant.CustomEnchant;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
+import de.tr7zw.changeme.nbtapi.NBT;
+import de.tr7zw.changeme.nbtapi.iface.ReadableNBT;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -647,8 +649,8 @@ public class MiningScheduler
 					if (!drops.isEmpty())
 					{
 						boolean hasTelekinesis =
-								CustomEnchant.isEnabled() && itemMeta != null && itemMeta.hasEnchant(CustomEnchant.TELEKINESIS) || CustomEffectManager.hasEffect(
-										player, CustomEffectType.TELEKINESIS);
+								CustomEnchant.isEnabled() && itemMeta != null && itemMeta.hasEnchant(CustomEnchant.TELEKINESIS) || CustomEffectManager.hasEffect(player,
+										CustomEffectType.TELEKINESIS);
 						if (hasTelekinesis)
 						{
 							AddItemUtil.addItem(player, drops);
@@ -891,8 +893,26 @@ public class MiningScheduler
 						}
 						if (currentDurability >= maxDurability && !toolIsDrill)
 						{
+							NBT.getComponents(toolItemStack, nbt ->
+							{
+								Sound sound = Sound.ENTITY_ITEM_BREAK;
+								if (nbt.hasTag("break_sound"))
+								{
+									String s = nbt.getString("break_sound");
+									if (s != null)
+									{
+										sound = Registry.SOUNDS.getOrThrow(NamespacedKey.minecraft(s));
+									}
+									ReadableNBT compound = nbt.getCompound("break_sound");
+									if (compound != null)
+									{
+										String soundId = compound.getString("sound_id");
+										sound = Registry.SOUNDS.getOrThrow(NamespacedKey.minecraft(soundId));
+									}
+								}
+								player.playSound(player.getLocation(), sound, SoundCategory.PLAYERS, 1F, 1F);
+							});
 							player.incrementStatistic(Statistic.BREAK_ITEM, toolItemStack.getType());
-							player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1F, 1F);
 							player.spawnParticle(Particle.ITEM, player.getEyeLocation().add(0, -0.5, 0), 30, 0, 0, 0, 0.1, toolItemStack);
 							PlayerItemBreakEvent playerItemBreakEvent = new PlayerItemBreakEvent(player, toolItemStack);
 							Bukkit.getPluginManager().callEvent(playerItemBreakEvent);

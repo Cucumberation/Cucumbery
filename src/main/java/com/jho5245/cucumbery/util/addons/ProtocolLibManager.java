@@ -9,10 +9,16 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.reflect.FuzzyReflection;
 import com.comphenix.protocol.reflect.StructureModifier;
+import com.comphenix.protocol.reflect.accessors.Accessors;
+import com.comphenix.protocol.reflect.accessors.MethodAccessor;
+import com.comphenix.protocol.reflect.fuzzy.FuzzyMethodContract;
 import com.comphenix.protocol.utility.MinecraftReflection;
+import com.comphenix.protocol.utility.MinecraftRegistryAccess;
 import com.comphenix.protocol.wrappers.EnumWrappers.ItemSlot;
 import com.comphenix.protocol.wrappers.*;
+import com.comphenix.protocol.wrappers.codecs.WrappedDataResult;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.jho5245.cucumbery.Cucumbery;
@@ -78,7 +84,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
+import javax.management.ReflectionException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -888,6 +896,14 @@ public class ProtocolLibManager
 						watchableAccessor.write(0, wrappedDataValues);
 					}
 				}
+				if (entity instanceof OminousItemSpawner ominousItemSpawner)
+				{
+					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, ominousItemSpawner.getItem(), player);
+					StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
+					List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
+					wrappedDataValues.add(new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
+					watchableAccessor.write(0, wrappedDataValues);
+				}
 			}
 		});
 
@@ -1154,7 +1170,19 @@ public class ProtocolLibManager
 				PacketContainer packet = event.getPacket();
 				boolean isActionBar = packet.getBooleans().read(0);
 				WrappedChatComponent wrappedChatComponent = packet.getChatComponents().read(0);
-				String json = wrappedChatComponent.getJson();
+
+				// TODO: This should be fixed by protocollib
+				String json;
+				try
+				{
+					json = wrappedChatComponent.getJson();
+				}
+				catch (Exception ignored)
+				{
+					return;
+				}
+				// TODO end
+
 				final Component originComponent = JSONComponentSerializer.json().deserialize(json);
 				Component component = JSONComponentSerializer.json().deserialize(json);
 				// 채팅창에 시각 표시 - 메시지가 여러줄될 경우 줄마다 시각 추가 표시
