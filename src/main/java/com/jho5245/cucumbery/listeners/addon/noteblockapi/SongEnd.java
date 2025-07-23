@@ -30,7 +30,7 @@ public class SongEnd implements Listener
     {
       Bukkit.getScheduler().runTaskLaterAsynchronously(Cucumbery.getPlugin(), () ->
       {
-        List<String> songs = new ArrayList<>(Variable.songFiles);
+        List<String> songs = new ArrayList<>(Songs.list);
         if (songs.isEmpty())
         {
           return;
