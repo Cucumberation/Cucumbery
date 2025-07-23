@@ -811,7 +811,8 @@ public class ProtocolLibManager
 					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, item.getItemStack(), player);
 					int itemAmount = itemStack.getAmount();
 					Component itemName = ItemNameUtil.itemName(itemStack);
-					Component component = itemAmount == 1 ? itemName : Component.translatable("%s (%s)").arguments(itemName, Component.text(itemAmount, Constant.THE_COLOR));
+					Component component =
+							itemAmount == 1 ? itemName : Component.translatable("%s (%s)").arguments(itemName, Component.text(itemAmount, Constant.THE_COLOR));
 					//					boolean showCustomName =
 					//							UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player) && !UserData.FORCE_HIDE_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player);
 					//					Boolean shouldShowCustomName = ItemStackUtil.shouldShowCustomName(itemStack);
@@ -877,17 +878,16 @@ public class ProtocolLibManager
 							new WrappedDataValue(7, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
 					watchableAccessor.write(0, wrappedDataValues);
 				}
-				// TODO: 삼지창 버그 수정해야함
-				//				if (entity instanceof Trident)
-				//				{
-				//					if (!UserData.SHOW_ENCHANTED_ITEM_GLINTS.getBoolean(player))
-				//					{
-				//						StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
-				//						List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-				//						wrappedDataValues.add(new WrappedDataValue(11, WrappedDataWatcher.Registry.get(Boolean.class), false));
-				//						watchableAccessor.write(0, wrappedDataValues);
-				//					}
-				//				}
+				if (entity instanceof Trident)
+				{
+					if (!UserData.SHOW_ENCHANTED_ITEM_GLINTS.getBoolean(player))
+					{
+						StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
+						List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
+						wrappedDataValues.add(new WrappedDataValue(10, WrappedDataWatcher.Registry.get(Boolean.class), false));
+						watchableAccessor.write(0, wrappedDataValues);
+					}
+				}
 			}
 		});
 
