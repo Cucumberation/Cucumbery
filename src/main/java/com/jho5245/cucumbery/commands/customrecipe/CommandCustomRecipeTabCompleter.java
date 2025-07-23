@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class CommandCustomRecipeTabCompleter implements TabCompleter
 {
@@ -172,8 +173,7 @@ public class CommandCustomRecipeTabCompleter implements TabCompleter
                   }
                   return Method.tabCompleterList(args, "<표시 아이템 출처>", hand, "material", "remove");
                 case "biome":
-                  // TODO: change tab list
-                  return Method.tabCompleterList(args, Collections.emptyList(), "<생물 군계>", false);
+                  return Method.tabCompleterList(args, RegistryAccess.registryAccess().getRegistry(RegistryKey.BIOME).stream().map(biome -> biome.toString().toLowerCase()).toList(), "<생물 군계>", false);
                 case "belowblock", "target-block":
                   List<String> list = new ArrayList<>();
                   for (Material material : Material.values())
