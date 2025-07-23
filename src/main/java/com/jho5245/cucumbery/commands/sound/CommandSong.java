@@ -141,7 +141,7 @@ public class CommandSong implements CucumberyCommandExecutor
 						}
 						boolean random = fileName.startsWith("--random");
 						String contain = random && fileName.startsWith("--random/") ? fileName.substring("--random/".length()) : "";
-						List<String> list = new ArrayList<>(Variable.songFiles);
+						List<String> list = new ArrayList<>(Songs.list);
 						if (!contain.isEmpty())
 						{
 							list.removeIf(s -> !s.toLowerCase().replace(" ", "").contains(contain.toLowerCase()));
@@ -670,7 +670,7 @@ public class CommandSong implements CucumberyCommandExecutor
 						}
 						boolean random = fileName.startsWith("--random");
 						String contain = random && fileName.startsWith("--random/") ? fileName.substring("--random/".length()) : "";
-						List<String> list = new ArrayList<>(Variable.songFiles);
+						List<String> list = new ArrayList<>(Songs.list);
 						if (!contain.isEmpty())
 						{
 							list.removeIf(s -> !s.toLowerCase().replace(" ", "").contains(contain.toLowerCase()));
@@ -967,7 +967,7 @@ public class CommandSong implements CucumberyCommandExecutor
 						}
 						boolean random = fileName.startsWith("--random");
 						String contain = random && fileName.startsWith("--random/") ? fileName.substring("--random/".length()) : "";
-						List<String> list = new ArrayList<>(Variable.songFiles);
+						List<String> list = new ArrayList<>(Songs.list);
 						if (!contain.isEmpty())
 						{
 							list.removeIf(s -> !s.toLowerCase().replace(" ", "").contains(contain.toLowerCase()));
@@ -1163,10 +1163,9 @@ public class CommandSong implements CucumberyCommandExecutor
 						}
 						case "play", "change-song" ->
 						{
-							Variable.songFiles.addAll(Songs.list);
 							List<Completion> list = new ArrayList<>();
-							Variable.songFiles.forEach(s -> list.add(Completion.completion(s)));
-							if (!Variable.songFiles.isEmpty())
+							Songs.list.forEach(s -> list.add(Completion.completion(s)));
+							if (!Songs.list.isEmpty())
 							{
 								list.add(Completion.completion("--random", ComponentUtil.translate("무작위 노래; '--random/(문자열)'으로 필터 가능")));
 							}
@@ -1235,10 +1234,10 @@ public class CommandSong implements CucumberyCommandExecutor
 				{
 					if (args.length == 4)
 					{
-						Variable.songFiles.addAll(Songs.list);
+						Songs.list.addAll(Songs.list);
 						List<Completion> list = new ArrayList<>();
-						Variable.songFiles.forEach(s -> list.add(Completion.completion(s)));
-						if (!Variable.songFiles.isEmpty())
+						Songs.list.forEach(s -> list.add(Completion.completion(s)));
+						if (!Songs.list.isEmpty())
 						{
 							list.add(Completion.completion("--random", ComponentUtil.translate("무작위 노래; '--random/(문자열)'으로 필터 가능")));
 						}
