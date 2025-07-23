@@ -6,6 +6,7 @@ import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.custommerchant.MerchantData;
 import com.jho5245.cucumbery.deathmessages.CustomDeathMessage;
+import com.jho5245.cucumbery.util.addons.Songs;
 import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.no_groups.*;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
@@ -367,7 +368,7 @@ public class Initializer
 				}
 			}
 		}
-		Variable.songFiles.clear();
+		Songs.list.clear();
 		File songsFolder = new File(Cucumbery.getPlugin().getDataFolder() + "/data/songs");
 		if (!songsFolder.exists())
 		{
@@ -388,7 +389,7 @@ public class Initializer
 				String fileName5 = file.getName();
 				if (fileName5.endsWith(".nbs"))
 				{
-					Variable.songFiles.add(fileName5.substring(0, fileName5.length() - 4));
+					Songs.list.add(fileName5.substring(0, fileName5.length() - 4));
 				}
 			}
 		}
