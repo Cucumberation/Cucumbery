@@ -884,7 +884,7 @@ public class ProtocolLibManager
 					{
 						StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
 						List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-						wrappedDataValues.add(new WrappedDataValue(10, WrappedDataWatcher.Registry.get(Boolean.class), false));
+						wrappedDataValues.add(new WrappedDataValue(12, WrappedDataWatcher.Registry.get(Boolean.class), false));
 						watchableAccessor.write(0, wrappedDataValues);
 					}
 				}
