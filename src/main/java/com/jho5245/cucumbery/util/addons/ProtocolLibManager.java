@@ -796,27 +796,6 @@ public class ProtocolLibManager
 			}
 		});
 
-		protocolManager.addPacketListener(new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.HIGH, Server.SPAWN_ENTITY)
-		{
-			@Override
-			public void onPacketSending(PacketEvent event)
-			{
-				if (!Cucumbery.using_ProtocolLib)
-					return;
-				PacketContainer packet = event.getPacket();
-				Player player = event.getPlayer();
-				Entity entity = packet.getEntityModifier(player.getWorld()).read(0);
-				if (entity instanceof Item item)
-				{
-					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, item.getItemStack(), player);
-					Component component = itemStack.getAmount() == 1
-							? ItemNameUtil.itemName(itemStack)
-							: Component.translatable("%s (%s)").arguments(ItemNameUtil.itemName(itemStack), Component.text(itemStack.getAmount(), Constant.THE_COLOR));
-					Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> mountTextDisplayToItem(protocolManager, player, component, item), 0L);
-				}
-			}
-		});
-
 		protocolManager.addPacketListener(new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.HIGH, Server.ENTITY_METADATA)
 		{
 			@Override
@@ -825,11 +804,6 @@ public class ProtocolLibManager
 				if (!Cucumbery.using_ProtocolLib)
 					return;
 				PacketContainer packet = event.getPacket();
-				for (int i = 0; i < packet.getModifier().size(); i++)
-				{
-					Object o = packet.getModifier().read(i);
-					//MessageUtil.broadcastDebug(o.getClass() + ": " + o);
-				}
 				Player player = event.getPlayer();
 				Entity entity = packet.getEntityModifier(player.getWorld()).read(0);
 				if (entity instanceof Item item)
@@ -853,6 +827,7 @@ public class ProtocolLibManager
 					//					// 아이템 웅크리게 하기
 					//					byte sneakStatus = UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME_BEHIND_BLOCKS.getBoolean(player) ? (byte) 0 : (byte) 0x02;
 					//					wrappedDataValues.add(new WrappedDataValue(0, WrappedDataWatcher.Registry.get(Byte.class), sneakStatus));
+
 					// entity metadata 패킷이 플레이어가 서버 접속 직후 보낸 패킷인지/접속 도중 보낸 패킷인지 구분하여
 					// 만약 서버 접속 직후 보낸 패킷이라면 일정 시간 뒤에 객체를 탑승시킨다.
 					long now = System.currentTimeMillis();
