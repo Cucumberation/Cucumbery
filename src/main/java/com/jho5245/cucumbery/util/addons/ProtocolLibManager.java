@@ -39,19 +39,23 @@ import com.jho5245.cucumbery.util.storage.data.Constant.CucumberyHideFlag;
 import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
 import com.jho5245.cucumbery.util.storage.data.Variable;
-import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.CustomConfigType;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
 import de.tr7zw.changeme.nbtapi.*;
-import it.unimi.dsi.fastutil.objects.ObjectLists;
-import it.unimi.dsi.fastutil.objects.ObjectLists.SynchronizedList;
+import net.kyori.adventure.dialog.DialogLike;
+import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.ClickEvent.Action;
+import net.kyori.adventure.text.event.ClickEvent.Payload;
+import net.kyori.adventure.text.event.ClickEvent.Payload.Custom;
+import net.kyori.adventure.text.event.ClickEvent.Payload.Dialog;
+import net.kyori.adventure.text.event.ClickEvent.Payload.Int;
+import net.kyori.adventure.text.event.ClickEvent.Payload.Text;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
 import net.kyori.adventure.text.event.HoverEvent.ShowItem;
@@ -59,30 +63,26 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.format.TextDecoration.State;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.text.serializer.json.JSONComponentSerializer;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.*;
-import org.bukkit.inventory.RecipeChoice.ExactChoice;
-import org.bukkit.inventory.RecipeChoice.MaterialChoice;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
-import javax.naming.Name;
 import java.lang.reflect.Constructor;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ProtocolLibManager
 {
@@ -875,7 +875,7 @@ public class ProtocolLibManager
 					StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
 					List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
 					wrappedDataValues.add(
-							new WrappedDataValue(7, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
+							new WrappedDataValue(23, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
 					watchableAccessor.write(0, wrappedDataValues);
 				}
 				if (entity instanceof Trident)
@@ -1154,8 +1154,9 @@ public class ProtocolLibManager
 				PacketContainer packet = event.getPacket();
 				boolean isActionBar = packet.getBooleans().read(0);
 				WrappedChatComponent wrappedChatComponent = packet.getChatComponents().read(0);
-				final Component originComponent = GsonComponentSerializer.gson().deserialize(wrappedChatComponent.getJson());
-				Component component = GsonComponentSerializer.gson().deserialize(wrappedChatComponent.getJson());
+				String json = wrappedChatComponent.getJson();
+				final Component originComponent = JSONComponentSerializer.json().deserialize(json);
+				Component component = JSONComponentSerializer.json().deserialize(json);
 				// 채팅창에 시각 표시 - 메시지가 여러줄될 경우 줄마다 시각 추가 표시
 				if (!isActionBar && UserData.SHOW_TIMESTAMP_ON_CHAT_MESSAGES.getBoolean(event.getPlayer()))
 				{
@@ -1432,6 +1433,7 @@ public class ProtocolLibManager
 			catch (Exception e)
 			{
 				Bukkit.getConsoleSender().sendMessage("§4" + e.getMessage());
+				e.printStackTrace();
 			}
 		}
 		ClickEvent clickEvent = component.clickEvent();
@@ -1440,7 +1442,8 @@ public class ProtocolLibManager
 		if (clickEvent != null)
 		{
 			Action action = clickEvent.action();
-			String value = clickEvent.value();
+			Payload payload = clickEvent.payload();
+			String value = resolvePayload(payload);
 			if (action == Action.OPEN_URL)
 			{
 				if (hoverEvent == null)
@@ -1554,6 +1557,33 @@ public class ProtocolLibManager
 			component = component.children(newList);
 		}
 		return component;
+	}
+
+	private static String resolvePayload(Payload payload)
+	{
+		if (payload == null)
+		{
+			throw new NullPointerException("payload null");
+		}
+		switch (payload)
+		{
+			case Text text ->
+			{
+				return text.value();
+			}
+			case Int i -> {
+				return String.valueOf(i.integer());
+			}
+			case Dialog dialog -> {
+				DialogLike dialogLike = dialog.dialog();
+				return dialogLike.toString();
+			}
+			case Custom custom -> {
+				BinaryTagHolder nbt = custom.nbt();
+				return nbt.string();
+			}
+			default -> throw new UnsupportedOperationException("cannot resolve payload with class: " + payload.getClass());
+		}
 	}
 
 	private static List<ItemStack> setItemLore(PacketType packetType, List<ItemStack> itemStacks, Player player)
@@ -1894,7 +1924,7 @@ public class ProtocolLibManager
 		if (ignoreCreativeWhat && CustomEffectManager.hasEffect(player, CustomEffectType.THE_CHAOS_INVENTORY))
 		{
 			List<Material> materials = new ArrayList<>(Arrays.asList(Material.values()));
-			materials.removeIf(material -> material.isAir() || !material.isItem() || !material.isEnabledByFeature(player.getWorld()));
+			materials.removeIf(material -> material.isAir() || !material.isItem());
 			clone.setType(materials.get((int) (Math.random() * materials.size())));
 		}
 
