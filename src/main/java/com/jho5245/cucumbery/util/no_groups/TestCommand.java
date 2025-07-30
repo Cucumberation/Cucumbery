@@ -1,22 +1,35 @@
 package com.jho5245.cucumbery.util.no_groups;
 
+import com.comphenix.protocol.PacketType.Play.Server;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.wrappers.WrappedAttribute;
+import com.comphenix.protocol.wrappers.WrappedAttribute.WrappedAttributeBase;
+import com.comphenix.protocol.wrappers.WrappedAttributeModifier;
+import com.comphenix.protocol.wrappers.WrappedAttributeModifier.Operation;
 import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent.Completion;
 import com.destroystokyo.paper.profile.PlayerProfile;
+import com.google.common.collect.Lists;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
+import com.jho5245.cucumbery.util.addons.ProtocolLibManager;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
 import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBTList;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import javax.smartcardio.ATR;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @SuppressWarnings("all")
 public class TestCommand implements CucumberyCommandExecutor
@@ -45,6 +58,27 @@ public class TestCommand implements CucumberyCommandExecutor
 						ReadWriteNBTList<String> hiddenCompoents = tooltipDisplay.getStringList("hidden_components");
 						hiddenCompoents.add("minecraft:ominous_bottle_amplifier");
 					});
+				}
+				case "attribute" -> {
+					Player player = (Player) sender;
+					ProtocolManager manager = ProtocolLibrary.getProtocolManager();
+					PacketContainer packet = manager.createPacket(Server.UPDATE_ATTRIBUTES);
+					var attributes = Lists.newArrayList(
+					WrappedAttribute.newBuilder()
+							.attributeKey("camera_distance")
+							.baseValue(player.getAttribute(Attribute.CAMERA_DISTANCE).getBaseValue())
+							.addModifier(
+									WrappedAttributeModifier.newBuilder()
+											.key("cucumbery", "test")
+											.operation(Operation.ADD_NUMBER)
+											.amount(3d)
+									.build()
+							)
+							.build()
+					);
+					packet.getIntegers().write(0, player.getEntityId());
+					packet.getAttributeCollectionModifier().write(0, attributes);
+					manager.sendServerPacket(player, packet);
 				}
 			}
 		}
