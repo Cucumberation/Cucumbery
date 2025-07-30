@@ -1,11 +1,17 @@
 package com.jho5245.cucumbery.util.no_groups;
 
+import com.comphenix.protocol.PacketType.Play;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.wrappers.WrappedAttribute;
+import com.comphenix.protocol.wrappers.WrappedAttributeModifier;
+import com.google.common.collect.Lists;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.Initializer;
 import com.jho5245.cucumbery.commands.reinforce.CommandReinforce;
 import com.jho5245.cucumbery.commands.sound.CommandSong;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffect;
-import com.jho5245.cucumbery.custom.customeffect.CustomEffect.DisplayType;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectScheduler;
 import com.jho5245.cucumbery.custom.customeffect.children.group.EntityCustomEffect;
@@ -16,7 +22,6 @@ import com.jho5245.cucumbery.custom.customeffect.custom_mining.MiningScheduler;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCooldown;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCustomMining;
-import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeMinecraft;
 import com.jho5245.cucumbery.custom.customrecipe.recipeinventory.RecipeInventoryCategory;
 import com.jho5245.cucumbery.custom.customrecipe.recipeinventory.RecipeInventoryMainMenu;
 import com.jho5245.cucumbery.custom.customrecipe.recipeinventory.RecipeInventoryRecipe;
@@ -62,7 +67,6 @@ import org.bukkit.block.CommandBlock;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.*;
@@ -90,6 +94,8 @@ public class Scheduler
 	public static BukkitTask delayTask = null;
 
 	public static int fileNameLength = -1;
+
+	public static final NamespacedKey CUSTOM_MINING_MODIFIER = new NamespacedKey("cucumbery", "custom_mining_modifier");
 
 	@SuppressWarnings("all")
 	public static void Schedule(Cucumbery cucumbery)
@@ -318,8 +324,6 @@ public class Scheduler
 		}
 	}
 
-	private static final UUID UUID_CUCUMBERY_CUSTOM_MINING_MODIFIER = UUID.fromString("4962252e-347b-4711-b418-1000");
-
 	private static void playerTick()
 	{
 		for (Player player : Bukkit.getOnlinePlayers())
@@ -340,41 +344,44 @@ public class Scheduler
 			CustomEffectScheduler.displayGUI(player);
 			MiningScheduler.customMiningPre(player);
 			MiningScheduler.customMining(player);
-			if (player.getGameMode() != GameMode.CREATIVE && CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE))
+			AttributeInstance instance = player.getAttribute(Attribute.BLOCK_BREAK_SPEED);
+			if (instance != null)
 			{
-				if (Cucumbery.using_ProtocolLib)
+				if (player.getGameMode() != GameMode.CREATIVE && CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE))
 				{
-
-				}
-				else
-				{
-					AttributeInstance instance = player.getAttribute(Attribute.BLOCK_BREAK_SPEED);
-					if (instance != null)
+					if (Cucumbery.using_ProtocolLib)
 					{
-						if (instance.getModifier(UUID_CUCUMBERY_CUSTOM_MINING_MODIFIER) != null)
-						{
-							instance.removeModifier(UUID_CUCUMBERY_CUSTOM_MINING_MODIFIER);
-						}
-						instance.addModifier(
-								new AttributeModifier(UUID_CUCUMBERY_CUSTOM_MINING_MODIFIER, "CUCUMBERY-CUSTOM-MINING-MODIFIER", -1d, Operation.MULTIPLY_SCALAR_1));
+						ProtocolManager manager = ProtocolLibrary.getProtocolManager();
+						PacketContainer packet = manager.createPacket(Play.Server.UPDATE_ATTRIBUTES);
+						var attributes = Lists.newArrayList(WrappedAttribute.newBuilder().attributeKey("block_break_speed").baseValue(instance.getBaseValue()).addModifier(
+								WrappedAttributeModifier.newBuilder().key(CUSTOM_MINING_MODIFIER.getNamespace(), CUSTOM_MINING_MODIFIER.getKey())
+										.operation(WrappedAttributeModifier.Operation.MULTIPLY_PERCENTAGE).amount(-1d).build()).build());
+						packet.getIntegers().write(0, player.getEntityId());
+						packet.getAttributeCollectionModifier().write(0, attributes);
+						manager.sendServerPacket(player, packet);
+					}
+					else if (instance.getModifier(CUSTOM_MINING_MODIFIER) != null)
+					{
+						instance.removeModifier(CUSTOM_MINING_MODIFIER);
+						instance.addModifier(new AttributeModifier(CUSTOM_MINING_MODIFIER, -1d, Operation.MULTIPLY_SCALAR_1));
 					}
 				}
-			}
-			else
-			{
-				if (Cucumbery.using_ProtocolLib)
-				{
-
-				}
 				else
 				{
-					AttributeInstance instance = player.getAttribute(Attribute.BLOCK_BREAK_SPEED);
-					if (instance != null)
+					if (Cucumbery.using_ProtocolLib)
 					{
-						if (instance.getModifier(UUID_CUCUMBERY_CUSTOM_MINING_MODIFIER) != null)
-						{
-							instance.removeModifier(UUID_CUCUMBERY_CUSTOM_MINING_MODIFIER);
-						}
+						ProtocolManager manager = ProtocolLibrary.getProtocolManager();
+						PacketContainer packet = manager.createPacket(Play.Server.UPDATE_ATTRIBUTES);
+						var attributes = Lists.newArrayList(WrappedAttribute.newBuilder().attributeKey("block_break_speed").baseValue(instance.getBaseValue()).addModifier(
+								WrappedAttributeModifier.newBuilder().key(CUSTOM_MINING_MODIFIER.getNamespace(), CUSTOM_MINING_MODIFIER.getKey())
+										.operation(WrappedAttributeModifier.Operation.MULTIPLY_PERCENTAGE).amount(0d).build()).build());
+						packet.getIntegers().write(0, player.getEntityId());
+						packet.getAttributeCollectionModifier().write(0, attributes);
+						manager.sendServerPacket(player, packet);
+					}
+					else if (instance.getModifier(CUSTOM_MINING_MODIFIER) != null)
+					{
+						instance.removeModifier(CUSTOM_MINING_MODIFIER);
 					}
 				}
 			}
@@ -395,9 +402,9 @@ public class Scheduler
 		}
 		if (helmet == CustomMaterial.MINER_HELMET || helmet == CustomMaterial.MINDAS_HELMET)
 		{
-//			if (!CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.NIGHT_VISION))
-//				CustomEffectManager.addEffect(player, new CustomEffect(CustomEffectTypeMinecraft.NIGHT_VISION, 10, 0, DisplayType.NONE));
-						player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 2, 0, true, false, false));
+			//			if (!CustomEffectManager.hasEffect(player, CustomEffectTypeMinecraft.NIGHT_VISION))
+			//				CustomEffectManager.addEffect(player, new CustomEffect(CustomEffectTypeMinecraft.NIGHT_VISION, 10, 0, DisplayType.NONE));
+			player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 2, 0, true, false, false));
 		}
 		if (helmet == CustomMaterial.MINER_HELMET && chestplate == CustomMaterial.MINER_CHESTPLATE && leggings == CustomMaterial.MINER_LEGGINGS
 				&& boots == CustomMaterial.MINER_BOOTS)
@@ -529,8 +536,7 @@ public class Scheduler
 	{
 		for (UUID uuid : Variable.starCatchPenalty.keySet())
 		{
-			int i = Variable.starCatchPenalty.get(uuid);
-			Variable.starCatchPenalty.put(uuid, Math.max(0, i - 20));
+			Variable.starCatchPenalty.compute(uuid, (k, i) -> Math.max(0, i - 20));
 		}
 	}
 
@@ -562,12 +568,12 @@ public class Scheduler
 		}
 		BlockVector3 max = region.getMaximumPoint();
 		BlockVector3 min = region.getMinimumPoint();
-		int maxx = Math.max(max.getBlockX(), min.getBlockX());
-		int maxy = Math.max(max.getBlockY(), min.getBlockY());
-		int maxz = Math.max(max.getBlockZ(), min.getBlockZ());
-		int minx = Math.min(max.getBlockX(), min.getBlockX());
-		int miny = Math.min(max.getBlockY(), min.getBlockY());
-		int minz = Math.min(max.getBlockZ(), min.getBlockZ());
+		int maxx = Math.max(max.x(), min.x());
+		int maxy = Math.max(max.y(), min.y());
+		int maxz = Math.max(max.z(), min.z());
+		int minx = Math.min(max.x(), min.x());
+		int miny = Math.min(max.y(), min.y());
+		int minz = Math.min(max.z(), min.z());
 		double avgx = (maxx + minx) / 2.;
 		double avgy = (maxy + miny) / 2.;
 		double avgz = (maxz + minz) / 2.;
@@ -738,7 +744,7 @@ public class Scheduler
 		}
 	}
 
-	private static void customEnchant(@NotNull Entity entity)
+/*	private static void customEnchant(@NotNull Entity entity)
 	{
 		if (!(entity instanceof LivingEntity livingEntity))
 		{
@@ -754,7 +760,7 @@ public class Scheduler
 		{
 			return;
 		}
-	}
+	}*/
 
 	private static void showSpectatorTargetInfoActionbar(@NotNull Player player)
 	{
@@ -778,12 +784,11 @@ public class Scheduler
 			float exp = targetPlayer.getExp();
 			message = message.append(ComponentUtil.create(" | &aLv." + level + "(" + Constant.Sosu2.format(exp * 100) + "%)"));
 		}
-		if (target instanceof Damageable && target instanceof Attributable attributable)
+		if (target instanceof Damageable damageable && target instanceof Attributable attributable)
 		{
 			AttributeInstance attributeInstanceMaxHealth = attributable.getAttribute(Attribute.MAX_HEALTH);
 			if (attributeInstanceMaxHealth != null)
 			{
-				Damageable damageable = (Damageable) target;
 				double hp = damageable.getHealth();
 				double mhp = attributeInstanceMaxHealth.getValue();
 				message = message.append(ComponentUtil.create(" | &c" + Constant.Sosu2.format(hp) + "&7/&c" + Constant.Sosu2.format(mhp) + "❤"));
