@@ -79,6 +79,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
+import javax.smartcardio.ATR;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.text.DateFormat;
@@ -1383,8 +1384,8 @@ public class ProtocolLibManager
 									{
 										for (var modifier : attribute.getModifiers())
 										{
-//											MessageUtil.broadcastDebug("effectD:%s, modifierD:%s".formatted(d, modifier.getAmount()));
-											if (modifier.getKey().getFullKey().equals(CustomEffectType.SECRET_GUARD_EFFECT.getNamespacedKey().toString()) && modifier.getAmount() == d)
+											MinecraftKey minecraftKey = modifier.getKey();
+											if (minecraftKey != null && minecraftKey.getFullKey().equals(CustomEffectType.SECRET_GUARD_EFFECT.getNamespacedKey().toString()) && modifier.getAmount() == d)
 											{
 //												MessageUtil.broadcastDebug("cancelled");
 												event.setCancelled(true);
@@ -1395,6 +1396,9 @@ public class ProtocolLibManager
 							}
 						}
 						case "movement_speed" -> {
+
+						}
+						case "block_break_speed" -> {
 
 						}
 						default -> {
