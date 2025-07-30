@@ -5,6 +5,7 @@ import com.jho5245.cucumbery.util.no_groups.BossBarMessage;
 import net.kyori.adventure.bossbar.BossBar;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
@@ -268,4 +269,10 @@ public class Variable
    * 플레이어가 마지막으로 사용했던 명령어
    */
   public static final HashMap<UUID, String> LAST_USED_COMMAND_MAP = new HashMap<>();
+
+  // 개체에게 AttributeModifier를 적용하기 전과 후의 해당 attribute에 대한amount를 저장
+  // ex 대미지% 증가 Modifier 적용 전의 damage의 amount와, 적용 후의 amount를 저장한다
+  public static final Map<UUID, Map<Attribute, List<Double>>> ATTRIBUTE_AMOUNT_BEFORE_AFTER = new HashMap<>();
+
+  public static final Map<UUID, List<BukkitTask>> SECRET_GUARD_ANIMATION_TASK_MAP = new HashMap<>();
 }

@@ -195,6 +195,10 @@ public class CustomEffectManager
 				effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.ATTACK_SPEED,
 						Operation.ADD_SCALAR, 0.25);
 			}
+			case "SECRET_GUARD_EFFECT" -> {
+				effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.CAMERA_DISTANCE,
+						Operation.ADD_NUMBER, 1);
+			}
 			case "POSITION_MEMORIZE" ->
 			{
 				effect = new LocationCustomEffectImple(effectType, initDura, initAmple, displayType, entity.getLocation());
@@ -1289,5 +1293,24 @@ public class CustomEffectManager
 			return true;
 		}
 		return false;
+	}
+
+	public static double getAttributeModifierAmount(CustomEffect customEffect)
+	{
+		if (!(customEffect instanceof AttributeCustomEffect attributeCustomEffect))
+		{
+			return 0;
+		}
+
+		CustomEffectType customEffectType = customEffect.getType();
+		int amplifier = customEffect.getAmplifier();
+
+		// SECRET GUARD EFFECT는 1~4레벨일때 1~4 증가, 5레벨일때 6 증가
+		if (customEffectType == CustomEffectType.SECRET_GUARD_EFFECT && amplifier == 4)
+		{
+			return 6;
+		}
+
+		return (customEffect.getAmplifier() + 1) * attributeCustomEffect.getMultiplier();
 	}
 }

@@ -1,5 +1,12 @@
 package com.jho5245.cucumbery.listeners.entity.customeffect;
 
+import com.comphenix.protocol.PacketType.Play;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.wrappers.WrappedAttribute;
+import com.comphenix.protocol.wrappers.WrappedAttributeModifier;
+import com.google.common.collect.Lists;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffect;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffect.DisplayType;
@@ -16,6 +23,7 @@ import com.jho5245.cucumbery.util.no_groups.MythicMobManager;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
+import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import dev.geco.gsit.api.GSitAPI;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -31,11 +39,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitTask;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class EntityCustomEffectPostApply implements Listener
@@ -44,10 +50,12 @@ public class EntityCustomEffectPostApply implements Listener
 	public void onEntityCustomEffectPostApply(EntityCustomEffectPostApplyEvent event)
 	{
 		Entity entity = event.getEntity();
+		UUID uuid = entity.getUniqueId();
 		CustomEffect customEffect = event.getCustomEffect();
 		int duration = customEffect.getDuration(), initDuration = customEffect.getInitDuration();
 		int amplifier = customEffect.getAmplifier(), initAmplifier = customEffect.getInitAmplifier();
 		CustomEffectType customEffectType = customEffect.getType();
+		NamespacedKey namespacedKey = customEffectType.getNamespacedKey();
 		List<CustomEffectType> conflictEffects = customEffectType.getConflictEffects();
 
 		for (CustomEffectType conflictEffect : conflictEffects)
@@ -214,14 +222,51 @@ public class EntityCustomEffectPostApply implements Listener
 
 		if (entity instanceof Attributable attributable && customEffect instanceof AttributeCustomEffect attributeCustomEffect)
 		{
-			UUID uuid = attributeCustomEffect.getUniqueId();
 			Attribute attribute = attributeCustomEffect.getAttribute();
 			AttributeInstance attributeInstance = attributable.getAttribute(attribute);
 			if (attributeInstance != null)
 			{
-				attributeInstance.addModifier(
-						new AttributeModifier(uuid, "cucumbery-" + customEffectType.translationKey(), (amplifier + 1) * attributeCustomEffect.getMultiplier(),
-								attributeCustomEffect.getOperation()));
+				double amount = CustomEffectManager.getAttributeModifierAmount(customEffect);
+				attributeInstance.addModifier(new AttributeModifier(customEffectType.getNamespacedKey(), amount, attributeCustomEffect.getOperation()));
+
+				if (Variable.ATTRIBUTE_AMOUNT_BEFORE_AFTER.containsKey(uuid))
+				{
+					Map<Attribute, List<Double>> attributeListMap = Variable.ATTRIBUTE_AMOUNT_BEFORE_AFTER.get(uuid);
+					if (attributeListMap.containsKey(Attribute.CAMERA_DISTANCE))
+					{
+						List<Double> amountList = attributeListMap.get(Attribute.CAMERA_DISTANCE);
+						if (!amountList.isEmpty())
+						{
+							if (entity instanceof Player player)
+							{
+								ProtocolManager manager = ProtocolLibrary.getProtocolManager();
+								List<BukkitTask> animationFrames = Variable.SECRET_GUARD_ANIMATION_TASK_MAP.getOrDefault(uuid, new ArrayList<>());
+								//								MessageUtil.broadcastDebug("amount:" + amount);
+								animationFrames.forEach(BukkitTask::cancel); // 기존 애니메이션 재생 취소
+								for (int i = 0; i < 10; i++)
+								{
+									double finalAmount = amount * (i + 1) * 0.1;
+									BukkitTask frame = Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+									{
+										//										MessageUtil.broadcastDebug(finalAmount);
+										PacketContainer packet = manager.createPacket(Play.Server.UPDATE_ATTRIBUTES);
+										var attributes = Lists.newArrayList(
+												WrappedAttribute.newBuilder().attributeKey("camera_distance").baseValue(attributeInstance.getBaseValue())
+														.addModifier(WrappedAttributeModifier.newBuilder().key(namespacedKey.getNamespace(), namespacedKey.getKey())
+																.operation(WrappedAttributeModifier.Operation.ADD_NUMBER).amount(finalAmount).build()).build());
+										packet.getIntegers().write(0, player.getEntityId());
+										packet.getAttributeCollectionModifier().write(0, attributes);
+										manager.sendServerPacket(player, packet);
+									}, i);
+									animationFrames.add(frame);
+								}
+								Variable.SECRET_GUARD_ANIMATION_TASK_MAP.put(uuid, animationFrames);
+							}
+						}
+						attributeListMap.put(Attribute.CAMERA_DISTANCE, Collections.singletonList(attributeInstance.getValue()));
+
+					}
+				}
 			}
 		}
 

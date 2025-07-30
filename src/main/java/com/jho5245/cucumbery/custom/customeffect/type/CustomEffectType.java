@@ -281,6 +281,13 @@ public class CustomEffectType implements Translatable, EnumHideable
 	HIDE_ITEM_INFORMATION = new CustomEffectType("hide_item_information", "아이템 정보 숨김",
 			builder().negative().keepOnDeath().description("정보 모릅니다.").icon(new ItemStack(Material.BARRIER))),
 
+	SECRET_GUARD = new CustomEffectType("secret_guard", "시크릿 가드", new TypeBuilder().description("3인칭 화면의 카메라 거리가 늘어납니다").maxAmplifier(4)),
+
+	SECRET_GUARD_EFFECT = new CustomEffectType("secret_guard_effect", "시크릿 가드", new TypeBuilder().description("3인칭 화면의 카메라 거리가 늘어납니다").hidden().defaultDuration(-1).removeOnQuit().maxAmplifier(4)),
+
+	// 애니메이션 첫 프레임 패킷 캔슬용
+	SECRET_GUARD_EFFECT_PROTOCOL = new CustomEffectType("secret_guard_effect_start", "시크릿 가드", new TypeBuilder().description("3인칭 화면의 카메라 거리가 늘어납니다").hidden().defaultDuration(2).removeOnMilk()),
+
 	/**/ NOTHING = new CustomEffectType("nothing", "아무것도 아님"),
 
 	/**/ TEST = new CustomEffectType(new NamespacedKey("test", "test"), "key:effect.cucumbery.test|테스트뭐", builder());
@@ -353,7 +360,7 @@ public class CustomEffectType implements Translatable, EnumHideable
 				BLESS_OF_VILLAGER, TOWN_SHIELD, EXPERIENCE_BOOST, DISAPPEAR, NO_BUFF_REMOVE, NO_REGENERATION, DAMAGE_INDICATOR, FREEZING,
 				NO_CUCUMBERY_ITEM_USAGE_ATTACK, GLIDING, NOTIFY_NO_TRADE_ITEM_DROP, DYNAMIC_LIGHT, CUSTOM_DEATH_MESSAGE, REMOVE_NO_DAMAGE_TICKS, MASTER_OF_FISHING,
 				MASTER_OF_FISHING_D, ASSASSINATION, ALARM, GAESANS, SUPERIOR_LEVITATION, THE_CHAOS_INVENTORY, HIDE_ITEM_TOOLTIP, ARM_SWING, IGNORE_ARM_SWING,
-				BLANKET_LOVER, HIDE_ITEM_INFORMATION,
+				BLANKET_LOVER, HIDE_ITEM_INFORMATION, SECRET_GUARD, SECRET_GUARD_EFFECT, SECRET_GUARD_EFFECT_PROTOCOL,
 
 				NOTHING, TEST);
 		CustomEffectTypeCooldown.registerEffect();

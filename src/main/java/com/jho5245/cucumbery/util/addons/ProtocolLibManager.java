@@ -9,22 +9,17 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.reflect.FuzzyReflection;
 import com.comphenix.protocol.reflect.StructureModifier;
-import com.comphenix.protocol.reflect.accessors.Accessors;
-import com.comphenix.protocol.reflect.accessors.MethodAccessor;
-import com.comphenix.protocol.reflect.fuzzy.FuzzyMethodContract;
 import com.comphenix.protocol.utility.MinecraftReflection;
-import com.comphenix.protocol.utility.MinecraftRegistryAccess;
 import com.comphenix.protocol.wrappers.EnumWrappers.ItemSlot;
 import com.comphenix.protocol.wrappers.*;
-import com.comphenix.protocol.wrappers.codecs.WrappedDataResult;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffect;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffect.DisplayType;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
+import com.jho5245.cucumbery.custom.customeffect.children.group.DoubleCustomEffect;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCooldown;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeMinecraft;
@@ -84,9 +79,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
-import javax.management.ReflectionException;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -1351,6 +1345,60 @@ public class ProtocolLibManager
 					if (!player.hasPermission("asdf"))
 					{
 						Bukkit.getScheduler().runTask(Cucumbery.getPlugin(), () -> CustomEffectManager.addEffect(player, CustomEffectTypeCooldown.COOLDOWN_ITEM_MEGAPHONE));
+					}
+				}
+			}
+		});
+
+		protocolManager.addPacketListener(new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.NORMAL, Server.UPDATE_ATTRIBUTES)
+		{
+			@Override
+			public void onPacketSending(PacketEvent event)
+			{
+				if (!Cucumbery.using_ProtocolLib)
+				{
+					return;
+				}
+				PacketContainer packet = event.getPacket();
+				Player player = event.getPlayer();
+				List<WrappedAttribute> attributes = packet.getAttributeCollectionModifier().read(0);
+				for (WrappedAttribute attribute : attributes)
+				{
+					String key = attribute.getAttributeKey();
+					switch (key)
+					{
+						case "camera_distance" -> {
+							if (CustomEffectManager.hasEffect(player, CustomEffectType.SECRET_GUARD_EFFECT_PROTOCOL))
+							{
+								CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectType.SECRET_GUARD_EFFECT_PROTOCOL);
+								if (customEffect instanceof DoubleCustomEffect doubleCustomEffect)
+								{
+									double d = doubleCustomEffect.getDouble();
+									if (attribute.getModifiers().isEmpty())
+									{
+//										MessageUtil.broadcastDebug("cancelled");
+										event.setCancelled(true);
+									}
+									else
+									{
+										for (var modifier : attribute.getModifiers())
+										{
+//											MessageUtil.broadcastDebug("effectD:%s, modifierD:%s".formatted(d, modifier.getAmount()));
+											if (modifier.getKey().getFullKey().equals(CustomEffectType.SECRET_GUARD_EFFECT.getNamespacedKey().toString()) && modifier.getAmount() == d)
+											{
+//												MessageUtil.broadcastDebug("cancelled");
+												event.setCancelled(true);
+											}
+										}
+									}
+								}
+							}
+						}
+						case "movement_speed" -> {
+
+						}
+						default -> {
+						}
 					}
 				}
 			}

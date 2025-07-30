@@ -342,25 +342,39 @@ public class Scheduler
 			MiningScheduler.customMining(player);
 			if (player.getGameMode() != GameMode.CREATIVE && CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE))
 			{
-				AttributeInstance instance = player.getAttribute(Attribute.BLOCK_BREAK_SPEED);
-				if (instance != null)
+				if (Cucumbery.using_ProtocolLib)
 				{
-					if (instance.getModifier(UUID_CUCUMBERY_CUSTOM_MINING_MODIFIER) != null)
+
+				}
+				else
+				{
+					AttributeInstance instance = player.getAttribute(Attribute.BLOCK_BREAK_SPEED);
+					if (instance != null)
 					{
-						instance.removeModifier(UUID_CUCUMBERY_CUSTOM_MINING_MODIFIER);
+						if (instance.getModifier(UUID_CUCUMBERY_CUSTOM_MINING_MODIFIER) != null)
+						{
+							instance.removeModifier(UUID_CUCUMBERY_CUSTOM_MINING_MODIFIER);
+						}
+						instance.addModifier(
+								new AttributeModifier(UUID_CUCUMBERY_CUSTOM_MINING_MODIFIER, "CUCUMBERY-CUSTOM-MINING-MODIFIER", -1d, Operation.MULTIPLY_SCALAR_1));
 					}
-					instance.addModifier(
-							new AttributeModifier(UUID_CUCUMBERY_CUSTOM_MINING_MODIFIER, "CUCUMBERY-CUSTOM-MINING-MODIFIER", -1d, Operation.MULTIPLY_SCALAR_1));
 				}
 			}
 			else
 			{
-				AttributeInstance instance = player.getAttribute(Attribute.BLOCK_BREAK_SPEED);
-				if (instance != null)
+				if (Cucumbery.using_ProtocolLib)
 				{
-					if (instance.getModifier(UUID_CUCUMBERY_CUSTOM_MINING_MODIFIER) != null)
+
+				}
+				else
+				{
+					AttributeInstance instance = player.getAttribute(Attribute.BLOCK_BREAK_SPEED);
+					if (instance != null)
 					{
-						instance.removeModifier(UUID_CUCUMBERY_CUSTOM_MINING_MODIFIER);
+						if (instance.getModifier(UUID_CUCUMBERY_CUSTOM_MINING_MODIFIER) != null)
+						{
+							instance.removeModifier(UUID_CUCUMBERY_CUSTOM_MINING_MODIFIER);
+						}
 					}
 				}
 			}

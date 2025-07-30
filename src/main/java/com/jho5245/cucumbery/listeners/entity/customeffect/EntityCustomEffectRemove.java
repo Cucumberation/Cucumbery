@@ -1,5 +1,12 @@
 package com.jho5245.cucumbery.listeners.entity.customeffect;
 
+import com.comphenix.protocol.PacketType.Play;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.wrappers.WrappedAttribute;
+import com.comphenix.protocol.wrappers.WrappedAttributeModifier;
+import com.google.common.collect.Lists;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.commands.reinforce.CommandReinforce;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffect;
@@ -37,7 +44,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
-import java.util.UUID;
+import java.util.*;
 
 public class EntityCustomEffectRemove implements Listener
 {
@@ -48,6 +55,7 @@ public class EntityCustomEffectRemove implements Listener
 		UUID uuid = entity.getUniqueId();
 		CustomEffect customEffect = event.getCustomEffect();
 		CustomEffectType customEffectType = customEffect.getType();
+		NamespacedKey namespacedKey = customEffectType.getNamespacedKey();
 		int amplifier = customEffect.getAmplifier();
 		RemoveReason removeReason = event.getReason();
 		if (entity instanceof Player player && customEffect.getDisplayType() == DisplayType.PLAYER_LIST && CustomEffectManager.getEffects(entity,
@@ -209,15 +217,15 @@ public class EntityCustomEffectRemove implements Listener
 
 		if (entity instanceof Attributable attributable && customEffect instanceof AttributeCustomEffect attributeCustomEffect)
 		{
-			UUID effectUniqueId = attributeCustomEffect.getUniqueId();
 			Attribute attribute = attributeCustomEffect.getAttribute();
 			AttributeInstance attributeInstance = attributable.getAttribute(attribute);
 			if (attributeInstance != null)
 			{
+				double amount = CustomEffectManager.getAttributeModifierAmount(customEffect);
 				AttributeModifier attributeModifier = null;
 				for (AttributeModifier modifier : attributeInstance.getModifiers())
 				{
-					if (modifier.getUniqueId().equals(effectUniqueId))
+					if (modifier.getKey().equals(customEffectType.getNamespacedKey()))
 					{
 						attributeModifier = modifier;
 						break;
@@ -226,6 +234,43 @@ public class EntityCustomEffectRemove implements Listener
 				if (attributeModifier != null)
 				{
 					attributeInstance.removeModifier(attributeModifier);
+					if (Variable.ATTRIBUTE_AMOUNT_BEFORE_AFTER.containsKey(uuid))
+					{
+						Map<Attribute, List<Double>> attributeListMap = Variable.ATTRIBUTE_AMOUNT_BEFORE_AFTER.get(uuid);
+						if (attributeListMap.containsKey(Attribute.CAMERA_DISTANCE))
+						{
+							List<Double> amountList = attributeListMap.get(Attribute.CAMERA_DISTANCE);
+							if (!amountList.isEmpty())
+							{
+								if (entity instanceof Player player)
+								{
+									ProtocolManager manager = ProtocolLibrary.getProtocolManager();
+									List<BukkitTask> animationFrames = Variable.SECRET_GUARD_ANIMATION_TASK_MAP.getOrDefault(uuid, new ArrayList<>());
+									//									MessageUtil.broadcastDebug("amount:" + amount);
+									animationFrames.forEach(BukkitTask::cancel); // 기존 애니메이션 재생 취소
+									for (int i = 0; i < 10; i++)
+									{
+										double finalAmount = amount * (9 - i) * 0.1;
+										BukkitTask frame = Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+										{
+											//											MessageUtil.broadcastDebug(finalAmount);
+											PacketContainer packet = manager.createPacket(Play.Server.UPDATE_ATTRIBUTES);
+											var attributes = Lists.newArrayList(
+													WrappedAttribute.newBuilder().attributeKey("camera_distance").baseValue(attributeInstance.getBaseValue()).addModifier(
+															WrappedAttributeModifier.newBuilder().key(namespacedKey.getNamespace(), namespacedKey.getKey())
+																	.operation(WrappedAttributeModifier.Operation.ADD_NUMBER).amount(finalAmount).build()).build());
+											packet.getIntegers().write(0, player.getEntityId());
+											packet.getAttributeCollectionModifier().write(0, attributes);
+											manager.sendServerPacket(player, packet);
+										}, i);
+										animationFrames.add(frame);
+									}
+									Variable.SECRET_GUARD_ANIMATION_TASK_MAP.put(uuid, animationFrames);
+								}
+							}
+							attributeListMap.put(Attribute.CAMERA_DISTANCE, Collections.singletonList(attributeInstance.getValue()));
+						}
+					}
 				}
 				// update max health
 				if (attribute == Attribute.MAX_HEALTH && entity instanceof Damageable damageable)
@@ -342,21 +387,22 @@ public class EntityCustomEffectRemove implements Listener
 		}
 
 		// 커스텀 채광 FALLBACK - 플레이어가 팔 흔들기를 멈추었을 때 저장된 위치에 대한 커스텀 채광 중지 처리
-		if (CustomEffectManager.hasEffect(entity, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE) && customEffectType == CustomEffectType.ARM_SWING && entity instanceof Player player)
+		if (CustomEffectManager.hasEffect(entity, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE) && customEffectType == CustomEffectType.ARM_SWING
+				&& entity instanceof Player player)
 		{
 			if (Variable.customMiningFallbackLocation.containsKey(uuid))
 			{
-				BlockDamageAbortEvent blockDamageAbortEvent = new BlockDamageAbortEvent(player, Variable.customMiningFallbackLocation.remove(uuid).getBlock(), player.getInventory().getItemInMainHand());
+				BlockDamageAbortEvent blockDamageAbortEvent = new BlockDamageAbortEvent(player, Variable.customMiningFallbackLocation.remove(uuid).getBlock(),
+						player.getInventory().getItemInMainHand());
 				Bukkit.getPluginManager().callEvent(blockDamageAbortEvent);
 			}
 		}
 		if (customEffectType.getNamespacedKey().getNamespace().equals("minecraft") && entity instanceof LivingEntity livingEntity)
 		{
 			// 특수 바닐라 효과 (예: 우유를 마셔도 사라지지 않는 효과) 처리용 key parsing
-			NamespacedKey namespacedKey = customEffectType.getNamespacedKey();
-			if (namespacedKey.getKey().contains("__"))
-				namespacedKey = new NamespacedKey(namespacedKey.getNamespace(), namespacedKey.getKey().split("__")[0]);
-			PotionEffectType potionEffectType = Registry.POTION_EFFECT_TYPE.get(namespacedKey);
+
+			PotionEffectType potionEffectType = Registry.POTION_EFFECT_TYPE.get(
+					namespacedKey.getKey().contains("__") ? new NamespacedKey(namespacedKey.getNamespace(), namespacedKey.getKey().split("__")[0]) : namespacedKey);
 			if (potionEffectType == null)
 			{
 				throw new NullPointerException("Invalid Potion Effect Type: " + customEffectType.getIdString());
@@ -365,12 +411,26 @@ public class EntityCustomEffectRemove implements Listener
 			if (potionEffect != null && potionEffect.getAmplifier() == amplifier && Math.abs(customEffect.getDuration() - potionEffect.getDuration()) <= 2)
 				livingEntity.removePotionEffect(potionEffectType);
 		}
-		
+
 		// 바닥에 떨어진 아이템 이름 표시 기능 전환 쿨타임 만료시 GUI 다시 열어주기
-		if (customEffectType == CustomEffectTypeCooldown.COOLDOWN_GUI_BUTTON_LONGER && entity instanceof Player player && player.getOpenInventory().getTitle().equals(
-				Constant.CANCEL_STRING + Constant.SERVER_SETTINGS))
+		if (customEffectType == CustomEffectTypeCooldown.COOLDOWN_GUI_BUTTON_LONGER && entity instanceof Player player && player.getOpenInventory().getTitle()
+				.equals(Constant.CANCEL_STRING + Constant.SERVER_SETTINGS))
 		{
 			GUIManager.openGUI(player, GUIType.SERVER_SETTINGS);
+		}
+
+		if (customEffectType == CustomEffectType.SECRET_GUARD && entity instanceof Player player)
+		{
+			AttributeInstance attributeInstance = player.getAttribute(Attribute.CAMERA_DISTANCE);
+			if (attributeInstance != null)
+			{
+				AttributeModifier attributeModifier = attributeInstance.getModifier(CustomEffectType.SECRET_GUARD_EFFECT.getNamespacedKey());
+				if (attributeModifier != null)
+				{
+					CustomEffectManager.addEffect(player, new DoubleCustomEffectImple(CustomEffectType.SECRET_GUARD_EFFECT_PROTOCOL, attributeModifier.getAmount()));
+				}
+			}
+			CustomEffectManager.removeEffect(player, CustomEffectType.SECRET_GUARD_EFFECT);
 		}
 	}
 }
