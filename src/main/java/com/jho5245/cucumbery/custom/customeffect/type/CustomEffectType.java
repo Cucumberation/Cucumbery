@@ -283,10 +283,20 @@ public class CustomEffectType implements Translatable, EnumHideable
 
 	SECRET_GUARD = new CustomEffectType("secret_guard", "시크릿 가드", new TypeBuilder().description("3인칭 화면의 카메라 거리가 늘어납니다").maxAmplifier(4)),
 
-	SECRET_GUARD_EFFECT = new CustomEffectType("secret_guard_effect", "시크릿 가드", new TypeBuilder().description("3인칭 화면의 카메라 거리가 늘어납니다").hidden().defaultDuration(-1).removeOnQuit().maxAmplifier(4)),
+	SECRET_GUARD_EFFECT = new CustomEffectType("secret_guard_effect", "시크릿 가드 효과", new TypeBuilder().description("3인칭 화면의 카메라 거리가 늘어납니다").hidden().defaultDuration(-1).removeOnQuit().maxAmplifier(4)),
 
 	// 애니메이션 첫 프레임 패킷 캔슬용
-	SECRET_GUARD_EFFECT_PROTOCOL = new CustomEffectType("secret_guard_effect_start", "시크릿 가드", new TypeBuilder().description("3인칭 화면의 카메라 거리가 늘어납니다").hidden().defaultDuration(2).removeOnMilk()),
+	SECRET_GUARD_EFFECT_PROTOCOL = new CustomEffectType("secret_guard_effect_protocol", "시크릿 가드 프로토콜", new TypeBuilder().description("3인칭 화면의 카메라 거리가 늘어납니다").hidden().defaultDuration(2).removeOnQuit()),
+
+
+	SNEAK_TO_GIANT = new CustomEffectType("sneak_to_giant", "웅크리면 커짐 ㄷㄷ", new TypeBuilder().description("웅크리면 커진다").maxAmplifier(159)),
+
+	SNEAK_TO_GIANT_EFFECT = new CustomEffectType("sneak_to_giant_effect", "웅크리면 커짐 ㄷㄷ 효과", new TypeBuilder().description("웅크리면 커진다").hidden().defaultDuration(-1).removeOnQuit().maxAmplifier(4)),
+
+	// 애니메이션 첫 프레임 패킷 캔슬용
+	SNEAK_TO_GIANT_EFFECT_PROTOCOL = new CustomEffectType("sneak_to_giant_effect_protocol", "웅크리면 커짐 ㄷㄷ 프로토콜", new TypeBuilder().description("웅크리면 커진다").hidden().defaultDuration(2).removeOnQuit()),
+
+
 
 	/**/ NOTHING = new CustomEffectType("nothing", "아무것도 아님"),
 
@@ -360,7 +370,9 @@ public class CustomEffectType implements Translatable, EnumHideable
 				BLESS_OF_VILLAGER, TOWN_SHIELD, EXPERIENCE_BOOST, DISAPPEAR, NO_BUFF_REMOVE, NO_REGENERATION, DAMAGE_INDICATOR, FREEZING,
 				NO_CUCUMBERY_ITEM_USAGE_ATTACK, GLIDING, NOTIFY_NO_TRADE_ITEM_DROP, DYNAMIC_LIGHT, CUSTOM_DEATH_MESSAGE, REMOVE_NO_DAMAGE_TICKS, MASTER_OF_FISHING,
 				MASTER_OF_FISHING_D, ASSASSINATION, ALARM, GAESANS, SUPERIOR_LEVITATION, THE_CHAOS_INVENTORY, HIDE_ITEM_TOOLTIP, ARM_SWING, IGNORE_ARM_SWING,
-				BLANKET_LOVER, HIDE_ITEM_INFORMATION, SECRET_GUARD, SECRET_GUARD_EFFECT, SECRET_GUARD_EFFECT_PROTOCOL,
+				BLANKET_LOVER, HIDE_ITEM_INFORMATION,
+				SECRET_GUARD, SECRET_GUARD_EFFECT, SECRET_GUARD_EFFECT_PROTOCOL,
+				SNEAK_TO_GIANT, SNEAK_TO_GIANT_EFFECT, SNEAK_TO_GIANT_EFFECT_PROTOCOL,
 
 				NOTHING, TEST);
 		CustomEffectTypeCooldown.registerEffect();
@@ -1283,5 +1295,11 @@ public class CustomEffectType implements Translatable, EnumHideable
 	public boolean hasTargetFilter()
 	{
 		return this.targetFilter != null;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return getNamespacedKey().hashCode();
 	}
 }

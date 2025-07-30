@@ -50,6 +50,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.json.simple.parser.JSONParser;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -594,6 +595,10 @@ public class ComponentUtil
 			else if (object instanceof Translatable translatable)
 			{
 				component = component.append(ComponentUtil.translate(translatable.translationKey()));
+			}
+			else if (object instanceof Number number)
+			{
+				component = component.append(Component.text(Constant.Sosu2.format(number)));
 			}
 			else if (!(object instanceof Boolean))
 			{

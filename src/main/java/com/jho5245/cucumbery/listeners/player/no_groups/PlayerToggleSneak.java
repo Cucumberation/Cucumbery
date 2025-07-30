@@ -3,6 +3,7 @@ package com.jho5245.cucumbery.listeners.player.no_groups;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffect;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
+import com.jho5245.cucumbery.custom.customeffect.children.group.DoubleCustomEffectImple;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
@@ -15,12 +16,16 @@ import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTList;
 import org.bukkit.GameMode;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -40,6 +45,7 @@ public class PlayerToggleSneak implements Listener
 		this.itemSneakUsage(player, player.getInventory().getItemInOffHand(), false);
 		this.customEffect(player, event.isSneaking());
 		this.customItem(event);
+		this.customEffect(event);
 	}
 
 	private void customItem(PlayerToggleSneakEvent event)
@@ -154,6 +160,36 @@ public class PlayerToggleSneak implements Listener
 						player.getInventory().setItemInOffHand(item);
 					}
 				}
+			}
+		}
+	}
+
+
+	private void customEffect(PlayerToggleSneakEvent event)
+	{
+		Player player = event.getPlayer();
+		boolean isSprinting = event.isSneaking();
+		if (CustomEffectManager.hasEffect(player, CustomEffectType.SNEAK_TO_GIANT))
+		{
+			int amplifier = CustomEffectManager.getEffect(player, CustomEffectType.SNEAK_TO_GIANT).getAmplifier();
+			if (isSprinting)
+			{
+				CustomEffectManager.addEffect(player, CustomEffectType.SNEAK_TO_GIANT_EFFECT, CustomEffectType.SNEAK_TO_GIANT_EFFECT.getDefaultDuration(), amplifier);
+				double amount = CustomEffectManager.getAttributeModifierAmount(CustomEffectManager.getEffect(player, CustomEffectType.SNEAK_TO_GIANT_EFFECT));
+				CustomEffectManager.addEffect(player, new DoubleCustomEffectImple(CustomEffectType.SNEAK_TO_GIANT_EFFECT_PROTOCOL, amount));
+			}
+			else
+			{
+				AttributeInstance attributeInstance = player.getAttribute(Attribute.SCALE);
+				if (attributeInstance != null)
+				{
+					AttributeModifier attributeModifier = attributeInstance.getModifier(CustomEffectType.SNEAK_TO_GIANT_EFFECT.getNamespacedKey());
+					if (attributeModifier != null)
+					{
+						CustomEffectManager.addEffect(player, new DoubleCustomEffectImple(CustomEffectType.SNEAK_TO_GIANT_EFFECT_PROTOCOL, attributeModifier.getAmount()));
+					}
+				}
+				CustomEffectManager.removeEffect(player, CustomEffectType.SNEAK_TO_GIANT_EFFECT);
 			}
 		}
 	}

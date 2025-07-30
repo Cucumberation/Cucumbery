@@ -17,48 +17,49 @@ import java.util.*;
 
 public class EntityCustomEffectApply implements Listener
 {
-  @EventHandler
-  public void onEntityCustomEffectApply(EntityCustomEffectApplyEvent event)
-  {
-    Entity entity = event.getEntity();
-    UUID uuid = entity.getUniqueId();
-    CustomEffect customEffect = event.getCustomEffect();
-    CustomEffectType customEffectType = customEffect.getType();
-    if (customEffectType.isToggle() && CustomEffectManager.hasEffect(entity, customEffectType))
-    {
-      CustomEffectManager.removeEffect(entity, customEffectType);
-      event.setCancelled(true);
-    }
-    if (customEffectType == CustomEffectType.PVP_MODE_ENABLED)
-    {
-      CustomEffectManager.addEffect(entity, CustomEffectType.PVP_MODE_COOLDOWN);
-    }
+	@EventHandler
+	public void onEntityCustomEffectApply(EntityCustomEffectApplyEvent event)
+	{
+		Entity entity = event.getEntity();
+		UUID uuid = entity.getUniqueId();
+		CustomEffect customEffect = event.getCustomEffect();
+		CustomEffectType customEffectType = customEffect.getType();
+		if (customEffectType.isToggle() && CustomEffectManager.hasEffect(entity, customEffectType))
+		{
+			CustomEffectManager.removeEffect(entity, customEffectType);
+			event.setCancelled(true);
+		}
+		if (customEffectType == CustomEffectType.PVP_MODE_ENABLED)
+		{
+			CustomEffectManager.addEffect(entity, CustomEffectType.PVP_MODE_COOLDOWN);
+		}
 
-    if (customEffect instanceof AttributeCustomEffect attributeCustomEffect)
-    {
-      if (!(entity instanceof Attributable attributable))
-      {
-        event.setCancelled(true);
-        return;
-      }
-      Attribute attribute = attributeCustomEffect.getAttribute();
-      AttributeInstance attributeInstance = attributable.getAttribute(attribute);
-      if (attributeInstance == null)
-      {
-        event.setCancelled(true);
-        return;
-      }
-      else
-      {
-        // 카메라 거리 변경 애니메이션 효과
-        if (customEffectType == CustomEffectType.SECRET_GUARD_EFFECT)
-        {
-          double origin = attributeInstance.getValue();
-          Map<Attribute, List<Double>> attributeListMap = Variable.ATTRIBUTE_AMOUNT_BEFORE_AFTER.getOrDefault(uuid, new HashMap<>());
-          attributeListMap.put(Attribute.CAMERA_DISTANCE, Collections.singletonList(origin));
-          Variable.ATTRIBUTE_AMOUNT_BEFORE_AFTER.put(uuid, attributeListMap);
-        }
-      }
-    }
-  }
+		if (customEffect instanceof AttributeCustomEffect attributeCustomEffect)
+		{
+			if (!(entity instanceof Attributable attributable))
+			{
+				event.setCancelled(true);
+				return;
+			}
+			Attribute attribute = attributeCustomEffect.getAttribute();
+			AttributeInstance attributeInstance = attributable.getAttribute(attribute);
+			if (attributeInstance == null)
+			{
+				event.setCancelled(true);
+			}
+			else
+			{
+				double value = attributeInstance.getValue();
+				// 카메라 거리 변경 애니메이션 효과
+				if (List.of(
+						CustomEffectType.SECRET_GUARD_EFFECT, CustomEffectType.SNEAK_TO_GIANT_EFFECT
+				).contains(customEffectType))
+				{
+					Map<Attribute, List<Double>> attributeListMap = Variable.ATTRIBUTE_AMOUNT_BEFORE_AFTER.getOrDefault(uuid, new HashMap<>());
+					attributeListMap.put(attribute, Collections.singletonList(value));
+					Variable.ATTRIBUTE_AMOUNT_BEFORE_AFTER.put(uuid, attributeListMap);
+				}
+			}
+		}
+	}
 }

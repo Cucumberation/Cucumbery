@@ -41,7 +41,6 @@ public class CommandReinforce implements CommandExecutor, TabCompleter, AsyncTab
   protected static final Set<UUID> ANTI_DESTRUCTION_ENABLED = new HashSet<>();
   protected static final int ANTI_DESTRUCTION_STARFORCE_FROM = 12, ANTI_DESTRUCTION_STARFORCE_TO = 16, ANTI_DESTRUCTION_CUCUMBERFORCE_FROM = 24, ANTI_DESTRUCTION_CUCUMBERFORCE_TO = 33;
   protected static final List<String> OPTION = Arrays.asList("STR", "DEX", "INT", "LUK", "최대 HP", "최대 MP", "방어력", "이동속도", "점프력", "공격력", "마력");
-  protected static DecimalFormat df2 = new DecimalFormat("#,###.##"), df3 = new DecimalFormat("#,###.######"), round = new DecimalFormat("####.##");
 
   protected static double[] getStarForceInfo(int amount)
   {
@@ -1687,18 +1686,18 @@ public class CommandReinforce implements CommandExecutor, TabCompleter, AsyncTab
     {
       MessageUtil.sendMessage(player, Prefix.INFO_REINFORCE, CommandReinforceConstantsAndUtils.WILL_DESTROY);
     }
-    MessageUtil.sendMessage(player, Prefix.INFO_REINFORCE, CommandReinforceConstantsAndUtils.REINFORCE_SUCCESS_CHANCE, Constant.THE_COLOR_HEX + df2.format(success) + "%");
+    MessageUtil.sendMessage(player, Prefix.INFO_REINFORCE, CommandReinforceConstantsAndUtils.REINFORCE_SUCCESS_CHANCE, Constant.THE_COLOR_HEX + Constant.Sosu2.format(success) + "%");
     if (failKeep > 0)
     {
-      MessageUtil.sendMessage(player, Prefix.INFO_REINFORCE, CommandReinforceConstantsAndUtils.REINFORCE_FAILURE_KEEP_CHANCE, Constant.THE_COLOR_HEX + df2.format(failKeep) + "%");
+      MessageUtil.sendMessage(player, Prefix.INFO_REINFORCE, CommandReinforceConstantsAndUtils.REINFORCE_FAILURE_KEEP_CHANCE, Constant.THE_COLOR_HEX + Constant.Sosu2.format(failKeep) + "%");
     }
     if (failDown > 0)
     {
-      MessageUtil.sendMessage(player, Prefix.INFO_REINFORCE, CommandReinforceConstantsAndUtils.REINFORCE_FAILURE_DROP_CHANCE, Constant.THE_COLOR_HEX + df2.format(failDown) + "%");
+      MessageUtil.sendMessage(player, Prefix.INFO_REINFORCE, CommandReinforceConstantsAndUtils.REINFORCE_FAILURE_DROP_CHANCE, Constant.THE_COLOR_HEX + Constant.Sosu2.format(failDown) + "%");
     }
     if (destroy > 0)
     {
-      MessageUtil.sendMessage(player, Prefix.INFO_REINFORCE, CommandReinforceConstantsAndUtils.REINFORCE_DESTRUCTION_DROP_CHANCE, Constant.THE_COLOR_HEX + df2.format(destroy) + "%");
+      MessageUtil.sendMessage(player, Prefix.INFO_REINFORCE, CommandReinforceConstantsAndUtils.REINFORCE_DESTRUCTION_DROP_CHANCE, Constant.THE_COLOR_HEX + Constant.Sosu2.format(destroy) + "%");
     }
   }
 

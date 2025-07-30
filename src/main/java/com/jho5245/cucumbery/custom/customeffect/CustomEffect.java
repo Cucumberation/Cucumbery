@@ -308,7 +308,10 @@ public class CustomEffect
 		{
 			description = ComponentUtil.translate("노빠꾸로 공중으로 떠오릅니다");
 			description = description.append(Component.text("\n"));
-			description = description.append(ComponentUtil.translate("말 그대로 빠꾸 없이 초당 약 %s 블록만큼 떠오릅니다", Constant.Sosu2.format((amplifier + 1) * 0.9)));
+			description = description.append(ComponentUtil.translate("말 그대로 빠꾸 없이 초당 약 %s 블록만큼 떠오릅니다", (amplifier + 1) * 0.9));
+		}
+		if (effectType == CustomEffectType.SECRET_GUARD) {
+			description = ComponentUtil.translate("3인칭 화면의 카메라 거리가 %s 블록만큼 늘어납니다", CustomEffectManager.getAttributeModifierAmount(this));
 		}
 		if (this instanceof OfflinePlayerCustomEffect offlinePlayerCustomEffect)
 		{

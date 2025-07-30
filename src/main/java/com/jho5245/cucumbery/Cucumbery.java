@@ -335,6 +335,7 @@ public class Cucumbery extends JavaPlugin
 	// 플러그인 비활성화 시 처리 과정
 	private void disableOperation()
 	{
+		Variable.onDisable();
 		Initializer.saveUserData();
 		BlockPlaceDataConfig.saveAll();
 		Initializer.saveItemUsageData();

@@ -19,6 +19,8 @@ import com.jho5245.cucumbery.util.storage.data.Prefix;
 import com.jho5245.cucumbery.util.storage.data.TranslatableKeyParser;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig;
+import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.CustomConfigType;
+import com.sk89q.worldguard.session.handler.HealFlag;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import de.tr7zw.changeme.nbtapi.NBTEntity;
@@ -166,47 +168,49 @@ public class CustomEffectManager
 		CustomEffectType effectType = effect.getType();
 		int initDura = effect.getInitDuration(), initAmple = effect.getInitAmplifier();
 		DisplayType displayType = effect.getDisplayType();
-		switch (effectType.getIdString().toUpperCase())
+		if (effectType == CustomEffectType.HEALTH_INCREASE)
 		{
-			case "HEALTH_INCREASE" ->
+			effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.MAX_HEALTH, Operation.ADD_SCALAR, 0.1);
+		}
+		if (effectType == CustomEffectType.NEWBIE_SHIELD)
+		{
+			if (entity instanceof OfflinePlayer offlinePlayer)
 			{
-				effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.MAX_HEALTH,
-						Operation.ADD_SCALAR, 0.1);
+				effect = new OfflinePlayerCustomEffectImple(effectType, initDura, initAmple, displayType, offlinePlayer);
 			}
-			case "NEWBIE_SHIELD" ->
-			{
-				if (entity instanceof OfflinePlayer offlinePlayer)
-				{
-					effect = new OfflinePlayerCustomEffectImple(effectType, initDura, initAmple, displayType, offlinePlayer);
-				}
-			}
-			case "BREAD_KIMOCHI" ->
-			{
-				effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.MOVEMENT_SPEED,
-						Operation.ADD_SCALAR, 0.1);
-			}
-			case "TOWN_SHIELD" ->
-			{
-				effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.MOVEMENT_SPEED,
-						Operation.ADD_SCALAR, 0.3);
-			}
-			case "COMBAT_BOOSTER" ->
-			{
-				effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.ATTACK_SPEED,
-						Operation.ADD_SCALAR, 0.25);
-			}
-			case "SECRET_GUARD_EFFECT" -> {
-				effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.CAMERA_DISTANCE,
-						Operation.ADD_NUMBER, 1);
-			}
-			case "POSITION_MEMORIZE" ->
-			{
-				effect = new LocationCustomEffectImple(effectType, initDura, initAmple, displayType, entity.getLocation());
-			}
-			case "DORMAMMU" ->
-			{
-				effect = new LocationVelocityCustomEffectImple(effectType, initDura, initAmple, displayType, entity.getLocation(), entity.getVelocity());
-			}
+		}
+		if (effectType == CustomEffectType.BREAD_KIMOCHI)
+		{
+			effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.MOVEMENT_SPEED, Operation.ADD_SCALAR,
+					0.1);
+		}
+		if (effectType == CustomEffectType.TOWN_SHIELD)
+		{
+			effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.MOVEMENT_SPEED, Operation.ADD_SCALAR,
+					0.3);
+		}
+		if (effectType == CustomEffectType.COMBAT_BOOSTER)
+		{
+			effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.ATTACK_SPEED, Operation.ADD_SCALAR,
+					0.25);
+		}
+		if (effectType == CustomEffectType.SECRET_GUARD_EFFECT)
+		{
+			effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.CAMERA_DISTANCE,
+					Operation.ADD_NUMBER, 1);
+		}
+		if (effectType == CustomEffectType.SNEAK_TO_GIANT_EFFECT)
+		{
+			effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.SCALE,
+					Operation.ADD_SCALAR, 0.1);
+		}
+		if (effectType == CustomEffectType.POSITION_MEMORIZE)
+		{
+			effect = new LocationCustomEffectImple(effectType, initDura, initAmple, displayType, entity.getLocation());
+		}
+		if (effectType == CustomEffectType.DORMAMMU)
+		{
+			effect = new LocationVelocityCustomEffectImple(effectType, initDura, initAmple, displayType, entity.getLocation(), entity.getVelocity());
 		}
 		if (effectType == CustomEffectType.STRANGE_CREATIVE_MODE && entity instanceof Player player)
 		{
@@ -1141,9 +1145,8 @@ public class CustomEffectManager
 				}
 			}
 			PotionEffectType effectType = potionEffect.getType();
-			Component effectComponent = ComponentUtil.translate((isVanillaNegative(effectType) ? "&c" : "&a") + (showDuration
-					? effectType.translationKey()
-					: getVanillaShortTranslationKey(effectType)));
+			Component effectComponent = ComponentUtil.translate(
+					(isVanillaNegative(effectType) ? "&c" : "&a") + (showDuration ? effectType.translationKey() : getVanillaShortTranslationKey(effectType)));
 			Component create = ComponentUtil.create(potionEffect);
 			effectComponent = effectComponent.hoverEvent(create.hoverEvent()).clickEvent(create.clickEvent());
 			arguments.add(ComponentUtil.translate(key2, effectComponent,
@@ -1297,20 +1300,15 @@ public class CustomEffectManager
 
 	public static double getAttributeModifierAmount(CustomEffect customEffect)
 	{
-		if (!(customEffect instanceof AttributeCustomEffect attributeCustomEffect))
-		{
-			return 0;
-		}
-
 		CustomEffectType customEffectType = customEffect.getType();
 		int amplifier = customEffect.getAmplifier();
 
 		// SECRET GUARD EFFECT는 1~4레벨일때 1~4 증가, 5레벨일때 6 증가
-		if (customEffectType == CustomEffectType.SECRET_GUARD_EFFECT && amplifier == 4)
+		if ((customEffectType == CustomEffectType.SECRET_GUARD || customEffectType == CustomEffectType.SECRET_GUARD_EFFECT) && amplifier == 4)
 		{
 			return 6;
 		}
 
-		return (customEffect.getAmplifier() + 1) * attributeCustomEffect.getMultiplier();
+		return (amplifier + 1) * (customEffect instanceof AttributeCustomEffect attributeCustomEffect ? attributeCustomEffect.getMultiplier() : 1);
 	}
 }

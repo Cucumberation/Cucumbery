@@ -27,6 +27,12 @@ public class PlayerToggleSprint implements Listener
 			return;
 		}
 
+		customEffect(event);
+	}
+
+	private void customEffect(PlayerToggleSprintEvent event)
+	{
+		Player player = event.getPlayer();
 		boolean isSprinting = event.isSprinting();
 		if (CustomEffectManager.hasEffect(player, CustomEffectType.SECRET_GUARD))
 		{

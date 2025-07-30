@@ -39,7 +39,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -237,33 +236,85 @@ public class EntityCustomEffectPostApply implements Listener
 						List<Double> amountList = attributeListMap.get(Attribute.CAMERA_DISTANCE);
 						if (!amountList.isEmpty())
 						{
-							if (entity instanceof Player player)
+							if (entity instanceof Player player && customEffectType == CustomEffectType.SECRET_GUARD_EFFECT)
 							{
-								ProtocolManager manager = ProtocolLibrary.getProtocolManager();
-								List<BukkitTask> animationFrames = Variable.SECRET_GUARD_ANIMATION_TASK_MAP.getOrDefault(uuid, new ArrayList<>());
-								//								MessageUtil.broadcastDebug("amount:" + amount);
-								animationFrames.forEach(BukkitTask::cancel); // 기존 애니메이션 재생 취소
-								for (int i = 0; i < 10; i++)
+								if (Variable.SECRET_GUARD_ANIMATION_TIMER_MAP.containsKey(uuid))
 								{
-									double finalAmount = amount * (i + 1) * 0.1;
-									BukkitTask frame = Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-									{
-										//										MessageUtil.broadcastDebug(finalAmount);
-										PacketContainer packet = manager.createPacket(Play.Server.UPDATE_ATTRIBUTES);
-										var attributes = Lists.newArrayList(
-												WrappedAttribute.newBuilder().attributeKey("camera_distance").baseValue(attributeInstance.getBaseValue())
-														.addModifier(WrappedAttributeModifier.newBuilder().key(namespacedKey.getNamespace(), namespacedKey.getKey())
-																.operation(WrappedAttributeModifier.Operation.ADD_NUMBER).amount(finalAmount).build()).build());
-										packet.getIntegers().write(0, player.getEntityId());
-										packet.getAttributeCollectionModifier().write(0, attributes);
-										manager.sendServerPacket(player, packet);
-									}, i);
-									animationFrames.add(frame);
+									Variable.SECRET_GUARD_ANIMATION_TIMER_MAP.remove(uuid).cancel();
 								}
-								Variable.SECRET_GUARD_ANIMATION_TASK_MAP.put(uuid, animationFrames);
+								ProtocolManager manager = ProtocolLibrary.getProtocolManager();
+								Timer timer = new Timer();
+								int animationDurationMillis = 500;
+								int periodMillis = 10;
+								int loopCount = animationDurationMillis / periodMillis; // 50
+								for (int i = 0; i < loopCount; i++)
+								{
+									double finalAmount = amount * (i + 1) / loopCount;
+									TimerTask task = new TimerTask()
+									{
+										@Override
+										public void run()
+										{
+											PacketContainer packet = manager.createPacket(Play.Server.UPDATE_ATTRIBUTES);
+											var attributes = Lists.newArrayList(
+													WrappedAttribute.newBuilder().attributeKey("camera_distance").baseValue(attributeInstance.getBaseValue()).addModifier(
+															WrappedAttributeModifier.newBuilder().key(namespacedKey.getNamespace(), namespacedKey.getKey())
+																	.operation(WrappedAttributeModifier.Operation.ADD_NUMBER).amount(finalAmount).build()).build());
+											packet.getIntegers().write(0, player.getEntityId());
+											packet.getAttributeCollectionModifier().write(0, attributes);
+											manager.sendServerPacket(player, packet);
+										}
+									};
+
+									timer.schedule(task, periodMillis * i);
+								}
+
+								Variable.SECRET_GUARD_ANIMATION_TIMER_MAP.put(uuid, timer);
 							}
 						}
 						attributeListMap.put(Attribute.CAMERA_DISTANCE, Collections.singletonList(attributeInstance.getValue()));
+					}
+					if (attributeListMap.containsKey(Attribute.SCALE))
+					{
+						List<Double> amountList = attributeListMap.get(Attribute.SCALE);
+						if (!amountList.isEmpty())
+						{
+							if (entity instanceof Player player && customEffectType == CustomEffectType.SNEAK_TO_GIANT_EFFECT)
+							{
+								if (Variable.SNEAK_TO_GIANT_ANIMATION_TIMER_MAP.containsKey(uuid))
+								{
+									Variable.SNEAK_TO_GIANT_ANIMATION_TIMER_MAP.remove(uuid).cancel();
+								}
+								ProtocolManager manager = ProtocolLibrary.getProtocolManager();
+								Timer timer = new Timer();
+								int animationDurationMillis = 500;
+								int periodMillis = 10;
+								int loopCount = animationDurationMillis / periodMillis; // 50
+								for (int i = 0; i < loopCount; i++)
+								{
+									double finalAmount = amount * (i + 1) / loopCount;
+									TimerTask task = new TimerTask()
+									{
+										@Override
+										public void run()
+										{
+											PacketContainer packet = manager.createPacket(Play.Server.UPDATE_ATTRIBUTES);
+											var attributes = Lists.newArrayList(WrappedAttribute.newBuilder().attributeKey("scale").baseValue(attributeInstance.getBaseValue())
+													.addModifier(WrappedAttributeModifier.newBuilder().key(namespacedKey.getNamespace(), namespacedKey.getKey())
+															.operation(WrappedAttributeModifier.Operation.ADD_NUMBER).amount(finalAmount).build()).build());
+											packet.getIntegers().write(0, player.getEntityId());
+											packet.getAttributeCollectionModifier().write(0, attributes);
+											manager.sendServerPacket(player, packet);
+										}
+									};
+
+									timer.schedule(task, periodMillis * i);
+								}
+
+								Variable.SNEAK_TO_GIANT_ANIMATION_TIMER_MAP.put(uuid, timer);
+							}
+						}
+						attributeListMap.put(Attribute.SCALE, Collections.singletonList(attributeInstance.getValue()));
 
 					}
 				}

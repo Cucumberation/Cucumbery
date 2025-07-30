@@ -274,5 +274,13 @@ public class Variable
   // ex 대미지% 증가 Modifier 적용 전의 damage의 amount와, 적용 후의 amount를 저장한다
   public static final Map<UUID, Map<Attribute, List<Double>>> ATTRIBUTE_AMOUNT_BEFORE_AFTER = new HashMap<>();
 
-  public static final Map<UUID, List<BukkitTask>> SECRET_GUARD_ANIMATION_TASK_MAP = new HashMap<>();
+  public static final Map<UUID, Timer> SECRET_GUARD_ANIMATION_TIMER_MAP = new HashMap<>();
+
+  public static final Map<UUID, Timer> SNEAK_TO_GIANT_ANIMATION_TIMER_MAP = new HashMap<>();
+
+  public static void onDisable()
+  {
+    SECRET_GUARD_ANIMATION_TIMER_MAP.values().forEach(Timer::cancel);
+    SNEAK_TO_GIANT_ANIMATION_TIMER_MAP.values().forEach(Timer::cancel);
+  }
 }

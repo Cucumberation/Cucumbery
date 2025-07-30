@@ -79,9 +79,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
-import javax.smartcardio.ATR;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Modifier;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -1400,6 +1398,34 @@ public class ProtocolLibManager
 						}
 						case "block_break_speed" -> {
 
+						}
+						case "scale" -> {
+							if (CustomEffectManager.hasEffect(player, CustomEffectType.SNEAK_TO_GIANT_EFFECT_PROTOCOL))
+							{
+								CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectType.SNEAK_TO_GIANT_EFFECT_PROTOCOL);
+								if (customEffect instanceof DoubleCustomEffect doubleCustomEffect)
+								{
+									double d = doubleCustomEffect.getDouble();
+									if (attribute.getModifiers().isEmpty())
+									{
+										//										MessageUtil.broadcastDebug("cancelled");
+										event.setCancelled(true);
+									}
+									else
+									{
+										for (var modifier : attribute.getModifiers())
+										{
+											MinecraftKey minecraftKey = modifier.getKey();
+											if (minecraftKey != null && minecraftKey.getFullKey().equals(CustomEffectType.SNEAK_TO_GIANT_EFFECT.getNamespacedKey().toString())
+													&& modifier.getAmount() == d)
+											{
+												//												MessageUtil.broadcastDebug("cancelled");
+												event.setCancelled(true);
+											}
+										}
+									}
+								}
+							}
 						}
 						default -> {
 						}
