@@ -1236,66 +1236,15 @@ public class CustomEffectManager
 		return potionEffectType.translationKey();
 	}
 
+	private static final Set<PotionEffectType> NEGATIVE_POTION_EFFECT_TYPES = Set.of(PotionEffectType.SLOWNESS, PotionEffectType.NAUSEA, PotionEffectType.MINING_FATIGUE,
+			PotionEffectType.INSTANT_DAMAGE, PotionEffectType.BLINDNESS, PotionEffectType.HUNGER, PotionEffectType.WEAKNESS, PotionEffectType.POISON, PotionEffectType.WITHER,
+			PotionEffectType.GLOWING, PotionEffectType.LEVITATION, PotionEffectType.UNLUCK, PotionEffectType.BAD_OMEN, PotionEffectType.DARKNESS, PotionEffectType.INFESTED,
+			PotionEffectType.OOZING, PotionEffectType.RAID_OMEN, PotionEffectType.TRIAL_OMEN, PotionEffectType.WEAVING, PotionEffectType.WIND_CHARGED);
+
 	@SuppressWarnings("all")
 	public static boolean isVanillaNegative(@NotNull PotionEffectType potionEffectType)
 	{
-		if (potionEffectType.equals(PotionEffectType.SLOWNESS))
-		{
-			return true;
-		}
-		if (potionEffectType.equals(PotionEffectType.NAUSEA))
-		{
-			return true;
-		}
-		if (potionEffectType.equals(PotionEffectType.MINING_FATIGUE))
-		{
-			return true;
-		}
-		if (potionEffectType.equals(PotionEffectType.INSTANT_DAMAGE))
-		{
-			return true;
-		}
-		if (potionEffectType.equals(PotionEffectType.BLINDNESS))
-		{
-			return true;
-		}
-		if (potionEffectType.equals(PotionEffectType.HUNGER))
-		{
-			return true;
-		}
-		if (potionEffectType.equals(PotionEffectType.WEAKNESS))
-		{
-			return true;
-		}
-		if (potionEffectType.equals(PotionEffectType.POISON))
-		{
-			return true;
-		}
-		if (potionEffectType.equals(PotionEffectType.WITHER))
-		{
-			return true;
-		}
-		if (potionEffectType.equals(PotionEffectType.GLOWING))
-		{
-			return true;
-		}
-		if (potionEffectType.equals(PotionEffectType.LEVITATION))
-		{
-			return true;
-		}
-		if (potionEffectType.equals(PotionEffectType.UNLUCK))
-		{
-			return true;
-		}
-		if (potionEffectType.equals(PotionEffectType.BAD_OMEN))
-		{
-			return true;
-		}
-		if (potionEffectType.equals(PotionEffectType.DARKNESS))
-		{
-			return true;
-		}
-		return false;
+		return NEGATIVE_POTION_EFFECT_TYPES.contains(potionEffectType);
 	}
 
 	public static double getAttributeModifierAmount(CustomEffect customEffect)
