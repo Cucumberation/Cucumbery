@@ -322,9 +322,7 @@ public class RecipeInventoryRecipe
 				ItemMeta itemMeta = ingredient.getItemMeta();
 				List<Component> lore;
 				int amount = ingredientAmounts.get(i);
-				itemMeta.setMaxStackSize(Math.min(99, amount));
-				ingredient.setItemMeta(itemMeta);
-				ingredient.setAmount(Math.min(127, amount));
+				ingredient.setAmount(Math.min(99, amount));
 				String ingredientString = config.getString("recipes." + recipe + ".ingredients." + (i + 1) + ".item");
 				int playerAmount = ItemStackUtil.countItem(player.getInventory(), ingredient);
 				Component display = ItemNameUtil.itemName(ingredient, NamedTextColor.WHITE);
@@ -420,6 +418,8 @@ public class RecipeInventoryRecipe
 				createButtonLore.add(
 						ComponentUtil.create(display, "&8 : " + playerAmountColor + playerAmount + " &7/rgb0,255,84; " + amount + (reusable ? " &8[∞]" : "")));
 				itemMeta.lore(lore);
+				// 재료 개수가 64개를 초과할 경우를 위해 maxStackSize 변경
+				itemMeta.setMaxStackSize(99);
 				ingredient.setItemMeta(itemMeta);
 				// 재료 아이템은 ProtocolLib에 의해 아이템 설명 갱신이 되지 않도록 함
 				{

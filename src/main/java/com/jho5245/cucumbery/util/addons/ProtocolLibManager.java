@@ -797,6 +797,28 @@ public class ProtocolLibManager
 			}
 		});
 
+		protocolManager.addPacketListener(new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.HIGH, Server.SPAWN_ENTITY)
+		{
+			@Override
+			public void onPacketSending(PacketEvent event)
+			{
+				if (!Cucumbery.using_ProtocolLib)
+					return;
+				PacketContainer packet = event.getPacket();
+				Player player = event.getPlayer();
+				Entity entity = packet.getEntityModifier(player.getWorld()).read(0);
+				if (entity instanceof Item item)
+				{
+					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, item.getItemStack(), player);
+					int itemAmount = itemStack.getAmount();
+					Component itemName = ItemNameUtil.itemName(itemStack);
+					Component component =
+							itemAmount == 1 ? itemName : Component.translatable("%s (%s)").arguments(itemName, Component.text(itemAmount, Constant.THE_COLOR));
+					Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> mountTextDisplayToItem(protocolManager, player, component, item), 0L);
+				}
+			}
+		});
+
 		protocolManager.addPacketListener(new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.HIGH, Server.ENTITY_METADATA)
 		{
 			@Override
@@ -832,16 +854,7 @@ public class ProtocolLibManager
 
 					// entity metadata 패킷이 플레이어가 서버 접속 직후 보낸 패킷인지/접속 도중 보낸 패킷인지 구분하여
 					// 만약 서버 접속 직후 보낸 패킷이라면 일정 시간 뒤에 객체를 탑승시킨다.
-					long now = System.currentTimeMillis();
-					long playerJoined = player.getLastLogin();
-					if (now - playerJoined < 1000) // 접속 직후인 경우
-					{
-						Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> mountTextDisplayToItem(protocolManager, player, component, item), 0L);
-					}
-					else // 이미 접속 중인 경우
-					{
-						mountTextDisplayToItem(protocolManager, player, component, item);
-					}
+					mountTextDisplayToItem(protocolManager, player, component, item);
 				}
 				if (entity instanceof ItemFrame itemFrame)
 				{
@@ -894,7 +907,8 @@ public class ProtocolLibManager
 					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, ominousItemSpawner.getItem(), player);
 					StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
 					List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-					wrappedDataValues.add(new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
+					wrappedDataValues.add(
+							new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
 					watchableAccessor.write(0, wrappedDataValues);
 				}
 			}
@@ -1366,7 +1380,8 @@ public class ProtocolLibManager
 					String key = attribute.getAttributeKey();
 					switch (key)
 					{
-						case "camera_distance" -> {
+						case "camera_distance" ->
+						{
 							if (CustomEffectManager.hasEffect(player, CustomEffectType.SECRET_GUARD_EFFECT_PROTOCOL))
 							{
 								CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectType.SECRET_GUARD_EFFECT_PROTOCOL);
@@ -1375,7 +1390,7 @@ public class ProtocolLibManager
 									double d = doubleCustomEffect.getDouble();
 									if (attribute.getModifiers().isEmpty())
 									{
-//										MessageUtil.broadcastDebug("cancelled");
+										//										MessageUtil.broadcastDebug("cancelled");
 										event.setCancelled(true);
 									}
 									else
@@ -1383,9 +1398,10 @@ public class ProtocolLibManager
 										for (var modifier : attribute.getModifiers())
 										{
 											MinecraftKey minecraftKey = modifier.getKey();
-											if (minecraftKey != null && minecraftKey.getFullKey().equals(CustomEffectType.SECRET_GUARD_EFFECT.getNamespacedKey().toString()) && modifier.getAmount() == d)
+											if (minecraftKey != null && minecraftKey.getFullKey().equals(CustomEffectType.SECRET_GUARD_EFFECT.getNamespacedKey().toString())
+													&& modifier.getAmount() == d)
 											{
-//												MessageUtil.broadcastDebug("cancelled");
+												//												MessageUtil.broadcastDebug("cancelled");
 												event.setCancelled(true);
 											}
 										}
@@ -1393,13 +1409,16 @@ public class ProtocolLibManager
 								}
 							}
 						}
-						case "movement_speed" -> {
+						case "movement_speed" ->
+						{
 
 						}
-						case "block_break_speed" -> {
+						case "block_break_speed" ->
+						{
 
 						}
-						case "scale" -> {
+						case "scale" ->
+						{
 							if (CustomEffectManager.hasEffect(player, CustomEffectType.SNEAK_TO_GIANT_EFFECT_PROTOCOL))
 							{
 								CustomEffect customEffect = CustomEffectManager.getEffect(player, CustomEffectType.SNEAK_TO_GIANT_EFFECT_PROTOCOL);
@@ -1427,7 +1446,8 @@ public class ProtocolLibManager
 								}
 							}
 						}
-						default -> {
+						default ->
+						{
 						}
 					}
 				}
@@ -1677,14 +1697,17 @@ public class ProtocolLibManager
 			{
 				return text.value();
 			}
-			case Int i -> {
+			case Int i ->
+			{
 				return String.valueOf(i.integer());
 			}
-			case Dialog dialog -> {
+			case Dialog dialog ->
+			{
 				DialogLike dialogLike = dialog.dialog();
 				return dialogLike.toString();
 			}
-			case Custom custom -> {
+			case Custom custom ->
+			{
 				BinaryTagHolder nbt = custom.nbt();
 				return nbt.string();
 			}
