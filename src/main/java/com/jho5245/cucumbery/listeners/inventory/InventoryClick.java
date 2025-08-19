@@ -1484,7 +1484,7 @@ public class InventoryClick implements Listener
 			Method.playSound(player, Sound.ENTITY_VILLAGER_AMBIENT);
 		}
 		Method.playSound(player, Sound.BLOCK_NOTE_BLOCK_HAT, 1F, 1.4F);
-		String itemName = Objects.requireNonNull(item).getItemMeta().getDisplayName();
+		String itemName = item != null && item.hasItemMeta() ? item.getItemMeta().getDisplayName() : "";
 		if (itemName.startsWith("§와") && itemName.contains("§와"))
 		{
 			event.setCancelled(true);
