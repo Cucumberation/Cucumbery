@@ -49,7 +49,7 @@
 ### ProtocolLib
 ![img_22.png](README_images/img_22.png)
 바닥에 떨어져 있는 아이템 이름을 packet으로 전송
-![img_23.png](README_images/img_23.png)
+![img_23.png](README_images/img_23.png)  
 개체에게 피해를 입힐 때 준 피해량이 화면에 표시됨
 ### WorldEdit
 ![img_24.png](README_images/img_24.png)
