@@ -35,7 +35,7 @@ public class ItemSerializer
     }
     catch (Exception e)
     {
-      e.printStackTrace();
+      MessageUtil.consoleSendMessage("ItemStack Deserialization Error! ItemStack String: %s", String.valueOf(itemStack));
       return new ItemStack(Material.AIR);
     }
   }
