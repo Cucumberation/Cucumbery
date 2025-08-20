@@ -195,7 +195,7 @@ public class RecipeInventoryCategory
 					continue;
 				}
 				String recipe = recipes.get(i);
-				ItemStack result = ItemSerializer.deserialize(config.getString("recipes." + recipe + ".result"));
+				ItemStack result = ItemSerializer.deserialize(config.getString("recipes." + recipe + ".result"), true);
 				if (!ItemStackUtil.itemExists(result))
 				{
 					result = CreateItemStack.create(Material.BAKED_POTATO, 1, "rg255,204;알 수 없는 아이템", "&c&o손상된 레시피", true);
@@ -216,7 +216,7 @@ public class RecipeInventoryCategory
 						break;
 					}
 					ingredientAmounts.add(config.getInt("recipes." + recipe + ".ingredients." + j + ".amount"));
-					ItemStack ingredient = ItemSerializer.deserialize(ingredientString);
+					ItemStack ingredient = ItemSerializer.deserialize(ingredientString, true);
 					if (!ItemStackUtil.itemExists(ingredient) && !ingredientString.startsWith("predicate:"))
 					{
 						result = CreateItemStack.create(Material.MUSIC_DISC_11, 1, "rg255,204;알 수 없는 아이템", "&c&o손상된 레시피", true);
@@ -371,7 +371,7 @@ public class RecipeInventoryCategory
 					}
 					ingredientAmounts.add(config.getInt("recipes." + recipe + ".ingredients." + j + ".amount"));
 					boolean isPredicate = ingredientString.startsWith("predicate:");
-					ItemStack ingredient = ItemSerializer.deserialize(ingredientString);
+					ItemStack ingredient = ItemSerializer.deserialize(ingredientString, true);
 					int playerAmount = ItemStackUtil.countItem(player.getInventory(), ingredient);
 					if (isPredicate)
 					{

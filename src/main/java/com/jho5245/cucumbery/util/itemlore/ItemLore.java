@@ -175,7 +175,7 @@ public class ItemLore
 		}
 		else
 		{
-			itemGroup = ComponentUtil.translate(itemCategoryType.translationKey());
+			itemGroup = ComponentUtil.translate(type.translationKey());
 		}
 		if (customMaterial != null)
 		{

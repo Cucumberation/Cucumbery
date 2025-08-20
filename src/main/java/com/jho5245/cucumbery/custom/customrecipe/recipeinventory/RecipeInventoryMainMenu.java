@@ -150,7 +150,7 @@ public class RecipeInventoryMainMenu
       }
       String category = categoryNames.get(i);
       YamlConfiguration config = Variable.customRecipes.get(category);
-      ItemStack categoryItem = ItemSerializer.deserialize(config.getString("extra.displayitem"));
+      ItemStack categoryItem = ItemSerializer.deserialize(config.getString("extra.displayitem"), true);
       if (!ItemStackUtil.itemExists(categoryItem))
       {
         try

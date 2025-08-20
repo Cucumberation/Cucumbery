@@ -688,6 +688,7 @@ public class ProtocolLibManager
 				PacketContainer packet = event.getPacket();
 				Player player = event.getPlayer();
 				UUID uuid = player.getUniqueId();
+//				player.sendMessage(packet.getType().toString());
 				// 너무 자주 요청된 패킷은 처리하지 않고 반려
 				if (WINDOW_ITEMS_COOLDOWN_UUIDS.contains(uuid))
 					return;
@@ -711,6 +712,22 @@ public class ProtocolLibManager
 			}
 		});
 
+		protocolManager.addPacketListener(new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.NORMAL, Server.SET_CURSOR_ITEM)
+		{
+			@Override
+			public void onPacketSending(PacketEvent event)
+			{
+				if (!Cucumbery.using_ProtocolLib)
+				{
+					return;
+				}
+				PacketContainer packet = event.getPacket();
+				Player player = event.getPlayer();
+//				player.sendMessage(packet.getType().toString());
+				packet.getItemModifier().write(0, setItemLore(packet.getType(), packet.getItemModifier().read(0), player));
+			}
+		});
+
 		protocolManager.addPacketListener(new PacketAdapter(Cucumbery.getPlugin(), ListenerPriority.NORMAL, Server.SET_SLOT)
 		{
 			@Override
@@ -722,6 +739,7 @@ public class ProtocolLibManager
 				}
 				PacketContainer packet = event.getPacket();
 				Player player = event.getPlayer();
+//				player.sendMessage(packet.getType().toString());
 				StructureModifier<ItemStack> modifier = packet.getItemModifier();
 				modifier.write(0, setItemLore(packet.getType(), modifier.read(0), player));
 			}
@@ -1980,7 +1998,7 @@ public class ProtocolLibManager
 				new NBTItem(clone, true).mergeNBT(overrideItemStack);
 				ItemMeta originMeta = clone.getItemMeta();
 				originMeta.lore(originLore);
-				originMeta.displayName(originDisplayname);
+				originMeta.itemName(originDisplayname);
 				List<Component> cloneLore = originMeta.lore();
 				if (cloneLore == null)
 					cloneLore = new ArrayList<>();
@@ -2107,7 +2125,8 @@ public class ProtocolLibManager
 	private static final PacketType[] ITEM_TYPES = {
 			Server.WINDOW_ITEMS,
 			Server.OPEN_WINDOW_MERCHANT,
-			Server.SET_SLOT
+			Server.SET_SLOT,
+			Server.SET_CURSOR_ITEM,
 	};
 
 	public static int[] getBlockPositionOf(@NotNull Object object)

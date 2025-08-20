@@ -21,9 +21,13 @@ public class ItemSerializer
     }
     return NBTItem.convertItemtoNBT(itemStack).toString();
   }
+  @NotNull
+  public static ItemStack deserialize(@Nullable String itemStack) {
+    return deserialize(itemStack, false);
+  }
 
   @NotNull
-  public static ItemStack deserialize(@Nullable String itemStack)
+  public static ItemStack deserialize(@Nullable String itemStack, boolean ignoreException)
   {
     try
     {
@@ -35,7 +39,8 @@ public class ItemSerializer
     }
     catch (Exception e)
     {
-      MessageUtil.consoleSendMessage("ItemStack Deserialization Error! ItemStack String: %s", String.valueOf(itemStack));
+      if (!ignoreException)
+        MessageUtil.consoleSendMessage("ItemStack Deserialization Error! ItemStack String: %s", String.valueOf(itemStack));
       return new ItemStack(Material.AIR);
     }
   }
