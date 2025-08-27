@@ -16,14 +16,19 @@ import com.jho5245.cucumbery.util.storage.data.Prefix;
 import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBTList;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
+import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -75,6 +80,16 @@ public class TestCommand implements CucumberyCommandExecutor
 					packet.getIntegers().write(0, player.getEntityId());
 					packet.getAttributeCollectionModifier().write(0, attributes);
 					manager.sendServerPacket(player, packet);
+				}
+				case "entity-id" -> {
+					sender.sendMessage(Bukkit.getUnsafe().nextEntityId() + "");
+					List<Integer> integers = new ArrayList<>();
+					for (World world : Bukkit.getWorlds()) {
+						for (Entity entity : world.getEntities()) {
+							integers.add(entity.getEntityId());
+						}
+					}
+					sender.sendMessage(Arrays.toString(integers.toArray()));
 				}
 			}
 		}
