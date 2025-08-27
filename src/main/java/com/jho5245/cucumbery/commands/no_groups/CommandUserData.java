@@ -84,7 +84,8 @@ public class CommandUserData implements CucumberyCommandExecutor
       for (OfflinePlayer offlinePlayer : offlinePlayers)
       {
         UUID uuid = offlinePlayer.getUniqueId();
-        if (!key.get(uuid).toString().equalsIgnoreCase(value))
+        Object o = key.get(uuid);
+        if (o != null && !o.toString().equalsIgnoreCase(value))
         {
           successPlayers.add(offlinePlayer);
         }
