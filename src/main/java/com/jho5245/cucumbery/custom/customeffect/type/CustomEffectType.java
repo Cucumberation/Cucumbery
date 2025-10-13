@@ -184,7 +184,7 @@ public class CustomEffectType implements Translatable, EnumHideable
 			builder().keepOnDeath().defaultDuration(-1).description("관전 모드에서 다른 개체 관전 시 %s 효과가 적용됩니다", PotionEffectType.NIGHT_VISION)),
 
 	SUPERIOR_LEVITATION = new CustomEffectType("superior_levitation", "강력한 공중 부양",
-			builder().negative().maxAmplifier(127).icon(new ItemStack(Material.FEATHER)).description("노빠꾸로 공중으로 떠오릅니다")),
+			builder().negative().maxAmplifier(127).icon(Material.FEATHER).description("노빠꾸로 공중으로 떠오릅니다")),
 
 	SPYGLASS_TELEPORT = new CustomEffectType("spyglass_teleport", "망원경 텔레포트", builder().enumHidden().defaultDuration(60)),
 
@@ -218,32 +218,17 @@ public class CustomEffectType implements Translatable, EnumHideable
 
 	FLY = new CustomEffectType("fly", "플라이", builder().keepOnDeath()
 			.description(ComponentUtil.translate("비행 모드가 활성화 됩니다").append(Component.text("\n")).append(ComponentUtil.translate("자유롭게 비행할 수 있으며 낙하 피해를 입지 않습니다")))
-			.icon(() ->
-			{
-				ItemStack itemStack = new ItemStack(Material.ELYTRA);
-				ItemMeta itemMeta = itemStack.getItemMeta();
-				itemMeta.setCustomModelData(5201);
-				itemStack.setItemMeta(itemMeta);
-				return itemStack;
-			})),
+			.icon(Material.ELYTRA)),
 
 	FLY_REMOVE_ON_QUIT = new CustomEffectType("fly_remove_on_quit", "플라이", builder().keepOnDeath().removeOnQuit()
 			.description(ComponentUtil.translate("비행 모드가 활성화 됩니다").append(Component.text("\n")).append(ComponentUtil.translate("자유롭게 비행할 수 있으며 낙하 피해를 입지 않습니다")))
-			.icon(() ->
-			{
-				ItemStack itemStack = new ItemStack(Material.ELYTRA);
-				ItemMeta itemMeta = itemStack.getItemMeta();
-				itemMeta.setCustomModelData(5201);
-				itemStack.setItemMeta(itemMeta);
-				return itemStack;
-			})),
+			.icon(Material.ELYTRA)),
 
 	FLY_NOT_ENABLED = new CustomEffectType("fly_not_enabled", "플라이 불가 지역",
 			builder().keepOnDeath().negative().description("비행 모드를 사용할 수 없는 지역입니다").timeHidden().icon(() ->
 			{
 				ItemStack itemStack = new ItemStack(Material.ELYTRA);
 				ItemMeta itemMeta = itemStack.getItemMeta();
-				itemMeta.setCustomModelData(5203);
 				itemMeta.setUnbreakable(true);
 				((Damageable) itemMeta).setDamage(Material.ELYTRA.getMaxDurability() - 1);
 				itemStack.setItemMeta(itemMeta);
@@ -276,7 +261,7 @@ public class CustomEffectType implements Translatable, EnumHideable
 
 	BLANKET_LOVER = new CustomEffectType("blanket_lover", "우와 이불 \uD83D\uDE01 너무 조아",
 			builder().removeOnMilk().description("이불 너무 조아... 안 일어날 거야..").icon(new ItemStack(Material.RED_BED)).defaultDuration(20 * 10)
-					.targetFilter(e -> e instanceof Player).customModelData(25201)),
+					.targetFilter(e -> e instanceof Player)),
 
 	HIDE_ITEM_INFORMATION = new CustomEffectType("hide_item_information", "아이템 정보 숨김",
 			builder().negative().keepOnDeath().description("정보 모릅니다.").icon(new ItemStack(Material.BARRIER))),
@@ -395,7 +380,7 @@ public class CustomEffectType implements Translatable, EnumHideable
 
 	private final String id, translationKey, shortenTranslationKey;
 
-	private final int maxAmplifier, defaultDuration, customModelData;
+	private final int maxAmplifier, defaultDuration;
 
 	private final boolean isBuffFreezable, isKeepOnDeath, isKeepOnMilk, isKeepOnQuit, isRealDuration, isRemoveable, isNegative, isInstant;
 
@@ -456,7 +441,6 @@ public class CustomEffectType implements Translatable, EnumHideable
 
 		this.maxAmplifier = builder.getMaxAmplifier();
 		this.defaultDuration = builder.getDefaultDuration();
-		this.customModelData = builder.getCustomModelData();
 
 		this.description = builder.getDescription();
 		this.icon = builder.getIcon();
@@ -490,7 +474,6 @@ public class CustomEffectType implements Translatable, EnumHideable
 
 		this.maxAmplifier = builder.getMaxAmplifier();
 		this.defaultDuration = builder.getDefaultDuration();
-		this.customModelData = builder.getCustomModelData();
 
 		this.description = builder.getDescription();
 		this.icon = builder.getIcon();
@@ -915,122 +898,6 @@ public class CustomEffectType implements Translatable, EnumHideable
 	}
 
 	/**
-	 * @return 아이콘에 부여할 CustomModelData magic value입니다
-	 */
-	@SuppressWarnings("all")
-	public int getId()
-	{
-		if (this.namespacedKey.getNamespace().equals("minecraft"))
-		{
-			NamespacedKey key = namespacedKey;
-			if (key.getKey().contains("__"))
-				key = new NamespacedKey(key.getNamespace(), key.getKey().split("__")[0]);
-			PotionEffectType effectType = PotionEffectType.getByKey(key);
-			if (effectType != null)
-			{
-				return 15200 + effectType.getId();
-			}
-		}
-		// 가장 높은 버프 숫자 : 92 = RUNE_EXPERIENCE;
-		return 5200 + switch (this.id)
-		{
-			case "awkward" -> 1;
-			case "bane_of_arthropods" -> 2;
-			case "bless_of_sans" -> 54;
-			case "bless_of_villager" -> 79;
-			case "boss_slayer" -> 76;
-			case "bread_kimochi" -> 78;
-			case "buff_freeze" -> 3;
-			case "cheese_experiment" -> 4;
-			case "combat_booster" -> 86;
-			case "combat_mode_melee" -> 72;
-			case "combat_mode_melee_cooldown" -> 73;
-			case "combat_mode_ranged" -> 74;
-			case "combat_mode_ranged_cooldown" -> 75;
-			case "confusion" -> 5;
-			case "continual_spectating" -> 6;
-			case "continual_spectating_exempt" -> 81;
-			case "cooldown_chat" -> 7;
-			case "cooldown_item_megaphone" -> 8;
-			case "curse_of_beans" -> 9;
-			case "curse_of_consumption" -> 10;
-			case "curse_of_creativity" -> 11;
-			case "curse_of_creativity_break" -> 12;
-			case "curse_of_creativity_place" -> 13;
-			case "curse_of_drop" -> 14;
-			case "curse_of_inventory" -> 15;
-			case "curse_of_jumping" -> 16;
-			case "curse_of_mushroom" -> 17;
-			case "curse_of_pickup" -> 18;
-			case "darkness_terror" -> 19;
-			case "darkness_terror_activated" -> 20;
-			case "darkness_terror_resistance" -> 21;
-			case "debug_watcher" -> 22;
-			case "do_not_pickup_but_throw_it" -> 23;
-			case "dodge" -> 24;
-			case "elytra_booster" -> 25;
-			case "experience_boost" -> 82;
-			case "ender_slayer" -> 77;
-			case "fancy_spotlight" -> 26;
-			case "fancy_spotlight_activated" -> 27;
-			case "feather_falling" -> 28;
-			case "freezing" -> 85;
-			case "frost_walker" -> 29;
-			case "gaesans" -> 90;
-			case "health_increase" -> 30;
-			case "heros_echo" -> 31;
-			case "heros_echo_others" -> 32;
-			case "idiot_shooter" -> 33;
-			case "insider" -> 34;
-			case "invincible" -> 35;
-			case "invincible_plugin_reload" -> 36;
-			case "invincible_respawn" -> 37;
-			case "keep_inventory" -> 38;
-			case "kinetic_resistance" -> 39;
-			case "knockback_resistance" -> 40;
-			case "knockback_resistance_combat" -> 41;
-			case "knockback_resistance_non_combat" -> 42;
-			case "levitation_resistance" -> 43;
-			case "mundane" -> 44;
-			case "mute" -> 45;
-			case "newbie_shield" -> 46;
-			case "no_buff_remove" -> 83;
-			case "no_entity_aggro" -> 47;
-			case "no_regeneration" -> 84;
-			case "nothing" -> 48;
-			case "outsider" -> 49;
-			case "parrots_cheer" -> 50;
-			case "pvp_mode" -> 87;
-			case "pvp_mode_enabled" -> 88;
-			case "pvp_mode_cooldown" -> 89;
-			case "resurrection" -> 51;
-			case "resurrection_cooldown" -> 52;
-			case "resurrection_invincible" -> 53;
-			case "rune_cooldown" -> 91;
-			case "rune_experience" -> 92;  ///////////////////////////////// <--[here]
-			case "server_radio_listening" -> 56;
-			case "sharpness" -> 57;
-			case "silk_touch" -> 58;
-			case "smelting_touch" -> 59;
-			case "smite" -> 60;
-			case "spread" -> 61;
-			case "stop" -> 62;
-			case "telekinesis" -> 63;
-			case "thick" -> 64;
-			case "town_shield" -> 80;
-			case "troll_inventory_property" -> 65;
-			case "true_invisibility" -> 66;
-			case "uncraftable" -> 67;
-			case "var_detoxicate" -> 68;
-			case "var_pneumonia" -> 69;
-			case "var_podagra" -> 70;
-			case "var_stomachache" -> 71;
-			case "wa_sans" -> 55;
-			default -> 0;
-		};
-	}
-
-	/**
 	 * 다른 효과와 중첩되지 않는 효과를 반환합니다.
 	 *
 	 * @return 중첩되지 않는 효과 목록 혹은 빈 목록
@@ -1168,11 +1035,6 @@ public class CustomEffectType implements Translatable, EnumHideable
 	public int getDefaultDuration()
 	{
 		return defaultDuration;
-	}
-
-	public int getCustomModelData()
-	{
-		return customModelData;
 	}
 
 	public boolean isInstant()

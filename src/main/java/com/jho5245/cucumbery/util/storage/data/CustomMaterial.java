@@ -518,7 +518,8 @@ public enum CustomMaterial implements Translatable
 			CreativeCategory.BUILDING_BLOCKS),
 	WEATHER_FORECAST(Material.ENDER_EYE, "key:item.cucumbery.weather_forecast|날씨를 알려주는 눈", Rarity.ELITE, CreativeCategory.TOOLS),
 	WNYNYA_ORE(Material.PLAYER_HEAD, "rgb200,100,255;key:block.cucumbery.wnynya_ore|완YEE 광석", Rarity.RARE, "itemGroup.natural"),
-
+	YOUPEOPLEGAME_DAMP_COOKIE(Material.COOKIE, "&6key:item.youpeoplegame.damp_cookie|눅눅한 쿠키", Rarity.JUNK, "눅눅한 쿠키"),
+	YOUPEOPLEGAME_DAMP_COOKIE_PILE(Material.COOKIE, "&6&lkey:item.youpeoplegame.damp_cookie_pile|뭉친 눅눅한 쿠키", "눅눅한 쿠키"),
 	;
 
 	private final Material displayMaterial;
@@ -610,7 +611,7 @@ public enum CustomMaterial implements Translatable
 	{
 		return this.toString().startsWith("ENCHANTED") || switch (this)
 		{
-			case TODWOT_PICKAXE, IQ_CHOOK_CHUCK -> true;
+			case TODWOT_PICKAXE, IQ_CHOOK_CHUCK, YOUPEOPLEGAME_DAMP_COOKIE_PILE -> true;
 			default -> false;
 		};
 	}

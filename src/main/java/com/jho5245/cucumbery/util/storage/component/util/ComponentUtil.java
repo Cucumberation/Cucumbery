@@ -43,6 +43,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.components.CustomModelDataComponent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
@@ -319,10 +320,9 @@ public class ComponentUtil
 				{
 					new NBTItem(icon, true).setBoolean("VirtualItem", true);
 					ItemMeta itemMeta = icon.getItemMeta();
-					if (!itemMeta.hasCustomModelData())
-					{
-						itemMeta.setCustomModelData(effectType.getId());
-					}
+					CustomModelDataComponent customModelDataComponent = itemMeta.getCustomModelDataComponent();
+					customModelDataComponent.setStrings(Collections.singletonList(effectType.toString().toLowerCase()));
+					itemMeta.setCustomModelDataComponent(customModelDataComponent);
 					itemMeta.displayName(concat.decoration(TextDecoration.ITALIC, State.FALSE));
 					List<Component> lore = convertHoverToItemLore(hover, false);
 					lore.remove(0);
@@ -405,10 +405,9 @@ public class ComponentUtil
 				{
 					new NBTItem(icon, true).setBoolean("VirtualItem", true);
 					ItemMeta itemMeta = icon.getItemMeta();
-					if (!itemMeta.hasCustomModelData())
-					{
-						itemMeta.setCustomModelData(effectType.getId());
-					}
+					CustomModelDataComponent customModelDataComponent = itemMeta.getCustomModelDataComponent();
+					customModelDataComponent.setStrings(Collections.singletonList(effectType.toString().toLowerCase()));
+					itemMeta.setCustomModelDataComponent(customModelDataComponent);
 					itemMeta.displayName(concat.decoration(TextDecoration.ITALIC, State.FALSE));
 					List<Component> lore = convertHoverToItemLore(hover, false);
 					lore.remove(0);

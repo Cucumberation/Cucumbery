@@ -312,6 +312,13 @@ public class ItemLore3
             description.add(Component.empty());
             description.add(ComponentUtil.translate("&7&o악 더러워!"));
           }
+					case YOUPEOPLEGAME_DAMP_COOKIE -> {
+						description.add(ComponentUtil.translate("&75초를 기다려 얻은 쿠키다."));
+						description.add(ComponentUtil.translate("&7어딘가 좀 눅눅하다."));
+					}
+					case YOUPEOPLEGAME_DAMP_COOKIE_PILE -> {
+						description.add(ComponentUtil.translate("&7뭉쳐서 이름이 굵어졌다."));
+					}
         }
       }
       if (!customType.isEmpty())

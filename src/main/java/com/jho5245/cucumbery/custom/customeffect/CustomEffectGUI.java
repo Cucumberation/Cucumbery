@@ -30,6 +30,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.inventory.meta.components.CustomModelDataComponent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -137,21 +138,9 @@ public class CustomEffectGUI
 				itemMeta.displayName(ComponentUtil.translate(key).color(effectType.isNegative() ? NamedTextColor.RED : NamedTextColor.GREEN)
 						.decoration(TextDecoration.ITALIC, State.FALSE));
 				itemMeta.lore(customEffectLore(player, customEffect));
-				if (!itemMeta.hasCustomModelData())
-				{
-					itemMeta.setCustomModelData(effectType.getId());
-				}
-				if (effectType.getCustomModelData() != -1)
-				{
-					itemMeta.setCustomModelData(effectType.getCustomModelData());
-				}
-				if (effectType == CustomEffectType.FLY || effectType == CustomEffectType.FLY_REMOVE_ON_QUIT)
-				{
-					if (CustomEffectManager.hasEffect(player, CustomEffectType.FLY_NOT_ENABLED))
-					{
-						itemMeta.setCustomModelData(5202);
-					}
-				}
+				CustomModelDataComponent customModelDataComponent = itemMeta.getCustomModelDataComponent();
+				customModelDataComponent.setStrings(Collections.singletonList(effectType.toString().toLowerCase()));
+				itemMeta.setCustomModelDataComponent(customModelDataComponent);
 				itemStack.setItemMeta(itemMeta);
 				if (customEffect.isRemoveable())
 				{
@@ -173,8 +162,9 @@ public class CustomEffectGUI
 				PotionMeta potionMeta = (PotionMeta) itemStack.getItemMeta();
 				potionMeta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP, ItemFlag.HIDE_ENCHANTS);
 				String effectKey = effectType.translationKey();
-				int id = potionEffect.getType().getId() + 15200;
-				potionMeta.setCustomModelData(id);
+				CustomModelDataComponent customModelDataComponent = potionMeta.getCustomModelDataComponent();
+				customModelDataComponent.setStrings(Collections.singletonList(effectType.toString().toLowerCase()));
+				potionMeta.setCustomModelDataComponent(customModelDataComponent);
 				potionMeta.displayName(ComponentUtil.translate((CustomEffectManager.isVanillaNegative(effectType) ? "&c" : "&a") + effectKey));
 				potionMeta.setColor(effectType.getColor());
 				potionMeta.lore(potionEffectLore(player, potionEffect));

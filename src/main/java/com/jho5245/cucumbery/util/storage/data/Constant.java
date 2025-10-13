@@ -320,6 +320,7 @@ public class Constant
     NO_BLOCK_PISTON_PUSH("피스톤으로 밀기 불가"),
     NO_BLOCK_STORE("보관 불가(블록)"),
     NO_BLOCK_TRADE("캐릭터 귀속(블록)"),
+		NO_BLOCK_CRAFTING_TABLE("제작대로 사용 불가"),
     NO_BREAK("블록 파괴 도구로 사용 불가"),
     NO_BREW("양조기에서 사용 불가"),
     NO_BUCKET("양동이로 사용 불가"),

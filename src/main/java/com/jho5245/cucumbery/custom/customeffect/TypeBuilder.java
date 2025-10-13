@@ -18,7 +18,7 @@ public class TypeBuilder
 {
   private @Nullable String shortenTranslationKey;
 
-  private int maxAmplifier, defaultDuration = 20 * 30, customModelData = -1;
+  private int maxAmplifier, defaultDuration = 20 * 30;
 
   private boolean isBuffFreezable = true;
   private boolean isKeepOnDeath;
@@ -178,16 +178,6 @@ public class TypeBuilder
   }
   
   /**
-   * 효과 아이콘에 사용할 커스텀 모델 데이터
-   */
-  @NotNull
-  public TypeBuilder customModelData(int customModelData)
-  {
-    this.customModelData = customModelData;
-    return this;
-  }
-  
-  /**
    * 효과 설명 지정
    */
   @NotNull
@@ -342,11 +332,6 @@ public class TypeBuilder
   public Component getDescription()
   {
     return description;
-  }
-
-  public int getCustomModelData()
-  {
-    return customModelData;
   }
 
   @Nullable

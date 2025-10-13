@@ -55,6 +55,8 @@ public class PlayerJoin implements Listener
       BlockPlaceDataConfig.display(player, player.getLocation());
     }
     UserData.WINDOW_ID.set(uuid, 0);
+		// Update Inventory
+		Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->ItemStackUtil.updateInventory(player), 0L);
     Initializer.setNickName(player);
     String name = Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName());
     YamlConfiguration cfg = Cucumbery.config;

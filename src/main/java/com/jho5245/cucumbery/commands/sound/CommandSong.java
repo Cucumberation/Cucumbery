@@ -1105,6 +1105,9 @@ public class CommandSong implements CucumberyCommandExecutor
 					}
 				}
 			}
+			case "csong-menu" -> {
+
+			}
 		}
 		return true;
 	}

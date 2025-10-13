@@ -693,18 +693,18 @@ public class ProtocolLibManager
 				if (WINDOW_ITEMS_COOLDOWN_UUIDS.contains(uuid))
 					return;
 				WINDOW_ITEMS_COOLDOWN_UUIDS.add(uuid);
-				Bukkit.getScheduler().runTaskLaterAsynchronously(Cucumbery.getPlugin(), () -> WINDOW_ITEMS_COOLDOWN_UUIDS.remove(uuid), 0L);
+				Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> WINDOW_ITEMS_COOLDOWN_UUIDS.remove(uuid), 0L);
 				// 아이템이 표시될 때 실제 적용되야 하는 nbt는 적용함
-				{
-					Inventory bottom = player.getOpenInventory().getBottomInventory();
-					for (int i = 0; i < bottom.getSize(); i++)
-					{
-						ItemStack bottomItemStack = bottom.getItem(i);
-						if (!ItemStackUtil.itemExists(bottomItemStack))
-							continue;
-						bottom.setItem(i, ItemLore.setItemLore(bottomItemStack, true, ItemLoreView.of(player)));
-					}
-				}
+//				{
+//					Inventory bottom = player.getOpenInventory().getBottomInventory();
+//					for (int i = 0; i < bottom.getSize(); i++)
+//					{
+//						ItemStack bottomItemStack = bottom.getItem(i);
+//						if (!ItemStackUtil.itemExists(bottomItemStack))
+//							continue;
+//						bottom.setItem(i, ItemLore.setItemLore(bottomItemStack, true, ItemLoreView.of(player)));
+//					}
+//				}
 				UserData.WINDOW_ID.set(uuid, packet.getIntegers().read(0));
 				packet.getItemModifier().write(0, setItemLore(packet.getType(), packet.getItemModifier().read(0), player));
 				StructureModifier<List<ItemStack>> modifier = packet.getItemListModifier();
@@ -723,7 +723,6 @@ public class ProtocolLibManager
 				}
 				PacketContainer packet = event.getPacket();
 				Player player = event.getPlayer();
-//				player.sendMessage(packet.getType().toString());
 				packet.getItemModifier().write(0, setItemLore(packet.getType(), packet.getItemModifier().read(0), player));
 			}
 		});
