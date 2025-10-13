@@ -250,6 +250,15 @@
             <version>22.4</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- DeluxeAuctions Dependency -->
+        <dependency>
+            <groupId>me.sedattr.deluxeauctions</groupId>
+            <artifactId>deluxeauctions</artifactId>
+            <version>3.8</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/DeluxeAuctions.jar</systemPath>
+        </dependency>
     </dependencies>
 
     <build>
