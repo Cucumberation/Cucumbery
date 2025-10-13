@@ -18,6 +18,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.type.CommandBlock;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -31,6 +32,12 @@ public class ServerCommand implements Listener
   @EventHandler
   public void onServerCommand(ServerCommandEvent event)
   {
+		// 콘솔에서 rlc 치면 bukkit:rl confirm 명령어 실행
+		if (event.getSender() instanceof ConsoleCommandSender && event.getCommand().equals("rlc"))
+		{
+			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "rlc");
+			return;
+		}
     String command = event.getCommand();
     if (command.contains("--cucumbery"))
     {
