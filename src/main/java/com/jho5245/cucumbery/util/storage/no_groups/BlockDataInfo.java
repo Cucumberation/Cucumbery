@@ -440,7 +440,7 @@ public class BlockDataInfo
           return getNumbers(3);
         }
         break;
-			case IRON_CHAIN, COPPER_CHAIN:
+      case CHAIN:
         switch (key)
         {
           case "axis":
