@@ -1,5 +1,5 @@
 .idea
 target
 dependency-reduced-pom.xml
-.gitignore
 qodana.yaml
+lib
