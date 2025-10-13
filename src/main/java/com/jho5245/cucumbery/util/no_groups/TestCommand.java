@@ -53,34 +53,6 @@ public class TestCommand implements CucumberyCommandExecutor
 					Player player = (Player) sender;
 					MessageUtil.info(player, player.getLocation().getBlock().getBiome().getKey());
 				}
-				case "bottle" -> {
-					NBT.modifyComponents(((Player) sender).getInventory().getItemInMainHand(), nbt -> {
-						ReadWriteNBT tooltipDisplay = nbt.getOrCreateCompound("minecraft:tooltip_display");
-						ReadWriteNBTList<String> hiddenCompoents = tooltipDisplay.getStringList("hidden_components");
-						hiddenCompoents.add("minecraft:ominous_bottle_amplifier");
-					});
-				}
-				case "attribute" -> {
-					Player player = (Player) sender;
-					ProtocolManager manager = ProtocolLibrary.getProtocolManager();
-					PacketContainer packet = manager.createPacket(Server.UPDATE_ATTRIBUTES);
-					var attributes = Lists.newArrayList(
-					WrappedAttribute.newBuilder()
-							.attributeKey("camera_distance")
-							.baseValue(player.getAttribute(Attribute.CAMERA_DISTANCE).getBaseValue())
-							.addModifier(
-									WrappedAttributeModifier.newBuilder()
-											.key("cucumbery", "test")
-											.operation(Operation.ADD_NUMBER)
-											.amount(3d)
-									.build()
-							)
-							.build()
-					);
-					packet.getIntegers().write(0, player.getEntityId());
-					packet.getAttributeCollectionModifier().write(0, attributes);
-					manager.sendServerPacket(player, packet);
-				}
 				case "entity-id" -> {
 					sender.sendMessage(Bukkit.getUnsafe().nextEntityId() + "");
 					List<Integer> integers = new ArrayList<>();
