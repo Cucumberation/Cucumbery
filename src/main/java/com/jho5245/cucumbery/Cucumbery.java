@@ -25,6 +25,7 @@ import com.jho5245.cucumbery.custom.recipe.RecipeManager;
 import com.jho5245.cucumbery.listeners.AsyncTabComplete;
 import com.jho5245.cucumbery.listeners.UnknownCommand;
 import com.jho5245.cucumbery.listeners.addon.deluxeacutions.AuctionCreate;
+import com.jho5245.cucumbery.listeners.addon.deluxeacutions.ItemPreview;
 import com.jho5245.cucumbery.listeners.addon.gsit.PreEntitySit;
 import com.jho5245.cucumbery.listeners.addon.noteblockapi.SongEnd;
 import com.jho5245.cucumbery.listeners.addon.quickshop.*;
@@ -1059,6 +1060,7 @@ public class Cucumbery extends JavaPlugin
 		if (using_DeluxeAuctions)
 		{
 			Initializer.registerEvent(new AuctionCreate());
+			Initializer.registerEvent(new ItemPreview());
 		}
 	}
 
