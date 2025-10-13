@@ -277,8 +277,7 @@
                             </mainClass>
                         </manifest>
                     </archive>
-<!--                    <outputDirectory>G:\CucumberyAutoUpdater</outputDirectory>-->
-                    <outputDirectory>G:\느아아ㅏㅏ아아ㅏ앙ㄺ\게임\마인크래프트\기타 자료\서버\페이퍼 1.21.8 테스트 서버\plugins</outputDirectory>
+                    <outputDirectory>C:\minecraft_plugins</outputDirectory>
                 </configuration>
             </plugin>
             <plugin>
