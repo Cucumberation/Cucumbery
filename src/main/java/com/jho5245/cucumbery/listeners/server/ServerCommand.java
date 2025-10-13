@@ -35,7 +35,7 @@ public class ServerCommand implements Listener
 		// 콘솔에서 rlc 치면 bukkit:rl confirm 명령어 실행
 		if (event.getSender() instanceof ConsoleCommandSender && event.getCommand().equals("rlc"))
 		{
-			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "rlc");
+			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "bukkit:rl confirm");
 			return;
 		}
     String command = event.getCommand();
