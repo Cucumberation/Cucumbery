@@ -9,18 +9,18 @@ import com.jho5245.cucumbery.util.storage.data.Prefix;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import net.kyori.adventure.audience.Audience;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.lang.module.Configuration;
+import java.util.*;
 
 public class CommandUserData implements CucumberyCommandExecutor
 {
@@ -51,7 +51,7 @@ public class CommandUserData implements CucumberyCommandExecutor
       {
         return failure;
       }
-      String keyString = args[1].toLowerCase();
+      String keyString = args[1];
 			boolean isCustomData = keyString.startsWith(UserData.CUSTOM_DATA.getKey());
       UserData key = null;
 			if (!isCustomData)
@@ -241,7 +241,22 @@ public class CommandUserData implements CucumberyCommandExecutor
     }
     else if (length == 2)
     {
-      return CommandTabUtil.tabCompleterList(args, UserData.values(), "<데이터 키>");
+			List<Completion> list = CommandTabUtil.tabCompleterList(args, UserData.values(), "<데이터 키>");
+			if (args[1].startsWith("custom_data"))
+			{
+				OfflinePlayer offlinePlayer = SelectorUtil.getOfflinePlayer(sender, args[1], false);
+				if (offlinePlayer != null)
+				{
+					CustomConfig customConfig = CustomConfig.getPlayerConfig(offlinePlayer);
+					ConfigurationSection section = customConfig.getConfig().getConfigurationSection(UserData.CUSTOM_DATA.getKey());
+					if (section != null)
+					{
+						Set<String> keys = section.getKeys(true);
+						return CommandTabUtil.sortError(list, CommandTabUtil.tabCompleterList(args, keys, "<커스텀 데이터>"));
+					}
+				}
+			}
+			return list;
     }
     else if (length == 3)
     {
