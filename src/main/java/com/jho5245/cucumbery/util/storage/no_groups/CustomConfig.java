@@ -67,7 +67,7 @@ public class CustomConfig
 			{
 				continue;
 			}
-			// custom-data를 제외한 UserData에 없는 키들은 전부 삭제한다.
+			// UserData에 없는 키들은 전부 삭제한다.
 			if (!dataKeys.contains(key))
 			{
 				config.set(key, null);
@@ -385,7 +385,7 @@ public class CustomConfig
 		MINING_SPEED_RATIO_MODIFIER_LIGHT_PENALTY("채광-속도-비율-수정자-빛-페널티", 0),
 		IGNORE_MINING_SPEED_RATIO_MODIFIER_LIGHT_PENALTY("채광-속도-비율-수정자-빛-페널티-무시", false),
 		SHOW_CLICK_EVENT_INFORMATION_ON_CHAT_IF_NULL("채팅-메시지-클릭-이벤트-정보-표시(없을 경우)", false),
-		CUSTOM_DATA("custom-data", new Object())
+		CUSTOM_DATA("custom_data", Collections.EMPTY_LIST)
 		;
 
 		private final String key;
@@ -607,6 +607,21 @@ public class CustomConfig
 				config = CustomConfig.getPlayerConfig(uuid).getConfig();
 			}
 			return config.getString(key, defaultValue);
+		}
+
+		public static Object get(OfflinePlayer offlinePlayer, String key)
+		{
+			return get(offlinePlayer.getUniqueId(), key);
+		}
+
+		public static Object get(UUID uuid, String key)
+		{
+			YamlConfiguration config = Variable.userData.get(uuid);
+			if (config == null)
+			{
+				config = CustomConfig.getPlayerConfig(uuid).getConfig();
+			}
+			return config.get(key);
 		}
 
 		public static void set(OfflinePlayer player, String key, Object value) {

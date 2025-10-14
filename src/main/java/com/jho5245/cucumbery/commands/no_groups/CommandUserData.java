@@ -52,29 +52,33 @@ public class CommandUserData implements CucumberyCommandExecutor
         return failure;
       }
       String keyString = args[1].toLowerCase();
-      UserData key;
-      try
-      {
-        key = UserData.valueOf(keyString.toUpperCase());
-      }
-      catch (Exception e)
-      {
-        MessageUtil.noArg(sender, Prefix.NO_KEY, keyString);
-        return true;
-      }
+			boolean isCustomData = keyString.startsWith(UserData.CUSTOM_DATA.getKey());
+      UserData key = null;
+			if (!isCustomData)
+			{
+				try
+				{
+					key = UserData.valueOf(keyString.toUpperCase());
+				}
+				catch (Exception e)
+				{
+					MessageUtil.noArg(sender, Prefix.NO_KEY, keyString);
+					return true;
+				}
+			}
       if (length == 2)
       {
         HashMap<Object, List<OfflinePlayer>> map = new HashMap<>();
         for (OfflinePlayer offlinePlayer : offlinePlayers)
         {
-          Object obj = key.get(offlinePlayer);
+          Object obj = isCustomData ? UserData.get(offlinePlayer, keyString) : key.get(offlinePlayer);
           List<OfflinePlayer> list = map.getOrDefault(obj, new ArrayList<>());
           list.add(offlinePlayer);
           map.put(obj, list);
         }
         for (Object obj : map.keySet())
         {
-          MessageUtil.info(sender, "%s의 %s은(는) %s입니다", map.get(obj), key, Constant.THE_COLOR_HEX + obj);
+          MessageUtil.info(sender, "%s의 %s은(는) %s입니다", map.get(obj), isCustomData ? keyString : key, Constant.THE_COLOR_HEX + obj);
         }
         return true;
       }
@@ -164,6 +168,10 @@ public class CommandUserData implements CucumberyCommandExecutor
             }
             config.getConfig().set(key.getKey(), intVal);
           }
+					case CUSTOM_DATA -> {
+						MessageUtil.sendWarn(sender, "custom-data 편집 기능은 준비중입니다");
+						return true;
+					}
           default ->
           {
             if (!value.equals("true") && !value.equals("false"))
