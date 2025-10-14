@@ -1253,8 +1253,12 @@ public class ItemLoreCustomItem
 				}
 				case YOUPEOPLEGAME_BURNING_FIRE -> {
 					itemMeta.setItemModel(Material.CAMPFIRE.getKey());
+					itemMeta.setMaxStackSize(64);
 				}
-				case YOUPEOPLEGAME_CRISPY_COOKIE_BOX -> itemMeta.setItemModel(Material.ORANGE_SHULKER_BOX.getKey());
+				case YOUPEOPLEGAME_CRISPY_COOKIE_BOX -> {
+					itemMeta.setItemModel(Material.ORANGE_SHULKER_BOX.getKey());
+					itemMeta.setMaxStackSize(64);
+				}
 			}
 			// 반짝이 효과가 없는 아이템 중 디버그 막대기인 아이템은 반짝이 효과 제거
 			if (customMaterial.getDisplayMaterial() == Material.DEBUG_STICK && !customMaterial.isGlow() && !itemMeta.hasEnchants())
