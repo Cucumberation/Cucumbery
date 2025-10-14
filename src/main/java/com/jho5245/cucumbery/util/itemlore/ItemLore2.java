@@ -3,6 +3,7 @@ package com.jho5245.cucumbery.util.itemlore;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
+import com.jho5245.cucumbery.util.no_groups.Method2;
 import com.jho5245.cucumbery.util.no_groups.PlaceHolderUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
@@ -322,22 +323,7 @@ public class ItemLore2
 			long rarity = customRarityTag.getLong(CucumberyTag.VALUE_KEY);
 			ItemLoreUtil.setItemRarityValue(lore, rarity);
 		}
-		// 커스텀 아이템 등급(강제 설정)
-		String customRarityFinal = NBTAPI.getString(customRarityTag, CucumberyTag.CUSTOM_RARITY_FINAL_KEY);
-		if (customRarityFinal != null)
-		{
-			try
-			{
-				if (!customRarityFinal.startsWith("_"))
-				{
-					ItemLoreUtil.setItemRarityValue(lore, ItemCategory.Rarity.valueOf(customRarityFinal).getRarityValue(), false);
-				}
-			}
-			catch (Exception ignored)
-			{
 
-			}
-		}
 		// 내구도 무한 아이템이 아니면 내구도 무한 설명 숨김 태그 제거
 		if (!itemMeta.isUnbreakable() && itemMeta.hasItemFlag(ItemFlag.HIDE_UNBREAKABLE))
 		{
@@ -414,17 +400,6 @@ public class ItemLore2
 		{
 			rarity = ItemCategory.getItemRarirty(type);
 		}
-		if (customRarityFinal != null && customRarityFinal.startsWith("_"))
-		{
-			try
-			{
-				rarity = Rarity.valueOf(customRarityFinal);
-			}
-			catch (Exception ignored)
-			{
-
-			}
-		}
 		boolean rarityUpgraded = (nbtItem.hasTag("RarityUpgraded") && nbtItem.getType("RarityUpgraded") == NBTType.NBTTagByte && Objects.equals(
 				nbtItem.getBoolean("RarityUpgraded"), true));
 		if (rarityUpgraded)
@@ -438,6 +413,13 @@ public class ItemLore2
 			rarityComponent = ComponentUtil.translate("A %s A", rarityComponent.decoration(TextDecoration.OBFUSCATED, State.FALSE))
 					.decoration(TextDecoration.OBFUSCATED, State.TRUE).decoration(TextDecoration.BOLD, rarityComponent.decoration(TextDecoration.BOLD))
 					.color(rarityComponent.color());
+		}
+		// 커스텀 아이템 등급(강제 설정)
+		String customRarityFinal = NBTAPI.getString(customRarityTag, CucumberyTag.CUSTOM_RARITY_FINAL_KEY);
+		if (customRarityFinal != null)
+		{
+			Rarity finalRarity = Method2.valueOf(customRarityFinal, Rarity.class);
+			rarityComponent = ComponentUtil.translate(finalRarity != null ? finalRarity.getDisplay() : customRarityFinal);
 		}
 		Component itemRarityComponent = ComponentUtil.translate("&7아이템 등급 : %s", rarityComponent);
 		lore.set(2, itemRarityComponent);

@@ -11,9 +11,12 @@ import com.jho5245.cucumbery.util.storage.data.Constant.ExtraTag;
 import com.jho5245.cucumbery.util.storage.data.Constant.RestrictionType;
 import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.Variable;
+import com.jho5245.cucumbery.util.storage.no_groups.ItemCategory.Rarity;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.RecipeChecker;
 import de.tr7zw.changeme.nbtapi.*;
+import net.kyori.adventure.text.format.ShadowColor;
+import net.kyori.adventure.util.ARGBLike;
 import org.bukkit.*;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.attribute.Attribute;
@@ -640,6 +643,13 @@ public class ItemLoreCustomItem
 						nbtItem.setShort("Size", (short) 30);
 					}
 				}
+				// YouPeople
+				case YOUPEOPLEGAME_CRISPY_COOKIE_PICKAXE -> {
+					nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_RARITY_KEY).setString(CucumberyTag.CUSTOM_RARITY_FINAL_KEY, Rarity.RARE.toString());
+				}
+				case YOUPEOPLEGAME_BURNING_FIRE, YOUPEOPLEGAME_CRISPY_COOKIE_BOX -> {
+					nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_RARITY_KEY).setString(CucumberyTag.CUSTOM_RARITY_FINAL_KEY, Rarity.NORMAL.toString());
+				}
 			}
 			if (customMaterial.isVerticalSlab())
 			{
@@ -682,6 +692,7 @@ public class ItemLoreCustomItem
 			customModelDataComponent.setStrings(Collections.singletonList(customMaterial.toString().toLowerCase()));
 			itemMeta.setCustomModelDataComponent(customModelDataComponent);
 		}
+
 		// ItemMeta NBT 설정
 		{
 			Multimap<Attribute, AttributeModifier> attributeMap = itemMeta.getAttributeModifiers();
@@ -1231,6 +1242,24 @@ public class ItemLoreCustomItem
 					case RE_PPER_LD_RALD_AMON_YST_RGANITE_BLOCK ->
 							ItemStackUtil.setTexture(skullMeta, "49de823d60248aa50e0bc9f61270fdaba19fb157b6aecc7eb497f5937f8063e1");
 				}
+			}
+		}
+		// YouPeopleGame
+		{
+			switch (customMaterial)
+			{
+				case YOUPEOPLEGAME_CRISPY_COOKIE_PICKAXE -> {
+					itemMeta.addEnchant(Enchantment.EFFICIENCY, 3, true);
+				}
+				case YOUPEOPLEGAME_BURNING_FIRE -> {
+					itemMeta.setItemModel(Material.CAMPFIRE.getKey());
+				}
+				case YOUPEOPLEGAME_CRISPY_COOKIE_BOX -> itemMeta.setItemModel(Material.ORANGE_SHULKER_BOX.getKey());
+			}
+			// 반짝이 효과가 없는 아이템 중 디버그 막대기인 아이템은 반짝이 효과 제거
+			if (customMaterial.getDisplayMaterial() == Material.DEBUG_STICK && !customMaterial.isGlow() && !itemMeta.hasEnchants())
+			{
+				itemMeta.setEnchantmentGlintOverride(false);
 			}
 		}
 		// 모든 아이템 등급 COMMON으로

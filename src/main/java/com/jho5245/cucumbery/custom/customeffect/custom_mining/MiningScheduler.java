@@ -6,6 +6,7 @@ import com.jho5245.cucumbery.custom.customeffect.children.group.LocationCustomEf
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCustomMining;
 import com.jho5245.cucumbery.events.block.CustomBlockBreakEvent;
+import com.jho5245.cucumbery.events.item.PlayerCustomMiningItemDamageEvent;
 import com.jho5245.cucumbery.util.additemmanager.AddItemUtil;
 import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
@@ -487,7 +488,7 @@ public class MiningScheduler
 			if (progress >= 1 || instaBreak) // insta break
 			{
 				// 이벤트 호출
-				CustomBlockBreakEvent customBlockBreakEvent = new CustomBlockBreakEvent(block, player);
+				CustomBlockBreakEvent customBlockBreakEvent = new CustomBlockBreakEvent(block, player, miningResult.applyPhysics());
 				Bukkit.getPluginManager().callEvent(customBlockBreakEvent);
 				boolean mode2 = CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_2) || miningResult.overrideMode2();
 				boolean mode3 = CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_2_NO_RESTORE);
@@ -719,12 +720,11 @@ public class MiningScheduler
 							if ((block.getType() == Material.ICE && (block1Type.isSolid() || block1Type == Material.WATER) && drops.isEmpty() && customMaterial == null) || (
 									block.getBlockData() instanceof Waterlogged waterlogged && waterlogged.isWaterlogged()))
 							{
-
-								block.setType(Material.WATER);
+								block.setType(Material.WATER, customBlockBreakEvent.isApplyPhysics());
 							}
 							else
 							{
-								block.setType(Material.AIR);
+								block.setType(Material.AIR, customBlockBreakEvent.isApplyPhysics());
 							}
 							BlockPlaceDataConfig.removeData(location);
 							Variable.fakeBlocks.remove(location);
@@ -874,8 +874,10 @@ public class MiningScheduler
 				// 블록 파괴 진행도 초기화와 채굴 진행도 효과 제거
 				MiningManager.quitCustomMining(player);
 				// 채굴에 사용된 도구 내구도 처리 및 드릴의 연료 경고 처리(즉시 부숴지는 블록은 내구도가 깎이지 않음)
+				PlayerCustomMiningItemDamageEvent playerCustomMiningItemDamageEvent = new PlayerCustomMiningItemDamageEvent(player);
+				Bukkit.getPluginManager().callEvent(playerCustomMiningItemDamageEvent);
 				boolean dropDura = false;
-				if (!instaBreak && ItemStackUtil.itemExists(toolItemStack) && !toolItemStack.getItemMeta().isUnbreakable())
+				if (!playerCustomMiningItemDamageEvent.isCancelled() && !instaBreak && ItemStackUtil.itemExists(toolItemStack) && !toolItemStack.getItemMeta().isUnbreakable())
 				{
 					int currentDurability = ((Damageable) toolItemStack.getItemMeta()).getDamage();
 					int maxDurability = toolItemStack.getType().getMaxDurability();

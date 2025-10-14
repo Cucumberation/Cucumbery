@@ -96,7 +96,10 @@ public class ItemLore
 		}
 		Material type = itemStack.getType();
 		NBTItem nbtItem = new NBTItem(itemStack);
-		String customType = NBT.get(itemStack, nbt -> {return nbt.getString(CustomMaterial.IDENDTIFER);});
+		String customType = NBT.get(itemStack, nbt ->
+		{
+			return nbt.getString(CustomMaterial.IDENDTIFER);
+		});
 		CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
 		{
 			try
@@ -120,7 +123,8 @@ public class ItemLore
 		}
 		boolean hasOnlyNbtTagLore =
 				ItemLoreUtil.hasOnlyNbtTagLore(itemStack) || new NBTItem(itemStack).hasTag("NBTCopied") && new NBTItem(itemStack).getBoolean("NBTCopied");
-		if (Cucumbery.config.getBoolean("use-no-effect-potions-weirdly") && itemStack.getItemMeta() instanceof PotionMeta potionMeta && NBTAPI.getCompoundList(itemTagReadOnly, CucumberyTag.CUSTOM_EFFECTS) == null)
+		if (Cucumbery.config.getBoolean("use-no-effect-potions-weirdly") && itemStack.getItemMeta() instanceof PotionMeta potionMeta
+				&& NBTAPI.getCompoundList(itemTagReadOnly, CucumberyTag.CUSTOM_EFFECTS) == null)
 		{
 			PotionType potionType = potionMeta.getBasePotionType();
 			CustomEffectType customEffectType = switch (potionType)
@@ -223,7 +227,6 @@ public class ItemLore
 
 		// 이후 아이템의 추가 설명
 		ItemLore2.setItemLore(itemStack, itemMeta, defaultLore, params);
-
 		// 이후 아이템 최하단의 회색 설명 추가
 		ItemLore3.setItemLore(params instanceof ItemLoreView view ? view.getPlayer() : null, itemStack, defaultLore);
 		itemMeta = itemStack.getItemMeta();
@@ -443,7 +446,8 @@ public class ItemLore
 		if (removeFlag.removeItemFlags)
 			itemMeta.removeItemFlags(ItemFlag.values());
 		itemStack.setItemMeta(itemMeta);
-		NBT.modify(itemStack, nbt -> {
+		NBT.modify(itemStack, nbt ->
+		{
 			nbt.removeKey(CucumberyTag.KEY_TMI);
 		});
 		return itemStack;

@@ -319,6 +319,27 @@ public class ItemLore3
 					case YOUPEOPLEGAME_DAMP_COOKIE_PILE -> {
 						description.add(ComponentUtil.translate("&7뭉쳐서 이름이 굵어졌다."));
 					}
+					case YOUPEOPLEGAME_DAMP_COOKIE_EVEN -> {
+						description.add(ComponentUtil.translate("&7이젠 문쳐서 보기만 해도 목이 막힐 지경이다."));
+					}
+					case YOUPEOPLEGAME_CRISPY_COOKIE -> {
+						description.add(ComponentUtil.translate("&7눅눅한 쿠키를 익혀 바삭하게 만든 쿠키다."));
+					}
+					case YOUPEOPLEGAME_STARTER_SWORD, YOUPEOPLEGAME_STARTER_SHOVEL -> {
+						description.add(ComponentUtil.translate("&7뉴비에게 지급하는 %s이다", customMaterial.translationKey()));
+					}
+					case YOUPEOPLEGAME_STARTER_AXE, YOUPEOPLEGAME_STARTER_PICKAXE -> {
+						description.add(ComponentUtil.translate("&7뉴비에게 지급하는 %s다", customMaterial.translationKey()));
+					}
+					case YOUPEOPLEGAME_BURNING_FIRE -> {
+						description.add(ComponentUtil.translate("&7다용도로 필요해질 것 같은 불이다."));
+					}
+					case YOUPEOPLEGAME_CRISPY_COOKIE_PICKAXE -> {
+						description.add(ComponentUtil.translate("&7바삭한 쿠키로 만든 곡괭이다."));
+					}
+					case YOUPEOPLEGAME_CRISPY_COOKIE_BOX -> {
+						description.add(ComponentUtil.translate("&7바삭한 쿠키가 1셋트 들어있는 박스다."));
+					}
         }
       }
       if (!customType.isEmpty())

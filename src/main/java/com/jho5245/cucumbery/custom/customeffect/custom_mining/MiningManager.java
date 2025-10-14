@@ -10,7 +10,6 @@ import com.jho5245.cucumbery.events.block.PreCustomBlockBreakEvent;
 import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
-import com.jho5245.cucumbery.util.no_groups.ItemSerializer;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.no_groups.PlaceHolderUtil;
@@ -49,7 +48,10 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 public class MiningManager
 {
@@ -1371,7 +1373,7 @@ public class MiningManager
 		}
 
 		return new MiningResult(canMine, overrideMode2, toolSpeed, miningSpeed, miningSpeedBeforeHaste, blockHardness, miningFortune, expToDrop, toolTier,
-				blockTier, regenCooldown, drop, breakSound, breakCustomSound, breakSoundVolume, breakSoundPitch, breakParticle);
+				blockTier, regenCooldown, drop, breakSound, breakCustomSound, breakSoundVolume, breakSoundPitch, breakParticle, true);
 	}
 
 	public static boolean toolMatches(@NotNull ItemStack tool, int blockTier, Block block, @NotNull List<ItemStack> drops)

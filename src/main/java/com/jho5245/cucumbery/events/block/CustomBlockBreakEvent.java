@@ -12,16 +12,29 @@ public class CustomBlockBreakEvent extends BlockEvent
 
   private final Player player;
 
-  public CustomBlockBreakEvent(@NotNull Block theBlock, @NotNull Player player)
+	private boolean applyPhysics;
+
+  public CustomBlockBreakEvent(@NotNull Block theBlock, @NotNull Player player, boolean applyPhysics)
   {
     super(theBlock);
     this.player = player;
+		this.applyPhysics = applyPhysics;
   }
 
   public Player getPlayer()
   {
     return player;
   }
+
+	public boolean isApplyPhysics()
+	{
+		return applyPhysics;
+	}
+
+	public void setApplyPhysics(boolean value)
+	{
+		this.applyPhysics = value;
+	}
 
   @Override
   public @NotNull HandlerList getHandlers()

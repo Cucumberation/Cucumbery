@@ -8,10 +8,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public record MiningResult(boolean canMine, boolean overrideMode2, double toolSpeed, double miningSpeed, double miningSpeedBeforeHaste, double blockHardness, double miningFortune, double expToDrop, int miningTier, int blockTier, int regenCooldown, List<ItemStack> drops, @Nullable
-                           Sound breakSound, @Nullable String breakCustomSound, float breakSoundVolume, float breakSoundPitch, String breakParticle)
+                           Sound breakSound, @Nullable String breakCustomSound, float breakSoundVolume, float breakSoundPitch, String breakParticle, boolean applyPhysics)
 {
   public MiningResult(boolean canMine, boolean overrideMode2, double toolSpeed, double miningSpeed, double miningSpeedBeforeHaste, double blockHardness, double miningFortune, double expToDrop, int miningTier, int blockTier, int regenCooldown, @NotNull List<ItemStack> drops, @Nullable
-  Sound breakSound, @Nullable String breakCustomSound, float breakSoundVolume, float breakSoundPitch, String breakParticle)
+  Sound breakSound, @Nullable String breakCustomSound, float breakSoundVolume, float breakSoundPitch, String breakParticle, boolean applyPhysics)
   {
     this.canMine = canMine;
     this.overrideMode2 = overrideMode2;
@@ -30,5 +30,6 @@ public record MiningResult(boolean canMine, boolean overrideMode2, double toolSp
     this.breakSoundVolume = breakSoundVolume;
     this.breakSoundPitch = breakSoundPitch;
     this.breakParticle = breakParticle;
+		this.applyPhysics = applyPhysics;
   }
 }

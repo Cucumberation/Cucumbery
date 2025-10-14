@@ -8,6 +8,7 @@ import com.jho5245.cucumbery.util.storage.no_groups.ItemCategory.Rarity;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.ShadowColor;
 import net.kyori.adventure.translation.Translatable;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -518,8 +519,19 @@ public enum CustomMaterial implements Translatable
 			CreativeCategory.BUILDING_BLOCKS),
 	WEATHER_FORECAST(Material.ENDER_EYE, "key:item.cucumbery.weather_forecast|날씨를 알려주는 눈", Rarity.ELITE, CreativeCategory.TOOLS),
 	WNYNYA_ORE(Material.PLAYER_HEAD, "rgb200,100,255;key:block.cucumbery.wnynya_ore|완YEE 광석", Rarity.RARE, "itemGroup.natural"),
+
 	YOUPEOPLEGAME_DAMP_COOKIE(Material.COOKIE, "&6key:item.youpeoplegame.damp_cookie|눅눅한 쿠키", Rarity.JUNK, "눅눅한 쿠키"),
 	YOUPEOPLEGAME_DAMP_COOKIE_PILE(Material.COOKIE, "&6&lkey:item.youpeoplegame.damp_cookie_pile|뭉친 눅눅한 쿠키", "눅눅한 쿠키"),
+	YOUPEOPLEGAME_DAMP_COOKIE_EVEN(Material.COOKIE, "&6&lkey:item.youpeoplegame.damp_cookie_even|더욱 눅눅한 쿠키", "눅눅한 쿠키"),
+	YOUPEOPLEGAME_CRISPY_COOKIE(Material.COOKIE, "&6key:item.youpeoplegame.crispy_cookie|바삭한 쿠키", "바삭한 쿠키"),
+	YOUPEOPLEGAME_CRISPY_COOKIE_BOX(Material.DEBUG_STICK, "&6key:item.youpeoplegame.crispy_cookie_box|바삭한 쿠키박스", "바삭한 쿠키"),
+	YOUPEOPLEGAME_CRISPY_COOKIE_PICKAXE(Material.DIAMOND_PICKAXE,
+			ComponentUtil.translate("&6key:item.youpeoplegame.crispy_cookie_pickaxe|바삭한 쿠키곡괭이").shadowColor(ShadowColor.shadowColor(-256)), Rarity.RARE, "바삭한 쿠키"),
+	YOUPEOPLEGAME_BURNING_FIRE(Material.DEBUG_STICK, "&6key:item.youpeoplegame.burning_fire|타오르는 불", Material.FIRE.translationKey()),
+	YOUPEOPLEGAME_STARTER_SWORD(Material.IRON_SWORD, Material.IRON_SWORD.translationKey(), "스타터"),
+	YOUPEOPLEGAME_STARTER_PICKAXE(Material.IRON_PICKAXE, Material.IRON_PICKAXE.translationKey(), "스타터"),
+	YOUPEOPLEGAME_STARTER_AXE(Material.IRON_AXE, Material.IRON_AXE.translationKey(), "스타터"),
+	YOUPEOPLEGAME_STARTER_SHOVEL(Material.IRON_SHOVEL, Material.IRON_SHOVEL.translationKey(), "스타터"),
 	;
 
 	private final Material displayMaterial;
@@ -611,7 +623,10 @@ public enum CustomMaterial implements Translatable
 	{
 		return this.toString().startsWith("ENCHANTED") || switch (this)
 		{
-			case TODWOT_PICKAXE, IQ_CHOOK_CHUCK, YOUPEOPLEGAME_DAMP_COOKIE_PILE -> true;
+			case TODWOT_PICKAXE, IQ_CHOOK_CHUCK,
+					 YOUPEOPLEGAME_DAMP_COOKIE_PILE,
+					 YOUPEOPLEGAME_DAMP_COOKIE_EVEN,
+					 YOUPEOPLEGAME_CRISPY_COOKIE -> true;
 			default -> false;
 		};
 	}

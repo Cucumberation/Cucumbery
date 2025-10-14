@@ -56,7 +56,7 @@ public class PlayerJoin implements Listener
     }
     UserData.WINDOW_ID.set(uuid, 0);
 		// Update Inventory
-		Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->ItemStackUtil.updateInventory(player), 0L);
+		Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 20L);
     Initializer.setNickName(player);
     String name = Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName());
     YamlConfiguration cfg = Cucumbery.config;
