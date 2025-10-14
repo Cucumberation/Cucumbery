@@ -623,10 +623,7 @@ public enum CustomMaterial implements Translatable
 	{
 		return this.toString().startsWith("ENCHANTED") || switch (this)
 		{
-			case TODWOT_PICKAXE, IQ_CHOOK_CHUCK,
-					 YOUPEOPLEGAME_DAMP_COOKIE_PILE,
-					 YOUPEOPLEGAME_DAMP_COOKIE_EVEN,
-					 YOUPEOPLEGAME_CRISPY_COOKIE -> true;
+			case TODWOT_PICKAXE, IQ_CHOOK_CHUCK -> true;
 			default -> false;
 		};
 	}

@@ -686,6 +686,11 @@ public class ItemLoreCustomItem
 		{
 			itemMeta.setEnchantmentGlintOverride(true);
 		}
+		// 아닐 경우 추가된 반짝이는 효과 제거
+		else if (itemMeta.hasEnchantmentGlintOverride())
+		{
+			itemMeta.setEnchantmentGlintOverride(null);
+		}
 		// 커스텀 모델 데이터 설정
 		{
 			CustomModelDataComponent customModelDataComponent = itemMeta.getCustomModelDataComponent();
