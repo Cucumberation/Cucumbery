@@ -66,7 +66,8 @@ public class CustomConfig
 			{
 				continue;
 			}
-			if (!dataKeys.contains(key))
+			// custom-data를 제외한 UserData에 없는 키들은 전부 삭제한다.
+			if (!dataKeys.contains(key) && !key.startsWith("custom-data"))
 			{
 				config.set(key, null);
 				needToUpdate = true;
