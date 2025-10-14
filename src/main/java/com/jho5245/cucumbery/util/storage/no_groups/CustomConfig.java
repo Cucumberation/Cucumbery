@@ -2,6 +2,7 @@ package com.jho5245.cucumbery.util.storage.no_groups;
 
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.commands.sound.CommandSong;
+import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.no_groups.Method2;
 import com.jho5245.cucumbery.util.storage.data.Constant.AllPlayer;
@@ -17,10 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @SuppressWarnings("unused")
 public class CustomConfig
@@ -537,23 +535,113 @@ public class CustomConfig
 			return this.getMaterial(player.getUniqueId());
 		}
 
-		public void set(UUID uuid, Object value)
+		public static boolean getBoolean(OfflinePlayer offlinePlayer, String key)
+		{
+			return getBoolean(offlinePlayer.getUniqueId(), key);
+		}
+
+		public static boolean getBoolean(UUID uuid, String key)
+		{
+			YamlConfiguration config = Variable.userData.get(uuid);
+			if (config == null)
+			{
+				config = CustomConfig.getPlayerConfig(uuid).getConfig();
+			}
+			return config.getBoolean(key);
+		}
+
+
+		public static int getInt(OfflinePlayer offlinePlayer, String key)
+		{
+			return getInt(offlinePlayer.getUniqueId(), key);
+		}
+
+		public static int getInt(UUID uuid, String key)
+		{
+			YamlConfiguration config = Variable.userData.get(uuid);
+			if (config == null)
+			{
+				config = CustomConfig.getPlayerConfig(uuid).getConfig();
+			}
+			return config.getInt(key);
+		}
+
+		public static double getDouble(OfflinePlayer offlinePlayer, String key)
+		{
+			return getDouble(offlinePlayer.getUniqueId(), key);
+		}
+
+		public static double getDouble(UUID uuid, String key)
+		{
+			YamlConfiguration config = Variable.userData.get(uuid);
+			if (config == null)
+			{
+				config = CustomConfig.getPlayerConfig(uuid).getConfig();
+			}
+			return config.getDouble(key);
+		}
+
+		public static String getString(OfflinePlayer offlinePlayer, String key)
+		{
+			return getString(offlinePlayer.getUniqueId(), key);
+		}
+
+		public static String getString(UUID uuid, String key)
+		{
+			return getString(uuid, key, null);
+		}
+
+		public static String getString(OfflinePlayer offlinePlayer, String key, String defaultValue)
+		{
+			return getString(offlinePlayer.getUniqueId(), key, defaultValue);
+		}
+
+		public static String getString(UUID uuid, String key, String defaultValue)
+		{
+			YamlConfiguration config = Variable.userData.get(uuid);
+			if (config == null)
+			{
+				config = CustomConfig.getPlayerConfig(uuid).getConfig();
+			}
+			return config.getString(key, defaultValue);
+		}
+
+		public static void set(OfflinePlayer player, String key, Object value) {
+			set(player.getUniqueId(), key, value);
+		}
+
+		public static void set(UUID uuid, String key, Object value)
 		{
 			Player player = Method2.getEntity(uuid) instanceof Player p ? p : null;
 			YamlConfiguration config = Variable.userData.get(uuid);
-			boolean offline = config == null;
-			if (offline)
+			if (config == null)
 			{
 				CustomConfig customConfig = CustomConfig.getPlayerConfig(uuid);
 				config = customConfig.getConfig();
-				config.set(this.getKey(), value);
+				config.set(key, value);
 				customConfig.saveConfig();
 			}
 			else
 			{
-				config.set(this.getKey(), value);
+				config.set(key, value);
 				Variable.userData.put(uuid, config);
 			}
+		}
+
+		public static void setToggle(OfflinePlayer player, String key)
+		{
+			setToggle(player.getUniqueId(), key);
+		}
+
+		public static void setToggle(UUID uuid, String key)
+		{
+			set(uuid, key, !getBoolean(uuid, key));
+		}
+
+		public void set(UUID uuid, Object value)
+		{
+			set(uuid, this.getKey(), value);
+			Player player = Method2.getEntity(uuid) instanceof Player p ? p : null;
 			if (player != null)
 			{
 				switch (this)

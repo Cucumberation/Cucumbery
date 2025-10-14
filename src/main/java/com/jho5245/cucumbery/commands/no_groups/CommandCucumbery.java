@@ -406,6 +406,13 @@ public class CommandCucumbery implements CucumberyCommandExecutor
           MessageUtil.info(sender, "%s 월드의 커스텀 채광 블록 쿨타임을 초기화했습니다", world);
         }
       }
+			case "update-shopkeepers-item" -> {
+				if (!Cucumbery.using_Shopkeepers)
+				{
+					MessageUtil.sendError(sender, "rg255,204;Shopkeepers&r 플러그인을 사용하고 있지 않습니다");
+					return true;
+				}
+			}
       default ->
       {
         MessageUtil.wrongArg(sender, 1, args);

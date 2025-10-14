@@ -532,6 +532,8 @@ public enum CustomMaterial implements Translatable
 	YOUPEOPLEGAME_STARTER_PICKAXE(Material.IRON_PICKAXE, Material.IRON_PICKAXE.translationKey(), "스타터"),
 	YOUPEOPLEGAME_STARTER_AXE(Material.IRON_AXE, Material.IRON_AXE.translationKey(), "스타터"),
 	YOUPEOPLEGAME_STARTER_SHOVEL(Material.IRON_SHOVEL, Material.IRON_SHOVEL.translationKey(), "스타터"),
+	YOUPEOPLEGAME_MOIST_COOKIE(Material.COOKIE, "&6key:item.youpeoplegame.moist_cookie|촉촉한 초코칩", "촉촉한 쿠키"),
+	YOUPEOPLEGAME_DAMP_COOKIE_POTION(Material.DEBUG_STICK, "key:item.youpeoplegame.damp_cookie_potion|눅눅한 쿠키 포션", "포션"),
 	;
 
 	private final Material displayMaterial;

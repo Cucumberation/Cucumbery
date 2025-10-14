@@ -120,7 +120,7 @@ import java.util.UUID;
 
 public class Cucumbery extends JavaPlugin
 {
-	public static final int CONFIG_VERSION = 51, DEATH_MESSAGES_CONFIG_VERSION = 13, LANG_CONFIG_VERSION = 7;
+	public static final int CONFIG_VERSION = 52, DEATH_MESSAGES_CONFIG_VERSION = 13, LANG_CONFIG_VERSION = 7;
 
 	//  private static final ExecutorService brigadierService = Executors.newFixedThreadPool(1);
 	public static YamlConfiguration config;
@@ -156,6 +156,8 @@ public class Cucumbery extends JavaPlugin
 	public static boolean using_CoreProtect;
 
 	public static boolean using_DeluxeAuctions;
+
+	public static boolean using_Shopkeepers;
 
 	/**
 	 * MythicMobs API
@@ -580,6 +582,7 @@ public class Cucumbery extends JavaPlugin
 		Cucumbery.using_CoreProtect =
 				Cucumbery.config.getBoolean("use-hook-plugins.CoreProtect") && this.pluginManager.getPlugin("CoreProtect") instanceof CoreProtect;
 		Cucumbery.using_DeluxeAuctions =  Cucumbery.config.getBoolean("use-hook-plugins.DeluxeAuctions") && this.pluginManager.getPlugin("DeluxeAuctions") instanceof DeluxeAuctions;
+//		Cucumbery.using_Shopkeepers =  Cucumbery.config.getBoolean("use-hook-plugins.Shopkeepers") && this.pluginManager.getPlugin("Shopkeepers") instanceof Shopkeepers;
 
 		if (using_Residence)
 		{

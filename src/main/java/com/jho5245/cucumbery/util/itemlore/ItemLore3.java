@@ -340,6 +340,14 @@ public class ItemLore3
 					case YOUPEOPLEGAME_CRISPY_COOKIE_BOX -> {
 						description.add(ComponentUtil.translate("&7바삭한 쿠키가 1셋트 들어있는 박스다."));
 					}
+					case YOUPEOPLEGAME_MOIST_COOKIE -> {
+						description.add(ComponentUtil.translate("&7눅눅함과 바삭함이 만나 촉촉한 쿠키가 되었다!"));
+					}
+					case YOUPEOPLEGAME_DAMP_COOKIE_POTION -> {
+						description.add(ComponentUtil.translate("&7더욱 눅눅한 쿠키를 액화하여 만든 이상한 포션이다."));
+						description.add(ComponentUtil.translate("&7사용시 잠수자리에서 영구적으로 25%확률로 쿠키를 하나 더 얻을 수 있다."));
+						description.add(ComponentUtil.translate("&7단, 딱 한 번만 사용할 수 있다."));
+					}
         }
       }
       if (!customType.isEmpty())

@@ -23,6 +23,9 @@ import com.jho5245.cucumbery.custom.customeffect.children.group.DoubleCustomEffe
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCooldown;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeMinecraft;
+import com.jho5245.cucumbery.events.addon.protocollib.OpenWindowMerchantEvent;
+import com.jho5245.cucumbery.events.addon.protocollib.SetCursorItemEvent;
+import com.jho5245.cucumbery.events.addon.protocollib.SetSlotEvent;
 import com.jho5245.cucumbery.events.addon.protocollib.WindowItemsEvent;
 import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.itemlore.ItemLore.RemoveFlag;
@@ -731,7 +734,13 @@ public class ProtocolLibManager
 				}
 				PacketContainer packet = event.getPacket();
 				Player player = event.getPlayer();
-				packet.getItemModifier().write(0, setItemLore(packet.getType(), packet.getItemModifier().read(0), player));
+				ItemStack itemStack = setItemLore(packet.getType(), packet.getItemModifier().read(0), player);
+				SetCursorItemEvent setCursorItemEvent = new SetCursorItemEvent(player, itemStack);
+				Bukkit.getPluginManager().callEvent(setCursorItemEvent);
+				if (!setCursorItemEvent.isCancelled())
+				{
+					packet.getItemModifier().write(0, setCursorItemEvent.getItemStack());
+				}
 			}
 		});
 
@@ -748,7 +757,13 @@ public class ProtocolLibManager
 				Player player = event.getPlayer();
 //				player.sendMessage(packet.getType().toString());
 				StructureModifier<ItemStack> modifier = packet.getItemModifier();
-				modifier.write(0, setItemLore(packet.getType(), modifier.read(0), player));
+				ItemStack itemStack = setItemLore(packet.getType(), packet.getItemModifier().read(0), player);
+				SetSlotEvent setSlotEvent = new SetSlotEvent(player, itemStack);
+				Bukkit.getPluginManager().callEvent(setSlotEvent);
+				if (!setSlotEvent.isCancelled())
+				{
+					packet.getItemModifier().write(0, setSlotEvent.getItemStack());
+				}
 			}
 		});
 
@@ -767,11 +782,18 @@ public class ProtocolLibManager
 				List<MerchantRecipe> merchantRecipeList = modifier.read(0), newMerchantRecipeList = new ArrayList<>(merchantRecipeList.size());
 				for (MerchantRecipe recipe : merchantRecipeList)
 				{
-					MerchantRecipe newRecipe = new MerchantRecipe(setItemLore(packet.getType(), recipe.getResult(), player), recipe.getUses(), recipe.getMaxUses(),
-							recipe.hasExperienceReward(), recipe.getVillagerExperience(), recipe.getPriceMultiplier(), recipe.getDemand(), recipe.getSpecialPrice(),
-							recipe.shouldIgnoreDiscounts());
-					newRecipe.setIngredients(setItemLore(packet.getType(), recipe.getIngredients(), player));
-					newMerchantRecipeList.add(newRecipe);
+					ItemStack result = setItemLore(packet.getType(), recipe.getResult(), player);
+					List<ItemStack> ingredients = setItemLore(packet.getType(), recipe.getIngredients(), player);
+					OpenWindowMerchantEvent openWindowMerchantEvent = new OpenWindowMerchantEvent(player, result, ingredients);
+					Bukkit.getPluginManager().callEvent(openWindowMerchantEvent);
+					if (!openWindowMerchantEvent.isCancelled())
+					{
+						MerchantRecipe newRecipe = new MerchantRecipe(openWindowMerchantEvent.getResult(), recipe.getUses(), recipe.getMaxUses(),
+								recipe.hasExperienceReward(), recipe.getVillagerExperience(), recipe.getPriceMultiplier(), recipe.getDemand(), recipe.getSpecialPrice(),
+								recipe.shouldIgnoreDiscounts());
+						newRecipe.setIngredients(openWindowMerchantEvent.getIngredients());
+						newMerchantRecipeList.add(newRecipe);
+					}
 				}
 				modifier.write(0, newMerchantRecipeList);
 			}

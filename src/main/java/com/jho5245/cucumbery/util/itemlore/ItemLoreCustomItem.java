@@ -15,6 +15,7 @@ import com.jho5245.cucumbery.util.storage.no_groups.ItemCategory.Rarity;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.RecipeChecker;
 import de.tr7zw.changeme.nbtapi.*;
+import de.tr7zw.changeme.nbtapi.handler.NBTHandlers;
 import net.kyori.adventure.text.format.ShadowColor;
 import net.kyori.adventure.util.ARGBLike;
 import org.bukkit.*;
@@ -193,6 +194,8 @@ public class ItemLoreCustomItem
 						foodTag.setInteger(CucumberyTag.FOOD_LEVEL_KEY, 6);
 						foodTag.setDouble(CucumberyTag.SATURATION_KEY, 0.2d);
 					}
+					// 먹을 수 있는 음식
+					case YOUPEOPLEGAME_DAMP_COOKIE_POTION -> {}
 					default ->
 					{
 						if (!NBTAPI.isRestricted(itemStack, RestrictionType.NO_CONSUME))
@@ -647,7 +650,7 @@ public class ItemLoreCustomItem
 				case YOUPEOPLEGAME_CRISPY_COOKIE_PICKAXE -> {
 					nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_RARITY_KEY).setString(CucumberyTag.CUSTOM_RARITY_FINAL_KEY, Rarity.RARE.toString());
 				}
-				case YOUPEOPLEGAME_BURNING_FIRE, YOUPEOPLEGAME_CRISPY_COOKIE_BOX -> {
+				case YOUPEOPLEGAME_BURNING_FIRE, YOUPEOPLEGAME_CRISPY_COOKIE_BOX, YOUPEOPLEGAME_DAMP_COOKIE_POTION -> {
 					nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_RARITY_KEY).setString(CucumberyTag.CUSTOM_RARITY_FINAL_KEY, Rarity.NORMAL.toString());
 				}
 			}
@@ -1264,6 +1267,9 @@ public class ItemLoreCustomItem
 					itemMeta.setItemModel(Material.ORANGE_SHULKER_BOX.getKey());
 					itemMeta.setMaxStackSize(64);
 				}
+				case YOUPEOPLEGAME_DAMP_COOKIE_POTION -> {
+					itemMeta.setItemModel(Material.HONEY_BOTTLE.getKey());
+				}
 			}
 			// 반짝이 효과가 없는 아이템 중 디버그 막대기인 아이템은 반짝이 효과 제거
 			if (customMaterial.getDisplayMaterial() == Material.DEBUG_STICK && !customMaterial.isGlow() && !itemMeta.hasEnchants())
@@ -1321,6 +1327,18 @@ public class ItemLoreCustomItem
 				}
 			}
 		}
+		// NBT API
+		{
+			switch (customMaterial)
+			{
+				case YOUPEOPLEGAME_DAMP_COOKIE_POTION -> {
+					NBT.modifyComponents(itemStack, nbt -> {
+						nbt.set("minecraft:consumable", new NBTContainer(), NBTHandlers.STORE_READWRITE_TAG);
+					});
+				}
+			}
+		}
+
 	}
 
 	protected static void itemLore(@NotNull ItemStack itemStack, @NotNull NBTItem nbtItem, @NotNull String id)
