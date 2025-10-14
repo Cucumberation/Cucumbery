@@ -9,6 +9,7 @@ import com.jho5245.cucumbery.util.storage.data.Constant.AllPlayer;
 import com.jho5245.cucumbery.util.storage.data.EnumHideable;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import org.bukkit.*;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
@@ -67,7 +68,7 @@ public class CustomConfig
 				continue;
 			}
 			// custom-data를 제외한 UserData에 없는 키들은 전부 삭제한다.
-			if (!dataKeys.contains(key) && !key.startsWith("custom-data"))
+			if (!dataKeys.contains(key))
 			{
 				config.set(key, null);
 				needToUpdate = true;
@@ -384,6 +385,7 @@ public class CustomConfig
 		MINING_SPEED_RATIO_MODIFIER_LIGHT_PENALTY("채광-속도-비율-수정자-빛-페널티", 0),
 		IGNORE_MINING_SPEED_RATIO_MODIFIER_LIGHT_PENALTY("채광-속도-비율-수정자-빛-페널티-무시", false),
 		SHOW_CLICK_EVENT_INFORMATION_ON_CHAT_IF_NULL("채팅-메시지-클릭-이벤트-정보-표시(없을 경우)", false),
+		CUSTOM_DATA("custom-data", new Object())
 		;
 
 		private final String key;
