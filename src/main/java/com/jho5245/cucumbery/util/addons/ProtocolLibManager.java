@@ -23,6 +23,7 @@ import com.jho5245.cucumbery.custom.customeffect.children.group.DoubleCustomEffe
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCooldown;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeMinecraft;
+import com.jho5245.cucumbery.events.addon.protocollib.WindowItemsEvent;
 import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.itemlore.ItemLore.RemoveFlag;
 import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
@@ -706,9 +707,16 @@ public class ProtocolLibManager
 					}
 				}
 				UserData.WINDOW_ID.set(uuid, packet.getIntegers().read(0));
-				packet.getItemModifier().write(0, setItemLore(packet.getType(), packet.getItemModifier().read(0), player));
 				StructureModifier<List<ItemStack>> modifier = packet.getItemListModifier();
-				modifier.write(0, setItemLore(packet.getType(), modifier.read(0), player));
+				ItemStack itemStack = setItemLore(packet.getType(), packet.getItemModifier().read(0), player);
+				List<ItemStack> itemStacks = setItemLore(packet.getType(), modifier.read(0), player);
+				WindowItemsEvent windowItemsEvent = new WindowItemsEvent(player, itemStack, itemStacks);
+				Bukkit.getPluginManager().callEvent(windowItemsEvent);
+				if (!windowItemsEvent.isCancelled())
+				{
+					packet.getItemModifier().write(0, windowItemsEvent.getItemStack());
+					modifier.write(0, windowItemsEvent.getItemStacks());
+				}
 			}
 		});
 
