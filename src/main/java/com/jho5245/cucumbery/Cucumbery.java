@@ -79,6 +79,8 @@ import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.RecipeChecker;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
 import com.jho5245.cucumbery.util.storage.no_groups.Updater;
+import com.nisovin.shopkeepers.api.ShopkeepersPlugin;
+import com.nisovin.shopkeepers.api.shopkeeper.Shopkeeper;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.songoda.ultimatetimber.UltimateTimber;
@@ -582,7 +584,7 @@ public class Cucumbery extends JavaPlugin
 		Cucumbery.using_CoreProtect =
 				Cucumbery.config.getBoolean("use-hook-plugins.CoreProtect") && this.pluginManager.getPlugin("CoreProtect") instanceof CoreProtect;
 		Cucumbery.using_DeluxeAuctions =  Cucumbery.config.getBoolean("use-hook-plugins.DeluxeAuctions") && this.pluginManager.getPlugin("DeluxeAuctions") instanceof DeluxeAuctions;
-//		Cucumbery.using_Shopkeepers =  Cucumbery.config.getBoolean("use-hook-plugins.Shopkeepers") && this.pluginManager.getPlugin("Shopkeepers") instanceof Shopkeepers;
+		Cucumbery.using_Shopkeepers =  Cucumbery.config.getBoolean("use-hook-plugins.Shopkeepers") && this.pluginManager.getPlugin("Shopkeepers") != null;
 
 		if (using_Residence)
 		{

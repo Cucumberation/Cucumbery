@@ -6,6 +6,7 @@ import com.jho5245.cucumbery.Initializer;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.custom_mining.MiningScheduler;
 import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
+import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.no_groups.*;
 import com.jho5245.cucumbery.util.plugin_support.CustomRecipeSupport;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
@@ -17,26 +18,26 @@ import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.PluginLoader;
 import com.jho5245.cucumbery.util.storage.no_groups.RecipeChecker;
 import com.jho5245.cucumbery.util.storage.no_groups.Updater;
+import com.nisovin.shopkeepers.api.ShopkeepersAPI;
+import com.nisovin.shopkeepers.api.shopkeeper.Shopkeeper;
+import com.nisovin.shopkeepers.api.shopkeeper.TradingRecipe;
+import com.nisovin.shopkeepers.api.shopkeeper.admin.regular.RegularAdminShopkeeper;
+import com.nisovin.shopkeepers.api.shopkeeper.offers.TradeOffer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.maxgamer.quickshop.QuickShop;
 import org.maxgamer.quickshop.api.QuickShopAPI;
 
 import java.io.File;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -412,6 +413,27 @@ public class CommandCucumbery implements CucumberyCommandExecutor
 					MessageUtil.sendError(sender, "rg255,204;Shopkeepers&r 플러그인을 사용하고 있지 않습니다");
 					return true;
 				}
+				long currentTime = System.currentTimeMillis();
+				int count = 0;
+				for (Shopkeeper shopkeeper : ShopkeepersAPI.getShopkeeperRegistry().getAllShopkeepers())
+				{
+					if (shopkeeper instanceof RegularAdminShopkeeper adminShopkeeper)
+					{
+						List<? extends TradeOffer> originOffers = adminShopkeeper.getOffers();
+						List<TradeOffer> newOffers = new ArrayList<>();
+						originOffers.forEach(tradeOffer -> {
+							newOffers.add(TradeOffer.create(
+									ItemLore.setItemLore(tradeOffer.getResultItem().copy(), true),
+									ItemLore.setItemLore(tradeOffer.getItem1().copy(), true),
+									tradeOffer.hasItem2() && tradeOffer.getItem2() != null ? ItemLore.setItemLore(tradeOffer.getItem2().copy(), true) : null
+							));
+						});
+						adminShopkeeper.setOffers(newOffers);
+						count++;
+					}
+				}
+				long now = System.currentTimeMillis();
+				MessageUtil.info(sender, "Shopkeepers의 모든 상점 아이템 정보를 업데이트했습니다. (총 %s개, %sms 소요)", count, now - currentTime);
 			}
       default ->
       {
@@ -431,7 +453,7 @@ public class CommandCucumbery implements CucumberyCommandExecutor
     {
       return CommandTabUtil.tabCompleterList(args, "<인수>", false,
               "reload", "reload-data", "reload-plugin", "reload-custom-enchants", "version", "update", "update-quickshop-item", "update-customrecipe-item", "purge-user-data-files", "reset-custom-mining-cooldowns",
-      "reload-configs", "reload-config", "reload-custom-recipes");
+      "reload-configs", "reload-config", "reload-custom-recipes", "update-shopkeepers-item");
     }
     if (length == 2)
     {
