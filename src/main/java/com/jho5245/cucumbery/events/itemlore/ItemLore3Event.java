@@ -1,10 +1,12 @@
 package com.jho5245.cucumbery.events.itemlore;
 
 import net.kyori.adventure.text.Component;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,13 +15,22 @@ public class ItemLore3Event extends Event
 {
 	private static final HandlerList handlers = new HandlerList();
 
+	@Nullable
+	private final Player player;
 	private ItemStack itemStack;
 	private List<Component> itemLore;
 
-	public ItemLore3Event(ItemStack itemStack, List<Component> itemLore)
+	public ItemLore3Event(@Nullable Player player,ItemStack itemStack, List<Component> itemLore)
 	{
+		this.player = player;
 		this.itemStack = itemStack.clone();
 		this.itemLore = new ArrayList<>(itemLore);
+	}
+
+	@Nullable
+	public Player getPlayer()
+	{
+		return this.player;
 	}
 
 	public ItemStack getItemStack()

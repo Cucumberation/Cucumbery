@@ -318,7 +318,7 @@ public class ItemLore3
         }
       }
 
-			ItemLore3Event itemLore3Event = new ItemLore3Event(itemStack, new ArrayList<>());
+			ItemLore3Event itemLore3Event = new ItemLore3Event(viewer, itemStack, new ArrayList<>());
 			Bukkit.getPluginManager().callEvent(itemLore3Event);
 			if (!itemLore3Event.getItemLore().isEmpty())
 			{
