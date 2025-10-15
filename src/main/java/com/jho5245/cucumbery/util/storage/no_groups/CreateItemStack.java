@@ -117,7 +117,7 @@ public class CreateItemStack
   {
     ItemStack itemStack = new ItemStack(Material.ARROW);
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.displayName(ComponentUtil.translate("&b이전 메뉴로"));
+    itemMeta.itemName(ComponentUtil.translate("&b이전 메뉴로"));
     itemMeta.lore(Collections.singletonList(ComponentUtil.translate("&8(%s)", previousTitle)));
     itemStack.setItemMeta(itemMeta);
     NBTItem nbtItem = new NBTItem(itemStack, true);
