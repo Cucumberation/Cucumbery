@@ -2,14 +2,12 @@ package com.jho5245.cucumbery.util.storage.no_groups;
 
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.commands.sound.CommandSong;
-import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.no_groups.Method2;
 import com.jho5245.cucumbery.util.storage.data.Constant.AllPlayer;
 import com.jho5245.cucumbery.util.storage.data.EnumHideable;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import org.bukkit.*;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
@@ -628,26 +626,26 @@ public class CustomConfig
 			return config.getString(key.toString(), defaultValue);
 		}
 
-		public static Object get(OfflinePlayer offlinePlayer, String key)
+		public static Object get(OfflinePlayer offlinePlayer, Object key)
 		{
 			return get(offlinePlayer.getUniqueId(), key);
 		}
 
-		public static Object get(UUID uuid, String key)
+		public static Object get(UUID uuid, Object key)
 		{
 			YamlConfiguration config = Variable.userData.get(uuid);
 			if (config == null)
 			{
 				config = CustomConfig.getPlayerConfig(uuid).getConfig();
 			}
-			return config.get(key);
+			return config.get(key.toString());
 		}
 
-		public static void set(OfflinePlayer player, String key, Object value) {
+		public static void set(OfflinePlayer player, Object key, Object value) {
 			set(player.getUniqueId(), key, value);
 		}
 
-		public static void set(UUID uuid, String key, Object value)
+		public static void set(UUID uuid, Object key, Object value)
 		{
 			Player player = Method2.getEntity(uuid) instanceof Player p ? p : null;
 			YamlConfiguration config = Variable.userData.get(uuid);
@@ -655,22 +653,22 @@ public class CustomConfig
 			{
 				CustomConfig customConfig = CustomConfig.getPlayerConfig(uuid);
 				config = customConfig.getConfig();
-				config.set(key, value);
+				config.set(key.toString(), value);
 				customConfig.saveConfig();
 			}
 			else
 			{
-				config.set(key, value);
+				config.set(key.toString(), value);
 				Variable.userData.put(uuid, config);
 			}
 		}
 
-		public static void setToggle(OfflinePlayer player, String key)
+		public static void setToggle(OfflinePlayer player, Object key)
 		{
 			setToggle(player.getUniqueId(), key);
 		}
 
-		public static void setToggle(UUID uuid, String key)
+		public static void setToggle(UUID uuid, Object key)
 		{
 			set(uuid, key, !getBoolean(uuid, key));
 		}
