@@ -87,7 +87,7 @@ public class CreateItemStack
     NBTItem nbtItem = new NBTItem(itemStack, true);
     nbtItem.addCompound(CucumberyTag.KEY_MAIN).getStringList(CucumberyTag.EXTRA_TAGS_KEY).add(ExtraTag.NO_TMI_LORE.toString());
     ItemMeta itemMeta = itemStack.getItemMeta();
-    itemMeta.displayName(name instanceof Component component ? component : name != null ? ComponentUtil.create(name) : null);
+    itemMeta.itemName(name instanceof Component component ? component : name != null ? ComponentUtil.create(name) : null);
     List<Component> list = new ArrayList<>();
     if (lore != null)
     {
