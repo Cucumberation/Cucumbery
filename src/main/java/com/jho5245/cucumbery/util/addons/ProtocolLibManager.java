@@ -100,14 +100,11 @@ public class ProtocolLibManager
 	// ITEM TEXT DISPLAY MOUNT MAP
 	private static final Map<Integer, List<Integer>> itemTextDisplayMountMap = Collections.synchronizedMap(new HashMap<>());
 
-	// 최대 요청 횟수
-	private static final int MAX_WINDOW_ITEMS_REQUEST = 3;
-
 	// 임의로 패킷을 보내기 전 대기 시간
-	private static final int RESEND_PACKET_DELAY_IN_TICKS = 1;
+	private static final int RESEND_PACKET_DELAY_IN_TICKS = 0;
 
-	// WINDOW_ITEMS Packet Listener 일정 시간 이내에 특정 횟수 이상 요청된 패킷은 무시후 일정 시간 뒤에 임의로 패킷을 보냄
-	private static final HashMap<UUID, Integer> TOO_MANY_REQUESTS_COOLDOWN_UUIDS = new HashMap<>();
+	// WINDOW_ITEMS Packet Listener 일정 시간 이내에 2회 이상 요청된 패킷은 무시후 일정 시간 뒤에 임의로 패킷을 보냄
+	private static final Set<UUID> TOO_MANY_REQUESTS_COOLDOWN_UUIDS = new HashSet<>();
 
 	// 임의로 패킷을 보낼 UUID들(중복 보냄 방지)
 	private static final Set<UUID> RESEND_PACKET_TARGETS = new HashSet<>();
@@ -701,8 +698,9 @@ public class ProtocolLibManager
 				PacketContainer packet = event.getPacket();
 				Player player = event.getPlayer();
 				UUID uuid = player.getUniqueId();
+//				MessageUtil.consoleSendMessage("&c" + packet.getType().name());
 				// 너무 자주 요청된 패킷은 처리하지 않고 반려
-				if (TOO_MANY_REQUESTS_COOLDOWN_UUIDS.getOrDefault(uuid, 0) > MAX_WINDOW_ITEMS_REQUEST)
+				if (TOO_MANY_REQUESTS_COOLDOWN_UUIDS.contains(uuid))
 				{
 					if (!RESEND_PACKET_TARGETS.contains(uuid))
 					{
@@ -712,22 +710,22 @@ public class ProtocolLibManager
 							RESEND_PACKET_TARGETS.remove(uuid);
 						}, RESEND_PACKET_DELAY_IN_TICKS);
 					}
-
 					return;
 				}
-				TOO_MANY_REQUESTS_COOLDOWN_UUIDS.put(uuid, TOO_MANY_REQUESTS_COOLDOWN_UUIDS.getOrDefault(uuid, 0) + 1);
-				Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> TOO_MANY_REQUESTS_COOLDOWN_UUIDS.put(uuid, TOO_MANY_REQUESTS_COOLDOWN_UUIDS.getOrDefault(uuid, 1) - 1), 0L);
+//				MessageUtil.consoleSendMessage("&a" + packet.getType().name());
+				TOO_MANY_REQUESTS_COOLDOWN_UUIDS.add(uuid);
+				Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> TOO_MANY_REQUESTS_COOLDOWN_UUIDS.remove(uuid), RESEND_PACKET_DELAY_IN_TICKS);
 				// 아이템이 표시될 때 실제 적용되야 하는 nbt는 적용함
-				{
-					Inventory bottom = player.getOpenInventory().getBottomInventory();
-					for (int i = 0; i < bottom.getSize(); i++)
-					{
-						ItemStack bottomItemStack = bottom.getItem(i);
-						if (!ItemStackUtil.itemExists(bottomItemStack))
-							continue;
-						bottom.setItem(i, ItemLore.setItemLore(bottomItemStack, true, ItemLoreView.of(player)));
-					}
-				}
+//				{
+//					Inventory bottom = player.getOpenInventory().getBottomInventory();
+//					for (int i = 0; i < bottom.getSize(); i++)
+//					{
+//						ItemStack bottomItemStack = bottom.getItem(i);
+//						if (!ItemStackUtil.itemExists(bottomItemStack))
+//							continue;
+//						bottom.setItem(i, ItemLore.setItemLore(bottomItemStack, true, ItemLoreView.of(player)));
+//					}
+//				}
 				UserData.WINDOW_ID.set(uuid, packet.getIntegers().read(0));
 				StructureModifier<List<ItemStack>> modifier = packet.getItemListModifier();
 				ItemStack itemStack = setItemLore(packet.getType(), packet.getItemModifier().read(0), player);
@@ -774,23 +772,24 @@ public class ProtocolLibManager
 				}
 				PacketContainer packet = event.getPacket();
 				Player player = event.getPlayer();
-				UUID uuid = player.getUniqueId();
-				// 너무 자주 요청된 패킷은 처리하지 않고 반려
-				if (TOO_MANY_REQUESTS_COOLDOWN_UUIDS.getOrDefault(uuid, 0) > MAX_WINDOW_ITEMS_REQUEST)
-				{
-					if (!RESEND_PACKET_TARGETS.contains(uuid))
-					{
-						RESEND_PACKET_TARGETS.add(uuid);
-						Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> {
-							ItemStackUtil.updateInventory(player);
-							RESEND_PACKET_TARGETS.remove(uuid);
-						}, RESEND_PACKET_DELAY_IN_TICKS);
-					}
-
-					return;
-				}
-				TOO_MANY_REQUESTS_COOLDOWN_UUIDS.put(uuid, TOO_MANY_REQUESTS_COOLDOWN_UUIDS.getOrDefault(uuid, 0) + 1);
-				Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> TOO_MANY_REQUESTS_COOLDOWN_UUIDS.put(uuid, TOO_MANY_REQUESTS_COOLDOWN_UUIDS.getOrDefault(uuid, 1) - 1), 0L);
+//				UUID uuid = player.getUniqueId();
+//				MessageUtil.consoleSendMessage("&c" + packet.getType().name());
+//				// 너무 자주 요청된 패킷은 처리하지 않고 반려
+//				if (TOO_MANY_REQUESTS_COOLDOWN_UUIDS.contains(uuid))
+//				{
+////					if (!RESEND_PACKET_TARGETS.contains(uuid))
+////					{
+////						RESEND_PACKET_TARGETS.add(uuid);
+////						Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> {
+////							ItemStackUtil.updateInventory(player);
+////							RESEND_PACKET_TARGETS.remove(uuid);
+////						}, RESEND_PACKET_DELAY_IN_TICKS);
+////					}
+//					return;
+//				}
+//				MessageUtil.consoleSendMessage("&a" + packet.getType().name());
+//				TOO_MANY_REQUESTS_COOLDOWN_UUIDS.add(uuid);
+//				Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> TOO_MANY_REQUESTS_COOLDOWN_UUIDS.remove(uuid), RESEND_PACKET_DELAY_IN_TICKS);
 				ItemStack itemStack = setItemLore(packet.getType(), packet.getItemModifier().read(0), player);
 				SetSlotEvent setSlotEvent = new SetSlotEvent(player, itemStack);
 				Bukkit.getPluginManager().callEvent(setSlotEvent);
@@ -812,7 +811,7 @@ public class ProtocolLibManager
 				}
 				PacketContainer packet = event.getPacket();
 				Player player = event.getPlayer();
-				Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 1L);
+				Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), RESEND_PACKET_DELAY_IN_TICKS);
 				StructureModifier<List<MerchantRecipe>> modifier = packet.getMerchantRecipeLists();
 				List<MerchantRecipe> merchantRecipeList = modifier.read(0), newMerchantRecipeList = new ArrayList<>(merchantRecipeList.size());
 				for (MerchantRecipe recipe : merchantRecipeList)
