@@ -538,95 +538,94 @@ public class CustomConfig
 			return this.getMaterial(player.getUniqueId());
 		}
 
-		public static boolean getBoolean(OfflinePlayer offlinePlayer, String key)
+		public static boolean getBoolean(OfflinePlayer offlinePlayer, Object key)
 		{
 			return getBoolean(offlinePlayer.getUniqueId(), key);
 		}
 
-		public static boolean getBoolean(UUID uuid, String key)
+		public static boolean getBoolean(UUID uuid, Object key)
 		{
 			YamlConfiguration config = Variable.userData.get(uuid);
 			if (config == null)
 			{
 				config = CustomConfig.getPlayerConfig(uuid).getConfig();
 			}
-			return config.getBoolean(key);
+			return config.getBoolean(key.toString());
 		}
 
-		public static int getInt(OfflinePlayer offlinePlayer, String key)
+		public static int getInt(OfflinePlayer offlinePlayer, Object key)
 		{
 			return  getInt(offlinePlayer, key, 0);
 		}
 
-		public static int getInt(OfflinePlayer offlinePlayer, String key, int defaultValue)
+		public static int getInt(OfflinePlayer offlinePlayer, Object key, int defaultValue)
 		{
 			return getInt(offlinePlayer.getUniqueId(), key, defaultValue);
 		}
 
-
-		public static int getInt(UUID uuid, String key)
+		public static int getInt(UUID uuid, Object key)
 		{
 			return getInt(uuid, key, 0);
 		}
 
-		public static int getInt(UUID uuid, String key, int defaultValue)
+		public static int getInt(UUID uuid, Object key, int defaultValue)
 		{
 			YamlConfiguration config = Variable.userData.get(uuid);
 			if (config == null)
 			{
 				config = CustomConfig.getPlayerConfig(uuid).getConfig();
 			}
-			return config.getInt(key, defaultValue);
+			return config.getInt(key.toString(), defaultValue);
 		}
 
-		public static double getDouble(OfflinePlayer offlinePlayer, String key)
+		public static double getDouble(OfflinePlayer offlinePlayer, Object key)
 		{
 			return getDouble(offlinePlayer, key, 0);
 		}
 
-		public static double getDouble(OfflinePlayer offlinePlayer, String key, double defaultValue)
+		public static double getDouble(OfflinePlayer offlinePlayer, Object key, double defaultValue)
 		{
 			return getDouble(offlinePlayer.getUniqueId(), key, defaultValue);
 		}
 
-		public static double getDouble(UUID uuid, String key)
+		public static double getDouble(UUID uuid, Object key)
 		{
 			return getDouble(uuid, key, 0);
 		}
 
-		public static double getDouble(UUID uuid, String key, double defaultValue)
+		public static double getDouble(UUID uuid, Object key, double defaultValue)
 		{
 			YamlConfiguration config = Variable.userData.get(uuid);
 			if (config == null)
 			{
 				config = CustomConfig.getPlayerConfig(uuid).getConfig();
 			}
-			return config.getDouble(key, defaultValue);
+			return config.getDouble(key.toString(), defaultValue);
 		}
 
-		public static String getString(OfflinePlayer offlinePlayer, String key)
+		public static String getString(OfflinePlayer offlinePlayer, Object key)
 		{
 			return getString(offlinePlayer.getUniqueId(), key);
 		}
 
-		public static String getString(UUID uuid, String key)
+		public static String getString(UUID uuid, Object key)
 		{
 			return getString(uuid, key, null);
 		}
 
-		public static String getString(OfflinePlayer offlinePlayer, String key, String defaultValue)
+		public static String getString(OfflinePlayer offlinePlayer, Object key, String defaultValue)
 		{
 			return getString(offlinePlayer.getUniqueId(), key, defaultValue);
 		}
 
-		public static String getString(UUID uuid, String key, String defaultValue)
+		public static String getString(UUID uuid, Object key, String defaultValue)
 		{
 			YamlConfiguration config = Variable.userData.get(uuid);
 			if (config == null)
 			{
 				config = CustomConfig.getPlayerConfig(uuid).getConfig();
 			}
-			return config.getString(key, defaultValue);
+			return config.getString(key.toString(), defaultValue);
 		}
 
 		public static Object get(OfflinePlayer offlinePlayer, String key)
