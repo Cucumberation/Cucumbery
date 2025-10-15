@@ -19,16 +19,35 @@ public class PreCustomBlockBreakEvent extends BlockEvent implements Cancellable
 
   private final Player player;
 
+	private final boolean isChain;
+
   public PreCustomBlockBreakEvent(@NotNull Block theBlock, @NotNull Player player)
   {
     super(theBlock);
+		this.player = player;
+		this.isChain = false;
+  }
+
+  public PreCustomBlockBreakEvent(@NotNull Block theBlock, @NotNull Player player, boolean isChain)
+  {
+    super(theBlock);
     this.player = player;
+		this.isChain = isChain;
   }
 
   public Player getPlayer()
   {
     return player;
   }
+
+	/**
+	 * Indicates that this event would be called in chain.
+	 * @return ture if this event would be called in chain.
+	 */
+	public boolean isChain()
+	{
+		return isChain;
+	}
 
   @Override
   public @NotNull HandlerList getHandlers()

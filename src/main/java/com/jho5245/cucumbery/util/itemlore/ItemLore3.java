@@ -1,5 +1,6 @@
 package com.jho5245.cucumbery.util.itemlore;
 
+import com.jho5245.cucumbery.events.itemlore.ItemLore3Event;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
@@ -14,6 +15,7 @@ import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.NBTList;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.EntityType;
@@ -23,6 +25,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -312,44 +315,16 @@ public class ItemLore3
             description.add(Component.empty());
             description.add(ComponentUtil.translate("&7&o악 더러워!"));
           }
-					case YOUPEOPLEGAME_DAMP_COOKIE -> {
-						description.add(ComponentUtil.translate("&75초를 기다려 얻은 쿠키다."));
-						description.add(ComponentUtil.translate("&7어딘가 좀 눅눅하다."));
-					}
-					case YOUPEOPLEGAME_DAMP_COOKIE_PILE -> {
-						description.add(ComponentUtil.translate("&7뭉쳐서 이름이 굵어졌다."));
-					}
-					case YOUPEOPLEGAME_DAMP_COOKIE_EVEN -> {
-						description.add(ComponentUtil.translate("&7이젠 문쳐서 보기만 해도 목이 막힐 지경이다."));
-					}
-					case YOUPEOPLEGAME_CRISPY_COOKIE -> {
-						description.add(ComponentUtil.translate("&7눅눅한 쿠키를 익혀 바삭하게 만든 쿠키다."));
-					}
-					case YOUPEOPLEGAME_STARTER_SWORD, YOUPEOPLEGAME_STARTER_SHOVEL -> {
-						description.add(ComponentUtil.translate("&7뉴비에게 지급하는 %s이다", customMaterial.translationKey()));
-					}
-					case YOUPEOPLEGAME_STARTER_AXE, YOUPEOPLEGAME_STARTER_PICKAXE -> {
-						description.add(ComponentUtil.translate("&7뉴비에게 지급하는 %s다", customMaterial.translationKey()));
-					}
-					case YOUPEOPLEGAME_BURNING_FIRE -> {
-						description.add(ComponentUtil.translate("&7다용도로 필요해질 것 같은 불이다."));
-					}
-					case YOUPEOPLEGAME_CRISPY_COOKIE_PICKAXE -> {
-						description.add(ComponentUtil.translate("&7바삭한 쿠키로 만든 곡괭이다."));
-					}
-					case YOUPEOPLEGAME_CRISPY_COOKIE_BOX -> {
-						description.add(ComponentUtil.translate("&7바삭한 쿠키가 1셋트 들어있는 박스다."));
-					}
-					case YOUPEOPLEGAME_MOIST_COOKIE -> {
-						description.add(ComponentUtil.translate("&7눅눅함과 바삭함이 만나 촉촉한 쿠키가 되었다!"));
-					}
-					case YOUPEOPLEGAME_DAMP_COOKIE_POTION -> {
-						description.add(ComponentUtil.translate("&7더욱 눅눅한 쿠키를 액화하여 만든 이상한 포션이다."));
-						description.add(ComponentUtil.translate("&7사용시 잠수자리에서 영구적으로 25%확률로 쿠키를 하나 더 얻을 수 있다."));
-						description.add(ComponentUtil.translate("&7단, 딱 한 번만 사용할 수 있다."));
-					}
         }
       }
+
+			ItemLore3Event itemLore3Event = new ItemLore3Event(itemStack, new ArrayList<>());
+			Bukkit.getPluginManager().callEvent(itemLore3Event);
+			if (!itemLore3Event.getItemLore().isEmpty())
+			{
+				description.addAll(itemLore3Event.getItemLore());
+			}
+
       if (!customType.isEmpty())
       {
         ConfigurationSection root = Variable.customItemsConfig.getConfigurationSection(customType);

@@ -14,11 +14,22 @@ public class CustomBlockBreakEvent extends BlockEvent
 
 	private boolean applyPhysics;
 
+	private final boolean isChain;
+
   public CustomBlockBreakEvent(@NotNull Block theBlock, @NotNull Player player, boolean applyPhysics)
   {
     super(theBlock);
     this.player = player;
 		this.applyPhysics = applyPhysics;
+		this.isChain = false;
+  }
+
+  public CustomBlockBreakEvent(@NotNull Block theBlock, @NotNull Player player, boolean applyPhysics, boolean isChain)
+  {
+    super(theBlock);
+    this.player = player;
+		this.applyPhysics = applyPhysics;
+		this.isChain = isChain;
   }
 
   public Player getPlayer()
@@ -34,6 +45,15 @@ public class CustomBlockBreakEvent extends BlockEvent
 	public void setApplyPhysics(boolean value)
 	{
 		this.applyPhysics = value;
+	}
+
+	/**
+	 * Indicates that this event would be called in chain.
+	 * @return ture if this event would be called in chain.
+	 */
+	public boolean isChain()
+	{
+		return isChain;
 	}
 
   @Override

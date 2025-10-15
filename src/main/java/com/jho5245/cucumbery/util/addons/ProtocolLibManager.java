@@ -706,7 +706,8 @@ public class ProtocolLibManager
 					{
 						RESEND_PACKET_TARGETS.add(uuid);
 						Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> {
-							ItemStackUtil.updateInventory(player);
+//							MessageUtil.consoleSendMessage(player.getOpenInventory().getType().toString());
+//							ItemStackUtil.updateInventory(player);
 							RESEND_PACKET_TARGETS.remove(uuid);
 						}, RESEND_PACKET_DELAY_IN_TICKS);
 					}
@@ -811,7 +812,7 @@ public class ProtocolLibManager
 				}
 				PacketContainer packet = event.getPacket();
 				Player player = event.getPlayer();
-				Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), RESEND_PACKET_DELAY_IN_TICKS);
+				Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(player), 2L);
 				StructureModifier<List<MerchantRecipe>> modifier = packet.getMerchantRecipeLists();
 				List<MerchantRecipe> merchantRecipeList = modifier.read(0), newMerchantRecipeList = new ArrayList<>(merchantRecipeList.size());
 				for (MerchantRecipe recipe : merchantRecipeList)

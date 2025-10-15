@@ -93,6 +93,14 @@ public class MiningManager
 		{
 			return null;
 		}
+		// 공기 블록, 물 블록은 파괴 불가
+		{
+			Material type = blockLocation.getBlock().getType();
+			if (type.isAir() || type == Material.WATER || type == Material.LAVA)
+			{
+				return null;
+			}
+		}
 		// 월드가드 보호 여부 확인
 		if (Cucumbery.using_WorldGuard)
 		{

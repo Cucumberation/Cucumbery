@@ -8,7 +8,9 @@ import com.jho5245.cucumbery.util.storage.data.Permission;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
+import io.lumine.mythic.bukkit.utils.scoreboard.PacketScoreboard;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -84,118 +86,148 @@ public class CommandUserData implements CucumberyCommandExecutor
 			}
 			boolean hideOutput = args.length == 4 && args[3].equalsIgnoreCase("true");
 			String value = args[2].toLowerCase();
+			boolean isRemove = value.equals("--remove");
 			List<OfflinePlayer> successPlayers = new ArrayList<>();
 			for (OfflinePlayer offlinePlayer : offlinePlayers)
 			{
 				UUID uuid = offlinePlayer.getUniqueId();
-				Object o = isCustomData ? UserData.get(uuid, keyString) : key.get(uuid);
-				if (o != null && !o.toString().equalsIgnoreCase(value))
-				{
-					successPlayers.add(offlinePlayer);
-				}
-				CustomConfig config = CustomConfig.getPlayerConfig(uuid);
 				if (isCustomData)
 				{
-					MessageUtil.sendWarn(sender, "custom-data 편집 기능은 준비중입니다");
-					return true;
-				}
-				switch (key)
-				{
-					case DISPLAY_NAME, PLAYER_LIST_NAME ->
+					successPlayers.add(offlinePlayer);
+					if (isRemove)
 					{
-						MessageUtil.sendError(sender, "닉네임은 닉네임 명령어(rg255,204;/nick&r, rg255,204;/nickothers&r)를 사용하여 변경해주세요.");
-						return true;
+						UserData.set(uuid, keyString, null);
 					}
-					case HEALTH_BAR ->
+					else
 					{
-						MessageUtil.sendError(sender, "HP바는 HP바 명령어(rg255,204;/shp&r)를 사용하여 변경해주세요.");
-						return true;
-					}
-					case ID, UUID ->
-					{
-						MessageUtil.sendError(sender, "%s 키의 값은 변경할 수 없습니다", key);
-						return true;
-					}
-					case ITEM_DROP_MODE, ITEM_PICKUP_MODE ->
-					{
-						if (!value.equals("normal") && !value.equals("sneak") && !value.equals("disabled"))
+						try
 						{
-							MessageUtil.noArg(sender, Prefix.NO_VALUE, value);
+							if (value.startsWith("int:"))
+							{
+								value = value.substring("int:".length());
+								int v = Integer.parseInt(value);
+								UserData.set(uuid, keyString, v);
+							}
+							else if (value.startsWith("double:"))
+							{
+								value = value.substring("double:".length());
+								double v = Double.parseDouble(value);
+								UserData.set(uuid, keyString, v);
+							}
+							else if (value.startsWith("boolean:"))
+							{
+								value = value.substring("boolean:".length());
+								boolean v = Boolean.parseBoolean(value);
+								UserData.set(uuid, keyString, v);
+							}
+							else
+							{
+								UserData.set(uuid, keyString, value);
+							}
+						}
+						catch (Exception e) {
+							MessageUtil.noArg(sender, Prefix.ARGS_WRONG, value);
 							return true;
 						}
-						config.getConfig().set(key.getKey(), value);
-					}
-					case ITEM_USE_DELAY, ITEM_DROP_DELAY ->
-					{
-						if (!MessageUtil.isInteger(sender, value, true))
-						{
-							return true;
-						}
-						int intVal = Integer.parseInt(value);
-						if (!MessageUtil.checkNumberSize(sender, intVal, 0, 200))
-						{
-							return true;
-						}
-						config.getConfig().set(key.getKey(), intVal);
-					}
-					case INVINCIBLE_TIME, INVINCIBLE_TIME_JOIN ->
-					{
-						if (!MessageUtil.isInteger(sender, value, true))
-						{
-							return true;
-						}
-						int intVal = Integer.parseInt(value);
-						if (!MessageUtil.checkNumberSize(sender, intVal, -1, 2000))
-						{
-							return true;
-						}
-						config.getConfig().set(key.getKey(), intVal);
-					}
-					case CUSTOM_MINING_COOLDOWN_DISPLAY_BLOCK ->
-					{
-						Material material = Method2.valueOf(value.toUpperCase(), Material.class);
-						if (material == null || !material.isBlock())
-						{
-							MessageUtil.sendError(sender, "argument.block.id.invalid", value);
-							return true;
-						}
-						config.getConfig().set(key.getKey(), material.toString());
-					}
-					case MINING_SPEED_RATIO_MODIFIER_LIGHT_PENALTY ->
-					{
-						if (!MessageUtil.isInteger(sender, value, true))
-						{
-							return true;
-						}
-						int intVal = Integer.parseInt(value);
-						if (!MessageUtil.checkNumberSize(sender, intVal, 0, 100))
-						{
-							return true;
-						}
-						config.getConfig().set(key.getKey(), intVal);
-					}
-					case CUSTOM_DATA ->
-					{
-						MessageUtil.sendWarn(sender, "custom-data 편집 기능은 준비중입니다");
-						return true;
-					}
-					default ->
-					{
-						if (!value.equals("true") && !value.equals("false"))
-						{
-							MessageUtil.wrongBool(sender, 3, args);
-							return true;
-						}
-						config.getConfig().set(key.getKey(), Boolean.parseBoolean(value));
 					}
 				}
-				config.saveConfig();
-				try
+				else
 				{
-					key.set(uuid, config.getConfig().get(key.getKey()));
-				}
-				catch (Exception ignored)
-				{
+					Object o = key.get(uuid);
+					if (o != null && !o.toString().equalsIgnoreCase(value))
+					{
+						successPlayers.add(offlinePlayer);
+					}
+					switch (key)
+					{
+						case DISPLAY_NAME, PLAYER_LIST_NAME ->
+						{
+							MessageUtil.sendError(sender, "닉네임은 닉네임 명령어(rg255,204;/nick&r, rg255,204;/nickothers&r)를 사용하여 변경해주세요.");
+							return true;
+						}
+						case HEALTH_BAR ->
+						{
+							MessageUtil.sendError(sender, "HP바는 HP바 명령어(rg255,204;/shp&r)를 사용하여 변경해주세요.");
+							return true;
+						}
+						case ID, UUID ->
+						{
+							MessageUtil.sendError(sender, "%s 키의 값은 변경할 수 없습니다", key);
+							return true;
+						}
+						case ITEM_DROP_MODE, ITEM_PICKUP_MODE ->
+						{
+							if (!value.equals("normal") && !value.equals("sneak") && !value.equals("disabled"))
+							{
+								MessageUtil.noArg(sender, Prefix.NO_VALUE, value);
+								return true;
+							}
+							key.set(uuid, value);
+						}
+						case ITEM_USE_DELAY, ITEM_DROP_DELAY ->
+						{
+							if (!MessageUtil.isInteger(sender, value, true))
+							{
+								return true;
+							}
+							int intVal = Integer.parseInt(value);
+							if (!MessageUtil.checkNumberSize(sender, intVal, 0, 200))
+							{
+								return true;
+							}
+							key.set(uuid, intVal);
+						}
+						case INVINCIBLE_TIME, INVINCIBLE_TIME_JOIN ->
+						{
+							if (!MessageUtil.isInteger(sender, value, true))
+							{
+								return true;
+							}
+							int intVal = Integer.parseInt(value);
+							if (!MessageUtil.checkNumberSize(sender, intVal, -1, 2000))
+							{
+								return true;
+							}
+							key.set(uuid, intVal);
+						}
+						case CUSTOM_MINING_COOLDOWN_DISPLAY_BLOCK ->
+						{
+							Material material = Method2.valueOf(value.toUpperCase(), Material.class);
+							if (material == null || !material.isBlock())
+							{
+								MessageUtil.sendError(sender, "argument.block.id.invalid", value);
+								return true;
+							}
+							key.set(uuid, material.toString());
+						}
+						case MINING_SPEED_RATIO_MODIFIER_LIGHT_PENALTY ->
+						{
+							if (!MessageUtil.isInteger(sender, value, true))
+							{
+								return true;
+							}
+							int intVal = Integer.parseInt(value);
+							if (!MessageUtil.checkNumberSize(sender, intVal, 0, 100))
+							{
+								return true;
+							}
+							key.set(uuid, intVal);
+						}
+						case CUSTOM_DATA ->
+						{
+							MessageUtil.sendWarn(sender, "custom-data 편집 기능은 준비중입니다");
+							return true;
+						}
+						default ->
+						{
+							if (!value.equals("true") && !value.equals("false"))
+							{
+								MessageUtil.wrongBool(sender, 3, args);
+								return true;
+							}
+							key.set(uuid, Boolean.parseBoolean(value));
+						}
+					}
 				}
 			}
 			boolean successPlayersEmpty = successPlayers.isEmpty();
@@ -206,12 +238,28 @@ public class CommandUserData implements CucumberyCommandExecutor
 				if (!failurePlayers.isEmpty())
 				{
 					MessageUtil.sendWarnOrError(successPlayersEmpty, sender,
-							ComponentUtil.translate("변경 사항이 없습니다. 이미 %s의 %s 값이 %s입니다", failurePlayers, key, Constant.THE_COLOR_HEX + value));
+							ComponentUtil.translate("변경 사항이 없습니다. 이미 %s의 %s 값이 %s입니다", failurePlayers, isCustomData ? keyString : key, Constant.THE_COLOR_HEX + value));
 				}
 				if (!successPlayersEmpty)
 				{
-					MessageUtil.info(sender, "%s의 %s 값을 %s(으)로 설정했습니다", successPlayers, key, Constant.THE_COLOR_HEX + value);
-					MessageUtil.sendAdminMessage(sender, "%s의 %s 값을 %s(으)로 설정했습니다", successPlayers, key, Constant.THE_COLOR_HEX + value);
+					if (isCustomData)
+					{
+						if (isRemove)
+						{
+							MessageUtil.info(sender, "%s의 %s 값을 제거했습니다", successPlayers, keyString);
+							MessageUtil.sendAdminMessage(sender, "%s의 %s 값을 제거했습니다", successPlayers, keyString);
+						}
+						else
+						{
+							MessageUtil.info(sender, "%s의 %s 값을 %s(으)로 설정했습니다", successPlayers, keyString, Constant.THE_COLOR_HEX + value);
+							MessageUtil.sendAdminMessage(sender, "%s의 %s 값을 %s(으)로 설정했습니다", successPlayers, keyString, Constant.THE_COLOR_HEX + value);
+						}
+					}
+					else
+					{
+						MessageUtil.info(sender, "%s의 %s 값을 %s(으)로 설정했습니다", successPlayers, key, Constant.THE_COLOR_HEX + value);
+						MessageUtil.sendAdminMessage(sender, "%s의 %s 값을 %s(으)로 설정했습니다", successPlayers, key, Constant.THE_COLOR_HEX + value);
+					}
 					List<Audience> infoTarget = new ArrayList<>();
 					successPlayers.forEach(offlinePlayer ->
 					{
@@ -221,7 +269,8 @@ public class CommandUserData implements CucumberyCommandExecutor
 						}
 					});
 					infoTarget.remove(sender);
-					MessageUtil.sendMessage(infoTarget, Prefix.INFO_SETDATA, "%s이(가) 당신의 %s 값을 %s(으)로 설정했습니다", sender, key, Constant.THE_COLOR_HEX + value);
+					MessageUtil.sendMessage(infoTarget, Prefix.INFO_SETDATA, "%s이(가) 당신의 %s 값을 %s(으)로 설정했습니다", sender, isCustomData ? keyString : key,
+							Constant.THE_COLOR_HEX + value);
 				}
 			}
 			return !successPlayersEmpty || failure;
@@ -260,7 +309,8 @@ public class CommandUserData implements CucumberyCommandExecutor
 					if (section != null)
 					{
 						Set<String> keys = section.getKeys(true);
-						return CommandTabUtil.sortError(list, CommandTabUtil.tabCompleterList(args, keys, "<커스텀 데이터>"));
+						return CommandTabUtil.sortError(list,
+								CommandTabUtil.tabCompleterList(args, keys.stream().map(s -> UserData.CUSTOM_DATA.getKey() + "." + s).toList(), "<커스텀 데이터>"));
 					}
 				}
 			}
@@ -275,7 +325,10 @@ public class CommandUserData implements CucumberyCommandExecutor
 			}
 			catch (Exception e)
 			{
-				return CommandTabUtil.errorMessage("%s은(는) 잘못된 데이터 키입니다", args[1]);
+				if (!args[1].startsWith("custom_data"))
+					return CommandTabUtil.errorMessage("%s은(는) 잘못된 데이터 키입니다", args[1]);
+				else
+					key = UserData.CUSTOM_DATA;
 			}
 			return switch (key)
 			{
@@ -287,6 +340,13 @@ public class CommandUserData implements CucumberyCommandExecutor
 				case INVINCIBLE_TIME, INVINCIBLE_TIME_JOIN -> CommandTabUtil.tabCompleterIntegerRadius(args, -1, 2000, "<틱>");
 				case MINING_SPEED_RATIO_MODIFIER_LIGHT_PENALTY -> CommandTabUtil.tabCompleterIntegerRadius(args, 0, 100, "<페널티 비율>");
 				case CUSTOM_MINING_COOLDOWN_DISPLAY_BLOCK -> CommandTabUtil.tabCompleterList(args, Material.values(), "<블록 유형>", material -> !material.isBlock());
+				case CUSTOM_DATA -> CommandTabUtil.tabCompleterList(args,
+						Arrays.asList(
+								Completion.completion("--remove", Component.translatable("제거")),
+								Completion.completion("boolean:", Component.translatable("boolean 값 지정")),
+								Completion.completion("int:", Component.translatable("int 값 지정")),
+								Completion.completion("double:", Component.translatable("double 값 지정"))
+						), "<값>");
 				default -> CommandTabUtil.tabCompleterBoolean(args, "<값>");
 			};
 		}

@@ -1375,7 +1375,7 @@ public class ItemStackUtil
 			InventoryView inventoryView = player.getOpenInventory();
 			InventoryType inventoryType = inventoryView.getType();
 			Inventory top = inventoryView.getTopInventory(), bottom = inventoryView.getBottomInventory();
-			// MessageUtil.broadcastDebug(inventoryType + ", top: " + top.getSize() + ", bottom: " + bottom.getSize());
+//			MessageUtil.broadcastDebug(inventoryType + ", top: " + top.getSize() + ", bottom: " + bottom.getSize(), "type:" + inventoryType);
 			List<ItemStack> itemStackList = new ArrayList<>(Arrays.asList(top.getContents()));
 			int windowID;
 			if (inventoryType == InventoryType.CRAFTING || inventoryType == InventoryType.CREATIVE)

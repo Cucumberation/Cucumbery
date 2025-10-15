@@ -343,7 +343,7 @@ public class Scheduler
 			CustomEffectScheduler.townShield(player);
 			CustomEffectScheduler.displayGUI(player);
 			MiningScheduler.customMiningPre(player);
-			MiningScheduler.customMining(player);
+			MiningScheduler.breakingBlock(player);
 			AttributeInstance instance = player.getAttribute(Attribute.BLOCK_BREAK_SPEED);
 			if (instance != null)
 			{
