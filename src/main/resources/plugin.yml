@@ -311,10 +311,6 @@ commands:
     description: 개체를 날립니다.
     usage: /<command> <x축 속력> <y축 속력> <z축 속력>
     aliases: [velo2, cvelo2, cvelocity2, 날리기2]
-  quickshopaddon:
-    description: QuickShop 플러그인 애드온 명령어
-    usage: /<command> <상점 위치> <price|amount|type|get> ...
-    aliases: [qsa, shopa]
   repeat:
     description: 명령어를 반복 실행합니다. %repeat% 플레이스 홀더로 반복된 횟수 수치를 사용할 수 있습니다.
     usage: /<command> <반복 횟수> <딜레이> <명령어>

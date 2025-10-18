@@ -88,7 +88,9 @@ public class CustomEffectType implements Translatable, EnumHideable
 			builder().removeOnQuit().defaultDuration(20 * 60 * 40)), HEROS_ECHO_OTHERS = new CustomEffectType("heros_echo_others", "영웅의 메아리",
 			builder().removeOnQuit().defaultDuration(20 * 60 * 40).enumHidden()),
 
-	/**/ INVINCIBLE = new CustomEffectType("invincible", "무적"), INVINCIBLE_PLUGIN_RELOAD = new CustomEffectType("invincible_plugin_reload", "플러그인 리로드 무적",
+	/**/ INVINCIBLE = new CustomEffectType("invincible", "무적"),
+	/**/ INVINCIBLE_FALL = new CustomEffectType("invincible_fall", "낙하 피해 무적"),
+			INVINCIBLE_PLUGIN_RELOAD = new CustomEffectType("invincible_plugin_reload", "플러그인 리로드 무적",
 			builder().defaultDuration(100).nonBuffFreezable().enumHidden()), INVINCIBLE_RESPAWN = new CustomEffectType("invincible_respawn", "리스폰 무적",
 			builder().defaultDuration(100).nonBuffFreezable().enumHidden()),
 
@@ -320,7 +322,8 @@ public class CustomEffectType implements Translatable, EnumHideable
 
 				HEROS_ECHO, HEROS_ECHO_OTHERS,
 
-				INVINCIBLE, INVINCIBLE_RESPAWN, INVINCIBLE_PLUGIN_RELOAD,
+				INVINCIBLE, INVINCIBLE_FALL,
+				INVINCIBLE_RESPAWN, INVINCIBLE_PLUGIN_RELOAD,
 
 				KINETIC_RESISTANCE, KNOCKBACK_RESISTANCE, KNOCKBACK_RESISTANCE_COMBAT, KNOCKBACK_RESISTANCE_NON_COMBAT, LEVITATION_RESISTANCE,
 

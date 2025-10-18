@@ -1,8 +1,6 @@
 package com.jho5245.cucumbery;
 
 import com.comphenix.protocol.ProtocolLib;
-import com.destroystokyo.paper.profile.PlayerProfile;
-import com.jho5245.cucumbery.commands.addon.CommandQuickShopAddon;
 import com.jho5245.cucumbery.commands.air.CommandAirPoint;
 import com.jho5245.cucumbery.commands.brigadier.*;
 import com.jho5245.cucumbery.commands.brigadier.hp.CommandHealthPoint;
@@ -79,8 +77,6 @@ import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.RecipeChecker;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
 import com.jho5245.cucumbery.util.storage.no_groups.Updater;
-import com.nisovin.shopkeepers.api.ShopkeepersPlugin;
-import com.nisovin.shopkeepers.api.shopkeeper.Shopkeeper;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.songoda.ultimatetimber.UltimateTimber;
@@ -90,7 +86,6 @@ import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.geco.gsit.GSitMain;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
-import dev.jorel.commandapi.CommandAPIConfig;
 import dev.jorel.commandapi.Converter;
 import io.lumine.mythic.bukkit.BukkitAPIHelper;
 import me.clip.placeholderapi.PlaceholderAPIPlugin;
@@ -835,7 +830,6 @@ public class Cucumbery extends JavaPlugin
 		Initializer.registerCommand("viewinventory", new CommandViewInventory());
 		Initializer.registerCommand("custommerchant", new CommandCustomMerchant());
 		Initializer.registerCommand("customeffect", new CommandCustomEffect());
-		Initializer.registerCommand("quickshopaddon", new CommandQuickShopAddon());
 		Initializer.registerCommand("modifyexplosive", new CommandModifyExplosive());
 		Initializer.registerCommand("sendtoast", new CommandSendToast());
 		Initializer.registerCommand("sendbossbar", new CommandSendBossbar());

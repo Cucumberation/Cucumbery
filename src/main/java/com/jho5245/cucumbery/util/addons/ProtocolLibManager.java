@@ -14,7 +14,6 @@ import com.comphenix.protocol.utility.MinecraftReflection;
 import com.comphenix.protocol.wrappers.EnumWrappers.ItemSlot;
 import com.comphenix.protocol.wrappers.*;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Multimap;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffect;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffect.DisplayType;
@@ -70,11 +69,12 @@ import net.kyori.adventure.text.format.TextDecoration.State;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.json.JSONComponentSerializer;
 import org.bukkit.*;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.MerchantRecipe;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
@@ -1973,25 +1973,25 @@ public class ProtocolLibManager
 			}
 		}
 
-		if (!itemMeta.hasAttributeModifiers())
-		{
-			Material type = clone.getType();
-			Multimap<Attribute, AttributeModifier> attributeModifierMultimap = type.getDefaultAttributeModifiers();
-			if (!attributeModifierMultimap.isEmpty())
-			{
-				if (showItemLore)
-					itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-				for (Attribute attribute : attributeModifierMultimap.keySet())
-				{
-					for (AttributeModifier modifier : attributeModifierMultimap.get(attribute))
-					{
-						AttributeModifier newModifier = new AttributeModifier(new NamespacedKey(Cucumbery.getPlugin(), "protocollib_random_number_" + Math.random()),
-								modifier.getAmount(), modifier.getOperation(), modifier.getSlotGroup());
-						itemMeta.addAttributeModifier(attribute, newModifier);
-					}
-				}
-			}
-		}
+//		if (!itemMeta.hasAttributeModifiers())
+//		{
+//			Material type = clone.getType();
+//			Multimap<Attribute, AttributeModifier> attributeModifierMultimap = type.getDefaultAttributeModifiers();
+//			if (!attributeModifierMultimap.isEmpty())
+//			{
+//				if (showItemLore)
+//					itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+//				for (Attribute attribute : attributeModifierMultimap.keySet())
+//				{
+//					for (AttributeModifier modifier : attributeModifierMultimap.get(attribute))
+//					{
+//						AttributeModifier newModifier = new AttributeModifier(new NamespacedKey(Cucumbery.getPlugin(), "protocollib_random_number_" + Math.random()),
+//								modifier.getAmount(), modifier.getOperation(), modifier.getSlotGroup());
+//						itemMeta.addAttributeModifier(attribute, newModifier);
+//					}
+//				}
+//			}
+//		}
 
 		// 일부 인챈트는 Attribute 설명을 추가하므로 클라이언트에서 해당 인챈트를 제거하여 보냄
 		if (showItemLore && ignoreCreativeWhat && itemMeta.hasEnchants())

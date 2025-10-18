@@ -154,7 +154,6 @@ public class PlayerCommandSend implements Listener
 		commands.removeAll(this.deleteCommands(player, Permission.CMD_EDIT_BLOCK_DATA, "editblockdata"));
 		commands.removeAll(this.deleteCommands(player, Permission.CMD_CONSOLE_SUDO, "consolesudo"));
 		commands.removeAll(this.deleteCommands(player, Permission.CMD_VELOCITY, "velocity2"));
-		commands.removeAll(this.deleteCommands(player, Permission.CMD_QUICKSHOP_ADDON, "quickshopaddon"));
 		commands.removeAll(this.deleteCommands(player, Permission.CMD_REPEAT, "repeat"));
 		commands.removeAll(this.deleteCommands(player, Permission.CMD_TRUEKILL, "ckill2"));
 		commands.removeAll(this.deleteCommands(player, Permission.CMD_VIEW_INVNETORY, "viewinventory"));

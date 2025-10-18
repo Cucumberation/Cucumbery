@@ -123,7 +123,6 @@ public enum Permission
   CMD_EDIT_COMMAND_BLOCK(C + "editcommandblock"),
   CMD_EDIT_BLOCK_DATA(C + "editblockdata"),
   CMD_CONSOLE_SUDO(C + "consolesudo"),
-  CMD_QUICKSHOP_ADDON(C + "quickshopaddon"),
   CMD_REPEAT(C + "repeat"),
   CMD_VIEW_INVNETORY(C + "viewinventory"),
   CMD_CUSTOM_MERCHANT_ADMIN(C + "custommerchant.admin"),

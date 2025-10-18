@@ -124,11 +124,13 @@ public class Scheduler
 			spectateUpdaterAsync();
 			// 인벤토리가 가득 찼을때 타이틀 알림
 			inventoryFullNotifyAsync();
-			// gui 업데이트
-			updateGUIAsync();
 			// 이름표 - 트래커
 			nameTagTrackerAsync();
 		}, 20L, 20L);
+		Bukkit.getScheduler().runTaskTimer(Cucumbery.getPlugin(), () -> {
+			// gui 업데이트
+			updateGUI();
+		}, 0L, 20L);
 		Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(cucumbery, () ->
 		{
 			expireItemAvailableTimeAsync();
@@ -1286,7 +1288,7 @@ public class Scheduler
 	/**
 	 * 1초마다 플레이어의 일부 gui 화면을 업데이트 합니다.
 	 */
-	private static void updateGUIAsync()
+	private static void updateGUI()
 	{
 		for (Player player : Bukkit.getServer().getOnlinePlayers())
 		{

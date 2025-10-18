@@ -557,6 +557,7 @@ public enum CustomMaterial implements Translatable
 	YOUPEOPLEGAME_STARTER_SHOVEL(Material.IRON_SHOVEL, Material.IRON_SHOVEL.translationKey(), "스타터"),
 	YOUPEOPLEGAME_STARTER_SWORD(Material.IRON_SWORD, Material.IRON_SWORD.translationKey(), "스타터"),
 	YOUPEOPLEGAME_SUPER_MOIST_COOKIE_BOOSTER(Material.DEBUG_STICK, "&6key:item.youpeoplegame.super_moist_cookie_booster|촉촉한 쿠키 포션", "포션"),
+	YOUPEOPLEGAME_HARD_OAK_WOOD(Material.OAK_WOOD, "#553830; key:item.youpeoplegame.hard_oak_wood|단단한 참나무", "key:itemGroup.wood|나무"),
 	;
 
 	private final Material displayMaterial;

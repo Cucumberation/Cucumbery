@@ -252,6 +252,11 @@ public class EntityDamage implements Listener
 			victim.setFireTicks(-20);
 			return;
 		}
+		if (damageCause == DamageCause.FALL && CustomEffectManager.hasEffect(victim, CustomEffectType.INVINCIBLE_FALL))
+		{
+			event.setCancelled(true);
+			return;
+		}
 		if (CustomEffectManager.hasEffect(victim, CustomEffectType.RESURRECTION_INVINCIBLE) || CustomEffectManager.hasEffect(victim,
 				CustomEffectType.INVINCIBLE_RESPAWN) || CustomEffectManager.hasEffect(victim, CustomEffectType.INVINCIBLE_PLUGIN_RELOAD))
 		{

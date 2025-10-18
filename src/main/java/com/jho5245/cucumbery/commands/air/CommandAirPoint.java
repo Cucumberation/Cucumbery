@@ -60,9 +60,9 @@ public class CommandAirPoint implements CommandExecutor, TabCompleter
             target.setRemainingAir(maxAir);
             if (!hideMessage)
             {
-              MessageUtil.sendWarn(sender,"설정한 산소량이 %s의 최대 산소량보다 많습니다 (손해 본 값 : %s)", target, Constant.THE_COLOR_HEX + (value - maxAir));
-              MessageUtil.sendMessage(target, Prefix.INFO_AIR, sender, "이 당신의 산소량을 rg255,204;" + maxAir + "&r으로 설정했습니다 (rg255,204;산소량&r : rg255,204;" + target.getRemainingAir() + "&r / rg255,204;" + maxAir + "&r)");
-              MessageUtil.sendMessage(sender, Prefix.INFO_AIR, target, "의 산소량을 rg255,204;" + maxAir + "&r으로 설정했습니다 (rg255,204;산소량&r : rg255,204;" + target.getRemainingAir() + "&r / rg255,204;" + maxAir + "&r)");
+              MessageUtil.sendWarn(sender,"설정한 산소량이 %s의 최대 산소량보다 많습니다. (손해 본 값 : %s)", target, value - maxAir);
+              MessageUtil.sendMessage(target, Prefix.INFO_AIR, sender, "이 당신의 산소량을 %s으로 설정했습니다. (산소량 : %s / %s)", maxAir, target.getRemainingAir(), maxAir);
+              MessageUtil.sendMessage(sender, Prefix.INFO_AIR, target, "의 산소량을 %s으로 설정했습니다. (산소량 : %s / %s)", maxAir, target.getRemainingAir(), maxAir);
             }
             return true;
           }
