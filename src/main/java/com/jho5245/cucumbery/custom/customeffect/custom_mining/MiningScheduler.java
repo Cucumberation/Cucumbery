@@ -408,11 +408,15 @@ public class MiningScheduler
 	/**
 	 * 특정 위치 블록 파괴
 	 * <p>
-	 *   isChain이 <code>true</code>일 경우 chainLocation이 <code>null</code>이 될 수 없다.
+	 * isChain이 <code>true</code>일 경우 chainLocation이 <code>null</code>이 될 수 없다.
 	 * </p>
-	 * @param player 블록을 파괴하는 플레이어
-	 * @param isChain 연쇄 파괴 여부
-	 * @param chainLocation 연쇄 파괴 위치
+	 *
+	 * @param player
+	 * 		블록을 파괴하는 플레이어
+	 * @param isChain
+	 * 		연쇄 파괴 여부
+	 * @param chainLocation
+	 * 		연쇄 파괴 위치
 	 */
 	public static void breakingBlock(@NotNull Player player, boolean isChain, @Nullable Location chainLocation)
 	{
@@ -821,7 +825,8 @@ public class MiningScheduler
 						else
 						{
 							boolean hasAllowedBlocks = CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_ALLOWED_BLOCKS);
-							if (hasAllowedBlocks)
+							boolean cobbleMode = Cucumbery.config.getBoolean("mining-mode-1-cobble-mode");
+							if (hasAllowedBlocks && cobbleMode)
 							{
 								final BlockData blockData = block.getBlockData();
 								switch (block.getType())
@@ -856,25 +861,28 @@ public class MiningScheduler
 									}
 								}
 							}
-							switch (block.getType())
+							if (cobbleMode)
 							{
-								case STONE ->
+								switch (block.getType())
 								{
-									Variable.customMiningExtraBlocks.put(locationClone, Bukkit.createBlockData(Material.COBBLESTONE));
-									if (Variable.customMiningExtraBlocksTask.containsKey(locationClone))
+									case STONE ->
 									{
-										Variable.customMiningExtraBlocksTask.remove(locationClone).cancel();
+										Variable.customMiningExtraBlocks.put(locationClone, Bukkit.createBlockData(Material.COBBLESTONE));
+										if (Variable.customMiningExtraBlocksTask.containsKey(locationClone))
+										{
+											Variable.customMiningExtraBlocksTask.remove(locationClone).cancel();
+										}
+										customMining();
 									}
-									customMining();
-								}
-								case DEEPSLATE ->
-								{
-									Variable.customMiningExtraBlocks.put(locationClone, Bukkit.createBlockData(Material.COBBLED_DEEPSLATE));
-									if (Variable.customMiningExtraBlocksTask.containsKey(locationClone))
+									case DEEPSLATE ->
 									{
-										Variable.customMiningExtraBlocksTask.remove(locationClone).cancel();
+										Variable.customMiningExtraBlocks.put(locationClone, Bukkit.createBlockData(Material.COBBLED_DEEPSLATE));
+										if (Variable.customMiningExtraBlocksTask.containsKey(locationClone))
+										{
+											Variable.customMiningExtraBlocksTask.remove(locationClone).cancel();
+										}
+										customMining();
 									}
-									customMining();
 								}
 							}
 						}

@@ -784,6 +784,8 @@ custom-mining:
     gemstone: cucumbery_miner_gemstone
   # 기본 블록 재생성 주기 (틱)
   default-ore-regen-in-ticks: 200
+  # 채광 모드 1에서 돌을 캤을때 조약돌이 나오게 할 것인가?
+  mining-mode-1-cobble-mode: false
   # 채광 모드 2 (cucumbery_miner_2) 에서의 블록 재생성 주기 배수 (2.0 = 2배 오래 걸림(기존 10초 -> 100초))
   mining-mode-2-regen-multiplier: 2.0
   # 플러그인 비활성화 시 채광 모드 2에서 채굴한 블록이 복구되게 할 것인가?
