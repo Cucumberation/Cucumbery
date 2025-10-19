@@ -1270,6 +1270,9 @@ public class ItemLoreCustomItem
 				case YOUPEOPLEGAME_DAMP_COOKIE_POTION, YOUPEOPLEGAME_MOIST_COOKIE_BOOSTER, YOUPEOPLEGAME_SUPER_MOIST_COOKIE_BOOSTER -> {
 					itemMeta.setItemModel(Material.HONEY_BOTTLE.getKey());
 				}
+				case YOUPEOPLEGAME_MEDAL_OF_PARKOUR -> {
+					itemMeta.setMaxStackSize(99);
+				}
 			}
 			// 반짝이 효과가 없는 아이템 중 디버그 막대기인 아이템은 반짝이 효과 제거
 			if (customMaterial.getDisplayMaterial() == Material.DEBUG_STICK && !customMaterial.isGlow() && !itemMeta.hasEnchants())

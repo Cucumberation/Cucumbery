@@ -560,6 +560,7 @@ public enum CustomMaterial implements Translatable
 	YOUPEOPLEGAME_HARD_OAK_WOOD(Material.OAK_WOOD, "#553830;key:item.youpeoplegame.hard_oak_wood|단단한 참나무", "key:itemGroup.wood|나무"),
 	YOUPEOPLEGAME_HIGH_QUALITY_STICK(Material.STICK, "#553830;key:item.youpeoplegame.high_quality_stick|품질좋은 막대기", "key:itemGroup.wood|나무"),
 	YOUPEOPLEGAME_HARD_DARK_OAK_WOOD(Material.DARK_OAK_WOOD, "#553830;key:item.youpeoplegame.hard_dark_oak_wood|단단한 짙은 참나무", "key:itemGroup.wood|나무"),
+	YOUPEOPLEGAME_MEDAL_OF_PARKOUR(Material.MUSIC_DISC_13, "&ekey:item.youpeoplegame.medal_of_parkour|점프맵의 메달", "key:itemGroup.medal|메달"),
 	;
 
 	private final Material displayMaterial;
