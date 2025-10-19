@@ -3,9 +3,7 @@ package com.jho5245.cucumbery.commands.no_groups;
 import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent.Completion;
 import com.jho5245.cucumbery.util.no_groups.*;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
-import com.jho5245.cucumbery.util.storage.data.Constant;
-import com.jho5245.cucumbery.util.storage.data.Permission;
-import com.jho5245.cucumbery.util.storage.data.Prefix;
+import com.jho5245.cucumbery.util.storage.data.*;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import io.lumine.mythic.bukkit.utils.scoreboard.PacketScoreboard;
@@ -19,6 +17,7 @@ import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.module.Configuration;
@@ -304,8 +303,9 @@ public class CommandUserData implements CucumberyCommandExecutor
 				OfflinePlayer offlinePlayer = SelectorUtil.getOfflinePlayer(sender, args[0], false);
 				if (offlinePlayer != null)
 				{
-					CustomConfig customConfig = CustomConfig.getPlayerConfig(offlinePlayer);
-					ConfigurationSection section = customConfig.getConfig().getConfigurationSection(UserData.CUSTOM_DATA.getKey());
+					UUID uuid = offlinePlayer.getUniqueId();
+					YamlConfiguration config = Variable.userData.getOrDefault(uuid, CustomConfig.getPlayerConfig(uuid).getConfig());
+					ConfigurationSection section = config.getConfigurationSection(UserData.CUSTOM_DATA.getKey());
 					if (section != null)
 					{
 						Set<String> keys = section.getKeys(true);
