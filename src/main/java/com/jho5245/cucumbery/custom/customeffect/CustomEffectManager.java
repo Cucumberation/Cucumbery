@@ -196,13 +196,20 @@ public class CustomEffectManager
 		}
 		if (effectType == CustomEffectType.SECRET_GUARD_EFFECT)
 		{
-			effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.CAMERA_DISTANCE,
-					Operation.ADD_NUMBER, 1);
+			effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.CAMERA_DISTANCE, Operation.ADD_NUMBER,
+					1);
 		}
 		if (effectType == CustomEffectType.SNEAK_TO_GIANT_EFFECT)
 		{
-			effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.SCALE,
-					Operation.ADD_SCALAR, 0.1);
+			effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.SCALE, Operation.ADD_SCALAR, 0.1);
+		}
+		if (effectType == CustomEffectType.GRAVITY)
+		{
+			effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.GRAVITY, Operation.ADD_SCALAR, 0.1);
+		}
+		if (effectType == CustomEffectType.ANTI_GRAVITY)
+		{
+			effect = new AttributeCustomEffectImple(effectType, initDura, initAmple, displayType, UUID.randomUUID(), Attribute.GRAVITY, Operation.ADD_SCALAR, -0.1);
 		}
 		if (effectType == CustomEffectType.POSITION_MEMORIZE)
 		{
@@ -1236,10 +1243,11 @@ public class CustomEffectManager
 		return potionEffectType.translationKey();
 	}
 
-	private static final Set<PotionEffectType> NEGATIVE_POTION_EFFECT_TYPES = Set.of(PotionEffectType.SLOWNESS, PotionEffectType.NAUSEA, PotionEffectType.MINING_FATIGUE,
-			PotionEffectType.INSTANT_DAMAGE, PotionEffectType.BLINDNESS, PotionEffectType.HUNGER, PotionEffectType.WEAKNESS, PotionEffectType.POISON, PotionEffectType.WITHER,
-			PotionEffectType.GLOWING, PotionEffectType.LEVITATION, PotionEffectType.UNLUCK, PotionEffectType.BAD_OMEN, PotionEffectType.DARKNESS, PotionEffectType.INFESTED,
-			PotionEffectType.OOZING, PotionEffectType.RAID_OMEN, PotionEffectType.TRIAL_OMEN, PotionEffectType.WEAVING, PotionEffectType.WIND_CHARGED);
+	private static final Set<PotionEffectType> NEGATIVE_POTION_EFFECT_TYPES = Set.of(PotionEffectType.SLOWNESS, PotionEffectType.NAUSEA,
+			PotionEffectType.MINING_FATIGUE, PotionEffectType.INSTANT_DAMAGE, PotionEffectType.BLINDNESS, PotionEffectType.HUNGER, PotionEffectType.WEAKNESS,
+			PotionEffectType.POISON, PotionEffectType.WITHER, PotionEffectType.GLOWING, PotionEffectType.LEVITATION, PotionEffectType.UNLUCK,
+			PotionEffectType.BAD_OMEN, PotionEffectType.DARKNESS, PotionEffectType.INFESTED, PotionEffectType.OOZING, PotionEffectType.RAID_OMEN,
+			PotionEffectType.TRIAL_OMEN, PotionEffectType.WEAVING, PotionEffectType.WIND_CHARGED);
 
 	@SuppressWarnings("all")
 	public static boolean isVanillaNegative(@NotNull PotionEffectType potionEffectType)

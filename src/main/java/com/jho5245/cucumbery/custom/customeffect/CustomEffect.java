@@ -75,7 +75,8 @@ public class CustomEffect
 		this(effectType, duration, amplifier, displayType, null);
 	}
 
-	public CustomEffect(@NotNull CustomEffectType effectType, int duration, int amplifier, @NotNull DisplayType displayType, @Nullable OverridePropertyBuilder builder)
+	public CustomEffect(@NotNull CustomEffectType effectType, int duration, int amplifier, @NotNull DisplayType displayType,
+			@Nullable OverridePropertyBuilder builder)
 	{
 		this.effectType = effectType;
 		if (effectType.isToggle())
@@ -260,7 +261,8 @@ public class CustomEffect
 			case "MINECRAFT_SPEED" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.SPEED, duration, amplifier));
 			case "MINECRAFT_SLOWNESS" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.SLOWNESS, duration, amplifier));
 			case "MINECRAFT_HASTE" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.HASTE, duration, amplifier), viewer);
-			case "MINECRAFT_MINING_FATIGUE" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.MINING_FATIGUE, duration, amplifier), viewer);
+			case "MINECRAFT_MINING_FATIGUE" ->
+					VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.MINING_FATIGUE, duration, amplifier), viewer);
 			case "MINECRAFT_STRENGTH" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.STRENGTH, duration, amplifier));
 			case "MINECRAFT_WEAKNESS" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.WEAKNESS, duration, amplifier));
 			case "MINECRAFT_INSTANT_DAMAGE" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.INSTANT_DAMAGE, duration, amplifier));
@@ -310,8 +312,17 @@ public class CustomEffect
 			description = description.append(Component.text("\n"));
 			description = description.append(ComponentUtil.translate("말 그대로 빠꾸 없이 초당 약 %s 블록만큼 떠오릅니다", (amplifier + 1) * 0.9));
 		}
-		if (effectType == CustomEffectType.SECRET_GUARD) {
+		if (effectType == CustomEffectType.SECRET_GUARD)
+		{
 			description = ComponentUtil.translate("3인칭 화면의 카메라 거리가 %s 블록만큼 늘어납니다", CustomEffectManager.getAttributeModifierAmount(this));
+		}
+		if (effectType == CustomEffectType.GRAVITY)
+		{
+			description = ComponentUtil.translate("중력이 %s 증가합니다.", (amplifier + 1) * 10 + "%p");
+		}
+		if (effectType == CustomEffectType.ANTI_GRAVITY)
+		{
+			description = ComponentUtil.translate("중력이 %s 감소합니다.", (amplifier + 1) * 10 + "%p");
 		}
 		if (this instanceof OfflinePlayerCustomEffect offlinePlayerCustomEffect)
 		{
@@ -411,12 +422,12 @@ public class CustomEffect
 			}
 			if (!buffFreezable)
 			{
-				propertyDescription = propertyDescription.append(Component.text("\n")).append(ComponentUtil.translate("&e%s의 영향을 받지 않습니다", ComponentUtil.translate(CustomEffectType.BUFF_FREEZE.translationKey())));
+				propertyDescription = propertyDescription.append(Component.text("\n"))
+						.append(ComponentUtil.translate("&e%s의 영향을 받지 않습니다", ComponentUtil.translate(CustomEffectType.BUFF_FREEZE.translationKey())));
 			}
 			if (isRealDuration)
 			{
-				propertyDescription = propertyDescription.append(Component.text("\n")).append(
-						ComponentUtil.translate("&e접속을 종료해도 시간이 흐르는 효과입니다"));
+				propertyDescription = propertyDescription.append(Component.text("\n")).append(ComponentUtil.translate("&e접속을 종료해도 시간이 흐르는 효과입니다"));
 			}
 			if (effectType.isToggle())
 			{
