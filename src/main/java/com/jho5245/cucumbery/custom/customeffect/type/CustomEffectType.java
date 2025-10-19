@@ -288,7 +288,7 @@ public class CustomEffectType implements Translatable, EnumHideable
 
 	GRAVITY = new CustomEffectType("gravity", "중력 증가", builder().negative().description("중력이 증가합니다").maxAmplifier(255)),
 
-	ANTI_GRAVITY = new CustomEffectType("anti_gravity", "중력 감소", builder().negative().description("중력이 감소합니다")),
+	ANTI_GRAVITY = new CustomEffectType("anti_gravity", "중력 감소", builder().negative().description("중력이 감소합니다").maxAmplifier(255)),
 
 	/**/ NOTHING = new CustomEffectType("nothing", "아무것도 아님"),
 

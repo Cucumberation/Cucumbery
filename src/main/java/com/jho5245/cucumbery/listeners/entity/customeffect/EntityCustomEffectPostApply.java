@@ -226,7 +226,8 @@ public class EntityCustomEffectPostApply implements Listener
 			if (attributeInstance != null)
 			{
 				double amount = CustomEffectManager.getAttributeModifierAmount(customEffect);
-				attributeInstance.addModifier(new AttributeModifier(customEffectType.getNamespacedKey(), amount, attributeCustomEffect.getOperation()));
+				NamespacedKey copy = new NamespacedKey(customEffectType.getNamespacedKey().getNamespace(), customEffectType.getNamespacedKey().getKey() + "_" + amplifier);
+				attributeInstance.addModifier(new AttributeModifier(copy, amount, attributeCustomEffect.getOperation()));
 
 				if (Variable.ATTRIBUTE_AMOUNT_BEFORE_AFTER.containsKey(uuid))
 				{

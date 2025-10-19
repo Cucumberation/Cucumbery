@@ -141,7 +141,6 @@ public class CustomEffectManager
 			{
 				if (entity instanceof Attributable attributable && customEffect instanceof AttributeCustomEffect attributeCustomEffect)
 				{
-					UUID uuid = attributeCustomEffect.getUniqueId();
 					Attribute attribute = attributeCustomEffect.getAttribute();
 					AttributeInstance attributeInstance = attributable.getAttribute(attribute);
 					if (attributeInstance != null)
@@ -149,7 +148,9 @@ public class CustomEffectManager
 						AttributeModifier attributeModifier = null;
 						for (AttributeModifier modifier : attributeInstance.getModifiers())
 						{
-							if (modifier.getUniqueId().equals(uuid))
+							NamespacedKey modifierKey = modifier.getKey(), effectKey = customEffect.getType().getNamespacedKey();
+							NamespacedKey effectkeyCopy = new NamespacedKey(effectKey.getNamespace(), effectKey.getKey() + "_" + customEffect.getAmplifier());
+							if (modifierKey.equals(effectkeyCopy))
 							{
 								attributeModifier = modifier;
 								break;
@@ -571,13 +572,15 @@ public class CustomEffectManager
 			{
 				if (customEffect instanceof AttributeCustomEffect attributeCustomEffect)
 				{
-					UUID uuid = attributeCustomEffect.getUniqueId();
 					Attribute attribute = attributeCustomEffect.getAttribute();
 					AttributeInstance attributeInstance = attributable.getAttribute(attribute);
 					if (attributeInstance != null)
 					{
-						attributeInstance.addModifier(new AttributeModifier(uuid, "cucumbery-" + customEffect.getType().translationKey(),
-								(customEffect.getAmplifier() + 1) * attributeCustomEffect.getMultiplier(), attributeCustomEffect.getOperation()));
+						CustomEffectType customEffectType = customEffect.getType();
+						NamespacedKey namespacedKey = customEffectType.getNamespacedKey();
+						NamespacedKey copy = new NamespacedKey(namespacedKey.getNamespace(), namespacedKey.getKey() + "_" + customEffect.getAmplifier());
+						attributeInstance.addModifier(
+								new AttributeModifier(copy, (customEffect.getAmplifier() + 1) * attributeCustomEffect.getMultiplier(), attributeCustomEffect.getOperation()));
 					}
 				}
 			}

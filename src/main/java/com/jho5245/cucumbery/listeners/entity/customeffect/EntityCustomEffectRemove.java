@@ -225,7 +225,9 @@ public class EntityCustomEffectRemove implements Listener
 				AttributeModifier attributeModifier = null;
 				for (AttributeModifier modifier : attributeInstance.getModifiers())
 				{
-					if (modifier.getKey().equals(customEffectType.getNamespacedKey()))
+					NamespacedKey modifierKey = modifier.getKey(), effectKey = customEffectType.getNamespacedKey();
+					NamespacedKey effectKeyCopy = new NamespacedKey(effectKey.getNamespace(), effectKey.getKey() + "_" + amplifier);
+					if (modifierKey.equals(effectKeyCopy))
 					{
 						attributeModifier = modifier;
 						break;
