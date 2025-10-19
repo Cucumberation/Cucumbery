@@ -51,9 +51,9 @@ public class CustomEffectType implements Translatable, EnumHideable
 	BACKWARDS_CHAT = new CustomEffectType("backwards_chat", "팅채 로꾸거", builder().removeOnMilk().description("다니됩력입 로꾸거 이팅채")), MUNDANE = new CustomEffectType(
 			"mundane", "평범함", "평범", builder().removeOnMilk()), UNCRAFTABLE = new CustomEffectType("uncraftable", "제작 불가능함", builder().negative().maxAmplifier(2)),
 
-	/**/ BANE_OF_ARTHROPODS = new CustomEffectType("bane_of_arthropods", Enchantment.BANE_OF_ARTHROPODS.translationKey(),
-			builder().removeOnMilk().maxAmplifier(255)), SHARPNESS = new CustomEffectType("sharpness", Enchantment.SHARPNESS.translationKey(),
-			builder().removeOnMilk().maxAmplifier(255)), SMITE = new CustomEffectType("smite", Enchantment.SMITE.translationKey(),
+	/**/ BANE_OF_ARTHROPODS = new CustomEffectType("bane_of_arthropods", "enchantment.minecraft.bane_of_arthropods|살충",
+			builder().removeOnMilk().maxAmplifier(255)), SHARPNESS = new CustomEffectType("sharpness", "key:enchantment.minecraft.sharpness|날카로움",
+			builder().removeOnMilk().maxAmplifier(255)), SMITE = new CustomEffectType("smite", "key:enchantment.minecraft.smite|강타",
 			builder().removeOnMilk().maxAmplifier(255)),
 
 	/**/ CONTINUAL_SPECTATING = new CustomEffectType("continual_spectating", "관전 지속",
@@ -75,7 +75,7 @@ public class CustomEffectType implements Translatable, EnumHideable
 			builder().negative().keepOnDeath()), CURSE_OF_JUMPING = new CustomEffectType("curse_of_jumping", "점프 불가능",
 			builder().negative().keepOnDeath()), CURSE_OF_MUSHROOM = new CustomEffectType("curse_of_mushroom", "버섯의 저주",
 			builder().negative().keepOnDeath().maxAmplifier(999)), CURSE_OF_VANISHING = new CustomEffectType("curse_of_vanishing",
-			Enchantment.VANISHING_CURSE.translationKey(), builder().negative().keepOnDeath().description("아이템을 버리면 즉시 사라집니다")),
+			"key:enchantment.minecraft.vanishing_curse|소실 저주", builder().negative().keepOnDeath().description("아이템을 버리면 즉시 사라집니다")),
 
 	/**/ DARKNESS_TERROR = new CustomEffectType("darkness_terror", "어두운거 싫어요", builder().negative()), DARKNESS_TERROR_ACTIVATED = new CustomEffectType(
 			"darkness_terror_activated", "어둠의 공포", builder().negative().enumHidden().timeHidden().skipEvent()), DARKNESS_TERROR_RESISTANCE = new CustomEffectType(
@@ -85,7 +85,8 @@ public class CustomEffectType implements Translatable, EnumHideable
 			"fancy_spotlight_activated", "화려한 조명 활성화", builder().removeOnQuit().enumHidden().timeHidden().defaultDuration(20).skipEvent()),
 
 	/**/ HEROS_ECHO = new CustomEffectType("heros_echo", "영웅의 메아리",
-			builder().removeOnQuit().defaultDuration(20 * 60 * 40)), HEROS_ECHO_OTHERS = new CustomEffectType("heros_echo_others", "영웅의 메아리",
+			builder().removeOnQuit().defaultDuration(20 * 60 * 40)),
+			HEROS_ECHO_OTHERS = new CustomEffectType("heros_echo_others", "영웅의 메아리",
 			builder().removeOnQuit().defaultDuration(20 * 60 * 40).enumHidden()),
 
 	/**/ INVINCIBLE = new CustomEffectType("invincible", "무적"),
@@ -110,7 +111,8 @@ public class CustomEffectType implements Translatable, EnumHideable
 	/**/ BLESS_OF_SANS = new CustomEffectType("bless_of_sans", "샌즈의 축복", builder().maxAmplifier(9)), WA_SANS = new CustomEffectType("wa_sans", "와 샌즈",
 			builder().maxAmplifier(9)),
 
-	/**/ SILK_TOUCH = new CustomEffectType("silk_touch", Enchantment.SILK_TOUCH.translationKey()), SMELTING_TOUCH = new CustomEffectType("smelting_touch",
+	/**/ SILK_TOUCH = new CustomEffectType("silk_touch", "key:|enchantment.minecraft.silk_touch|섬세한 손길"),
+			SMELTING_TOUCH = new CustomEffectType("smelting_touch",
 			"제련의 손길"), TELEKINESIS = new CustomEffectType("telekinesis", "염력"),
 
 	/**/ TROLL_INVENTORY_PROPERTY = new CustomEffectType("troll_inventory_property", "인벤토리 트롤", HIDDEN), TROLL_INVENTORY_PROPERTY_MIN = new CustomEffectType(
@@ -153,8 +155,8 @@ public class CustomEffectType implements Translatable, EnumHideable
 			builder().keepOnDeath()), DO_NOT_PICKUP_BUT_THROW_IT = new CustomEffectType("do_not_pickup_but_throw_it", "줍지 마, 던져!",
 			builder().negative().maxAmplifier(9)), DODGE = new CustomEffectType("dodge", "회피", builder().maxAmplifier(99)), ELYTRA_BOOSTER = new CustomEffectType(
 			"elytra_booster", "겉날개 부스터", builder().maxAmplifier(9)), FEATHER_FALLING = new CustomEffectType("feather_falling",
-			Enchantment.FEATHER_FALLING.translationKey(), builder().maxAmplifier(9)), FROST_WALKER = new CustomEffectType("frost_walker",
-			Enchantment.FROST_WALKER.translationKey()), HEALTH_INCREASE = new CustomEffectType("health_increase", "HP 증가",
+			"enchantment.minecraft.feather_falling", builder().maxAmplifier(9)), FROST_WALKER = new CustomEffectType("frost_walker",
+			"enchantment.minecraft.frost_walker"), HEALTH_INCREASE = new CustomEffectType("health_increase", "HP 증가",
 			builder().maxAmplifier(99)), IDIOT_SHOOTER = new CustomEffectType("idiot_shooter", "똥손",
 			builder().negative().keepOnDeath().maxAmplifier(19)), MUTE = new CustomEffectType("mute", "채팅 금지",
 			builder().negative().keepOnDeath()), NEWBIE_SHIELD = new CustomEffectType("newbie_shield", "뉴비 보호막",
@@ -284,6 +286,9 @@ public class CustomEffectType implements Translatable, EnumHideable
 	SNEAK_TO_GIANT_EFFECT_PROTOCOL = new CustomEffectType("sneak_to_giant_effect_protocol", "웅크리면 커짐 ㄷㄷ 프로토콜", new TypeBuilder().description("웅크리면 커진다").hidden().defaultDuration(2).removeOnQuit()),
 
 
+	GRAVITY = new CustomEffectType("gravity", "중력 증가", builder().negative().description("중력이 증가합니다").maxAmplifier(255)),
+
+	ANTI_GRAVITY = new CustomEffectType("anti_gravity", "중력 감소", builder().negative().description("중력이 감소합니다")),
 
 	/**/ NOTHING = new CustomEffectType("nothing", "아무것도 아님"),
 
@@ -352,6 +357,8 @@ public class CustomEffectType implements Translatable, EnumHideable
 				COMBO, COMBO_DELAY, COMBO_STACK,
 
 				KEEP_INVENTORY, ADVANCED_KEEP_INVENTORY,
+
+				GRAVITY, ANTI_GRAVITY,
 
 				BUFF_FREEZE, CUCUMBERY_UPDATER, CHEESE_EXPERIMENT, CONFUSION, DEBUG_WATCHER, DO_NOT_PICKUP_BUT_THROW_IT, DODGE, ELYTRA_BOOSTER, FEATHER_FALLING,
 				FROST_WALKER, HEALTH_INCREASE, IDIOT_SHOOTER, MUTE, NEWBIE_SHIELD, NO_ENTITY_AGGRO, PARROTS_CHEER, SERVER_RADIO_LISTENING, STOP, TRUE_INVISIBILITY,
