@@ -17,7 +17,9 @@ import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.module.Configuration;
@@ -124,7 +126,8 @@ public class CommandUserData implements CucumberyCommandExecutor
 								UserData.set(uuid, keyString, value);
 							}
 						}
-						catch (Exception e) {
+						catch (Exception e)
+						{
 							MessageUtil.noArg(sender, Prefix.ARGS_WRONG, value);
 							return true;
 						}
@@ -303,15 +306,55 @@ public class CommandUserData implements CucumberyCommandExecutor
 				OfflinePlayer offlinePlayer = SelectorUtil.getOfflinePlayer(sender, args[0], false);
 				if (offlinePlayer != null)
 				{
+					// lastPathContainsList: 마지막 Path가 포함되어 있는 경우 목록
+					/* 예시 - 다음 path들이 있다고 가정
+					 * foo.bar
+					 * foo.baz
+					 * foo.quz
+					 *
+					 * 일때
+					 * foo.b 만 입력하면 foo 내부에 있는 path들 중 b가 있는 모든 경로 반환 (foo.bar, foo.baz)
+					 */
+					List<Completion> lastPathContainsList = new ArrayList<>();
 					UUID uuid = offlinePlayer.getUniqueId();
 					YamlConfiguration config = Variable.userData.getOrDefault(uuid, CustomConfig.getPlayerConfig(uuid).getConfig());
-					ConfigurationSection section = config.getConfigurationSection(UserData.CUSTOM_DATA.getKey());
+					if (config.contains(args[1]) && !(config.get(args[1]) instanceof MemorySection))
+					{
+						return CommandTabUtil.tabCompleterList(args, "<커스텀 데이터>", true);
+					}
+					List<String> list2 = new ArrayList<>();
+					ConfigurationSection section = config.getConfigurationSection(args[1]);
 					if (section != null)
 					{
-						Set<String> keys = section.getKeys(true);
-						return CommandTabUtil.sortError(list,
-								CommandTabUtil.tabCompleterList(args, keys.stream().map(s -> UserData.CUSTOM_DATA.getKey() + "." + s).toList(), "<커스텀 데이터>"));
+						Set<String> keys = section.getKeys(false);
+						ConfigurationSection finalSection = section;
+						list2.addAll(keys.stream().map(s -> finalSection.getCurrentPath() + "." + s).toList());
 					}
+					if (!args[1].endsWith(".") && args[1].contains("."))
+					{
+						String[] split = args[1].split("\\.");
+						String sectionPath = MessageUtil.listToString(".", 0, split.length - 1, split);
+						String lastPath = split[split.length - 1];
+						section = config.getConfigurationSection(sectionPath);
+						if (section != null)
+						{
+							Set<String> keys = section.getKeys(false);
+							ConfigurationSection finalSection1 = section;
+							list2.addAll(keys.stream().map(s ->
+							{
+								String returnValue = finalSection1.getCurrentPath() + "." + s;
+								if (returnValue.startsWith(args[1]))
+									return returnValue;
+								if (s.contains(lastPath))
+								{
+									lastPathContainsList.add(Completion.completion(returnValue));
+								}
+								return "";
+							}).toList());
+						}
+					}
+
+					return CommandTabUtil.sortError(list, CommandTabUtil.tabCompleterList(args, list2, "<커스텀 데이터>"), lastPathContainsList);
 				}
 			}
 			return list;
@@ -340,13 +383,9 @@ public class CommandUserData implements CucumberyCommandExecutor
 				case INVINCIBLE_TIME, INVINCIBLE_TIME_JOIN -> CommandTabUtil.tabCompleterIntegerRadius(args, -1, 2000, "<틱>");
 				case MINING_SPEED_RATIO_MODIFIER_LIGHT_PENALTY -> CommandTabUtil.tabCompleterIntegerRadius(args, 0, 100, "<페널티 비율>");
 				case CUSTOM_MINING_COOLDOWN_DISPLAY_BLOCK -> CommandTabUtil.tabCompleterList(args, Material.values(), "<블록 유형>", material -> !material.isBlock());
-				case CUSTOM_DATA -> CommandTabUtil.tabCompleterList(args,
-						Arrays.asList(
-								Completion.completion("--remove", Component.translatable("제거")),
-								Completion.completion("boolean:", Component.translatable("boolean 값 지정")),
-								Completion.completion("int:", Component.translatable("int 값 지정")),
-								Completion.completion("double:", Component.translatable("double 값 지정"))
-						), "<값>");
+				case CUSTOM_DATA -> CommandTabUtil.tabCompleterList(args, Arrays.asList(Completion.completion("--remove", Component.translatable("제거")),
+						Completion.completion("boolean:", Component.translatable("boolean 값 지정")), Completion.completion("int:", Component.translatable("int 값 지정")),
+						Completion.completion("double:", Component.translatable("double 값 지정"))), "<값>");
 				default -> CommandTabUtil.tabCompleterBoolean(args, "<값>");
 			};
 		}
