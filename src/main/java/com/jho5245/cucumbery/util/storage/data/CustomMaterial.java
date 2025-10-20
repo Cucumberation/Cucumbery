@@ -10,6 +10,7 @@ import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.ShadowColor;
 import net.kyori.adventure.translation.Translatable;
+import net.kyori.adventure.util.ARGBLike;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -539,9 +540,19 @@ public enum CustomMaterial implements Translatable
 	YOUPEOPLEGAME_DAMP_COOKIE_POTION(Material.DEBUG_STICK, "&6key:item.youpeoplegame.damp_cookie_potion|눅눅한 쿠키 포션", "key:itemGroup.potion|포션"),
 	YOUPEOPLEGAME_GENERATOR_MATERIAL(Material.REDSTONE_TORCH, "&4key:item.youpeoplegame.generator_material|발전물체", "key:itemGroup.redstone|레드스톤"),
 	YOUPEOPLEGAME_GOLD_PILE(Material.RAW_GOLD_BLOCK, "&ekey:item.youpeoplegame.gold_pile|금뭉치", "key:itemGroup.gold|금"),
+	YOUPEOPLEGAME_HARD_ACACIA_WOOD(Material.ACACIA_WOOD, "#FF7F00;key:item.youpeoplegame.hard_acacia_wood|단단한 아카시아나무", "key:itemGroup.wood|나무"),
+	YOUPEOPLEGAME_HARD_BIRCH_WOOD(Material.BIRCH_WOOD, "&7key:item.youpeoplegame.hard_birch_wood|단단한 자작나무", "key:itemGroup.wood|나무"),
+	YOUPEOPLEGAME_HARD_CHERRY_WOOD(Material.CHERRY_WOOD, "&dkey:item.youpeoplegame.hard_cherry_wood|단단한 벚나무", "key:itemGroup.wood|나무"),
+	YOUPEOPLEGAME_HARD_DARK_OAK_WOOD(Material.DARK_OAK_WOOD, "#553830;key:item.youpeoplegame.hard_dark_oak_wood|단단한 짙은 참나무", "key:itemGroup.wood|나무"),
+	YOUPEOPLEGAME_HARD_JUNGLE_WOOD(Material.JUNGLE_WOOD, "#E0B88A;key:item.youpeoplegame.hard_jungle_wood|단단한 정글나무", "key:itemGroup.wood|나무"),
+	YOUPEOPLEGAME_HARD_MANGROVE_WOOD(Material.MANGROVE_WOOD, "&ckey:item.youpeoplegame.hard_mangrove_wood|단단한 맹그로브나무", "key:itemGroup.wood|나무"),
+	YOUPEOPLEGAME_HARD_OAK_WOOD(Material.OAK_WOOD, "#553830;key:item.youpeoplegame.hard_oak_wood|단단한 참나무", "key:itemGroup.wood|나무"),
+	YOUPEOPLEGAME_HARD_PALE_OAK_WOOD(Material.PALE_OAK_WOOD, "&fkey:item.youpeoplegame.hard_jungle_wood|단단한 창백한 참나무", "key:itemGroup.wood|나무"),
 	YOUPEOPLEGAME_HARD_STONE(Material.STONE, "&7key:item.youpeoplegame.hard_stone|단단한 돌", "key:itemGroup.stone|돌"),
+	YOUPEOPLEGAME_HIGH_QUALITY_STICK(Material.STICK, "#553830;key:item.youpeoplegame.high_quality_stick|품질좋은 막대기", "key:itemGroup.wood|나무"),
 	YOUPEOPLEGAME_IRON_PILE(Material.RAW_IRON_BLOCK, "&fkey:item.youpeoplegame.iron_pile|철뭉치", "key:itemGroup.iron|철"),
 	YOUPEOPLEGAME_MAGIC_MATTER(Material.LAPIS_LAZULI, "&1key:item.youpeoplegame.magic_matter|마력물질", "청금석"),
+	YOUPEOPLEGAME_MEDAL_OF_PARKOUR(Material.DEBUG_STICK, "&ekey:item.youpeoplegame.medal_of_parkour|점프맵의 메달", "key:itemGroup.medal|메달"),
 	YOUPEOPLEGAME_MOIST_COOKIE(Material.COOKIE, "&6key:item.youpeoplegame.moist_cookie|촉촉한 초코칩", "촉촉한 쿠키"),
 	YOUPEOPLEGAME_MOIST_COOKIE_BOOSTER(Material.DEBUG_STICK, "&6key:item.youpeoplegame.moist_cookie_booster|촉촉한 쿠키 촉진제", "포션"),
 	YOUPEOPLEGAME_REFINED_AMETHYST(Material.AMETHYST_CLUSTER, "&5key:item.youpeoplegame.refined_amethyst|가공된 자수정", "key:itemGroup.amethyst|자수정"),
@@ -552,15 +563,19 @@ public enum CustomMaterial implements Translatable
 	YOUPEOPLEGAME_REFINED_HARD_STONE(Material.SMOOTH_STONE, "&7key:item.youpeoplegame.refined_hard_stone|가공된 단단한 돌", "key:itemGroup.stone|돌"),
 	YOUPEOPLEGAME_REFINED_IRON(Material.IRON_BLOCK, "&fkey:item.youpeoplegame.refined_iron|가공된 철", "key:itemGroup.iron|철"),
 	YOUPEOPLEGAME_REFINED_QUARTZ(Material.WHITE_STAINED_GLASS, "&fkey:item.youpeoplegame.refined_quartz|가공된 석영", "key:itemGraoup.quartz|석영"),
+	YOUPEOPLEGAME_REFINED_ANCIENT_ORE(Material.NETHERITE_BLOCK,
+			ComponentUtil.translate("&8key:item.youpeoplegame.refined_ancient_ore|가공된 고대광물")
+					.shadowColor(ShadowColor.shadowColor(197, 199, 196, 255)), Rarity.RARE, "key:itemGraoup.ancient_ore|고대광물"),
 	YOUPEOPLEGAME_STARTER_AXE(Material.IRON_AXE, Material.IRON_AXE.translationKey(), "스타터"),
 	YOUPEOPLEGAME_STARTER_PICKAXE(Material.IRON_PICKAXE, Material.IRON_PICKAXE.translationKey(), "스타터"),
 	YOUPEOPLEGAME_STARTER_SHOVEL(Material.IRON_SHOVEL, Material.IRON_SHOVEL.translationKey(), "스타터"),
 	YOUPEOPLEGAME_STARTER_SWORD(Material.IRON_SWORD, Material.IRON_SWORD.translationKey(), "스타터"),
 	YOUPEOPLEGAME_SUPER_MOIST_COOKIE_BOOSTER(Material.DEBUG_STICK, "&6key:item.youpeoplegame.super_moist_cookie_booster|촉촉한 쿠키 포션", "포션"),
-	YOUPEOPLEGAME_HARD_OAK_WOOD(Material.OAK_WOOD, "#553830;key:item.youpeoplegame.hard_oak_wood|단단한 참나무", "key:itemGroup.wood|나무"),
-	YOUPEOPLEGAME_HIGH_QUALITY_STICK(Material.STICK, "#553830;key:item.youpeoplegame.high_quality_stick|품질좋은 막대기", "key:itemGroup.wood|나무"),
-	YOUPEOPLEGAME_HARD_DARK_OAK_WOOD(Material.DARK_OAK_WOOD, "#553830;key:item.youpeoplegame.hard_dark_oak_wood|단단한 짙은 참나무", "key:itemGroup.wood|나무"),
-	YOUPEOPLEGAME_MEDAL_OF_PARKOUR(Material.MUSIC_DISC_13, "&ekey:item.youpeoplegame.medal_of_parkour|점프맵의 메달", "key:itemGroup.medal|메달"),
+	YOUPEOPLEGAME_SACK_EXPANDER_COOKIE(Material.DEBUG_STICK, "&6key:item.youpeoplegame.sack_expander_cookie|쿠키 주머니 확장", "주머니 확장"),
+	YOUPEOPLEGAME_SACK_EXPANDER_MINING(Material.DEBUG_STICK, "&6key:item.youpeoplegame.sack_expander_mining|광물 주머니 확장", "주머니 확장"),
+	YOUPEOPLEGAME_SACK_EXPANDER_WOOD(Material.DEBUG_STICK, "&6key:item.youpeoplegame.sack_expander_wood|나무 주머니 확장", "주머니 확장"),
+	YOUPEOPLEGAME_SACK_EXPANDER_DIRT(Material.DEBUG_STICK, "&6key:item.youpeoplegame.sack_expander_dirt|흙 주머니 확장", "주머니 확장"),
+	YOUPEOPLEGAME_SACK_EXPANDER_CURRENCY(Material.DEBUG_STICK, "&6key:item.youpeoplegame.sack_expander_currency|재화 주머니 확장", "주머니 확장"),
 	;
 
 	private final Material displayMaterial;

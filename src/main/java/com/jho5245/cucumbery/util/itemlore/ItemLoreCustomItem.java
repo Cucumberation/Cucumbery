@@ -650,8 +650,12 @@ public class ItemLoreCustomItem
 				case YOUPEOPLEGAME_CRISPY_COOKIE_PICKAXE, YOUPEOPLEGAME_CRISPY_COOKIE_AXE, YOUPEOPLEGAME_CRISPY_COOKIE_SHOVEL -> {
 					nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_RARITY_KEY).setString(CucumberyTag.CUSTOM_RARITY_FINAL_KEY, Rarity.RARE.toString());
 				}
-				case YOUPEOPLEGAME_BURNING_FIRE, YOUPEOPLEGAME_CRISPY_COOKIE_BOX, YOUPEOPLEGAME_DAMP_COOKIE_POTION, YOUPEOPLEGAME_MOIST_COOKIE_BOOSTER, YOUPEOPLEGAME_SUPER_MOIST_COOKIE_BOOSTER -> {
+				case YOUPEOPLEGAME_BURNING_FIRE, YOUPEOPLEGAME_CRISPY_COOKIE_BOX, YOUPEOPLEGAME_DAMP_COOKIE_POTION, YOUPEOPLEGAME_MOIST_COOKIE_BOOSTER, YOUPEOPLEGAME_SUPER_MOIST_COOKIE_BOOSTER
+				, YOUPEOPLEGAME_MEDAL_OF_PARKOUR -> {
 					nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_RARITY_KEY).setString(CucumberyTag.CUSTOM_RARITY_FINAL_KEY, Rarity.NORMAL.toString());
+				}
+				case YOUPEOPLEGAME_SACK_EXPANDER_COOKIE, YOUPEOPLEGAME_SACK_EXPANDER_MINING, YOUPEOPLEGAME_SACK_EXPANDER_WOOD, YOUPEOPLEGAME_SACK_EXPANDER_CURRENCY, YOUPEOPLEGAME_SACK_EXPANDER_DIRT -> {
+					nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_RARITY_KEY).setString(CucumberyTag.CUSTOM_RARITY_FINAL_KEY, Rarity.RARE.toString());
 				}
 			}
 			if (customMaterial.isVerticalSlab())
@@ -1271,7 +1275,23 @@ public class ItemLoreCustomItem
 					itemMeta.setItemModel(Material.HONEY_BOTTLE.getKey());
 				}
 				case YOUPEOPLEGAME_MEDAL_OF_PARKOUR -> {
+					itemMeta.setItemModel(Material.MUSIC_DISC_13.getKey());
 					itemMeta.setMaxStackSize(99);
+				}
+				case YOUPEOPLEGAME_SACK_EXPANDER_COOKIE -> {
+					itemMeta.setItemModel(Material.ORANGE_BUNDLE.getKey());
+				}
+				case YOUPEOPLEGAME_SACK_EXPANDER_MINING -> {
+					itemMeta.setItemModel(Material.GRAY_BUNDLE.getKey());
+				}
+				case YOUPEOPLEGAME_SACK_EXPANDER_WOOD -> {
+					itemMeta.setItemModel(Material.BROWN_BUNDLE.getKey());
+				}
+				case  YOUPEOPLEGAME_SACK_EXPANDER_DIRT -> {
+					itemMeta.setItemModel(Material.BUNDLE.getKey());
+				}
+				case  YOUPEOPLEGAME_SACK_EXPANDER_CURRENCY -> {
+					itemMeta.setItemModel(Material.PINK_BUNDLE.getKey());
 				}
 			}
 			// 반짝이 효과가 없는 아이템 중 디버그 막대기인 아이템은 반짝이 효과 제거
