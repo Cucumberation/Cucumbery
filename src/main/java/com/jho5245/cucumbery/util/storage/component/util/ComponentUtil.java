@@ -155,6 +155,9 @@ public class ComponentUtil
 					component = component.append(ItemNameUtil.itemName(material, Constant.THE_COLOR));
 					continue;
 				}
+				// 아이템의 개수가 1-99 사이가 아닐 경우 개수 설정
+				itemStack = itemStack.clone();
+				itemStack.setAmount(Math.max(1, Math.min(99, itemStack.getAmount())));
 				Component concat = Cucumbery.using_ProtocolLib
 						? ItemNameUtil.itemName(itemStack, Constant.THE_COLOR).hoverEvent(itemStack)
 						: ItemStackComponent.itemStackComponent(itemStack, 1, Constant.THE_COLOR, false, player);
