@@ -104,7 +104,7 @@ public class CommandUserData implements CucumberyCommandExecutor
 				{
 					if (!modifyCustomDataAlert.containsKey(sender) || !modifyCustomDataAlert.get(sender).equals(keyString))
 					{
-						MessageUtil.sendWarn(sender, "%s의 커스텀 데이터를 수정하려 시도중입니다. 정말로 %s 경로의 데이터를 제거하려면 5초 안에 한 번 더 입력하세요.", offlinePlayer,
+						MessageUtil.sendWarn(sender, "%s의 커스텀 데이터를 수정하려 시도중입니다. 정말로 %s 경로의 데이터를 수정하려면 5초 안에 한 번 더 입력하세요.", offlinePlayer,
 								Constant.THE_COLOR_HEX + keyString);
 						modifyCustomDataAlert.put(sender, keyString);
 						alertResetTask.put(sender, Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
