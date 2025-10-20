@@ -9,7 +9,10 @@ import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.ShadowColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.format.TextDecoration.State;
 import net.kyori.adventure.translation.Translatable;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -129,7 +132,8 @@ public enum CustomMaterial implements Translatable
 			CreativeCategory.BUILDING_BLOCKS),
 	DEEPSLATE_TILE_SLAB_VERTICAL(Material.DEEPSLATE_TILE_SLAB, "key:block.cucumbery.deepslate_tile_slab_vertical|심층암 타일 세로 반 블록",
 			CreativeCategory.BUILDING_BLOCKS),
-	DIAMOND_BLOCK_DECORATIVE(true, Material.DIAMOND_BLOCK, "key:item.cucumbery.diamond_block_decorative|장식용 다이아몬드 블록", Rarity.NORMAL, CreativeCategory.BUILDING_BLOCKS),
+	DIAMOND_BLOCK_DECORATIVE(true, Material.DIAMOND_BLOCK, "key:item.cucumbery.diamond_block_decorative|장식용 다이아몬드 블록", Rarity.NORMAL,
+			CreativeCategory.BUILDING_BLOCKS),
 
 	DIAMOND_CHESTPLATE_WITH_ELYTRA(Material.ELYTRA, "key:item.cucumbery.diamond_chestplate_with_elytra|다이아몬드 겉날개", Rarity.EXCELLENT, CreativeCategory.TOOLS),
 	DIA_RON_LAPI_RED_COAL_GOLD_ORE(true, Material.PLAYER_HEAD, "다이아철 청금석레 드스톤석 탄금광석", Rarity.EPIC, "itemGroup.natural"),
@@ -268,9 +272,11 @@ public enum CustomMaterial implements Translatable
 	ENCHANTED_WHEAT(Material.WHEAT, "key:item.cucumbery.enchanted_wheat|마법이 부여된 밀", Rarity.RARE),
 	END_STONE_BRICK_SLAB_VERTICAL(Material.END_STONE_BRICK_SLAB, "key:block.cucumbery.end_stone_brick_slab_vertical|엔드 석재 벽돌 세로 반 블록",
 			CreativeCategory.BUILDING_BLOCKS),
-	EXPERIENCE_BOTTLE_COLOSSAL(true, Material.EXPERIENCE_BOTTLE, "&Rkey:item.cucumbery.experience_bottle_colossal|위대한 경험치 병", Rarity.EXCELLENT, CreativeCategory.TOOLS),
+	EXPERIENCE_BOTTLE_COLOSSAL(true, Material.EXPERIENCE_BOTTLE, "&Rkey:item.cucumbery.experience_bottle_colossal|위대한 경험치 병", Rarity.EXCELLENT,
+			CreativeCategory.TOOLS),
 	EXPERIENCE_BOTTLE_GRAND(true, Material.EXPERIENCE_BOTTLE, "&Rkey:item.cucumbery.experience_bottle_grand|대단한 경험치 병", Rarity.ELITE, CreativeCategory.TOOLS),
-	EXPERIENCE_BOTTLE_TITANIC(true, Material.EXPERIENCE_BOTTLE, "&Rkey:item.cucumbery.experience_bottle_titanic|엄청난 경험치 병", Rarity.UNIQUE, CreativeCategory.TOOLS),
+	EXPERIENCE_BOTTLE_TITANIC(true, Material.EXPERIENCE_BOTTLE, "&Rkey:item.cucumbery.experience_bottle_titanic|엄청난 경험치 병", Rarity.UNIQUE,
+			CreativeCategory.TOOLS),
 	EXPOSED_CUT_COPPER_SLAB_VERTICAL(Material.EXPOSED_CUT_COPPER_SLAB, "key:block.cucumbery.exposed_cut_copper_slab_vertical|약간 녹슨 깎인 구리 세로 반 블록",
 			CreativeCategory.BUILDING_BLOCKS),
 	FIREWORK_ROCKET_CHAIN(true, Material.FIREWORK_ROCKET, "key:item.cucumbery.firework_rocket_chain|연쇄형 폭죽", Rarity.EPIC),
@@ -399,7 +405,8 @@ public enum CustomMaterial implements Translatable
 	RAINBOW_CHESTPLATE(Material.IRON_CHESTPLATE, "key:item.cucumbery.rainbow_chestplate|무지개 흉갑", Rarity.RARE, CreativeCategory.COMBAT),
 	RAINBOW_HELMET(Material.IRON_HELMET, "key:item.cucumbery.rainbow_helmet|무지개 투구", Rarity.RARE, CreativeCategory.COMBAT),
 	RAINBOW_LEGGINGS(Material.IRON_LEGGINGS, "key:item.cucumbery.rainbow_leggings|무지개 레깅스", Rarity.RARE, CreativeCategory.COMBAT),
-	REDSTONE_BLOCK_INSTA_BREAK(true, Material.REDSTONE_BLOCK, "key:block.cucumbery.redstone_block_insta_break|즉시 부서지는 레드스톤 블록", Rarity.RARE, CreativeCategory.REDSTONE),
+	REDSTONE_BLOCK_INSTA_BREAK(true, Material.REDSTONE_BLOCK, "key:block.cucumbery.redstone_block_insta_break|즉시 부서지는 레드스톤 블록", Rarity.RARE,
+			CreativeCategory.REDSTONE),
 	RED_NETHER_BRICK_SLAB_VERTICAL(Material.RED_NETHER_BRICK_SLAB, "key:block.cucumbery.red_nether_brick_slab_vertical|붉은 네더 벽돌 세로 반 블록",
 			CreativeCategory.BUILDING_BLOCKS),
 	RED_SANDSTONE_SLAB_VERTICAL(Material.RED_SANDSTONE_SLAB, "key:block.cucumbery.red_sandstone_slab_vertical|붉은 사암 세로 반 블록", CreativeCategory.BUILDING_BLOCKS),
@@ -588,6 +595,7 @@ public enum CustomMaterial implements Translatable
 	{
 		this(false, displayMaterial, displayName);
 	}
+
 	CustomMaterial(boolean setMaterial, Material displayMaterial, String displayName)
 	{
 		this(setMaterial, displayMaterial, displayName, Rarity.NORMAL);
@@ -678,8 +686,8 @@ public enum CustomMaterial implements Translatable
 
 	CustomMaterial(boolean setMaterial, Material displayMaterial, String displayName, Rarity rarity, String category)
 	{
-		this(setMaterial, displayMaterial, ComponentUtil.translate(displayName.startsWith("&R") ? rarity.colorString() + displayName.substring(2) : displayName), rarity,
-				category);
+		this(setMaterial, displayMaterial, ComponentUtil.translate(displayName.startsWith("&R") ? rarity.colorString() + displayName.substring(2) : displayName),
+				rarity, category);
 	}
 
 	CustomMaterial(Material displayMaterial, String displayName, Rarity rarity, CreativeCategory category)
@@ -690,8 +698,8 @@ public enum CustomMaterial implements Translatable
 
 	CustomMaterial(boolean setMaterial, Material displayMaterial, String displayName, Rarity rarity, CreativeCategory category)
 	{
-		this(setMaterial, displayMaterial, ComponentUtil.translate(displayName.startsWith("&R") ? rarity.colorString() + displayName.substring(2) : displayName), rarity,
-				category);
+		this(setMaterial, displayMaterial, ComponentUtil.translate(displayName.startsWith("&R") ? rarity.colorString() + displayName.substring(2) : displayName),
+				rarity, category);
 	}
 
 	CustomMaterial(Material displayMaterial, Component displayName, Rarity rarity, CreativeCategory category)
@@ -713,7 +721,14 @@ public enum CustomMaterial implements Translatable
 	{
 		this.setMaterial = setMaterial;
 		this.displayMaterial = displayMaterial;
-		this.displayName = displayName;
+		if (displayName.decoration(TextDecoration.ITALIC) == State.FALSE)
+		{
+			this.displayName = displayName.decoration(TextDecoration.ITALIC, State.NOT_SET);
+		}
+		else
+		{
+			this.displayName = displayName;
+		}
 		this.rarity = rarity;
 		this.category = category;
 	}
@@ -904,13 +919,6 @@ public enum CustomMaterial implements Translatable
 		// setMaterial: true인 놈과 반블록은 기본 Material로 ItemStack 생성
 		boolean setMaterial = this.setMaterial || this.isVerticalSlab();
 		ItemStack itemStack = new ItemStack(setMaterial ? this.displayMaterial : Material.DEBUG_STICK, amount);
-		if (!setMaterial)
-		{
-			ItemMeta itemMeta = itemStack.getItemMeta();
-			itemMeta.setMaxStackSize(64);
-			itemMeta.setItemModel(this.displayMaterial.getKey());
-			itemStack.setItemMeta(itemMeta);
-		}
 		NBTItem nbtItem = new NBTItem(itemStack, true);
 		nbtItem.setString(IDENDTIFER, this.toString().toLowerCase());
 		ItemLore.setItemLore(itemStack, !withLore);

@@ -645,13 +645,6 @@ public class ItemLoreCustomItem
 				case YOUPEOPLEGAME_CRISPY_COOKIE_PICKAXE, YOUPEOPLEGAME_CRISPY_COOKIE_AXE, YOUPEOPLEGAME_CRISPY_COOKIE_SHOVEL -> {
 					nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_RARITY_KEY).setString(CucumberyTag.CUSTOM_RARITY_FINAL_KEY, Rarity.RARE.toString());
 				}
-				case YOUPEOPLEGAME_BURNING_FIRE, YOUPEOPLEGAME_CRISPY_COOKIE_BOX, YOUPEOPLEGAME_DAMP_COOKIE_POTION, YOUPEOPLEGAME_MOIST_COOKIE_BOOSTER, YOUPEOPLEGAME_SUPER_MOIST_COOKIE_BOOSTER
-				, YOUPEOPLEGAME_MEDAL_OF_PARKOUR -> {
-					nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_RARITY_KEY).setString(CucumberyTag.CUSTOM_RARITY_FINAL_KEY, Rarity.NORMAL.toString());
-				}
-				case YOUPEOPLEGAME_SACK_EXPANDER_COOKIE, YOUPEOPLEGAME_SACK_EXPANDER_MINING, YOUPEOPLEGAME_SACK_EXPANDER_WOOD, YOUPEOPLEGAME_SACK_EXPANDER_CURRENCY, YOUPEOPLEGAME_SACK_EXPANDER_DIRT -> {
-					nbtItem.addCompound(CucumberyTag.KEY_MAIN).addCompound(CucumberyTag.CUSTOM_RARITY_KEY).setString(CucumberyTag.CUSTOM_RARITY_FINAL_KEY, Rarity.RARE.toString());
-				}
 			}
 			if (customMaterial.isVerticalSlab())
 			{
@@ -680,7 +673,21 @@ public class ItemLoreCustomItem
 			}
 		}
 		itemStack.setItemMeta(nbtItem.getItem().getItemMeta());
-		itemStack.setType(displayMaterial);
+		// setMaterial: true인 놈과 반블록은 기본 Material로 ItemStack 지정, 아닐 경우 디버그 막대기로 생성
+		if (customMaterial.isSetMaterial() || customMaterial.isVerticalSlab())
+		{
+			itemStack.setType(displayMaterial);
+		}
+		else
+		{
+			itemStack.setType(Material.DEBUG_STICK);
+			ItemMeta itemMeta = itemStack.getItemMeta();
+			itemMeta.setRarity(ItemRarity.COMMON);
+			itemMeta.setMaxStackSize(64);
+			itemMeta.setItemModel(customMaterial.getDisplayMaterial().getKey());
+			itemMeta.setEnchantmentGlintOverride(false);
+			itemStack.setItemMeta(itemMeta);
+		}
 		ItemMeta itemMeta = itemStack.getItemMeta();
 		itemMeta.itemName(customMaterial.getDisplayName());
 		// isGlow가 true일 경우 반짝이는 효과 추가
@@ -1224,8 +1231,6 @@ public class ItemLoreCustomItem
 				}
 			}
 		}
-		// 모든 아이템 등급 COMMON으로
-		itemMeta.setRarity(ItemRarity.COMMON);
 		itemStack.setItemMeta(itemMeta);
 		if (itemMeta instanceof SkullMeta skullMeta && !skullMeta.hasOwner())
 		{
