@@ -166,7 +166,7 @@ public class PlayerInteract implements Listener
 			return;
 		}
 		// Custom Material이 DEBUG_STICK이고 관리자가  Block Interact Cancel
-		if (customMaterial != null && customMaterial.getDisplayMaterial() == Material.DEBUG_STICK && blockClick && player.hasPermission("cucumbery.admin"))
+		if (customMaterial != null && item.getType() == Material.DEBUG_STICK && blockClick && player.hasPermission("cucumbery.admin"))
 		{
 			MessageUtil.sendDebug(player, "CustomMaterial의 디버그 막대기 기능 사용 취소됨");
 			event.setCancelled(true);

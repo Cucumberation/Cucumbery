@@ -65,7 +65,9 @@ public class ItemLoreCustomItem
 
 	protected static void itemLore(@NotNull ItemStack itemStack, @NotNull CustomMaterial customMaterial)
 	{
-		Material displayMaterial = customMaterial.getDisplayMaterial();
+		// 로직 처리를 위한 실제 아이템 Material
+		final Material internalMaterial = customMaterial.isSetMaterial() || customMaterial.isVerticalSlab() ? customMaterial.getDisplayMaterial() : Material.DEBUG_STICK;
+		final Material displayMaterial = customMaterial.getDisplayMaterial();
 		NBTItem nbtItem = new NBTItem(itemStack);
 		NBTCompound itemTag = nbtItem.getCompound(CucumberyTag.KEY_MAIN);
 		if (itemTag == null)
@@ -100,7 +102,7 @@ public class ItemLoreCustomItem
 		}
 		{
 			NBTCompound nbtCompound = new NBTContainer();
-			if (RecipeChecker.hasCraftingRecipe(displayMaterial))
+			if (RecipeChecker.hasCraftingRecipe(internalMaterial))
 			{
 				if (!NBTAPI.isRestricted(itemStack, RestrictionType.NO_CRAFT))
 				{
@@ -109,7 +111,7 @@ public class ItemLoreCustomItem
 					restrictionTag.addCompound(nbtCompound);
 				}
 			}
-			if (RecipeChecker.hasSmeltingRecipe(new ItemStack(displayMaterial)))
+			if (RecipeChecker.hasSmeltingRecipe(new ItemStack(internalMaterial)))
 			{
 				if (!NBTAPI.isRestricted(itemStack, RestrictionType.NO_SMELT))
 				{
@@ -118,7 +120,7 @@ public class ItemLoreCustomItem
 					restrictionTag.addCompound(nbtCompound);
 				}
 			}
-			if (displayMaterial == Material.PLAYER_HEAD)
+			if (internalMaterial == Material.PLAYER_HEAD)
 			{
 				switch (customMaterial)
 				{
@@ -137,7 +139,7 @@ public class ItemLoreCustomItem
 					}
 				}
 			}
-			if (ItemStackUtil.isPlacable(displayMaterial))
+			if (ItemStackUtil.isPlacable(internalMaterial))
 			{
 				switch (customMaterial)
 				{
@@ -172,7 +174,7 @@ public class ItemLoreCustomItem
 					}
 				}
 			}
-			if (ItemStackUtil.isBrewable(displayMaterial))
+			if (ItemStackUtil.isBrewable(internalMaterial))
 			{
 				if (!NBTAPI.isRestricted(itemStack, RestrictionType.NO_BREW))
 				{
@@ -181,7 +183,7 @@ public class ItemLoreCustomItem
 					restrictionTag.addCompound(nbtCompound);
 				}
 			}
-			if (ItemStackUtil.isEdible(displayMaterial))
+			if (ItemStackUtil.isEdible(internalMaterial))
 			{
 				switch (customMaterial)
 				{
@@ -198,7 +200,6 @@ public class ItemLoreCustomItem
 						foodTag.setDouble(CucumberyTag.SATURATION_KEY, 0.2d);
 					}
 					// 먹을 수 있는 음식
-					case YOUPEOPLEGAME_DAMP_COOKIE_POTION, YOUPEOPLEGAME_MOIST_COOKIE_BOOSTER, YOUPEOPLEGAME_SUPER_MOIST_COOKIE_BOOSTER -> {}
 					default ->
 					{
 						if (!NBTAPI.isRestricted(itemStack, RestrictionType.NO_CONSUME))
@@ -210,7 +211,7 @@ public class ItemLoreCustomItem
 					}
 				}
 			}
-			if (ItemStackUtil.getFuelTimeInSecond(displayMaterial) > 0)
+			if (ItemStackUtil.getFuelTimeInSecond(internalMaterial) > 0)
 			{
 				switch (customMaterial)
 				{
@@ -235,7 +236,7 @@ public class ItemLoreCustomItem
 					}
 				}
 			}
-			if (ItemStackUtil.getCompostChance(displayMaterial) > 0)
+			if (ItemStackUtil.getCompostChance(internalMaterial) > 0)
 			{
 				if (!NBTAPI.isRestricted(itemStack, RestrictionType.NO_COMPOSTER))
 				{
@@ -244,7 +245,7 @@ public class ItemLoreCustomItem
 					restrictionTag.addCompound(nbtCompound);
 				}
 			}
-			if (displayMaterial == Material.LAPIS_LAZULI)
+			if (internalMaterial == Material.LAPIS_LAZULI)
 			{
 				if (!NBTAPI.isRestricted(itemStack, RestrictionType.NO_ENCHANT))
 				{
@@ -649,23 +650,23 @@ public class ItemLoreCustomItem
 			if (customMaterial.isVerticalSlab())
 			{
 				nbtItem.setString("change_material", Material.BARRIER.toString());
-				if (Tag.MINEABLE_PICKAXE.isTagged(customMaterial.getDisplayMaterial()))
+				if (Tag.MINEABLE_PICKAXE.isTagged(internalMaterial))
 					nbtItem.setInteger("BlockTier", 1);
 				else
 				{
 					nbtItem.removeKey("BlockTier");
 					nbtItem.setString("MatchTools", "AXE");
 				}
-				nbtItem.setDouble("BlockHardness", MiningManager.getBlockHardness(customMaterial.getDisplayMaterial()));
-				nbtItem.setString("BreakParticle", "block:" + customMaterial.getDisplayMaterial().toString().toLowerCase());
-				nbtItem.setString("BreakSound", customMaterial.getDisplayMaterial().createBlockData().getSoundGroup().getBreakSound().toString());
+				nbtItem.setDouble("BlockHardness", MiningManager.getBlockHardness(internalMaterial));
+				nbtItem.setString("BreakParticle", "block:" + internalMaterial.toString().toLowerCase());
+				nbtItem.setString("BreakSound", internalMaterial.createBlockData().getSoundGroup().getBreakSound().toString());
 				nbtItem.setFloat("additionalPitch", 90f);
 				nbtItem.setBoolean("perspectiveYaw", true);
 				nbtItem.setBoolean("perspectivePitch", true);
 				nbtItem.setBoolean("perspectiveGrid", true);
 				NBTCompound nbtCompound = nbtItem.addCompound("displays");
 				nbtCompound.setString("type", "item");
-				nbtCompound.setString("value", customMaterial.getDisplayMaterial().toString().toLowerCase());
+				nbtCompound.setString("value", internalMaterial.toString().toLowerCase());
 			}
 			if (nbtItem.getCompound(CucumberyTag.KEY_MAIN).getKeys().isEmpty())
 			{
@@ -676,7 +677,7 @@ public class ItemLoreCustomItem
 		// setMaterial: true인 놈과 반블록은 기본 Material로 ItemStack 지정, 아닐 경우 디버그 막대기로 생성
 		if (customMaterial.isSetMaterial() || customMaterial.isVerticalSlab())
 		{
-			itemStack.setType(displayMaterial);
+			itemStack.setType(internalMaterial);
 		}
 		else
 		{
@@ -684,7 +685,7 @@ public class ItemLoreCustomItem
 			ItemMeta itemMeta = itemStack.getItemMeta();
 			itemMeta.setRarity(ItemRarity.COMMON);
 			itemMeta.setMaxStackSize(64);
-			itemMeta.setItemModel(customMaterial.getDisplayMaterial().getKey());
+			itemMeta.setItemModel(displayMaterial.getKey());
 			itemMeta.setEnchantmentGlintOverride(false);
 			itemStack.setItemMeta(itemMeta);
 		}
@@ -696,7 +697,7 @@ public class ItemLoreCustomItem
 			itemMeta.setEnchantmentGlintOverride(true);
 		}
 		// 아닐 경우 추가된 반짝이는 효과 제거
-		else if (itemMeta.hasEnchantmentGlintOverride())
+		else if (customMaterial.isSetMaterial() && itemMeta.hasEnchantmentGlintOverride())
 		{
 			itemMeta.setEnchantmentGlintOverride(null);
 		}

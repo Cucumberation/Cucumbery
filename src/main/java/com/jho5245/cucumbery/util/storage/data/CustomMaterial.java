@@ -917,8 +917,7 @@ public enum CustomMaterial implements Translatable
 	public ItemStack create(int amount, boolean withLore)
 	{
 		// setMaterial: true인 놈과 반블록은 기본 Material로 ItemStack 생성
-		boolean setMaterial = this.setMaterial || this.isVerticalSlab();
-		ItemStack itemStack = new ItemStack(setMaterial ? this.displayMaterial : Material.DEBUG_STICK, amount);
+		ItemStack itemStack = new ItemStack(isSetMaterial() || isVerticalSlab() ? displayMaterial : Material.DEBUG_STICK, amount);
 		NBTItem nbtItem = new NBTItem(itemStack, true);
 		nbtItem.setString(IDENDTIFER, this.toString().toLowerCase());
 		ItemLore.setItemLore(itemStack, !withLore);
