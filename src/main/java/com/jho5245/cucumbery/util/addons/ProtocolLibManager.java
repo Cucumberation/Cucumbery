@@ -1715,7 +1715,8 @@ public class ProtocolLibManager
 					String content = textComponent.content();
 					try
 					{
-						Double.parseDouble(content);
+						// 1,200 같이 구분자 있는 숫자도 숫자로 판별
+						Double.parseDouble(content.replace(",", ""));
 						// 채팅 메시지에 숫자를 입력한 것은 색깔 변경하지 않음
 						// 일부 메시지는 색깔 변경하지 않음
 						switch (key)
