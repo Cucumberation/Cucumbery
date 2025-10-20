@@ -139,7 +139,7 @@ public class ItemStackComponent
 
 			if (!showItemLore && !tooltip.isEmpty() && !showEnchants && showAll)
 			{
-				tooltip.add(0, ComponentUtil.translate("&8관리자 권한으로 숨겨진 마법을 참조합니다"));
+				tooltip.addFirst(ComponentUtil.translate("&8관리자 권한으로 숨겨진 마법을 참조합니다"));
 			}
 			for (int i = 0; i < tooltip.size(); i++)
 			{
