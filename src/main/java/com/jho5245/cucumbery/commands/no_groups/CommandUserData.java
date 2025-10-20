@@ -102,11 +102,13 @@ public class CommandUserData implements CucumberyCommandExecutor
 				UUID uuid = offlinePlayer.getUniqueId();
 				if (isCustomData)
 				{
-					if (!modifyCustomDataAlert.containsKey(sender) || !modifyCustomDataAlert.get(sender).equals(keyString))
+					String commandLine = label + " " + String.join(" ", args);
+					if (!modifyCustomDataAlert.containsKey(sender) || !modifyCustomDataAlert.get(sender).equals(commandLine))
 					{
 						MessageUtil.sendWarn(sender, "%s의 커스텀 데이터를 수정하려 시도중입니다. 정말로 %s 경로의 데이터를 수정하려면 5초 안에 한 번 더 입력하세요.", offlinePlayer,
 								Constant.THE_COLOR_HEX + keyString);
-						modifyCustomDataAlert.put(sender, keyString);
+						MessageUtil.info(sender, "입력한 명령어 : /" + commandLine);
+						modifyCustomDataAlert.put(sender, commandLine);
 						alertResetTask.put(sender, Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
 						{
 							modifyCustomDataAlert.remove(sender);
