@@ -353,8 +353,10 @@ public class CommandUserData implements CucumberyCommandExecutor
 							}).toList());
 						}
 					}
-
-					return CommandTabUtil.sortError(list, CommandTabUtil.tabCompleterList(args, list2, "<커스텀 데이터>"), lastPathContainsList);
+					if (lastPathContainsList.isEmpty())
+						return CommandTabUtil.sortError(list, CommandTabUtil.tabCompleterList(args, list2, "<커스텀 데이터>"));
+					else
+						return CommandTabUtil.sortError(list, CommandTabUtil.tabCompleterList(args, list2, "<커스텀 데이터>"), lastPathContainsList);
 				}
 			}
 			return list;
