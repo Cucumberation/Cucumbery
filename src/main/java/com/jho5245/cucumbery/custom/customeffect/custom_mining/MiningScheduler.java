@@ -5,6 +5,7 @@ import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.children.group.LocationCustomEffect;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCustomMining;
+import com.jho5245.cucumbery.events.PlayerTelekinesisItemEvent;
 import com.jho5245.cucumbery.events.block.CustomBlockBreakEvent;
 import com.jho5245.cucumbery.events.item.PlayerCustomMiningItemDamageEvent;
 import com.jho5245.cucumbery.util.additemmanager.AddItemUtil;
@@ -678,11 +679,15 @@ public class MiningScheduler
 			// 블록 드롭 처리(염력 인챈트나 효과가 있으면 인벤토리에 지급 혹은 블록 위치에 아이템 떨굼
 			{
 				// 블록 드롭 컬렉션이 비어있지 않을 경우에만 드롭 아이템 지급 작업 수행
+				PlayerTelekinesisItemEvent event = new PlayerTelekinesisItemEvent(player, drops);
+				event.callEvent();
+				drops.clear();
+				drops.addAll(event.getDrops());
 				if (!drops.isEmpty())
 				{
-					boolean hasTelekinesis =
-							CustomEnchant.isEnabled() && itemMeta != null && itemMeta.hasEnchant(CustomEnchant.TELEKINESIS) || CustomEffectManager.hasEffect(player,
-									CustomEffectType.TELEKINESIS);
+					boolean hasTelekinesis = !event.isCancelled() &&
+							(CustomEnchant.isEnabled() && itemMeta != null && itemMeta.hasEnchant(CustomEnchant.TELEKINESIS) || CustomEffectManager.hasEffect(player,
+									CustomEffectType.TELEKINESIS));
 					if (hasTelekinesis)
 					{
 						AddItemUtil.addItem(player, drops);
