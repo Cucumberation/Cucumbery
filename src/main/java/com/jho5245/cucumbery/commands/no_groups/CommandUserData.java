@@ -26,9 +26,9 @@ import java.util.*;
 
 public class CommandUserData implements CucumberyCommandExecutor
 {
-	private HashMap<CommandSender, String> modifyCustomDataAlert = new HashMap<>();
+	private final HashMap<CommandSender, String> modifyCustomDataAlert = new HashMap<>();
 
-	private HashMap<CommandSender, BukkitTask> alertResetTask = new HashMap<>();
+	private final HashMap<CommandSender, BukkitTask> alertResetTask = new HashMap<>();
 
 	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args)
