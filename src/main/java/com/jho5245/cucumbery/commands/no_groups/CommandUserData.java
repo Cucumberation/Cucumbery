@@ -1,6 +1,7 @@
 package com.jho5245.cucumbery.commands.no_groups;
 
 import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent.Completion;
+import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.util.no_groups.*;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.*;
@@ -20,6 +21,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.module.Configuration;
@@ -27,6 +29,10 @@ import java.util.*;
 
 public class CommandUserData implements CucumberyCommandExecutor
 {
+	private HashMap<CommandSender, String> removeCustomDataAlert = new HashMap<>();
+
+	private HashMap<CommandSender, BukkitTask> alertResetTask = new HashMap<>();
+
 	@Override
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args)
 	{
@@ -81,6 +87,11 @@ public class CommandUserData implements CucumberyCommandExecutor
 				}
 				for (Object obj : map.keySet())
 				{
+					if (obj == null)
+					{
+						MessageUtil.sendWarnOrError(map.size() == 1, sender, "%s의 %s 값이 없습니다.", map.get(null), isCustomData ? keyString : key);
+						continue;
+					}
 					MessageUtil.info(sender, "%s의 %s은(는) %s입니다", map.get(obj), isCustomData ? keyString : key, Constant.THE_COLOR_HEX + obj);
 				}
 				return true;
@@ -94,10 +105,27 @@ public class CommandUserData implements CucumberyCommandExecutor
 				UUID uuid = offlinePlayer.getUniqueId();
 				if (isCustomData)
 				{
-					successPlayers.add(offlinePlayer);
+					Object o = UserData.get(uuid, keyString);
 					if (isRemove)
 					{
-						UserData.set(uuid, keyString, null);
+						if (o != null)
+						{
+							if (!removeCustomDataAlert.containsKey(sender) || !removeCustomDataAlert.get(sender).equals(keyString))
+							{
+								MessageUtil.sendWarn(sender, "%s의 커스텀 데이터를 제거하려 시도중입니다. 정말로 %s 경로의 데이터를 제거하려면 5초 안에 한 번 더 입력하세요.", offlinePlayer,
+										Constant.THE_COLOR_HEX + keyString);
+								removeCustomDataAlert.put(sender, keyString);
+								alertResetTask.put(sender, Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+								{
+									removeCustomDataAlert.remove(sender);
+								}, 100L));
+								return true;
+							}
+							removeCustomDataAlert.remove(sender);
+							Optional.of(alertResetTask.remove(sender)).ifPresent(BukkitTask::cancel);
+							successPlayers.add(offlinePlayer);
+							UserData.set(uuid, keyString, null);
+						}
 					}
 					else
 					{
@@ -107,23 +135,39 @@ public class CommandUserData implements CucumberyCommandExecutor
 							{
 								value = value.substring("int:".length());
 								int v = Integer.parseInt(value);
-								UserData.set(uuid, keyString, v);
+								if (!Objects.equals(o, v))
+								{
+									successPlayers.add(offlinePlayer);
+									UserData.set(uuid, keyString, v);
+								}
 							}
 							else if (value.startsWith("double:"))
 							{
 								value = value.substring("double:".length());
 								double v = Double.parseDouble(value);
-								UserData.set(uuid, keyString, v);
+								if (!Objects.equals(o, v))
+								{
+									successPlayers.add(offlinePlayer);
+									UserData.set(uuid, keyString, v);
+								}
 							}
 							else if (value.startsWith("boolean:"))
 							{
 								value = value.substring("boolean:".length());
 								boolean v = Boolean.parseBoolean(value);
-								UserData.set(uuid, keyString, v);
+								if (!Objects.equals(o, v))
+								{
+									successPlayers.add(offlinePlayer);
+									UserData.set(uuid, keyString, v);
+								}
 							}
 							else
 							{
-								UserData.set(uuid, keyString, value);
+								if (!Objects.equals(o, value))
+								{
+									successPlayers.add(offlinePlayer);
+									UserData.set(uuid, keyString, value);
+								}
 							}
 						}
 						catch (Exception e)
@@ -239,8 +283,17 @@ public class CommandUserData implements CucumberyCommandExecutor
 				failurePlayers.removeAll(successPlayers);
 				if (!failurePlayers.isEmpty())
 				{
-					MessageUtil.sendWarnOrError(successPlayersEmpty, sender,
-							ComponentUtil.translate("변경 사항이 없습니다. 이미 %s의 %s 값이 %s입니다", failurePlayers, isCustomData ? keyString : key, Constant.THE_COLOR_HEX + value));
+					if (isRemove)
+					{
+						MessageUtil.sendWarnOrError(successPlayersEmpty, sender,
+								ComponentUtil.translate("변경 사항이 없습니다. 이미 %s의 %s 값이 없습니다", failurePlayers, isCustomData ? keyString : key));
+					}
+					else
+					{
+						MessageUtil.sendWarnOrError(successPlayersEmpty, sender,
+								ComponentUtil.translate("변경 사항이 없습니다. 이미 %s의 %s 값이 %s입니다", failurePlayers, isCustomData ? keyString : key, Constant.THE_COLOR_HEX + value));
+					}
+
 				}
 				if (!successPlayersEmpty)
 				{
