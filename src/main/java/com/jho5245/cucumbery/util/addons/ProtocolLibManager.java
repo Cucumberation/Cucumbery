@@ -1259,19 +1259,7 @@ public class ProtocolLibManager
 				PacketContainer packet = event.getPacket();
 				boolean isActionBar = packet.getBooleans().read(0);
 				WrappedChatComponent wrappedChatComponent = packet.getChatComponents().read(0);
-
-				// TODO: This should be fixed by protocollib
-				String json;
-				try
-				{
-					json = wrappedChatComponent.getJson();
-				}
-				catch (Exception ignored)
-				{
-					return;
-				}
-				// TODO end
-
+				String json = wrappedChatComponent.getJson();
 				final Component originComponent = JSONComponentSerializer.json().deserialize(json);
 				Component component = JSONComponentSerializer.json().deserialize(json);
 				// 채팅창에 시각 표시 - 메시지가 여러줄될 경우 줄마다 시각 추가 표시
