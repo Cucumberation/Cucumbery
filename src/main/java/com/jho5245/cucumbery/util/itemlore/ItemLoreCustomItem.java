@@ -16,8 +16,6 @@ import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.RecipeChecker;
 import de.tr7zw.changeme.nbtapi.*;
 import de.tr7zw.changeme.nbtapi.handler.NBTHandlers;
-import net.kyori.adventure.text.format.ShadowColor;
-import net.kyori.adventure.util.ARGBLike;
 import org.bukkit.*;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.attribute.Attribute;
@@ -25,12 +23,17 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.EquipmentSlotGroup;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemRarity;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.inventory.meta.components.CustomModelDataComponent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class ItemLoreCustomItem
 {
@@ -464,14 +467,6 @@ public class ItemLoreCustomItem
 					nbtItem.setDouble(MiningManager.TOOL_SPEED, 1d);
 					nbtItem.setInteger(MiningManager.TOOL_TIER, 1);
 				}
-				case COPPER_AXE, COPPER_HOE, COPPER_PICKAXE, COPPER_SHOVEL, COPPER_SWORD ->
-				{
-					nbtItem.setDouble(MiningManager.TOOL_SPEED, customMaterial != CustomMaterial.COPPER_SWORD ? 300d : 600d);
-					if (customMaterial == CustomMaterial.COPPER_PICKAXE)
-					{
-						nbtItem.setInteger(MiningManager.TOOL_TIER, 2);
-					}
-				}
 				case PLATINUM_AXE, PLATINUM_HOE, PLATINUM_PICKAXE, PLATINUM_SHOVEL, PLATINUM_SWORD ->
 				{
 					nbtItem.setDouble(MiningManager.TOOL_SPEED, 600d);
@@ -760,13 +755,6 @@ public class ItemLoreCustomItem
 					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -2.8, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
-				case COPPER_PICKAXE ->
-				{
-					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
-							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 2.5, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
-							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -2.8, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-				}
 				case TIN_PICKAXE ->
 				{
 					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
@@ -826,13 +814,6 @@ public class ItemLoreCustomItem
 					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -2.4, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
-				case COPPER_SWORD ->
-				{
-					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
-							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 3.5, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
-							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -2.4, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-				}
 				case TIN_SWORD, LEAD_SWORD, COBALT_SWORD ->
 				{
 					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
@@ -882,13 +863,6 @@ public class ItemLoreCustomItem
 				{
 					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 4, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
-							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -3.2, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-				}
-				case COPPER_AXE ->
-				{
-					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
-							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 4.5, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -3.2, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
@@ -951,13 +925,6 @@ public class ItemLoreCustomItem
 					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -3, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
-				case COPPER_SHOVEL ->
-				{
-					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
-							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 3, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
-							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -3, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-				}
 				case TIN_SHOVEL ->
 				{
 					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
@@ -1014,13 +981,6 @@ public class ItemLoreCustomItem
 				{
 					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 1, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
-							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -3, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
-				}
-				case COPPER_HOE ->
-				{
-					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE,
-							new AttributeModifier(ATTRIBUTE_IDENTIFIER_1_0, 1.5, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED,
 							new AttributeModifier(ATTRIBUTE_IDENTIFIER_2_0, -3, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
 				}
@@ -1198,7 +1158,6 @@ public class ItemLoreCustomItem
 			{
 				case TEST_PICKAXE -> damageable.setMaxDamage(12345678);
 				case TODWOT_PICKAXE -> damageable.setMaxDamage(1000);
-				case COPPER_AXE, COPPER_HOE, COPPER_PICKAXE, COPPER_SHOVEL, COPPER_SWORD -> damageable.setMaxDamage(76);
 				case PLATINUM_AXE, PLATINUM_HOE, PLATINUM_PICKAXE, PLATINUM_SHOVEL, PLATINUM_SWORD -> damageable.setMaxDamage(34);
 				case TIN_AXE, TIN_HOE, TIN_PICKAXE, TIN_SHOVEL, TIN_SWORD -> damageable.setMaxDamage(142);
 				case LEAD_AXE, LEAD_HOE, LEAD_PICKAXE, LEAD_SHOVEL, LEAD_SWORD -> damageable.setMaxDamage(176);
@@ -1263,41 +1222,6 @@ public class ItemLoreCustomItem
 				case YOUPEOPLEGAME_CRISPY_COOKIE_PICKAXE, YOUPEOPLEGAME_CRISPY_COOKIE_AXE, YOUPEOPLEGAME_CRISPY_COOKIE_SHOVEL -> {
 					itemMeta.addEnchant(Enchantment.EFFICIENCY, 3, true);
 				}
-				case YOUPEOPLEGAME_BURNING_FIRE -> {
-					itemMeta.setItemModel(Material.CAMPFIRE.getKey());
-					itemMeta.setMaxStackSize(64);
-				}
-				case YOUPEOPLEGAME_CRISPY_COOKIE_BOX -> {
-					itemMeta.setItemModel(Material.ORANGE_SHULKER_BOX.getKey());
-					itemMeta.setMaxStackSize(64);
-				}
-				case YOUPEOPLEGAME_DAMP_COOKIE_POTION, YOUPEOPLEGAME_MOIST_COOKIE_BOOSTER, YOUPEOPLEGAME_SUPER_MOIST_COOKIE_BOOSTER -> {
-					itemMeta.setItemModel(Material.HONEY_BOTTLE.getKey());
-				}
-				case YOUPEOPLEGAME_MEDAL_OF_PARKOUR -> {
-					itemMeta.setItemModel(Material.MUSIC_DISC_13.getKey());
-					itemMeta.setMaxStackSize(99);
-				}
-				case YOUPEOPLEGAME_SACK_EXPANDER_COOKIE -> {
-					itemMeta.setItemModel(Material.ORANGE_BUNDLE.getKey());
-				}
-				case YOUPEOPLEGAME_SACK_EXPANDER_MINING -> {
-					itemMeta.setItemModel(Material.GRAY_BUNDLE.getKey());
-				}
-				case YOUPEOPLEGAME_SACK_EXPANDER_WOOD -> {
-					itemMeta.setItemModel(Material.BROWN_BUNDLE.getKey());
-				}
-				case  YOUPEOPLEGAME_SACK_EXPANDER_DIRT -> {
-					itemMeta.setItemModel(Material.BUNDLE.getKey());
-				}
-				case  YOUPEOPLEGAME_SACK_EXPANDER_CURRENCY -> {
-					itemMeta.setItemModel(Material.PINK_BUNDLE.getKey());
-				}
-			}
-			// 반짝이 효과가 없는 아이템 중 디버그 막대기인 아이템은 반짝이 효과 제거
-			if (customMaterial.getDisplayMaterial() == Material.DEBUG_STICK && !customMaterial.isGlow() && !itemMeta.hasEnchants())
-			{
-				itemMeta.setEnchantmentGlintOverride(false);
 			}
 		}
 		// 모든 아이템 등급 COMMON으로
@@ -1320,7 +1244,6 @@ public class ItemLoreCustomItem
 				case SANS_BOOTS, SANS_CHESTPLATE, SANS_HELMET, SANS_LEGGINGS -> leatherArmorMeta.setColor(Color.fromRGB(240, 240, 240));
 				case FROG_BOOTS, FROG_CHESTPLATE, FROG_LEGGINGS -> leatherArmorMeta.setColor(Color.fromRGB(50, 255, 50));
 				case MINER_BOOTS, MINER_CHESTPLATE, MINER_HELMET, MINER_LEGGINGS -> leatherArmorMeta.setColor(Color.fromRGB(200, 200, 200));
-				case COPPER_BOOTS, COPPER_CHESTPLATE, COPPER_HELMET, COPPER_LEGGINGS -> leatherArmorMeta.setColor(Color.fromRGB(255, 150, 100));
 				case TUNGSTEN_BOOTS, TUNGSTEN_CHESTPLATE, TUNGSTEN_HELMET, TUNGSTEN_LEGGINGS -> leatherArmorMeta.setColor(Color.fromRGB(139, 175, 154));
 				case COBALT_BOOTS, COBALT_CHESTPLATE, COBALT_HELMET, COBALT_LEGGINGS -> leatherArmorMeta.setColor(Color.fromRGB(0, 150, 235));
 				case MITHRIL_BOOTS, MITHRIL_CHESTPLATE, MITHRIL_HELMET, MITHRIL_LEGGINGS -> leatherArmorMeta.setColor(Color.fromRGB(10, 200, 200));
