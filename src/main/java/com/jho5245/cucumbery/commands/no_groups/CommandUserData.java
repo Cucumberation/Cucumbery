@@ -7,7 +7,6 @@ import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.*;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
-import io.lumine.mythic.bukkit.utils.scoreboard.PacketScoreboard;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -20,16 +19,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.module.Configuration;
 import java.util.*;
 
 public class CommandUserData implements CucumberyCommandExecutor
 {
-	private HashMap<CommandSender, String> removeCustomDataAlert = new HashMap<>();
+	private HashMap<CommandSender, String> modifyCustomDataAlert = new HashMap<>();
 
 	private HashMap<CommandSender, BukkitTask> alertResetTask = new HashMap<>();
 
@@ -105,24 +102,24 @@ public class CommandUserData implements CucumberyCommandExecutor
 				UUID uuid = offlinePlayer.getUniqueId();
 				if (isCustomData)
 				{
+					if (!modifyCustomDataAlert.containsKey(sender) || !modifyCustomDataAlert.get(sender).equals(keyString))
+					{
+						MessageUtil.sendWarn(sender, "%s의 커스텀 데이터를 수정하려 시도중입니다. 정말로 %s 경로의 데이터를 제거하려면 5초 안에 한 번 더 입력하세요.", offlinePlayer,
+								Constant.THE_COLOR_HEX + keyString);
+						modifyCustomDataAlert.put(sender, keyString);
+						alertResetTask.put(sender, Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+						{
+							modifyCustomDataAlert.remove(sender);
+						}, 100L));
+						return true;
+					}
+					modifyCustomDataAlert.remove(sender);
+					Optional.of(alertResetTask.remove(sender)).ifPresent(BukkitTask::cancel);
 					Object o = UserData.get(uuid, keyString);
 					if (isRemove)
 					{
 						if (o != null)
 						{
-							if (!removeCustomDataAlert.containsKey(sender) || !removeCustomDataAlert.get(sender).equals(keyString))
-							{
-								MessageUtil.sendWarn(sender, "%s의 커스텀 데이터를 제거하려 시도중입니다. 정말로 %s 경로의 데이터를 제거하려면 5초 안에 한 번 더 입력하세요.", offlinePlayer,
-										Constant.THE_COLOR_HEX + keyString);
-								removeCustomDataAlert.put(sender, keyString);
-								alertResetTask.put(sender, Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
-								{
-									removeCustomDataAlert.remove(sender);
-								}, 100L));
-								return true;
-							}
-							removeCustomDataAlert.remove(sender);
-							Optional.of(alertResetTask.remove(sender)).ifPresent(BukkitTask::cancel);
 							successPlayers.add(offlinePlayer);
 							UserData.set(uuid, keyString, null);
 						}
