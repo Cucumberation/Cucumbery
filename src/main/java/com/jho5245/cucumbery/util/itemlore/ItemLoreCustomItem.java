@@ -1230,6 +1230,16 @@ public class ItemLoreCustomItem
 				case YOUPEOPLEGAME_CRISPY_COOKIE_PICKAXE, YOUPEOPLEGAME_CRISPY_COOKIE_AXE, YOUPEOPLEGAME_CRISPY_COOKIE_SHOVEL -> {
 					itemMeta.addEnchant(Enchantment.EFFICIENCY, 3, true);
 				}
+				case YOUPEOPLEGAME_CRISPY_COOKIE_SWORD -> {
+					itemMeta.addEnchant(Enchantment.SHARPNESS, 3, true);
+					itemMeta.addAttributeModifier(Attribute.ATTACK_DAMAGE, new AttributeModifier(
+							new NamespacedKey("cucumbery", customMaterial.toString().toLowerCase() + "_attack_damage_1"),
+							4d, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND
+					));					itemMeta.addAttributeModifier(Attribute.ATTACK_SPEED, new AttributeModifier(
+							new NamespacedKey("cucumbery", customMaterial.toString().toLowerCase() + "_attack_speed_1"),
+							-2.4d, Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND
+					));
+				}
 			}
 		}
 		itemStack.setItemMeta(itemMeta);
