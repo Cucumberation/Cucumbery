@@ -58,7 +58,12 @@ public class CommandUserData implements CucumberyCommandExecutor
 				return failure;
 			}
 			String keyString = args[1];
-			boolean isCustomData = keyString.startsWith(UserData.CUSTOM_DATA.getKey());
+			boolean isCustomData = keyString.startsWith(UserData.CUSTOM_DATA.getKey() + ".");
+			if (isCustomData)
+			{
+				// custom_data 참조 시 앞의 key("custom_data.") 제거
+				keyString = keyString.substring((UserData.CUSTOM_DATA.getKey() + ".").length());
+			}
 			UserData key = null;
 			if (!isCustomData)
 			{
