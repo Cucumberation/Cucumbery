@@ -66,16 +66,7 @@ public class TestCommand implements CucumberyCommandExecutor
 					sender.sendMessage(Arrays.toString(integers.toArray()));
 				}
 				case "youpeoplegame" -> {
-					Inventory inventory = Bukkit.createInventory(null, 54, ComponentUtil.translate("YouPeopleGame 아이템"));
-					List<CustomMaterial> list = Arrays.stream(CustomMaterial.values()).toList().stream().filter(m -> m.toString().toLowerCase().startsWith("youpeoplegame")).toList();
-					int maxPage = list.size() / 54 + 1;
-					int page = Math.max(1, Math.min(maxPage, args.length >= 2 ? Integer.parseInt(args[1]) : 1));
-					int startIndex = (page - 1) * 54;
-					int endIndex = Math.min(list.size(), startIndex + 54);
-					for (int i = startIndex; i < endIndex; i++) {
-						inventory.addItem(list.get(i).create());
-					}
-					((Player) sender).openInventory(inventory);
+
 				}
 			}
 		}
