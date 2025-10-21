@@ -548,7 +548,7 @@ public class CustomConfig
 			{
 				config = CustomConfig.getPlayerConfig(uuid).getConfig();
 			}
-			return config.getBoolean(key.toString());
+			return config.getBoolean(CUSTOM_DATA.getKey() + "." + key);
 		}
 
 		public static int getInt(OfflinePlayer offlinePlayer, Object key)
@@ -573,7 +573,7 @@ public class CustomConfig
 			{
 				config = CustomConfig.getPlayerConfig(uuid).getConfig();
 			}
-			return config.getInt(key.toString(), defaultValue);
+			return config.getInt(CUSTOM_DATA.getKey() + "." + key, defaultValue);
 		}
 
 		public static double getDouble(OfflinePlayer offlinePlayer, Object key)
@@ -598,7 +598,7 @@ public class CustomConfig
 			{
 				config = CustomConfig.getPlayerConfig(uuid).getConfig();
 			}
-			return config.getDouble(key.toString(), defaultValue);
+			return config.getDouble(CUSTOM_DATA.getKey() + "." + key, defaultValue);
 		}
 
 		public static String getString(OfflinePlayer offlinePlayer, Object key)
@@ -623,7 +623,7 @@ public class CustomConfig
 			{
 				config = CustomConfig.getPlayerConfig(uuid).getConfig();
 			}
-			return config.getString(key.toString(), defaultValue);
+			return config.getString(CUSTOM_DATA.getKey() + "." + key, defaultValue);
 		}
 
 		public static Object get(OfflinePlayer offlinePlayer, Object key)
@@ -638,7 +638,7 @@ public class CustomConfig
 			{
 				config = CustomConfig.getPlayerConfig(uuid).getConfig();
 			}
-			return config.get(key.toString());
+			return config.get(CUSTOM_DATA.getKey() + "." + key);
 		}
 
 		public static void set(OfflinePlayer player, Object key, Object value) {
@@ -653,12 +653,12 @@ public class CustomConfig
 			{
 				CustomConfig customConfig = CustomConfig.getPlayerConfig(uuid);
 				config = customConfig.getConfig();
-				config.set(key.toString(), value);
+				config.set(CUSTOM_DATA.getKey() + "." + key, value);
 				customConfig.saveConfig();
 			}
 			else
 			{
-				config.set(key.toString(), value);
+				config.set(CUSTOM_DATA.getKey() + "." + key, value);
 				Variable.userData.put(uuid, config);
 			}
 		}
@@ -675,7 +675,19 @@ public class CustomConfig
 
 		public void set(UUID uuid, Object value)
 		{
-			set(uuid, this.getKey(), value);
+			YamlConfiguration config = Variable.userData.get(uuid);
+			if (config == null)
+			{
+				CustomConfig customConfig = CustomConfig.getPlayerConfig(uuid);
+				config = customConfig.getConfig();
+				config.set(this.getKey(), value);
+				customConfig.saveConfig();
+			}
+			else
+			{
+				config.set(this.getKey(), value);
+				Variable.userData.put(uuid, config);
+			}
 			Player player = Method2.getEntity(uuid) instanceof Player p ? p : null;
 			if (player != null)
 			{
