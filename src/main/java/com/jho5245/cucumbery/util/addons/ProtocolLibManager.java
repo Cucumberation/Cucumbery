@@ -1342,9 +1342,10 @@ public class ProtocolLibManager
 				Component component = GsonComponentSerializer.gson().deserialize(wrappedChatComponent.getJson());
 				if (component instanceof TranslatableComponent translatableComponent && !translatableComponent.arguments().isEmpty())
 				{
-					List<Component> components = new ArrayList<>();
-					for (ComponentLike componentLike : translatableComponent.arguments())
-						components.add(componentLike.asComponent());
+					// why this exists
+//					List<Component> components = new ArrayList<>();
+//					for (ComponentLike componentLike : translatableComponent.arguments())
+//						components.add(componentLike.asComponent());
 					String key = ComponentUtil.convertConsonant(translatableComponent.key(), translatableComponent).key();
 					component = translatableComponent.key(key).fallback(key);
 				}
