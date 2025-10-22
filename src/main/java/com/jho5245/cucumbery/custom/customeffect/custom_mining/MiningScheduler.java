@@ -737,8 +737,7 @@ public class MiningScheduler
 					intSide++;
 				}
 				int finalIntSide = intSide;
-				if ((!drops.isEmpty() || Arrays.asList(Material.SPAWNER, Material.SCULK, Material.SCULK_CATALYST, Material.SCULK_SENSOR, Material.SCULK_SHRIEKER)
-						.contains(block.getType())) && finalIntSide > 0)
+				if (finalIntSide > 0)
 				{
 					player.getWorld()
 							.spawnEntity(location, EntityType.EXPERIENCE_ORB, SpawnReason.CUSTOM, (entity -> ((ExperienceOrb) entity).setExperience(finalIntSide)));
