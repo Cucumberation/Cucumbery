@@ -91,7 +91,6 @@ public class EntityComponentUtil
 					List<Component> args = new ArrayList<>();
 					String prefix = Cucumbery.chat.getPlayerPrefix(player), suffix = Cucumbery.chat.getPlayerSuffix(player);
 					args.add(prefix != null ? ComponentUtil.create(prefix) : Component.empty());
-					Bukkit.getConsoleSender().sendMessage("name: " + ComponentUtil.serializeAsJson(nameComponent));
 					args.add(nameComponent);
 					args.add(suffix != null ? ComponentUtil.create(suffix) : Component.empty());
 					args.add(Component.text(VAULT_DISPLAY_NAME_FORMATTER));
