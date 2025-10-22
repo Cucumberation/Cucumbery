@@ -9,7 +9,7 @@ import dev.jorel.commandapi.Brigadier;
 import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.StringTooltip;
 import dev.jorel.commandapi.arguments.*;
-import dev.jorel.commandapi.wrappers.FloatRange;
+import dev.jorel.commandapi.wrappers.DoubleRange;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;
@@ -424,7 +424,7 @@ public class ExtraExecuteArgument
 
     List<Argument> arguments = new ArrayList<>();
     Argument<Player> playerArgument = new EntitySelectorArgument.OnePlayer("플레이어");
-    Argument<FloatRange> moneyArgument = new FloatRangeArgument("소지 금액");
+    Argument<DoubleRange> moneyArgument = new DoubleRangeArgument("소지 금액");
     arguments.add(playerArgument);
     arguments.add(moneyArgument);
 
@@ -433,10 +433,10 @@ public class ExtraExecuteArgument
     builder2.fork(Brigadier.getRootNode().getChild("execute"), Brigadier.fromPredicate((sender, args) ->
     {
       Player player = (Player) args[0];
-      FloatRange floatRange = (FloatRange) args[1];
+      DoubleRange DoubleRange = (DoubleRange) args[1];
       try
       {
-        return floatRange.isInRange((float) Cucumbery.eco.getBalance(player));
+        return DoubleRange.isInRange((float) Cucumbery.eco.getBalance(player));
       }
       catch (Error | Exception e)
       {
@@ -454,7 +454,7 @@ public class ExtraExecuteArgument
 
     List<Argument> arguments = new ArrayList<>();
     Argument<Player> playerArgument = new EntitySelectorArgument.OnePlayer("플레이어");
-    Argument<FloatRange> moneyArgument = new FloatRangeArgument("소지 금액");
+    Argument<DoubleRange> moneyArgument = new DoubleRangeArgument("소지 금액");
     arguments.add(playerArgument);
     arguments.add(moneyArgument);
 
@@ -463,10 +463,10 @@ public class ExtraExecuteArgument
     builder2.fork(Brigadier.getRootNode().getChild("execute"), Brigadier.fromPredicate((sender, args) ->
     {
       Player player = (Player) args[0];
-      FloatRange floatRange = (FloatRange) args[1];
+      DoubleRange DoubleRange = (DoubleRange) args[1];
       try
       {
-        return !floatRange.isInRange((float) Cucumbery.eco.getBalance(player));
+        return !DoubleRange.isInRange((float) Cucumbery.eco.getBalance(player));
       }
       catch (Error | Exception e)
       {

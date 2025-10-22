@@ -2,6 +2,10 @@ package com.jho5245.cucumbery.commands.brigadier.base;
 
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.jorel.commandapi.arguments.*;
+import dev.jorel.commandapi.arguments.EntitySelectorArgument.ManyEntities;
+import dev.jorel.commandapi.arguments.EntitySelectorArgument.ManyPlayers;
+import dev.jorel.commandapi.arguments.EntitySelectorArgument.OneEntity;
+import dev.jorel.commandapi.arguments.EntitySelectorArgument.OnePlayer;
 import dev.jorel.commandapi.wrappers.Rotation;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -55,10 +59,10 @@ public class ArgumentUtil
       case LONG -> new LongArgument(key != null ? key : "값", (long) Math.max(Long.MIN_VALUE, min), (long) Math.min(Long.MAX_VALUE, max));
       case FLOAT -> new FloatArgument(key != null ? key : "값", (float) Math.max(-Float.MAX_VALUE, min), (float) Math.min(Float.MAX_VALUE, max));
       case DOUBLE -> new DoubleArgument(key != null ? key : "값", min, max);
-      case ONE_PLAYER -> new PlayerArgument(key != null ? key : "플레이어");
-      case MANY_PLAYERS -> new EntitySelectorArgument.ManyPlayers(key != null ? key : "여러 플레이어");
-      case ONE_ENTITY -> new EntitySelectorArgument.OneEntity(key != null ? key : "개체");
-      case MANY_ENTITIES -> new EntitySelectorArgument.ManyEntities(key != null ? key : "여러 개체");
+      case ONE_PLAYER -> new OnePlayer(key != null ? key : "플레이어");
+      case MANY_PLAYERS -> new ManyPlayers(key != null ? key : "여러 플레이어");
+      case ONE_ENTITY -> new OneEntity(key != null ? key : "개체");
+      case MANY_ENTITIES -> new ManyEntities(key != null ? key : "여러 개체");
       case ITEMSTACK -> new ItemStackArgument(key != null ? key : "아이템");
       case LOCATION -> new LocationArgument(key != null ? key : "좌표");
       case LOCATION_BLOCK -> new LocationArgument(key != null ? key : "좌표", LocationType.BLOCK_POSITION);

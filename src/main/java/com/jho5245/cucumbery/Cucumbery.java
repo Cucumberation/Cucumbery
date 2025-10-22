@@ -85,7 +85,7 @@ import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer;
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.geco.gsit.GSitMain;
 import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIBukkitConfig;
+import dev.jorel.commandapi.CommandAPIPaperConfig;
 import dev.jorel.commandapi.Converter;
 import io.lumine.mythic.bukkit.BukkitAPIHelper;
 import me.clip.placeholderapi.PlaceholderAPIPlugin;
@@ -117,7 +117,7 @@ import java.util.UUID;
 
 public class Cucumbery extends JavaPlugin
 {
-	public static final int CONFIG_VERSION = 52, DEATH_MESSAGES_CONFIG_VERSION = 13, LANG_CONFIG_VERSION = 7;
+	public static final int CONFIG_VERSION = 52, DEATH_MESSAGES_CONFIG_VERSION = 13, LANG_CONFIG_VERSION = 8;
 
 	//  private static final ExecutorService brigadierService = Executors.newFixedThreadPool(1);
 	public static YamlConfiguration config;
@@ -201,7 +201,7 @@ public class Cucumbery extends JavaPlugin
 			return;
 		}
 		isLoaded = true;
-		CommandAPI.onLoad(new CommandAPIBukkitConfig(this)
+		CommandAPI.onLoad(new CommandAPIPaperConfig(this)
 				.initializeNBTAPI(NBTContainer.class, NBTContainer::new)
 		);
 	}
@@ -705,6 +705,8 @@ public class Cucumbery extends JavaPlugin
 			if (CoreProtect.getInstance() == null || !CoreProtect.getInstance().isEnabled() || CoreProtect.getInstance().getAPI().APIVersion() < 9)
 			{
 				getLogger().warning("CoreProtect가 연동되었으나 망했거나 플러그인이 비활성화되어 있거나 CoreProtect의 API 버전이 낮습니다. 예기치 못한 오류가 발생할 수 있습니다.");
+				// TODO: CoreProtect should be updated to 1.21.10
+				using_CoreProtect = false;
 			}
 		}
 	}

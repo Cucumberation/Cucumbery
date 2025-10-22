@@ -3,9 +3,9 @@ package com.jho5245.cucumbery.commands.brigadier;
 import com.jho5245.cucumbery.commands.brigadier.base.CommandBase;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.arguments.FloatRangeArgument;
+import dev.jorel.commandapi.arguments.DoubleRangeArgument;
 import dev.jorel.commandapi.arguments.ItemStackPredicateArgument;
-import dev.jorel.commandapi.wrappers.FloatRange;
+import dev.jorel.commandapi.wrappers.DoubleRange;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.block.BlockState;
@@ -30,7 +30,7 @@ public class CommandSearchChestItem extends CommandBase
     RANDOM,
   }
 
-  private void search(Player player, FloatRange range, Predicate<ItemStack> predicate, int maxSize)
+  private void search(Player player, DoubleRange range, Predicate<ItemStack> predicate, int maxSize)
   {
 
   }
@@ -40,9 +40,9 @@ public class CommandSearchChestItem extends CommandBase
   public void registerCommand(String command, String permission, String... aliases)
   {
     CommandAPICommand commandAPICommand = CommandBase.getCommandBase(command, permission, aliases);
-    commandAPICommand = commandAPICommand.withArguments(new FloatRangeArgument("범위"), new ItemStackPredicateArgument("아이템"));
+    commandAPICommand = commandAPICommand.withArguments(new DoubleRangeArgument("범위"), new ItemStackPredicateArgument("아이템"));
     commandAPICommand = commandAPICommand.executesPlayer((player, args) -> {
-      FloatRange range = (FloatRange) args.get(0);
+      DoubleRange range = (DoubleRange) args.get(0);
       Predicate<ItemStack> predicate = (Predicate<ItemStack>) args.get(1);
       List<Location> locations = new ArrayList<>();
       for (Chunk chunk : player.getWorld().getLoadedChunks())
