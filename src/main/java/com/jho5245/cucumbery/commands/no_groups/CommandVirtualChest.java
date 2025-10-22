@@ -30,6 +30,32 @@ import java.util.UUID;
 
 public class CommandVirtualChest implements CommandExecutor, TabCompleter
 {
+	public static void openChest(Player player, String chestName)
+	{
+		UUID uuid = player.getUniqueId();
+		CustomConfig customConfig = CustomConfig.getCustomConfig("data/VirtualChest/" + uuid + "/" + chestName + ".yml");
+		YamlConfiguration config = customConfig.getConfig();
+		Inventory chest = Bukkit.createInventory(null, 54, Constant.VIRTUAL_CHEST_MENU_PREFIX + "§6가상창고 - §e" + chestName);
+		ConfigurationSection items = config.getConfigurationSection("items");
+		if (items != null && !items.getKeys(false).isEmpty())
+		{
+			for (int i = 1; i <= 54; i++)
+			{
+				String itemString = config.getString("items." + i);
+				if (itemString != null)
+				{
+					ItemStack item = ItemSerializer.deserialize(itemString);
+					chest.setItem(i - 1, item);
+				}
+			}
+		}
+		if (Method.inventoryEmpty(chest))
+		{
+			customConfig.delete();
+		}
+		player.openInventory(chest);
+	}
+
   public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, @NotNull String[] args)
   {
     if (!(sender instanceof Player))
@@ -68,28 +94,7 @@ public class CommandVirtualChest implements CommandExecutor, TabCompleter
           MessageUtil.sendError(player, "해당하는 이름으로는 가상창고를 사용할 수 없습니다");
           return true;
         }
-        UUID uuid = player.getUniqueId();
-        CustomConfig customConfig = CustomConfig.getCustomConfig("data/VirtualChest/" + uuid.toString() + "/" + chestName + ".yml");
-        YamlConfiguration config = customConfig.getConfig();
-        Inventory chest = Bukkit.createInventory(null, 54, Constant.VIRTUAL_CHEST_MENU_PREFIX + "§6가상창고 - §e" + chestName);
-        ConfigurationSection items = config.getConfigurationSection("items");
-        if (items != null && !items.getKeys(false).isEmpty())
-        {
-          for (int i = 1; i <= 54; i++)
-          {
-            String itemString = config.getString("items." + i);
-            if (itemString != null)
-            {
-              ItemStack item = ItemSerializer.deserialize(itemString);
-              chest.setItem(i - 1, item);
-            }
-          }
-        }
-        if (Method.inventoryEmpty(chest))
-        {
-          customConfig.delete();
-        }
-        player.openInventory(chest);
+				openChest(player, chestName);
         MessageUtil.sendMessage(player, Prefix.INFO_VIRTUAL_CHEST, Constant.THE_COLOR_HEX + chestName + "&r 가상창고를 엽니다");
       }
       case "virtualchestadd" -> {
