@@ -2153,6 +2153,22 @@ public class ProtocolLibManager
 
 		if (player.getGameMode() != GameMode.CREATIVE && !player.hasPermission("asdf"))
 		{
+			// 관리자가 아닐 경우 Material이 DEBUG_STICK이고 ItemModel이 있는 CustomMaterial들을 전부 Material <= ItemModel로 변경
+			if (customMaterial != null && clone.getType() == Material.DEBUG_STICK)
+			{
+				ItemMeta cloneMeta = clone.getItemMeta();
+				if (cloneMeta.hasItemModel())
+				{
+					NamespacedKey itemModel = cloneMeta.getItemModel();
+					Material material = Method2.valueOf(itemModel != null ? itemModel.getKey().toUpperCase() : "", Material.class);
+					if (material != null)
+					{
+						cloneMeta.setItemModel(null);
+						clone.setItemMeta(cloneMeta);
+						clone.setType(material);
+					}
+				}
+			}
 			NBT.modify(clone, nbt ->
 			{
 				nbt.getKeys().forEach(nbt::removeKey);
