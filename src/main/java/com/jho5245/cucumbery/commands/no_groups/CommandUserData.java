@@ -400,9 +400,9 @@ public class CommandUserData implements CucumberyCommandExecutor
 							list2.addAll(keys.stream().map(s ->
 							{
 								String returnValue = finalSection1.getCurrentPath() + "." + s;
-								if (returnValue.startsWith(args[1]))
+								if (returnValue.toLowerCase().startsWith(args[1].toLowerCase()))
 									return returnValue;
-								if (s.contains(lastPath))
+								if (s.toLowerCase().contains(lastPath.toLowerCase()))
 								{
 									lastPathContainsList.add(Completion.completion(returnValue));
 								}
