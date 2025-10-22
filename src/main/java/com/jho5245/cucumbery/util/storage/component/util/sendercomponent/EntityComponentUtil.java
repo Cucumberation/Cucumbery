@@ -15,6 +15,7 @@ import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -66,24 +67,31 @@ public class EntityComponentUtil
 		if (entity instanceof Player player)
 		{
 			nameComponent = player.displayName().hoverEvent(null).clickEvent(null);
-			if (nameComponent instanceof TranslatableComponent translatableComponent && translatableComponent.arguments().size() == 4 && translatableComponent.arguments()
-					.get(3) instanceof TextComponent textComponent && textComponent.content().equals(TEAM_DISPLAY_NAME_FORMATTER))
+			if (nameComponent instanceof TranslatableComponent translatableComponent && translatableComponent.arguments().size() == 4
+					&& translatableComponent.arguments().get(3) instanceof TextComponent textComponent && textComponent.content().equals(TEAM_DISPLAY_NAME_FORMATTER))
 			{
-				nameComponent = (Component) translatableComponent.arguments().get(1);
+				nameComponent = translatableComponent.arguments().get(1).asComponent();
 			}
-			if (nameComponent instanceof TranslatableComponent translatableComponent && translatableComponent.arguments().size() == 4 && translatableComponent.arguments()
-					.get(3) instanceof TextComponent textComponent && textComponent.content().equals(VAULT_DISPLAY_NAME_FORMATTER))
+			if (nameComponent instanceof TranslatableComponent translatableComponent && translatableComponent.arguments().size() == 4
+					&& translatableComponent.arguments().get(3) instanceof TextComponent textComponent && textComponent.content().equals(VAULT_DISPLAY_NAME_FORMATTER))
 			{
-				nameComponent = (Component) translatableComponent.arguments().get(1);
+				nameComponent = translatableComponent.arguments().get(1).asComponent();
 			}
 			if (Cucumbery.using_Vault_Chat)
 			{
 				try
 				{
+					// Vault Prefix/Suffix 제거
+					if ((nameComponent instanceof TranslatableComponent trans && trans.arguments().size() == 4 && trans.arguments()
+							.get(3).asComponent() instanceof TextComponent text && text.content().equals(VAULT_DISPLAY_NAME_FORMATTER)))
+					{
+						nameComponent = trans.arguments().get(1).asComponent();
+					}
 					TranslatableComponent translatableComponent = ComponentUtil.translate("%s%s%s");
 					List<Component> args = new ArrayList<>();
 					String prefix = Cucumbery.chat.getPlayerPrefix(player), suffix = Cucumbery.chat.getPlayerSuffix(player);
 					args.add(prefix != null ? ComponentUtil.create(prefix) : Component.empty());
+					Bukkit.getConsoleSender().sendMessage("name: " + ComponentUtil.serializeAsJson(nameComponent));
 					args.add(nameComponent);
 					args.add(suffix != null ? ComponentUtil.create(suffix) : Component.empty());
 					args.add(Component.text(VAULT_DISPLAY_NAME_FORMATTER));
@@ -91,7 +99,7 @@ public class EntityComponentUtil
 				}
 				catch (Exception e)
 				{
-					Cucumbery.getPlugin().getLogger().warning(e.getMessage());
+					e.printStackTrace();
 				}
 			}
 		}
@@ -103,10 +111,10 @@ public class EntityComponentUtil
 				nameComponent = nameComponent.hoverEvent(null).clickEvent(null);
 			}
 		}
-		if (nameComponent instanceof TranslatableComponent translatableComponent && translatableComponent.arguments().size() == 4 && translatableComponent.arguments()
-				.get(3) instanceof TextComponent textComponent && textComponent.content().equals(TEAM_DISPLAY_NAME_FORMATTER))
+		if (nameComponent instanceof TranslatableComponent translatableComponent && translatableComponent.arguments().size() == 4
+				&& translatableComponent.arguments().get(3).asComponent() instanceof TextComponent textComponent && textComponent.content().equals(TEAM_DISPLAY_NAME_FORMATTER))
 		{
-			nameComponent = (Component) translatableComponent.arguments().get(1);
+			nameComponent = translatableComponent.arguments().get(1).asComponent();
 		}
 		if (nameComponent == null)
 		{
@@ -351,7 +359,8 @@ public class EntityComponentUtil
 				ItemStack item = entityEquipment.getItemInMainHand();
 				if (ItemStackUtil.itemExists(item))
 				{
-					List<Component> lore = ItemStackUtil.getItemInfoAsComponents(item, param, ComponentUtil.translate("rg255,204;[%s이(가) 물고 있는 아이템]", nameComponent), true);
+					List<Component> lore = ItemStackUtil.getItemInfoAsComponents(item, param, ComponentUtil.translate("rg255,204;[%s이(가) 물고 있는 아이템]", nameComponent),
+							true);
 					for (Component lor : lore)
 					{
 						hover = hover.append(Component.text("\n"));
@@ -475,8 +484,8 @@ public class EntityComponentUtil
 			ItemStack drinkingPotion = witch.getDrinkingPotion();
 			if (ItemStackUtil.itemExists(drinkingPotion))
 			{
-				List<Component> lore = ItemStackUtil.getItemInfoAsComponents(drinkingPotion, param, ComponentUtil.translate("rg255,204;[%s(이)가 마시고 있는 물약]", nameComponent),
-						true);
+				List<Component> lore = ItemStackUtil.getItemInfoAsComponents(drinkingPotion, param,
+						ComponentUtil.translate("rg255,204;[%s(이)가 마시고 있는 물약]", nameComponent), true);
 				for (Component lor : lore)
 				{
 					hover = hover.append(Component.text("\n"));
@@ -867,8 +876,8 @@ public class EntityComponentUtil
 			{
 				hover = hover.append(Component.text("\n")).append(ComponentUtil.translate("#52ee52;관리자입니다"));
 			}
-			hover = hover.append(Component.text("\n")).append(ComponentUtil.create(Constant.SEPARATOR)).append(Component.text("\n"))
-					.append(ComponentUtil.translate("클릭하여 소셜 메뉴 열기 : %s", "&7/socialmenu " + Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName())));
+			hover = hover.append(Component.text("\n")).append(ComponentUtil.create(Constant.SEPARATOR)).append(Component.text("\n")).append(
+					ComponentUtil.translate("클릭하여 소셜 메뉴 열기 : %s", "&7/socialmenu " + Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName())));
 			nameComponent = nameComponent.clickEvent(ClickEvent.runCommand(click));
 		}
 		else
