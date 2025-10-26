@@ -59,9 +59,9 @@ public class EntityMove implements Listener
         LastTrampledBlockManager.lastTrampledBlock(livingEntity, event.hasChangedBlock());
       }
     }
-    catch (Throwable ignored)
+    catch (Throwable throwable)
     {
-
+			throwable.printStackTrace();
     }
   }
 

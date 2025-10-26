@@ -15,7 +15,6 @@ import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -82,17 +81,21 @@ public class EntityComponentUtil
 				try
 				{
 					// Vault Prefix/Suffix 제거
-					if ((nameComponent instanceof TranslatableComponent trans && trans.arguments().size() == 4 && trans.arguments()
-							.get(3).asComponent() instanceof TextComponent text && text.content().equals(VAULT_DISPLAY_NAME_FORMATTER)))
+					if ((nameComponent instanceof TranslatableComponent trans && trans.arguments().size() == 4 && trans.arguments().get(3)
+							.asComponent() instanceof TextComponent text && text.content().equals(VAULT_DISPLAY_NAME_FORMATTER)))
 					{
 						nameComponent = trans.arguments().get(1).asComponent();
 					}
 					TranslatableComponent translatableComponent = ComponentUtil.translate("%s%s%s");
 					List<Component> args = new ArrayList<>();
 					String prefix = Cucumbery.chat.getPlayerPrefix(player), suffix = Cucumbery.chat.getPlayerSuffix(player);
-					args.add(prefix != null ? ComponentUtil.create(prefix) : Component.empty());
+//					if (prefix.contains("%"))
+//						prefix = PlaceHolderUtil.placeholder(player, prefix, null);
+//					if (suffix.contains("%"))
+//						suffix = PlaceHolderUtil.placeholder(player, suffix, null);
+					args.add(prefix != null ? ComponentUtil.create(player, prefix) : Component.empty());
 					args.add(nameComponent);
-					args.add(suffix != null ? ComponentUtil.create(suffix) : Component.empty());
+					args.add(suffix != null ? ComponentUtil.create(player, suffix) : Component.empty());
 					args.add(Component.text(VAULT_DISPLAY_NAME_FORMATTER));
 					nameComponent = translatableComponent.arguments(args);
 				}
@@ -111,7 +114,8 @@ public class EntityComponentUtil
 			}
 		}
 		if (nameComponent instanceof TranslatableComponent translatableComponent && translatableComponent.arguments().size() == 4
-				&& translatableComponent.arguments().get(3).asComponent() instanceof TextComponent textComponent && textComponent.content().equals(TEAM_DISPLAY_NAME_FORMATTER))
+				&& translatableComponent.arguments().get(3).asComponent() instanceof TextComponent textComponent && textComponent.content()
+				.equals(TEAM_DISPLAY_NAME_FORMATTER))
 		{
 			nameComponent = translatableComponent.arguments().get(1).asComponent();
 		}

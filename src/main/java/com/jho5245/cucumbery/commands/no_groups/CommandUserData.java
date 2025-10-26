@@ -91,10 +91,10 @@ public class CommandUserData implements CucumberyCommandExecutor
 				{
 					if (obj == null)
 					{
-						MessageUtil.sendWarnOrError(map.size() == 1, sender, "%s의 %s 값이 없습니다.", map.get(null), isCustomData ? keyString : key);
+						MessageUtil.sendWarnOrError(map.size() == 1, sender, "%s의 %s 값이 없습니다.", map.get(null), isCustomData ? Constant.THE_COLOR_HEX + keyString : key);
 						continue;
 					}
-					MessageUtil.info(sender, "%s의 %s은(는) %s입니다", map.get(obj), isCustomData ? keyString : key, Constant.THE_COLOR_HEX + obj);
+					MessageUtil.info(sender, "%s의 %s은(는) %s입니다", map.get(obj), isCustomData ? Constant.THE_COLOR_HEX + keyString : key, Constant.THE_COLOR_HEX + obj);
 				}
 				return true;
 			}
@@ -263,11 +263,6 @@ public class CommandUserData implements CucumberyCommandExecutor
 							}
 							key.set(uuid, intVal);
 						}
-						case CUSTOM_DATA ->
-						{
-							MessageUtil.sendWarn(sender, "custom-data 편집 기능은 준비중입니다");
-							return true;
-						}
 						default ->
 						{
 							if (!value.equals("true") && !value.equals("false"))
@@ -290,12 +285,12 @@ public class CommandUserData implements CucumberyCommandExecutor
 					if (isRemove)
 					{
 						MessageUtil.sendWarnOrError(successPlayersEmpty, sender,
-								ComponentUtil.translate("변경 사항이 없습니다. 이미 %s의 %s 값이 없습니다", failurePlayers, isCustomData ? keyString : key));
+								ComponentUtil.translate("변경 사항이 없습니다. 이미 %s의 %s 값이 없습니다", failurePlayers, isCustomData ? Constant.THE_COLOR_HEX + keyString : key));
 					}
 					else
 					{
 						MessageUtil.sendWarnOrError(successPlayersEmpty, sender,
-								ComponentUtil.translate("변경 사항이 없습니다. 이미 %s의 %s 값이 %s입니다", failurePlayers, isCustomData ? keyString : key, Constant.THE_COLOR_HEX + value));
+								ComponentUtil.translate("변경 사항이 없습니다. 이미 %s의 %s 값이 %s입니다", failurePlayers, isCustomData ? Constant.THE_COLOR_HEX + keyString : key, Constant.THE_COLOR_HEX + value));
 					}
 
 				}
@@ -305,13 +300,13 @@ public class CommandUserData implements CucumberyCommandExecutor
 					{
 						if (isRemove)
 						{
-							MessageUtil.info(sender, "%s의 %s 값을 제거했습니다", successPlayers, keyString);
-							MessageUtil.sendAdminMessage(sender, "%s의 %s 값을 제거했습니다", successPlayers, keyString);
+							MessageUtil.info(sender, "%s의 %s 값을 제거했습니다", successPlayers, Constant.THE_COLOR_HEX + keyString);
+							MessageUtil.sendAdminMessage(sender, "%s의 %s 값을 제거했습니다", successPlayers, Constant.THE_COLOR_HEX + keyString);
 						}
 						else
 						{
-							MessageUtil.info(sender, "%s의 %s 값을 %s(으)로 설정했습니다", successPlayers, keyString, Constant.THE_COLOR_HEX + value);
-							MessageUtil.sendAdminMessage(sender, "%s의 %s 값을 %s(으)로 설정했습니다", successPlayers, keyString, Constant.THE_COLOR_HEX + value);
+							MessageUtil.info(sender, "%s의 %s 값을 %s(으)로 설정했습니다", successPlayers, Constant.THE_COLOR_HEX + keyString, Constant.THE_COLOR_HEX + value);
+							MessageUtil.sendAdminMessage(sender, "%s의 %s 값을 %s(으)로 설정했습니다", successPlayers, Constant.THE_COLOR_HEX + keyString, Constant.THE_COLOR_HEX + value);
 						}
 					}
 					else
@@ -328,7 +323,7 @@ public class CommandUserData implements CucumberyCommandExecutor
 						}
 					});
 					infoTarget.remove(sender);
-					MessageUtil.sendMessage(infoTarget, Prefix.INFO_SETDATA, "%s이(가) 당신의 %s 값을 %s(으)로 설정했습니다", sender, isCustomData ? keyString : key,
+					MessageUtil.sendMessage(infoTarget, Prefix.INFO_SETDATA, "%s이(가) 당신의 %s 값을 %s(으)로 설정했습니다", sender, isCustomData ? Constant.THE_COLOR_HEX + keyString : key,
 							Constant.THE_COLOR_HEX + value);
 				}
 			}

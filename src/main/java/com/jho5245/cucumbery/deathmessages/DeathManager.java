@@ -61,10 +61,10 @@ public class DeathManager
 	public static String BRACKET = Variable.deathMessages.getString("death-messages.prefix.bracket", "&6[%s]");
 
 	public static Component DEATH_PREFIX = ComponentUtil.translate(BRACKET,
-			ComponentUtil.translate(Variable.deathMessages.getString("death-messages.prefix.death")));
+			ComponentUtil.translate(Variable.deathMessages.getString("death-messages.prefix.death", "&6사망")));
 
 	public static Component DEATH_PREFIX_PVP = ComponentUtil.translate(BRACKET,
-			ComponentUtil.translate(Variable.deathMessages.getString("death-messages.prefix.pvp")));
+			ComponentUtil.translate(Variable.deathMessages.getString("death-messages.prefix.pvp", "&6PvP")));
 
 	private static boolean goBack = false;
 

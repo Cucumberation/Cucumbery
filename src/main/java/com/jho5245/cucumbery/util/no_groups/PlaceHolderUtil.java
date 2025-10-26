@@ -182,13 +182,16 @@ public class PlaceHolderUtil
     }
     if (entity instanceof Player player)
     {
-      String displayName = CustomConfig.UserData.DISPLAY_NAME.getString(player.getUniqueId());
-      if (displayName == null)
-      {
-        displayName = ComponentUtil.serialize(SenderComponentUtil.senderComponent(player));
-      }
-      cmd = cmd.replace("%" + uuid + "_entity_display_name%", displayName);
-      cmd = cmd.replace("%" + uuid + "_entity_display_name_strip_color%", MessageUtil.stripColor(displayName));
+			if (cmd.contains("display_name"))
+			{
+				String displayName = CustomConfig.UserData.DISPLAY_NAME.getString(player.getUniqueId());
+				if (displayName == null)
+				{
+					displayName = ComponentUtil.serialize(SenderComponentUtil.senderComponent(player));
+				}
+				cmd = cmd.replace("%" + uuid + "_entity_display_name%", displayName);
+				cmd = cmd.replace("%" + uuid + "_entity_display_name_strip_color%", MessageUtil.stripColor(displayName));
+			}
       cmd = cmd.replace("%" + uuid + "_entity_foodlevel%", player.getFoodLevel() + "");
       cmd = cmd.replace("%" + uuid + "_entity_saturation%", Constant.Sosu2rawFormat.format(player.getSaturation()));
       cmd = cmd.replace("%" + uuid + "_entity_saturation_p%", Constant.rawFormat.format(player.getSaturation()));
