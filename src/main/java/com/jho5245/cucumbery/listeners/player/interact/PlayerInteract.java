@@ -642,7 +642,7 @@ public class PlayerInteract implements Listener
 					}
 
 					// 비료를 퇴비통에 우클릭
-					if (ItemStackUtil.getCompostChance(itemType) > 0d && clickedBlockType == Material.COMPOSTER)
+					if (itemType.isCompostable() && clickedBlockType == Material.COMPOSTER)
 					{
 						// 커스텀 채광 모드에서는 불가능하게 막음
 						if (player.getGameMode() != GameMode.CREATIVE && CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE)
@@ -654,7 +654,7 @@ public class PlayerInteract implements Listener
 					}
 
 					// 폭죽을 블록에 우클릭 혹은 비료를 퇴비통에 우클릭
-					if (itemType == Material.FIREWORK_ROCKET || (ItemStackUtil.getCompostChance(itemType) > 0d && clickedBlockType == Material.COMPOSTER))
+					if (itemType == Material.FIREWORK_ROCKET || (itemType.isCompostable() && clickedBlockType == Material.COMPOSTER))
 					{
 						if (player.getGameMode() != GameMode.CREATIVE && NBTAPI.arrayContainsValue(
 								NBTAPI.getStringList(NBTAPI.getMainCompound(item.clone()), CucumberyTag.EXTRA_TAGS_KEY), Constant.ExtraTag.INFINITE.toString()))
@@ -1271,11 +1271,6 @@ public class PlayerInteract implements Listener
 			}
 			Block block = event.getClickedBlock();
 			if ((block != null ? block.getType() : null) != Material.NOTE_BLOCK)
-			{
-				return;
-			}
-			ItemStack item = event.getItem();
-			if (itemExists && ItemStackUtil.isPickBlockable(item != null ? item.getType() : Material.AIR))
 			{
 				return;
 			}
