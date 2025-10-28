@@ -151,7 +151,7 @@ public class ItemStackComponent
 			{
 				tooltip.add(Component.empty());
 				tooltip.add(ComponentUtil.translate("&7클릭하여 /give 명령어로 복사"));
-				String nbt = ItemStackUtil.getComponentsFromItemStack(itemStack).replace(": ", ":").replace(", ", ",");
+				String nbt = ItemStackUtil.getComponentsFromItemStack(itemStack);
 				if (nbt.equals("[]"))
 					nbt = "";
 				if (UserData.SHOW_GIVE_COMMAND_NBT_ON_ITEM_ON_CHAT.getBoolean(viewer) && !nbt.isEmpty())

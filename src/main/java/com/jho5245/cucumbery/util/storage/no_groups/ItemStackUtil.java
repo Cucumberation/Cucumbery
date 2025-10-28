@@ -1458,7 +1458,7 @@ public class ItemStackUtil
 	@NotNull
 	public static String getComponentsFromItemStack(@NotNull ItemStack itemStack)
 	{
-		return itemStack.getItemMeta().getAsComponentString();
+		return getComponentsFromHoverEvent(itemStack.asHoverEvent().value());
 	}
 }
 
