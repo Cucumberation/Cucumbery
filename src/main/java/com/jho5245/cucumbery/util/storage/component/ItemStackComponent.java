@@ -171,8 +171,7 @@ public class ItemStackComponent
 						nbtClone = nbtClone.substring(cut.length());
 					}
 				}
-
-				String clickEventString = "/give @p minecraft:" + giveItem.getType().toString().toLowerCase() + nbt;
+				String clickEventString = "/give @p " + giveItem.getType().getKey() + nbt;
 				itemName = itemName.clickEvent(ClickEvent.copyToClipboard(clickEventString));
 			}
 			bundleMeta.lore(tooltip);
