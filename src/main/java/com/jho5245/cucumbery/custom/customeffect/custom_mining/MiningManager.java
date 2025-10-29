@@ -31,6 +31,7 @@ import com.sk89q.worldguard.protection.regions.RegionQuery;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.NBTList;
 import de.tr7zw.changeme.nbtapi.NBTType;
+import net.coreprotect.config.ConfigHandler;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;
@@ -110,6 +111,16 @@ public class MiningManager
 			com.sk89q.worldedit.util.Location location = BukkitAdapter.adapt(blockLocation);
 			if (!UserData.EVENT_EXCEPTION_ACCESS.getBoolean(player) && !query.testState(location, localPlayer, Flags.BUILD) && !query.testState(location, localPlayer,
 					Flags.BLOCK_BREAK))
+			{
+				return null;
+			}
+		}
+
+		// CoreProtect Inspector 모드인지 확인
+		if (Cucumbery.using_CoreProtect)
+		{
+			// /co i 사용중일 경우 블록 파괴 방지
+			if (ConfigHandler.inspecting.getOrDefault(player.getName(), false))
 			{
 				return null;
 			}

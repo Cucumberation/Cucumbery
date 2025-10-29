@@ -91,6 +91,8 @@ import io.lumine.mythic.bukkit.BukkitAPIHelper;
 import me.clip.placeholderapi.PlaceholderAPIPlugin;
 import me.sedattr.deluxeauctions.DeluxeAuctions;
 import net.coreprotect.CoreProtect;
+import net.coreprotect.CoreProtectAPI;
+import net.coreprotect.worldedit.CoreProtectEditSessionEvent;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;

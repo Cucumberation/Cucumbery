@@ -1,5 +1,6 @@
 package com.jho5245.cucumbery.util.no_groups;
 
+import com.comphenix.protocol.PacketType.Play;
 import com.comphenix.protocol.PacketType.Play.Server;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
@@ -19,6 +20,7 @@ import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBTList;
+import net.coreprotect.config.ConfigHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -67,6 +69,11 @@ public class TestCommand implements CucumberyCommandExecutor
 				}
 				case "youpeoplegame" -> {
 
+				}
+				case "coreproect" -> {
+					Player player = (Player) sender;
+					player.sendMessage(Cucumbery.using_CoreProtect + "");
+					player.sendMessage(ConfigHandler.inspecting.getOrDefault(player.getName(), false) + "");
 				}
 			}
 		}
