@@ -211,7 +211,7 @@ public class ItemLoreCustomItem
 					}
 				}
 			}
-			if (ItemStackUtil.getFuelTimeInSecond(internalMaterial) > 0)
+			if (internalMaterial.asItemType() != null && internalMaterial.asItemType().getBurnDuration() > 0)
 			{
 				switch (customMaterial)
 				{
@@ -236,7 +236,7 @@ public class ItemLoreCustomItem
 					}
 				}
 			}
-			if (ItemStackUtil.getCompostChance(internalMaterial) > 0)
+			if (internalMaterial.isCompostable())
 			{
 				if (!NBTAPI.isRestricted(itemStack, RestrictionType.NO_COMPOSTER))
 				{

@@ -19,6 +19,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.components.FoodComponent;
 import org.jetbrains.annotations.NotNull;
@@ -32,6 +33,7 @@ public class ItemLore2Ables
 			@NotNull List<Component> lore, @Nullable Object params)
 	{
 		Material type = itemStack.getType();
+		ItemType itemType = type.asItemType();
 		// 설치 가능
 		if (ItemStackUtil.isPlacable(type) && !NBTAPI.arrayContainsValue(hideFlags, CucumberyHideFlag.PLACABLE.toString()) && !NBTAPI.isRestrictedFinal(itemStack,
 				RestrictionType.NO_PLACE))
@@ -210,13 +212,17 @@ public class ItemLore2Ables
 			}
 		}
 
-		if (type.isFuel() && !NBTAPI.arrayContainsValue(hideFlags, CucumberyHideFlag.FUEL.toString()) && !NBTAPI.isRestrictedFinal(itemStack,
+		if (type.isFuel() && itemType != null && !NBTAPI.arrayContainsValue(hideFlags, CucumberyHideFlag.FUEL.toString()) && !NBTAPI.isRestrictedFinal(itemStack,
 				RestrictionType.NO_FUEL))
 		{
-			double sec = ItemStackUtil.getFuelTimeInSecond(type);
+			double sec;
 			if (nbtItem.hasTag("BurnTime") && nbtItem.getType("BurnTime") == NBTType.NBTTagInt)
 			{
 				sec = nbtItem.getInteger("BurnTime") / 20d;
+			}
+			else
+			{
+				sec = itemType.getBurnDuration() / 20d;
 			}
 			lore.add(Component.empty());
 			lore.add(ComponentUtil.translate(Constant.ITEM_LORE_FUEL));
@@ -227,13 +233,13 @@ public class ItemLore2Ables
 			}
 		}
 
-		double compostChance = ItemStackUtil.getCompostChance(type);
 
-		if (compostChance > 0d && !NBTAPI.arrayContainsValue(hideFlags, CucumberyHideFlag.COMPOSTABLE.toString()) && !NBTAPI.isRestrictedFinal(itemStack,
+		if (type.isCompostable() && !NBTAPI.arrayContainsValue(hideFlags, CucumberyHideFlag.COMPOSTABLE.toString()) && !NBTAPI.isRestrictedFinal(itemStack,
 				RestrictionType.NO_COMPOSTER))
 		{
+			double compostChance = type.getCompostChance();
 			lore.add(Component.empty());
-			lore.add(ComponentUtil.translate(Constant.ITEM_LORE_MATERIAL_COMPOSTABLE, Constant.Sosu2.format(compostChance) + "%"));
+			lore.add(ComponentUtil.translate(Constant.ITEM_LORE_MATERIAL_COMPOSTABLE, Constant.Sosu2.format(compostChance * 100d) + "%"));
 		}
 	}
 }
