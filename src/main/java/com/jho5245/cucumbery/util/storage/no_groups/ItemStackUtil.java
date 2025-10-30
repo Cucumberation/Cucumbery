@@ -28,11 +28,13 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.event.DataComponentValue;
+import net.kyori.adventure.text.event.DataComponentValue.Removed;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEvent.ShowItem;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.format.TextDecoration.State;
+import net.kyori.adventure.text.serializer.gson.GsonDataComponentValue;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -47,6 +49,7 @@ import org.bukkit.inventory.meta.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -1401,10 +1404,12 @@ public class ItemStackUtil
 
 	/**
 	 * {@link HoverEvent}의 {@link ShowItem}에서 {@link ItemStack}의 컴포넌트를 문자열 형태로 반환합니다.
+	 * <p>반환된 문자열은 /give 명령어의 아이템 인자로 사용할 수 있습니다.</p>
+	 * <p>예시: <code>[minecraft:item_model="minecraft:campfire"]</code></p>
 	 *
 	 * @param showItem
 	 * 		아이템을 가져올 {@link ShowItem}
-	 * @return 문자열 형태의 아이템의 컴포넌트
+	 * @return 문자열 형태의 아이템의 컴포넌트 or 컴포넌트가 없을 경우 빈 문자열
 	 */
 	@NotNull
 	public static String getComponentsFromHoverEvent(ShowItem showItem)
@@ -1416,19 +1421,26 @@ public class ItemStackUtil
 		{
 			try
 			{
-				Class<?> clazz = dataComponentValue.getClass();
-				switch (clazz.getName())
+				switch (dataComponentValue)
 				{
-					case "net.kyori.adventure.text.serializer.gson.GsonDataComponentValueImpl" ->
+					case GsonDataComponentValue componentValue -> strings.add(key.asString() + "=" + componentValue.element() + ",");
+					case Removed ignored -> strings.add("!" + key.asString() + ",");
+					case null -> MessageUtil.consoleSendMessage("dataComponentValue null with key: " + key.asString());
+					default ->
 					{
-						Method method = clazz.getDeclaredMethod("element");
-						method.setAccessible(true);
-						strings.add(key.asString() + "=");
-						strings.add(method.invoke(dataComponentValue).toString() + ",");
-					}
-					case "net.kyori.adventure.text.event.RemovedDataComponentValueImpl" -> strings.add("!" + key.asString() + ",");
-					case "io.papermc.paper.adventure.PaperAdventure$DataComponentValueImpl" ->
-					{
+						// with reflection
+						Class<?> clazz = dataComponentValue.getClass();
+						switch (clazz.getName())
+						{
+							case "io.papermc.paper.adventure.PaperAdventure$DataComponentValueImpl" ->
+							{
+								Method method = clazz.getDeclaredMethod("asBinaryTag");
+								method.setAccessible(true);
+								strings.add(key.asString() + "=");
+								strings.add(method.invoke(dataComponentValue).toString() + ",");
+							}
+							default -> MessageUtil.consoleSendMessage("unhandled data component class found: " + clazz.getName());
+						}
 					}
 				}
 			}

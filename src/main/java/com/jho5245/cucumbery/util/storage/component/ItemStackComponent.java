@@ -154,9 +154,10 @@ public class ItemStackComponent
 				String nbt = ItemStackUtil.getComponentsFromItemStack(itemStack);
 				if (nbt.equals("[]"))
 					nbt = "";
+				String giveCommand = "/give @p " + giveItem.getType().getKey() + nbt;
 				if (UserData.SHOW_GIVE_COMMAND_NBT_ON_ITEM_ON_CHAT.getBoolean(viewer) && !nbt.isEmpty())
 				{
-					String nbtClone = nbt;
+					String nbtClone = giveCommand;
 					int count = 0;
 					while (!nbtClone.isEmpty())
 					{
@@ -171,8 +172,7 @@ public class ItemStackComponent
 						nbtClone = nbtClone.substring(cut.length());
 					}
 				}
-				String clickEventString = "/give @p " + giveItem.getType().getKey() + nbt;
-				itemName = itemName.clickEvent(ClickEvent.copyToClipboard(clickEventString));
+				itemName = itemName.clickEvent(ClickEvent.copyToClipboard(giveCommand));
 			}
 			bundleMeta.lore(tooltip);
 		}
