@@ -119,7 +119,7 @@ import java.util.UUID;
 
 public class Cucumbery extends JavaPlugin
 {
-	public static final int CONFIG_VERSION = 52, DEATH_MESSAGES_CONFIG_VERSION = 13, LANG_CONFIG_VERSION = 8;
+	public static final int CONFIG_VERSION = 52, DEATH_MESSAGES_CONFIG_VERSION = 13, LANG_CONFIG_VERSION = 8, RESOURCE_PACK_VERSION = 1;
 
 	//  private static final ExecutorService brigadierService = Executors.newFixedThreadPool(1);
 	public static YamlConfiguration config;
