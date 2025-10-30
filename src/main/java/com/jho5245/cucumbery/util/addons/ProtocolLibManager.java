@@ -1577,8 +1577,8 @@ public class ProtocolLibManager
 		// 아이템 최대 겹치기 개수가 1일 경우 표시되는 아이템 이름 글자를 좀 더 크게 + 좀 더 위에 보이도록 지정
 		if (isMaxStackSizeOne)
 		{
-			values.add(new WrappedDataValue(11, WrappedDataWatcher.Registry.get(Vector3f.class), new Vector3f(0f, 0.6f, 0f))); // Translation
-			values.add(new WrappedDataValue(12, WrappedDataWatcher.Registry.get(Vector3f.class), new Vector3f(2f, 2f, 2f))); // Scale
+			values.add(new WrappedDataValue(11, WrappedDataWatcher.Registry.get(Vector3f.class), new Vector3f(0f, 0.4f, 0f))); // Translation
+			values.add(new WrappedDataValue(12, WrappedDataWatcher.Registry.get(Vector3f.class), new Vector3f(1.2f, 1.2f, 1.2f))); // Scale
 		}
 		else
 		{
