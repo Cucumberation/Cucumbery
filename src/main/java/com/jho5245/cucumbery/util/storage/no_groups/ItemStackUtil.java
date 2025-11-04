@@ -10,6 +10,7 @@ import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.commands.no_groups.CommandCgive;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
+import com.jho5245.cucumbery.custom.custommaterial.CustomMaterialNew;
 import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.itemlore.ItemLore.RemoveFlag;
 import com.jho5245.cucumbery.util.itemlore.ItemLore4;
@@ -27,6 +28,7 @@ import de.tr7zw.changeme.nbtapi.*;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
+import net.kyori.adventure.text.event.ClickEvent.Payload.Custom;
 import net.kyori.adventure.text.event.DataComponentValue;
 import net.kyori.adventure.text.event.DataComponentValue.Removed;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -1264,6 +1266,10 @@ public class ItemStackUtil
 			{
 				ItemLore.setItemLore(item, ItemLoreView.of(player));
 			}
+			if (CustomMaterialNew.itemStackOf(item) != null)
+			{
+				ItemLore.setItemLore(item, ItemLoreView.of(player));
+			}
 			ItemLore.removeItemLore(item, RemoveFlag.create().removeItemFlags());
 		}
 		inventory = openInventory.getTopInventory();
@@ -1278,9 +1284,17 @@ public class ItemStackUtil
 			{
 				ItemLore.setItemLore(item, ItemLoreView.of(player));
 			}
+			if (CustomMaterialNew.itemStackOf(item) != null)
+			{
+				ItemLore.setItemLore(item, ItemLoreView.of(player));
+			}
 			ItemLore.removeItemLore(item, RemoveFlag.create().removeItemFlags());
 		}
 		if (CustomMaterial.itemStackOf(player.getItemOnCursor()) != null)
+		{
+			player.setItemOnCursor(ItemLore.setItemLore(player.getItemOnCursor(), ItemLoreView.of(player)));
+		}
+		if (CustomMaterialNew.itemStackOf(player.getItemOnCursor()) != null)
 		{
 			player.setItemOnCursor(ItemLore.setItemLore(player.getItemOnCursor(), ItemLoreView.of(player)));
 		}
