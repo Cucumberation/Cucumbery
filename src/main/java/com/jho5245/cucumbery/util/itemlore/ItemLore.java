@@ -2,6 +2,7 @@ package com.jho5245.cucumbery.util.itemlore;
 
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
+import com.jho5245.cucumbery.custom.custommaterial.CustomMaterialNew;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
@@ -24,6 +25,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.CreativeCategory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -120,6 +122,12 @@ public class ItemLore
 		{
 			ItemLoreCustomItem.itemLore(itemStack, nbtItem, customType);
 			itemMeta = itemStack.getItemMeta();
+		}
+		CustomMaterialNew customMaterialNew = CustomMaterialNew.itemStackOf(itemStack);
+		if (customMaterialNew != null)
+		{
+			Player player = params instanceof Player p ? p : params instanceof ItemLoreView view ? view.getPlayer() : null;
+			ItemLoreCustomMaterial.itemLore(player, itemStack, customMaterialNew);
 		}
 		boolean hasOnlyNbtTagLore =
 				ItemLoreUtil.hasOnlyNbtTagLore(itemStack) || new NBTItem(itemStack).hasTag("NBTCopied") && new NBTItem(itemStack).getBoolean("NBTCopied");
