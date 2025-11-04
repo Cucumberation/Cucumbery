@@ -5,6 +5,7 @@ import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.custommaterial.CustomMaterialNew;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
+import com.jho5245.cucumbery.util.no_groups.ItemSerializer;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
@@ -124,7 +125,6 @@ public class ItemLore
 			itemMeta = itemStack.getItemMeta();
 		}
 		CustomMaterialNew customMaterialNew = CustomMaterialNew.itemStackOf(itemStack);
-		System.out.println("custom: " + customMaterialNew);
 		if (customMaterialNew != null)
 		{
 			Player player = params instanceof Player p ? p : params instanceof ItemLoreView view ? view.getPlayer() : null;
