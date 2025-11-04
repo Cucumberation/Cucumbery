@@ -11,6 +11,7 @@ import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCooldown;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCustomMining;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeRune;
+import com.jho5245.cucumbery.custom.custommaterial.CustomMaterialNew;
 import com.jho5245.cucumbery.custom.customrecipe.recipeinventory.RecipeInventoryMainMenu;
 import com.jho5245.cucumbery.listeners.block.NotePlay;
 import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
@@ -165,8 +166,9 @@ public class PlayerInteract implements Listener
 			event.setCancelled(true);
 			return;
 		}
+		CustomMaterialNew customMaterialNew = CustomMaterialNew.itemStackOf(item);
 		// Custom Material이 DEBUG_STICK이고 관리자가  Block Interact Cancel
-		if (customMaterial != null && item.getType() == Material.DEBUG_STICK && blockClick &&
+		if ((customMaterialNew != null || customMaterial != null) && item.getType() == Material.DEBUG_STICK && blockClick &&
 				(player.hasPermission("minecraft.debugstick.always") || player.hasPermission("minecraft.debugstick") && player.getGameMode() == GameMode.CREATIVE))
 		{
 			MessageUtil.sendDebug(player, "CustomMaterial의 디버그 막대기 기능 사용 취소됨");

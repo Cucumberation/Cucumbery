@@ -1,7 +1,6 @@
 package com.jho5245.cucumbery;
 
 import com.comphenix.protocol.ProtocolLib;
-import com.ghostchu.quickshop.QuickShopBukkit;
 import com.ghostchu.quickshop.api.QuickShopAPI;
 import com.ghostchu.quickshop.api.shop.Shop;
 import com.gmail.nossr50.mcMMO;
@@ -50,6 +49,7 @@ import com.jho5245.cucumbery.listeners.hanging.HangingBreak;
 import com.jho5245.cucumbery.listeners.hanging.HangingBreakByEntity;
 import com.jho5245.cucumbery.listeners.hanging.HangingPlace;
 import com.jho5245.cucumbery.listeners.inventory.*;
+import com.jho5245.cucumbery.listeners.itemlore.ItemLoreCustomMaterial;
 import com.jho5245.cucumbery.listeners.player.bucket.PlayerBucketEmpty;
 import com.jho5245.cucumbery.listeners.player.bucket.PlayerBucketEntity;
 import com.jho5245.cucumbery.listeners.player.bucket.PlayerBucketFill;
@@ -965,6 +965,9 @@ public class Cucumbery extends JavaPlugin
 		Initializer.registerEvent(new PrepareResult());
 		Initializer.registerEvent(new PrepareSmithing());
 
+		// listener.itemlore
+		Initializer.registerEvent(new ItemLoreCustomMaterial());
+
 		// listener.player
 		Initializer.registerEvent(new PlayerAdvancementDone());
 		Initializer.registerEvent(new PlayerArmorChange());
@@ -1045,9 +1048,6 @@ public class Cucumbery extends JavaPlugin
 		if (using_QuickShop)
 		{
 			Initializer.registerEvent(new ShopDelete());
-			Initializer.registerEvent(new ShopItemChange());
-			Initializer.registerEvent(new ShopPreCreate());
-			Initializer.registerEvent(new ShopPriceChange());
 			Initializer.registerEvent(new ShopSignUpdate());
 			Initializer.registerEvent(new ShopSuccessPurchase());
 		}
