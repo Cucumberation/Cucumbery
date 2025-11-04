@@ -59,9 +59,9 @@ public class ItemLore2Meta2
           }
 
           // 폭발형 폭죽은 효과 출력 안함
-          if (fireworkMeta.hasEffects() &&
+          if (fireworkMeta.hasEffects()/* &&
                   customMaterial != CustomMaterial.FIREWORK_ROCKET_EXPLOSIVE &&
-                  customMaterial != CustomMaterial.FIREWORK_ROCKET_EXPLOSIVE_DESTRUCTION && customMaterial != CustomMaterial.FIREWORK_ROCKET_EXPLOSIVE_FLAME)
+                  customMaterial != CustomMaterial.FIREWORK_ROCKET_EXPLOSIVE_DESTRUCTION && customMaterial != CustomMaterial.FIREWORK_ROCKET_EXPLOSIVE_FLAME*/)
           {
             lore.add(Component.empty());
             lore.add(ComponentUtil.translate("rg255,204;[폭죽 효과 목록]"));

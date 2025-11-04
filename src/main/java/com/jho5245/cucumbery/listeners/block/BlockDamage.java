@@ -53,10 +53,10 @@ public class BlockDamage implements Listener
       }
       if (!Variable.customMiningCooldown.containsKey(location) || Variable.customMiningExtraBlocks.containsKey(location))
       {
-        if (CustomMaterial.itemStackOf(BlockPlaceDataConfig.getItem(location)) == CustomMaterial.SUS)
+/*        if (CustomMaterial.itemStackOf(BlockPlaceDataConfig.getItem(location)) == CustomMaterial.SUS)
         {
           SoundPlay.playSound(player, "custom_sus_breaking", SoundCategory.BLOCKS, 0.8, 1);
-        }
+        }*/
         CustomEffectManager.addEffect(player, new LocationCustomEffectImple(CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PROGRESS, location));
       }
     }

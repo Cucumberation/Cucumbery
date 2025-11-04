@@ -36,26 +36,26 @@ public class ItemLore3
   {
     Material type = itemStack.getType();
     NBTItem nbtItem = new NBTItem(itemStack);
-    String customType = nbtItem.getString(CustomMaterial.IDENDTIFER);
-    CustomMaterial customMaterial = null;
-    {
-      try
-      {
-        type = Material.valueOf(customType.toUpperCase());
-      }
-      catch (Exception ignored)
-      {
-
-      }
-      try
-      {
-        customMaterial = CustomMaterial.valueOf(customType.toUpperCase());
-      }
-      catch (Exception ignored)
-      {
-
-      }
-    }
+//    String customType = nbtItem.getString(CustomMaterial.IDENDTIFER);
+//    CustomMaterial customMaterial = null;
+//    {
+//      try
+//      {
+//        type = Material.valueOf(customType.toUpperCase());
+//      }
+//      catch (Exception ignored)
+//      {
+//
+//      }
+//      try
+//      {
+//        customMaterial = CustomMaterial.valueOf(customType.toUpperCase());
+//      }
+//      catch (Exception ignored)
+//      {
+//
+//      }
+//    }
     ItemMeta itemMeta = itemStack.getItemMeta();
     NBTList<String> hideFlags = NBTAPI.getStringList(NBTAPI.getMainCompound(itemStack), CucumberyTag.HIDE_FLAGS_KEY);
     if (!NBTAPI.arrayContainsValue(hideFlags, CucumberyHideFlag.TMI_DESCRIPTION))
@@ -204,7 +204,7 @@ public class ItemLore3
         );
         case SCULK_SHRIEKER -> description.add(ComponentUtil.translate("&7트래시 가비지 블록!"));
       }
-      if (customMaterial != null)
+/*      if (customMaterial != null)
       {
         description.clear();
         description.add(Component.empty());
@@ -315,7 +315,7 @@ public class ItemLore3
             description.add(ComponentUtil.translate("&7&o악 더러워!"));
           }
         }
-      }
+      }*/
 
 			ItemLore3Event itemLore3Event = new ItemLore3Event(viewer, itemStack, new ArrayList<>());
 			Bukkit.getPluginManager().callEvent(itemLore3Event);
@@ -324,20 +324,20 @@ public class ItemLore3
 				description.addAll(itemLore3Event.getItemLore());
 			}
 
-      if (!customType.isEmpty())
-      {
-        ConfigurationSection root = Variable.customItemsConfig.getConfigurationSection(customType);
-        if (root != null)
-        {
-          List<String> lor = root.getStringList("lore");
-          if (!lor.isEmpty())
-          {
-            description.clear();
-            description.add(Component.empty());
-            lor.forEach(s -> description.add(ComponentUtil.create(MessageUtil.n2s(s))));
-          }
-        }
-      }
+//      if (!customType.isEmpty())
+//      {
+//        ConfigurationSection root = Variable.customItemsConfig.getConfigurationSection(customType);
+//        if (root != null)
+//        {
+//          List<String> lor = root.getStringList("lore");
+//          if (!lor.isEmpty())
+//          {
+//            description.clear();
+//            description.add(Component.empty());
+//            lor.forEach(s -> description.add(ComponentUtil.create(MessageUtil.n2s(s))));
+//          }
+//        }
+//      }
       if (description.size() > 1)
       {
         lore.addAll(description);

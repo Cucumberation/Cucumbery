@@ -4,11 +4,9 @@ import com.jho5245.cucumbery.custom.customeffect.CustomEffect;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.children.group.PlayerCustomEffect;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.entity.AbstractSkeleton;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
@@ -16,8 +14,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTargetEvent.TargetReason;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 
 public class EntityTarget implements Listener
 {
@@ -101,7 +97,7 @@ public class EntityTarget implements Listener
 
   private void sansArmor(EntityTargetEvent event)
   {
-    Entity entity = event.getEntity(); // 쫓아오는 개체
+/*    Entity entity = event.getEntity(); // 쫓아오는 개체
     Entity target = event.getTarget(); // 쫓기는 개체
     if (target instanceof Player player && entity instanceof AbstractSkeleton)
     {
@@ -114,6 +110,6 @@ public class EntityTarget implements Listener
       {
         event.setCancelled(true);
       }
-    }
+    }*/
   }
 }

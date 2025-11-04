@@ -8,7 +8,6 @@ import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Constant.CucumberyHideFlag;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.NBTList;
 import net.kyori.adventure.text.Component;
@@ -22,12 +21,11 @@ import java.util.List;
 
 public class ItemLore2CustomMiningAndCustomMaterial
 {
-  protected static void setItemLore(@NotNull ItemStack item, @NotNull Material type,
-                                    @Nullable CustomMaterial customMaterial, @NotNull List<Component> lore,
+  protected static void setItemLore(@NotNull ItemStack item, @NotNull Material type, @NotNull List<Component> lore,
                                     @NotNull NBTItem nbtItem, @Nullable NBTList<String> hideFlags,
                                     @Nullable Player viewer, @Nullable Object params)
   {
-    if (customMaterial != CustomMaterial.UNBINDING_SHEARS)
+//    if (customMaterial != CustomMaterial.UNBINDING_SHEARS)
     {
       if (!NBTAPI.arrayContainsValue(hideFlags, CucumberyHideFlag.CUSTOM_MININGS) &&
               (Constant.TOOLS_LOSE_DURABILITY_BY_BREAKING_BLOCKS.contains(type) || nbtItem.hasTag(MiningManager.TOOL_TIER) || nbtItem.hasTag(MiningManager.TOOL_SPEED) || nbtItem.hasTag(MiningManager.TOOL_FORTUNE)))

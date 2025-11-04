@@ -37,13 +37,13 @@ public class PreCustomBlockBreak implements Listener
         case DIAMOND_PICKAXE, GOLDEN_PICKAXE, IRON_PICKAXE, NETHERITE_PICKAXE, STONE_PICKAXE, WOODEN_PICKAXE -> PreCustomBlockBreakMcMMO.skill(player);
       }
     }
-    if (customMaterial != null)
+/*    if (customMaterial != null)
     {
       switch (customMaterial)
       {
         case COBALT_PICKAXE, MITHRIL_PICKAXE, MITHRIL_PICKAXE_REFINED, MUSHROOM_STEW_PICKAXE, TEST_PICKAXE, TITANIUM_PICKAXE, TITANIUM_PICKAXE_REFINED, TODWOT_PICKAXE, TUNGSTEN_PICKAXE,
                 MINDAS_DRILL, TITANIUM_DRILL_R266, TITANIUM_DRILL_R366, TITANIUM_DRILL_R466, TITANIUM_DRILL_R566 -> PreCustomBlockBreakMcMMO.skill(player);
       }
-    }
+    }*/
   }
 }

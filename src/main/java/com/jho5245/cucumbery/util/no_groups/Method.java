@@ -209,16 +209,16 @@ public class Method extends SoundPlay
 			playSound(player, Sound.BLOCK_NOTE_BLOCK_HAT, 0.5F, Method.random(130, 170) / 100.0F);
 			return;
 		}
-		CustomMaterial customMaterial = CustomMaterial.itemStackOf(item);
-		if (customMaterial != null)
-		{
-			switch (customMaterial)
-			{
-				case TUNGSTEN_INGOT, COBALT_INGOT, CUCUMBERITE_INGOT, MITHRIL_INGOT, SHROOMITE_INGOT, TITANIUM_INGOT, COBALT_ORE, CUCUMBERITE_ORE, MITHRIL_ORE,
-						 SHROOMITE_ORE, TITANIUM_ORE, TUNGSTEN_ORE -> heldItemSound(player, new ItemStack(Material.IRON_INGOT));
-			}
-		}
-		else
+//		CustomMaterial customMaterial = CustomMaterial.itemStackOf(item);
+//		if (customMaterial != null)
+//		{
+//			switch (customMaterial)
+//			{
+//				case TUNGSTEN_INGOT, COBALT_INGOT, CUCUMBERITE_INGOT, MITHRIL_INGOT, SHROOMITE_INGOT, TITANIUM_INGOT, COBALT_ORE, CUCUMBERITE_ORE, MITHRIL_ORE,
+//						 SHROOMITE_ORE, TITANIUM_ORE, TUNGSTEN_ORE -> heldItemSound(player, new ItemStack(Material.IRON_INGOT));
+//			}
+//		}
+//		else
 		{
 			switch (item.getType())
 			{

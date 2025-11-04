@@ -28,16 +28,14 @@ import com.jho5245.cucumbery.custom.customrecipe.recipeinventory.RecipeInventory
 import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
 import com.jho5245.cucumbery.util.gui.GUIManager;
 import com.jho5245.cucumbery.util.gui.GUIManager.GUIType;
-import com.jho5245.cucumbery.util.itemlore.ItemLore;
-import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
-import com.jho5245.cucumbery.util.no_groups.ColorUtil.Type;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
-import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
-import com.jho5245.cucumbery.util.storage.component.util.sendercomponent.EntityComponentUtil;
-import com.jho5245.cucumbery.util.storage.data.*;
+import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Constant.RestrictionType;
+import com.jho5245.cucumbery.util.storage.data.Permission;
+import com.jho5245.cucumbery.util.storage.data.Prefix;
+import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
@@ -50,7 +48,6 @@ import com.xxmicloxx.NoteBlockAPI.model.RepeatMode;
 import com.xxmicloxx.NoteBlockAPI.model.Song;
 import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
-import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.bossbar.BossBar.Overlay;
 import net.kyori.adventure.text.Component;
@@ -70,9 +67,11 @@ import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
@@ -182,31 +181,31 @@ public class Scheduler
 
 	private static void nameTagTrackerAsync()
 	{
-		for (Player player : Bukkit.getOnlinePlayers())
-		{
-			ItemStack mainHand = player.getInventory().getItemInMainHand();
-			CustomMaterial customMaterial = CustomMaterial.itemStackOf(mainHand);
-			if (customMaterial == CustomMaterial.TRACKER)
-			{
-				String uuidStr = new NBTItem(mainHand).getString("Tracking");
-				if (uuidStr != null && Method.isUUID(uuidStr))
-				{
-					Entity entity = Method2.getEntity(UUID.fromString(uuidStr));
-					Component message = ComponentUtil.translate("&cargument.entity.notfound.entity");
-					if (entity != null)
-					{
-						Location location = entity.getLocation();
-						int x = location.getBlockX(), y = location.getBlockY(), z = location.getBlockZ();
-						int distance = (int) Method2.distance(player.getLocation(), location);
-						String distanceString = distance == -1 ? "&c다른 월드에 있음!" : "&f" + distance + "m";
-						message = ComponentUtil.translate("%s : %s",
-								ComponentUtil.translate("&d[%s]", EntityComponentUtil.entityComponent(player, entity, NamedTextColor.WHITE)),
-								ComponentUtil.translate("&e거리= %s x= %s y= %s z= %s", ComponentUtil.translate(distanceString), "&f" + x, "&f" + y, "&f" + z));
-					}
-					player.sendActionBar(message);
-				}
-			}
-		}
+//		for (Player player : Bukkit.getOnlinePlayers())
+//		{
+//			ItemStack mainHand = player.getInventory().getItemInMainHand();
+//			CustomMaterial customMaterial = CustomMaterial.itemStackOf(mainHand);
+//			if (customMaterial == CustomMaterial.TRACKER)
+//			{
+//				String uuidStr = new NBTItem(mainHand).getString("Tracking");
+//				if (uuidStr != null && Method.isUUID(uuidStr))
+//				{
+//					Entity entity = Method2.getEntity(UUID.fromString(uuidStr));
+//					Component message = ComponentUtil.translate("&cargument.entity.notfound.entity");
+//					if (entity != null)
+//					{
+//						Location location = entity.getLocation();
+//						int x = location.getBlockX(), y = location.getBlockY(), z = location.getBlockZ();
+//						int distance = (int) Method2.distance(player.getLocation(), location);
+//						String distanceString = distance == -1 ? "&c다른 월드에 있음!" : "&f" + distance + "m";
+//						message = ComponentUtil.translate("%s : %s",
+//								ComponentUtil.translate("&d[%s]", EntityComponentUtil.entityComponent(player, entity, NamedTextColor.WHITE)),
+//								ComponentUtil.translate("&e거리= %s x= %s y= %s z= %s", ComponentUtil.translate(distanceString), "&f" + x, "&f" + y, "&f" + z));
+//					}
+//					player.sendActionBar(message);
+//				}
+//			}
+//		}
 	}
 
 	public static void fakeBlocksAsync(@Nullable Player target, @NotNull Location location, boolean distanceLimit)
@@ -394,7 +393,7 @@ public class Scheduler
 
 	private static void customArmor(@NotNull Player player)
 	{
-		PlayerInventory playerInventory = player.getInventory();
+/*		PlayerInventory playerInventory = player.getInventory();
 		CustomMaterial helmet = CustomMaterial.itemStackOf(playerInventory.getHelmet());
 		CustomMaterial chestplate = CustomMaterial.itemStackOf(playerInventory.getChestplate());
 		CustomMaterial leggings = CustomMaterial.itemStackOf(playerInventory.getLeggings());
@@ -533,7 +532,7 @@ public class Scheduler
 				itemStack.setItemMeta(leatherArmorMeta);
 				p.sendEquipmentChange(player, EquipmentSlot.FEET, itemStack);
 			});
-		}
+		}*/
 	}
 
 	private static void starCatchPenaltyAsync()

@@ -2,7 +2,7 @@ package com.jho5245.cucumbery.util.no_groups;
 
 import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent.Completion;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
-import com.jho5245.cucumbery.custom.custommaterial.CustomMaterialNew;
+import com.jho5245.cucumbery.custom.custommaterial.CustomMaterial;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
 import com.jho5245.cucumbery.util.no_groups.CommandArgumentUtil.LocationTooltip;
@@ -11,7 +11,6 @@ import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
 import com.jho5245.cucumbery.util.storage.component.util.sendercomponent.SenderComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.*;
-import com.jho5245.cucumbery.util.storage.data.Constant.ExtraTag;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
@@ -667,7 +666,7 @@ public class CommandTabUtil
 		//          {
 		//            hover = ComponentUtil.translate("key:subtitles." + sound.key().value() + "|" + sound.key().value());
 		//          }
-		else if (o instanceof CustomMaterialNew customMaterial)
+		else if (o instanceof CustomMaterial customMaterial)
 		{
 			hover = customMaterial.getDisplayName();
 		}

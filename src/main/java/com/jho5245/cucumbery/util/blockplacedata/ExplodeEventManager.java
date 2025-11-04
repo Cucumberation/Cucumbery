@@ -44,13 +44,13 @@ public class ExplodeEventManager
 				{
 					if (Math.random() <= yield)
 					{
-						CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
-						Collection<ItemStack> drops;
-						if (customMaterial != null && !(drops = customMaterial.getSpecialDrops()).isEmpty())
-						{
-							drops.forEach(drop -> location.getWorld().dropItemNaturally(location, drop));
-						}
-						else
+//						CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
+//						Collection<ItemStack> drops;
+//						if (customMaterial != null && !(drops = customMaterial.getSpecialDrops()).isEmpty())
+//						{
+//							drops.forEach(drop -> location.getWorld().dropItemNaturally(location, drop));
+//						}
+//						else
 							location.getWorld().dropItemNaturally(location, itemStack);
 					}
 					BlockPlaceDataConfig.removeData(location);

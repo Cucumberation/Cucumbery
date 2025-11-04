@@ -68,7 +68,7 @@ public class ItemCategory
 					Rarity.UNIQUE;
 			case DRAGON_HEAD, ELYTRA, BEACON, DRAGON_EGG -> Rarity.EXCELLENT;
 			case BARRIER, COMMAND_BLOCK, CHAIN_COMMAND_BLOCK, REPEATING_COMMAND_BLOCK, COMMAND_BLOCK_MINECART, STRUCTURE_BLOCK, STRUCTURE_VOID, JIGSAW, LIGHT, ENDER_DRAGON_SPAWN_EGG, WITHER_SPAWN_EGG ->
-					Rarity._ADMIN;
+					Rarity.ADMIN;
 			case SCULK_SHRIEKER -> Rarity.JUNK;
 			default -> Rarity.NORMAL;
 		};
@@ -95,6 +95,7 @@ public class ItemCategory
 		EXCELLENT(5, Cucumbery.config.getLong("item-rarity-value.excellent.value"), Cucumbery.config.getString("item-rarity-value.excellent.name")),
 		LEGENDARY(6, Cucumbery.config.getLong("item-rarity-value.legendary.value"), Cucumbery.config.getString("item-rarity-value.legendary.name")),
 		ARTIFACT(7, Cucumbery.config.getLong("item-rarity-value.artifact.value"), Cucumbery.config.getString("item-rarity-value.artifact.name")),
+		ADMIN(8, ARTIFACT.getRarityValue() + Integer.MAX_VALUE, "&4[관리자]"),
 
 		_COMMON(10, 0, "&f&lCOMMON"),
 		_UNCOMMON(11, 0, "&a&lUNCOMMON"),
@@ -105,7 +106,7 @@ public class ItemCategory
 		_DIVINE(16, 0, "&b&lDIVINE"),
 		_SPECIAL(17, 0, "&c&lSPECIAL"),
 		_VERY_SPECIAL(18, 0, "&c&lVERY SPECIAL"),
-		_ADMIN(999, 0, "&4[관리자]");
+		;
 
 		private final int rarityNumber;
 
@@ -215,7 +216,7 @@ public class ItemCategory
 				case _MYTHIC -> "&d";
 				case _DIVINE -> "&b";
 				case _SPECIAL, _VERY_SPECIAL -> "&c";
-				case _ADMIN -> "&4";
+				case ADMIN -> "&4";
 			};
 		}
 	}

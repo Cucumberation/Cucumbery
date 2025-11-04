@@ -1,23 +1,13 @@
 package com.jho5245.cucumbery.listeners.entity.item;
 
 import com.jho5245.cucumbery.Cucumbery;
-import com.jho5245.cucumbery.custom.customeffect.CustomEffect;
-import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
-import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
-import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method;
-import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
-import com.jho5245.cucumbery.util.storage.data.Constant;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
-import net.kyori.adventure.text.event.ClickEvent;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ItemSpawnEvent;
-import org.bukkit.inventory.ItemStack;
 
 public class ItemSpawn implements Listener
 {
@@ -34,7 +24,7 @@ public class ItemSpawn implements Listener
       Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
               Method.updateItem(entity), 0L);
     }
-    ItemStack itemStack = entity.getItemStack();
+/*    ItemStack itemStack = entity.getItemStack();
     CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
     if (customMaterial != null)
     {
@@ -55,6 +45,6 @@ public class ItemSpawn implements Listener
           entity.setWillAge(false);
         }
       }
-    }
+    }*/
   }
 }

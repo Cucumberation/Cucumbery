@@ -20,10 +20,10 @@ public class BlockDamageAbort implements Listener
   {
     Player player = event.getPlayer();
     ItemStack itemStack = BlockPlaceDataConfig.getItem(event.getBlock().getLocation());
-    if (CustomMaterial.itemStackOf(itemStack) == CustomMaterial.SUS)
+/*    if (CustomMaterial.itemStackOf(itemStack) == CustomMaterial.SUS)
     {
       player.stopSound("custom_sus_breaking", SoundCategory.BLOCKS);
-    }
+    }*/
     MiningManager.quitCustomMining(player);
   }
 }

@@ -18,7 +18,7 @@ public class PlayerStopUsingItem implements Listener
     Player player = event.getPlayer();
     ItemStack itemStack = event.getItem();
     int ticksHeldFor = event.getTicksHeldFor();
-    CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
+/*    CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
     if (customMaterial == CustomMaterial.SPYGLASS_TELEPORT)
     {
       if (CustomEffectManager.hasEffect(player, CustomEffectType.SPYGLASS_TELEPORT))
@@ -27,6 +27,6 @@ public class PlayerStopUsingItem implements Listener
         MessageUtil.sendWarn(player, "우클릭을 멈춰 순간 이동이 취소되었습니다");
         CustomEffectManager.addEffect(player, CustomEffectType.SPYGLASS_TELEPORT_COOLDOWN, 100);
       }
-    }
+    }*/
   }
 }

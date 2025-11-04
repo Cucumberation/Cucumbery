@@ -3,13 +3,11 @@ package com.jho5245.cucumbery.listeners.player.item;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
-import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
 import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.Permission;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
@@ -72,7 +70,7 @@ public class PlayerAttemptPickupItem implements Listener
 			return;
 		}
 
-		CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
+/*		CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
 		if (customMaterial != null)
 		{
 			switch (customMaterial)
@@ -82,7 +80,7 @@ public class PlayerAttemptPickupItem implements Listener
 					return;
 				}
 			}
-		}
+		}*/
 		int amount = itemStack.getAmount() - event.getRemaining();
 		if (amount > 0)
 		{

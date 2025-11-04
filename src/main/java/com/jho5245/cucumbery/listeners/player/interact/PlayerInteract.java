@@ -11,7 +11,7 @@ import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCooldown;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCustomMining;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeRune;
-import com.jho5245.cucumbery.custom.custommaterial.CustomMaterialNew;
+import com.jho5245.cucumbery.custom.custommaterial.CustomMaterial;
 import com.jho5245.cucumbery.custom.customrecipe.recipeinventory.RecipeInventoryMainMenu;
 import com.jho5245.cucumbery.listeners.block.NotePlay;
 import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
@@ -28,7 +28,6 @@ import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
-import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.NBTList;
 import org.bukkit.*;
 import org.bukkit.Note.Tone;
@@ -38,7 +37,6 @@ import org.bukkit.block.data.type.NoteBlock;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.Event;
-import org.bukkit.event.Event.Result;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -143,7 +141,7 @@ public class PlayerInteract implements Listener
 						CustomEffectManager.removeEffect(player, CustomEffectTypeRune.RUNE_USING);
 						CustomEffectManager.addEffect(player, CustomEffectTypeRune.RUNE_COOLDOWN);
 						CustomEffectManager.addEffect(player, CustomEffectTypeRune.RUNE_EXPERIENCE);
-						CustomMaterial customMaterial = CustomMaterial.itemStackOf(item.getItemStack());
+/*						com.jho5245.cucumbery.util.storage.data.CustomMaterial customMaterial = com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(item.getItemStack());
 						if (customMaterial != null)
 						{
 							switch (customMaterial)
@@ -151,7 +149,7 @@ public class PlayerInteract implements Listener
 								case RUNE_DESTRUCTION -> CustomEffectManager.addEffect(player, CustomEffectTypeRune.RUNE_DESTRUCTION);
 								case RUNE_EARTHQUAKE -> CustomEffectManager.addEffect(player, CustomEffectTypeRune.RUNE_EARTHQUAKE);
 							}
-						}
+						}*/
 						item.getPassengers().forEach(Entity::remove);
 						item.remove();
 					}
@@ -160,15 +158,15 @@ public class PlayerInteract implements Listener
 			}
 		}
 		ItemStack item = event.getItem();
-		CustomMaterial customMaterial = CustomMaterial.itemStackOf(item);
-		if (customMaterial == CustomMaterial.UNBINDING_SHEARS)
+/*		com.jho5245.cucumbery.util.storage.data.CustomMaterial customMaterial = com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(item);
+		if (customMaterial == com.jho5245.cucumbery.util.storage.data.CustomMaterial.UNBINDING_SHEARS)
 		{
 			event.setCancelled(true);
 			return;
-		}
-		CustomMaterialNew customMaterialNew = CustomMaterialNew.itemStackOf(item);
+		}*/
+		CustomMaterial customMaterial = CustomMaterial.itemStackOf(item);
 		// Custom Material이 DEBUG_STICK이고 관리자가  Block Interact Cancel
-		if ((customMaterialNew != null || customMaterial != null) && item.getType() == Material.DEBUG_STICK && blockClick &&
+		if ((customMaterial != null) && item.getType() == Material.DEBUG_STICK && blockClick &&
 				(player.hasPermission("minecraft.debugstick.always") || player.hasPermission("minecraft.debugstick") && player.getGameMode() == GameMode.CREATIVE))
 		{
 			MessageUtil.sendDebug(player, "CustomMaterial의 디버그 막대기 기능 사용 취소됨");
@@ -800,7 +798,7 @@ public class PlayerInteract implements Listener
 
 				try
 				{
-					switch (customMaterial)
+/*					switch (customMaterial)
 					{
 						case THE_MUSIC ->
 						{
@@ -889,13 +887,13 @@ public class PlayerInteract implements Listener
 								return;
 							}
 						}
-						case WEATHER_FORECAST ->
+					}*/
+					if (customMaterial == CustomMaterial.WEATHER_FORECAST)
+					{
+						if (rightClick)
 						{
-							if (rightClick)
-							{
-								event.setCancelled(true);
-								CommandWhatIs.weatherForecast(player.getWorld(), player);
-							}
+							event.setCancelled(true);
+							CommandWhatIs.weatherForecast(player.getWorld(), player);
 						}
 					}
 				}
@@ -1033,7 +1031,7 @@ public class PlayerInteract implements Listener
 				}
 				// 커스텀 제작대 우클릭
 				ItemStack clickedBlcokPlacedItemStack = BlockPlaceDataConfig.getItem(block.getLocation());
-				CustomMaterial clickedBlockPlacedItemStackMaterial = CustomMaterial.itemStackOf(clickedBlcokPlacedItemStack);
+/*				com.jho5245.cucumbery.util.storage.data.CustomMaterial clickedBlockPlacedItemStackMaterial = com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(clickedBlcokPlacedItemStack);
 				if (clickedBlockPlacedItemStackMaterial != null)
 				{
 					switch (clickedBlockPlacedItemStackMaterial)
@@ -1080,7 +1078,7 @@ public class PlayerInteract implements Listener
 							return;
 						}
 					}
-				}
+				}*/
 			}
 		}
 

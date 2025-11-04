@@ -150,7 +150,7 @@ public class EntityDamage implements Listener
 				{
 					event.setDamage(event.getDamage() + Variable.DAMAGE_SPREAD_MAP.remove(damagerUUID));
 				}
-				if (damager instanceof ThrowableProjectile throwableProjectile)
+/*				if (damager instanceof ThrowableProjectile throwableProjectile)
 				{
 					ItemStack thrownItem = throwableProjectile.getItem();
 					CustomMaterial customMaterial = CustomMaterial.itemStackOf(thrownItem);
@@ -164,7 +164,7 @@ public class EntityDamage implements Listener
 						case NETHERITE_INGOT_THROWABLE -> event.setDamage(Math.random() + 9.5);
 						case null, default -> {}
 					}
-				}
+				}*/
 			}
 		}
 
@@ -439,13 +439,13 @@ public class EntityDamage implements Listener
 		Item itemEntity = (Item) event.getEntity();
 		ItemStack item = itemEntity.getItemStack();
 		boolean affectedByPlugin = false;
-		CustomMaterial customMaterial = CustomMaterial.itemStackOf(item);
+/*		CustomMaterial customMaterial = CustomMaterial.itemStackOf(item);
 		if (customMaterial == CustomMaterial.DOEHAERIM_BABO || customMaterial == CustomMaterial.BAMIL_PABO)
 		{
 			event.setCancelled(true);
 			affectedByPlugin = true;
 			itemEntity.setInvulnerable(true);
-		}
+		}*/
 		NBTList<String> extraTags = NBTAPI.getStringList(NBTAPI.getMainCompound(item), CucumberyTag.EXTRA_TAGS_KEY);
 		if (extraTags != null && !extraTags.isEmpty())
 		{

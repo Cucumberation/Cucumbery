@@ -13,8 +13,6 @@ import com.jho5245.cucumbery.util.additemmanager.AddItemUtil;
 import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
 import com.jho5245.cucumbery.util.gui.GUIManager;
 import com.jho5245.cucumbery.util.gui.GUIManager.GUIType;
-import com.jho5245.cucumbery.util.itemlore.ItemLore;
-import com.jho5245.cucumbery.util.itemlore.ItemLore.RemoveFlag;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
 import com.jho5245.cucumbery.util.no_groups.ItemSerializer;
@@ -22,9 +20,12 @@ import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
-import com.jho5245.cucumbery.util.storage.data.*;
+import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Constant.ExtraTag;
 import com.jho5245.cucumbery.util.storage.data.Constant.RestrictionType;
+import com.jho5245.cucumbery.util.storage.data.Permission;
+import com.jho5245.cucumbery.util.storage.data.Prefix;
+import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.BlockDataInfo;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
@@ -56,7 +57,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.RayTraceResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -1299,7 +1299,7 @@ public class InventoryClick implements Listener
 
 	private void unbindingShears(InventoryClickEvent event)
 	{
-		ItemStack cursor = event.getCursor(), current = event.getCurrentItem();
+/*		ItemStack cursor = event.getCursor(), current = event.getCurrentItem();
 		CustomMaterial customMaterial = CustomMaterial.itemStackOf(cursor);
 		if (customMaterial == CustomMaterial.UNBINDING_SHEARS && current != null && current.hasItemMeta() && current.getItemMeta()
 				.hasEnchant(Enchantment.BINDING_CURSE))
@@ -1325,7 +1325,7 @@ public class InventoryClick implements Listener
 				playerInventory.addItem(current);
 				Method.playSound(player, Sound.ENTITY_SHEEP_SHEAR, SoundCategory.PLAYERS);
 			}
-		}
+		}*/
 	}
 
 	private void itemLore(InventoryClickEvent event, Player player)

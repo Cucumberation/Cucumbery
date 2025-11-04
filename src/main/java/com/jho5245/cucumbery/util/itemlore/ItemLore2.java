@@ -14,7 +14,6 @@ import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemCategory;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemCategory.Rarity;
-import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import de.tr7zw.changeme.nbtapi.*;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBTList;
@@ -31,7 +30,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.enginehub.linbus.stream.token.LinToken.Int;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -129,11 +127,11 @@ public class ItemLore2
 		boolean hideDurability = hideFlagsTagExists && NBTAPI.arrayContainsValue(hideFlags, CucumberyHideFlag.DURABILITY.toString());
 		boolean hideDurabilityChanceNotToConsume =
 				hideFlagsTagExists && NBTAPI.arrayContainsValue(hideFlags, CucumberyHideFlag.DURABILITY_CHANCE_NOT_TO_CONSUME.toString());
-		boolean isDrill = customMaterial != null && switch (customMaterial)
+/*		boolean isDrill = customMaterial != null && switch (customMaterial)
 		{
 			case TITANIUM_DRILL_R266, TITANIUM_DRILL_R366, TITANIUM_DRILL_R466, TITANIUM_DRILL_R566, MINDAS_DRILL -> true;
 			default -> false;
-		};
+		};*/
 		boolean hideEnchant = hideFlagsTagExists && NBTAPI.arrayContainsValue(hideFlags, CucumberyHideFlag.ENCHANTS);
 		boolean eventAccessMode = viewer != null && UserData.EVENT_EXCEPTION_ACCESS.getBoolean(viewer);
 		boolean hideAttributes = hideFlagsTagExists && NBTAPI.arrayContainsValue(hideFlags, CucumberyHideFlag.ATTRIBUTE_MODIFIERS);
@@ -142,11 +140,11 @@ public class ItemLore2
 		boolean hideBlockData = hideFlagsTagExists && NBTAPI.arrayContainsValue(hideFlags, CucumberyHideFlag.BLOCK_DATA);
 		boolean hideBlockState = hideFlagsTagExists && NBTAPI.arrayContainsValue(hideFlags, CucumberyHideFlag.BLOCK_STATE);
 		// 내구도 설명
-		ItemLore2Durability.setItemLore(item, type, customMaterial, itemMeta, lore, isDrill, hideDurability, hideDurabilityChanceNotToConsume);
+		ItemLore2Durability.setItemLore(item, type, customMaterial, itemMeta, lore, false, hideDurability, hideDurabilityChanceNotToConsume);
 		// 모루 사용 횟수 설명
 		ItemLore2Anvil.setItemLore(item, type, itemMeta, lore);
 		// 커스텀 채광 - 채광 등급/속도/행운 설명
-		ItemLore2CustomMiningAndCustomMaterial.setItemLore(item, type, customMaterial, lore, nbtItem, hideFlags, viewer, params);
+		ItemLore2CustomMiningAndCustomMaterial.setItemLore(item, type, lore, nbtItem, hideFlags, viewer, params);
 		// 인챈트된 아이템/마법이 부여된 책 설명 추가
 		ItemLore2Enchant.setItemLore(item, type, itemMeta, lore, viewer, hideEnchant, eventAccessMode);
 		// Custom Material일 경우애만 추가할 아이템 설명

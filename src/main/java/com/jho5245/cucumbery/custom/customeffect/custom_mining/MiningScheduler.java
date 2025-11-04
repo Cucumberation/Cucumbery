@@ -450,21 +450,21 @@ public class MiningScheduler
 		final BlockData originData = block.getBlockData().clone();
 		final Location locationClone = location.clone();
 		ItemStack toolItemStack = player.getInventory().getItemInMainHand().clone();
-		CustomMaterial toolCustomMaterial = CustomMaterial.itemStackOf(toolItemStack);
-		boolean toolIsDrill = toolCustomMaterial != null && toolCustomMaterial.isDrill();
+//		CustomMaterial toolCustomMaterial = CustomMaterial.itemStackOf(toolItemStack);
+//		boolean toolIsDrill = toolCustomMaterial != null && toolCustomMaterial.isDrill();
 		ItemMeta itemMeta = toolItemStack.getItemMeta();
 		// 드릴 연료 0 이하일 시 사용 불가 처리
-		if (toolIsDrill && itemMeta instanceof Damageable damageable)
-		{
-			int currentDurability = damageable.hasDamage() ? damageable.getDamage() : 0;
-			int maxDurability = damageable.hasMaxDamage() ? damageable.getMaxDamage() : 0;
-			if (currentDurability >= maxDurability)
-			{
-				MessageUtil.sendWarn(player, "%s의 연료가 다 떨어져서 사용할 수 없습니다. 모루에서 드릴과 드릴 연료를 사용하여 연료를 충전할 수 있습니다.", toolItemStack);
-				MiningManager.quitCustomMining(player);
-				return;
-			}
-		}
+//		if (toolIsDrill && itemMeta instanceof Damageable damageable)
+//		{
+//			int currentDurability = damageable.hasDamage() ? damageable.getDamage() : 0;
+//			int maxDurability = damageable.hasMaxDamage() ? damageable.getMaxDamage() : 0;
+//			if (currentDurability >= maxDurability)
+//			{
+//				MessageUtil.sendWarn(player, "%s의 연료가 다 떨어져서 사용할 수 없습니다. 모루에서 드릴과 드릴 연료를 사용하여 연료를 충전할 수 있습니다.", toolItemStack);
+//				MiningManager.quitCustomMining(player);
+//				return;
+//			}
+//		}
 		MiningResult miningResult = MiningManager.getMiningInfo(player, location);
 		// 채굴 정보가 없거나(쿨타임, 지역 보호 등) 블록을 캘 수 없는 상태(해당 도구의 해당 블록 채광 미지원, 블록의 강도가 -1) 처리
 		if (miningResult == null || !miningResult.canMine() || miningResult.blockHardness() == -1)
@@ -481,7 +481,7 @@ public class MiningScheduler
 		List<ItemStack> drops = miningResult.drops();
 		CustomMaterial customMaterial = drops.isEmpty() ? null : CustomMaterial.itemStackOf(drops.getFirst());
 		// sus
-		boolean isSUS = !drops.isEmpty() && CustomMaterial.itemStackOf(drops.getFirst()) == CustomMaterial.SUS;
+//		boolean isSUS = !drops.isEmpty() && CustomMaterial.itemStackOf(drops.getFirst()) == CustomMaterial.SUS;
 		if (miningResult.blockTier() > miningResult.miningTier())
 		{
 			if (miningResult.miningTier() > 0 && !Variable.customMiningTierAlertCooldown.contains(uuid) && !isChain)
@@ -531,7 +531,7 @@ public class MiningScheduler
 				{
 					switch (customMaterial)
 					{
-						case RUBY, AMBER, JADE, SAPPHIRE, TOPAZ, MORGANITE -> soundGroup = Material.AMETHYST_CLUSTER.createBlockData().getSoundGroup();
+//						case RUBY, AMBER, JADE, SAPPHIRE, TOPAZ, MORGANITE -> soundGroup = Material.AMETHYST_CLUSTER.createBlockData().getSoundGroup();
 					}
 				}
 				if (Variable.customMiningExtraBlocks.containsKey(location))
@@ -809,21 +809,21 @@ public class MiningScheduler
 						{
 							switch (customMaterial)
 							{
-								case TUNGSTEN_INGOT, TUNGSTEN_ORE ->
-								{
-									if (CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PREDEFINED_CUSTOM_ORE_CUCUMBERITES))
-									{
-										if (Math.random() > 0.7)
-										{
-											Variable.customMiningExtraBlocks.put(locationClone, Bukkit.createBlockData(Material.GREEN_WOOL));
-											if (Variable.customMiningExtraBlocksTask.containsKey(locationClone))
-											{
-												Variable.customMiningExtraBlocksTask.remove(locationClone).cancel();
-											}
-											customMining();
-										}
-									}
-								}
+//								case TUNGSTEN_INGOT, TUNGSTEN_ORE ->
+//								{
+//									if (CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PREDEFINED_CUSTOM_ORE_CUCUMBERITES))
+//									{
+//										if (Math.random() > 0.7)
+//										{
+//											Variable.customMiningExtraBlocks.put(locationClone, Bukkit.createBlockData(Material.GREEN_WOOL));
+//											if (Variable.customMiningExtraBlocksTask.containsKey(locationClone))
+//											{
+//												Variable.customMiningExtraBlocksTask.remove(locationClone).cancel();
+//											}
+//											customMining();
+//										}
+//									}
+//								}
 							}
 						}
 						else
@@ -933,7 +933,7 @@ public class MiningScheduler
 						currentDurability++;
 						dropDura = true;
 					}
-					if (currentDurability >= maxDurability && !toolIsDrill)
+					if (currentDurability >= maxDurability)
 					{
 						NBT.getComponents(toolItemStack, nbt ->
 						{
@@ -967,7 +967,7 @@ public class MiningScheduler
 						toolItemStack.setItemMeta(damageable);
 					}
 					player.getInventory().setItemInMainHand(toolItemStack);
-					if (dropDura && toolIsDrill)
+					if (dropDura)
 					{
 						double ratio = (maxDurability - currentDurability) * 1d / maxDurability;
 						if (ratio == 0.5 || ratio == 0.2 || ratio == 0.1 || ratio == 0.05 || ratio == 0.01)
@@ -989,10 +989,10 @@ public class MiningScheduler
 				player.incrementStatistic(Statistic.USE_ITEM, toolItemStack.getType());
 			}
 			// sus
-			if (isSUS)
-			{
-				location.clone().getWorld().spawnParticle(Particle.EXPLOSION, location.clone().add(0.5, 0.5, 0.5), 1);
-			}
+//			if (isSUS)
+//			{
+//				location.clone().getWorld().spawnParticle(Particle.EXPLOSION, location.clone().add(0.5, 0.5, 0.5), 1);
+//			}
 			// 즉시 부서지는 블록이 아닐 경우 다음 블록을 부수기까지 짧은 쿨타임 추가
 			if (miningResult.miningSpeed() < miningResult.blockHardness() * 20d)
 			{
@@ -1041,10 +1041,10 @@ public class MiningScheduler
 				while (MiningScheduler.blockBreakKey.containsValue(random));
 				MiningScheduler.blockBreakKey.put(uuid, random);
 			}
-			if (isSUS && progress > 0.5f)
-			{
-				progress = 1f - progress;
-			}
+//			if (isSUS && progress > 0.5f)
+//			{
+//				progress = 1f - progress;
+//			}
 			double finalProgress = progress;
 			player.getWorld().getPlayers().forEach(p -> p.sendBlockDamage(location, (float) finalProgress, blockBreakKey.get(uuid)));
 		}

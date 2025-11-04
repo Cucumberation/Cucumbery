@@ -7,9 +7,7 @@ import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.TypeBuilder;
 import com.jho5245.cucumbery.custom.customeffect.VanillaEffectDescription;
 import com.jho5245.cucumbery.listeners.entity.customeffect.EntityCustomEffectPreApply;
-import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.EnumHideable;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -180,8 +178,8 @@ public class CustomEffectType implements Translatable, EnumHideable
 			builder().keepOnDeath().description("캐스팅 즉시 입질됩니다!")), ASSASSINATION = new CustomEffectType("assassination", "암살", builder().description(
 			ComponentUtil.translate("다른 플레이어나 동물을 잡아서 뜨는 데스 메시지에").append(Component.text("\n"))
 					.append(ComponentUtil.translate("자신의 이름이 나타나지 않고 감춰집니다")))), ALARM = new CustomEffectType("alarm", "알람",
-			builder().enumHidden().keepOnDeath().removeOnQuit().maxAmplifier(2).description("알람이다! 소리 꺼라")), COOLDOWN_THE_MUSIC = new CustomEffectType(
-			"cooldown_the_music", MessageUtil.stripColor(ComponentUtil.serialize(CustomMaterial.THE_MUSIC.getDisplayName())),
+			builder().enumHidden().keepOnDeath().removeOnQuit().maxAmplifier(2).description("알람이다! 소리 꺼라")),
+			COOLDOWN_THE_MUSIC = new CustomEffectType("cooldown_the_music", "the music",
 			builder().hidden().defaultDuration(20 * 10).keepOnDeath()), GAESANS = new CustomEffectType("gaesans", "개샌즈",
 			builder().description("웅크리면 %s 효과가 적용됩니다", PotionEffectType.INVISIBILITY)), PICKLED = new CustomEffectType("pickled", "절여짐",
 			builder().description("당신은 절여졌습니다!")), NIGHT_VISION_SPECTATOR = new CustomEffectType("night_vision_spectator", "관전 모드 야간 투시",
@@ -579,7 +577,7 @@ public class CustomEffectType implements Translatable, EnumHideable
 				{
 					if (this == CustomEffectTypeCustomMining.AQUA_AFFINITY || this == CustomEffectTypeCustomMining.AIR_SCAFFOLDING
 							|| this == CustomEffectTypeCustomMining.HASTE || this == CustomEffectTypeCustomMining.MINING_FATIGUE
-							|| this == CustomEffectTypeCustomMining.TITANIUM_FINDER || this == CustomEffectTypeCustomMining.MINING_FORTUNE
+							|| /*this == CustomEffectTypeCustomMining.TITANIUM_FINDER ||*/ this == CustomEffectTypeCustomMining.MINING_FORTUNE
 							|| this == CustomEffectTypeCustomMining.MOLE_CLAW || this == CustomEffectTypeCustomMining.MINDAS_TOUCH
 							|| this == CustomEffectTypeCustomMining.MINING_BOOSTER)
 					{

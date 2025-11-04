@@ -4,7 +4,6 @@ import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
 import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.storage.data.Constant.RestrictionType;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Item;
@@ -39,7 +38,7 @@ public class ItemMerge implements Listener
 		}
 		NBTItem nbtItem1 = new NBTItem(item1), nbtItem2 = new NBTItem(item2);
 
-		CustomMaterial customMaterial = CustomMaterial.itemStackOf(item1);
+/*		CustomMaterial customMaterial = CustomMaterial.itemStackOf(item1);
 		if (customMaterial != null)
 		{
 			switch (customMaterial)
@@ -62,7 +61,7 @@ public class ItemMerge implements Listener
 					return;
 				}
 			}
-		}
+		}*/
 		if (!Cucumbery.using_ProtocolLib)
 			Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> Method.updateItem(target, item1.getAmount()), 0L);
 	}

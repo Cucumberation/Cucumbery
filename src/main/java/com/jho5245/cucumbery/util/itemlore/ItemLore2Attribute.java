@@ -382,22 +382,22 @@ public class ItemLore2Attribute
 	public static int getDamageSpread(@NotNull ItemStack itemStack)
 	{
 		int damageSpread = 0;
-		CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
-		if (customMaterial == null)
+//		CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
+//		if (customMaterial == null)
 		{
 			switch (itemStack.getType())
 			{
 				case CHAINMAIL_CHESTPLATE, CHAINMAIL_LEGGINGS, NETHERITE_HELMET, NETHERITE_CHESTPLATE, NETHERITE_LEGGINGS, NETHERITE_BOOTS -> damageSpread = 1;
 			}
 		}
-		else
+//		else
 		{
-			switch (customMaterial)
-			{
-				case MITHRIL_HELMET, MITHRIL_BOOTS, COBALT_HELMET, COBALT_BOOTS -> damageSpread = 1;
-				case COBALT_CHESTPLATE, COBALT_LEGGINGS, TITANIUM_HELMET, TITANIUM_CHESTPLATE, TITANIUM_LEGGINGS, TITANIUM_BOOTS -> damageSpread = 2;
-				case NAUTILITE_HELMET, NAUTILITE_CHESTPLATE, NAUTILITE_LEGGINGS, NAUTILITE_BOOTS -> damageSpread = 3;
-			}
+//			switch (customMaterial)
+//			{
+//				case MITHRIL_HELMET, MITHRIL_BOOTS, COBALT_HELMET, COBALT_BOOTS -> damageSpread = 1;
+//				case COBALT_CHESTPLATE, COBALT_LEGGINGS, TITANIUM_HELMET, TITANIUM_CHESTPLATE, TITANIUM_LEGGINGS, TITANIUM_BOOTS -> damageSpread = 2;
+//				case NAUTILITE_HELMET, NAUTILITE_CHESTPLATE, NAUTILITE_LEGGINGS, NAUTILITE_BOOTS -> damageSpread = 3;
+//			}
 		}
 		return damageSpread;
 	}

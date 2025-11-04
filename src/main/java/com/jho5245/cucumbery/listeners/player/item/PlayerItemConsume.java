@@ -117,14 +117,14 @@ public class PlayerItemConsume implements Listener
 		{
 			return;
 		}
-		CustomMaterial customMaterial = CustomMaterial.itemStackOf(item);
+/*		CustomMaterial customMaterial = CustomMaterial.itemStackOf(item);
 		if (customMaterial == CustomMaterial.BREAD_DIRTY)
 		{
 			player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 20 * 100, 0));
 			player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 20 * 100, 0));
 			player.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 20 * 100, 0));
 			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 20 * 100, 0));
-		}
+		}*/
 		this.customEffect(event);
 	}
 

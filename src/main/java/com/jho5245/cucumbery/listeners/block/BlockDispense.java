@@ -36,7 +36,7 @@ public class BlockDispense implements Listener
     {
       switch (customMaterial)
       {
-        case UNBINDING_SHEARS ->
+/*        case UNBINDING_SHEARS ->
         {
           if (block.getState() instanceof Dispenser)
           {
@@ -63,7 +63,7 @@ public class BlockDispense implements Listener
             });
             return;
           }
-        }
+        }*/
       }
     }
 

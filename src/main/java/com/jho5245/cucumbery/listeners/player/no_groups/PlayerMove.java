@@ -91,7 +91,7 @@ public class PlayerMove implements Listener
 
   private void customMaterial(PlayerMoveEvent event)
   {
-    Player player = event.getPlayer();
+/*    Player player = event.getPlayer();
     EntityEquipment equipment = player.getEquipment();
     ItemStack chestplate = equipment.getChestplate();
     if (event.hasExplicitlyChangedBlock() && player.isGliding() && chestplate != null && chestplate.getType() == Material.ELYTRA && CustomMaterial.itemStackOf(chestplate) == CustomMaterial.ELYTRA_SHIVA_AMOODO_NAREUL_MAKEURLSOON_UPSOROAN)
@@ -116,7 +116,7 @@ public class PlayerMove implements Listener
           }
         }
       }, 0L);
-    }
+    }*/
   }
 
   private void customEffect(PlayerMoveEvent event)

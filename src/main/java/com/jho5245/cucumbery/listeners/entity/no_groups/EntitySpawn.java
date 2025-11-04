@@ -1,10 +1,6 @@
 package com.jho5245.cucumbery.listeners.entity.no_groups;
 
-import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
-import com.jho5245.cucumbery.custom.customeffect.children.group.LongCustomEffectImple;
-import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import de.tr7zw.changeme.nbtapi.NBTItem;
@@ -88,7 +84,7 @@ public class EntitySpawn implements Listener
 		if (entity instanceof TNTPrimed tntPrimed)
 		{
 			ItemStack itemStack = BlockPlaceDataConfig.getItem(entity.getLocation());
-			CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
+/*			CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
 			if (customMaterial != null)
 			{
 				switch (customMaterial)
@@ -106,7 +102,7 @@ public class EntitySpawn implements Listener
 						}
 					}
 				}
-			}
+			}*/
 			if (ItemStackUtil.itemExists(itemStack))
 			{
 				NBTItem nbtItem = new NBTItem(itemStack);

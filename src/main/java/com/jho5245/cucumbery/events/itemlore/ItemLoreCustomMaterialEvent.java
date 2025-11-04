@@ -1,6 +1,6 @@
 package com.jho5245.cucumbery.events.itemlore;
 
-import com.jho5245.cucumbery.custom.custommaterial.CustomMaterialNew;
+import com.jho5245.cucumbery.custom.custommaterial.CustomMaterial;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Called when {@link CustomMaterialNew} item lore is updated. Note that you should listen {@link ItemLore3Event} if you want to add lore to the itemstack.
+ * Called when {@link CustomMaterial} item lore is updated. Note that you should listen {@link ItemLore3Event} if you want to add lore to the itemstack.
  * <p>This event is designed only for other item meta except lore.</p>
  */
 public class ItemLoreCustomMaterialEvent extends Event

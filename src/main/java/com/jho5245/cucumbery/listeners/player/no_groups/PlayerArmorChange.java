@@ -22,7 +22,7 @@ public class PlayerArmorChange implements Listener
 
   private void sansArmor(PlayerArmorChangeEvent event)
   {
-    Player player = event.getPlayer();
+/*    Player player = event.getPlayer();
     Bukkit.getScheduler().runTaskLaterAsynchronously(Cucumbery.getPlugin(), () ->
     {
       PlayerInventory playerInventory = player.getInventory();
@@ -39,6 +39,6 @@ public class PlayerArmorChange implements Listener
           }
         });
       }
-    }, 0L);
+    }, 0L);*/
   }
 }

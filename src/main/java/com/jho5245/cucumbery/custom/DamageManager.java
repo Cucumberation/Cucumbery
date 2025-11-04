@@ -47,19 +47,19 @@ public class DamageManager
 		{
 			return null;
 		}
-		if (damageCause == DamageCause.FALL && victim instanceof LivingEntity livingEntity)
-		{
-			EntityEquipment equipment = livingEntity.getEquipment();
-			if (equipment != null)
-			{
-				ItemStack boots = equipment.getBoots();
-				CustomMaterial bootsType = CustomMaterial.itemStackOf(boots);
-				if (bootsType == CustomMaterial.FROG_BOOTS)
-				{
-					finalDamageMultiplier *= 0.8d;
-				}
-			}
-		}
+//		if (damageCause == DamageCause.FALL && victim instanceof LivingEntity livingEntity)
+//		{
+//			EntityEquipment equipment = livingEntity.getEquipment();
+//			if (equipment != null)
+//			{
+//				ItemStack boots = equipment.getBoots();
+//				CustomMaterial bootsType = CustomMaterial.itemStackOf(boots);
+//				if (bootsType == CustomMaterial.FROG_BOOTS)
+//				{
+//					finalDamageMultiplier *= 0.8d;
+//				}
+//			}
+//		}
 		if (CustomEffectManager.hasEffect(victim, CustomEffectType.INVINCIBLE))
 		{
 			return null;

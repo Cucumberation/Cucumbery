@@ -259,7 +259,7 @@ public class PrepareAnvil implements Listener
 		}
 		if (ItemStackUtil.itemExists(firstItem) && ItemStackUtil.itemExists(secondItem))
 		{
-			CustomMaterial firstCustomMaterial = CustomMaterial.itemStackOf(firstItem), secondCustomMaterial = CustomMaterial.itemStackOf(secondItem);
+/*			CustomMaterial firstCustomMaterial = CustomMaterial.itemStackOf(firstItem), secondCustomMaterial = CustomMaterial.itemStackOf(secondItem);
 			if (firstCustomMaterial != null && secondCustomMaterial != null)
 			{
 				switch (firstCustomMaterial)
@@ -297,14 +297,14 @@ public class PrepareAnvil implements Listener
 						}
 					}
 				}
-			}
+			}*/
 		}
 
 		// 커스텀 인챈트
 		{
 			if (firstItemExists && secondItemExists)
 			{
-				CustomMaterial firstItemCustomMaterial = CustomMaterial.itemStackOf(firstItem), secondItemCustomMaterial = CustomMaterial.itemStackOf(secondItem);
+//				CustomMaterial firstItemCustomMaterial = CustomMaterial.itemStackOf(firstItem), secondItemCustomMaterial = CustomMaterial.itemStackOf(secondItem);
 				boolean applied = false;
 				ItemStack result = ItemStackUtil.itemExists(event.getResult()) ? event.getResult() : firstItem.clone();
 				ItemMeta resultMeta = result.getItemMeta();
@@ -330,10 +330,10 @@ public class PrepareAnvil implements Listener
 						{
 							if (enchantment.equals(Enchantment.EFFICIENCY) || enchantment.equals(Enchantment.FORTUNE))
 							{
-								if (firstItemCustomMaterial != null && firstItemCustomMaterial.isDrill())
-								{
-									canEnchant = true;
-								}
+//								if (firstItemCustomMaterial != null && firstItemCustomMaterial.isDrill())
+//								{
+//									canEnchant = true;
+//								}
 							}
 							// 방패에 가시 적용 가능
 							if (enchantment.equals(Enchantment.THORNS) && firstItem.getType() == Material.SHIELD)
@@ -377,76 +377,76 @@ public class PrepareAnvil implements Listener
 						applied = true;
 					}
 				}
-				boolean equipmentEquals = (firstItemCustomMaterial == null && secondItemCustomMaterial == null && firstItem.getType() != Material.ENCHANTED_BOOK
-						&& firstItem.getType() == secondItem.getType()) || (firstItemCustomMaterial != null && firstItemCustomMaterial == secondItemCustomMaterial);
-				if (equipmentEquals)
-				// 장비 + 장비
-				{
-					ItemMeta firstItemMeta = firstItem.getItemMeta(), secondItemMeta = secondItem.getItemMeta();
-					Map<Enchantment, Integer> firstItemEnchants = firstItemMeta.getEnchants(), secondItemEnchants = secondItemMeta.getEnchants();
-					for (Enchantment enchantment : firstItemEnchants.keySet())
-					{
-						if (!enchantment.getKey().getNamespace().equals("minecraft"))
-						{
-							resultMeta.addEnchant(enchantment, firstItemEnchants.get(enchantment), true);
-							applied = true;
-						}
-					}
-					for (Enchantment enchantment : secondItemEnchants.keySet())
-					{
-						// 인챈트 가능한 아이템인가?(예 : 효율은 도구에만)
-						boolean canEnchant = enchantment.canEnchantItem(firstItem);
-						// 특정 인챈트는 특정 아이템에 예외적으로 인챈트 가능(예: 드릴에 효율/행운)
-						{
-							if (enchantment.equals(Enchantment.EFFICIENCY) || enchantment.equals(Enchantment.FORTUNE))
-							{
-								if (firstItemCustomMaterial != null && firstItemCustomMaterial.isDrill())
-								{
-									canEnchant = true;
-								}
-							}
-							// 방패에 가시 적용 가능
-							if (enchantment.equals(Enchantment.THORNS) && firstItem.getType() == Material.SHIELD)
-							{
-								canEnchant = true;
-							}
-						}
-						if (!canEnchant)
-						{
-							continue;
-						}
-						int level = secondItemEnchants.get(enchantment);
-						if (!firstItemEnchants.keySet().isEmpty())
-						{
-							for (Enchantment firstEnchant : firstItemEnchants.keySet())
-							{
-								// 서로 다른 인챈트가 충돌할 경우 기존 인챈트를 제거한다
-								if (!enchantment.equals(firstEnchant) && enchantment.conflictsWith(firstEnchant))
-								{
-									resultMeta.removeEnchant(firstEnchant);
-									continue;
-								}
-								int firstEnchantLevel = firstItemEnchants.get(firstEnchant);
-								// 인챈트가 서로 같을 경우
-								if (enchantment.equals(firstEnchant))
-								{
-									// 레벨이 서로 같고 레벨 +1이 최대 레벨 이하일 경우
-									if (level == firstEnchantLevel && level + 1 <= enchantment.getMaxLevel())
-									{
-										level += 1;
-									}
-									// 아닌 경우 만약 원래 인챈트 레벨이 더 높을 경우 기존 값 유지
-									else if (firstEnchantLevel > level)
-									{
-										level = firstEnchantLevel;
-									}
-								}
-							}
-						}
-						resultMeta.addEnchant(enchantment, level, true);
-						applied = true;
-					}
-				}
+//				boolean equipmentEquals = (firstItemCustomMaterial == null && secondItemCustomMaterial == null && firstItem.getType() != Material.ENCHANTED_BOOK
+//						&& firstItem.getType() == secondItem.getType()) || (firstItemCustomMaterial != null && firstItemCustomMaterial == secondItemCustomMaterial);
+//				if (equipmentEquals)
+//				// 장비 + 장비
+//				{
+//					ItemMeta firstItemMeta = firstItem.getItemMeta(), secondItemMeta = secondItem.getItemMeta();
+//					Map<Enchantment, Integer> firstItemEnchants = firstItemMeta.getEnchants(), secondItemEnchants = secondItemMeta.getEnchants();
+//					for (Enchantment enchantment : firstItemEnchants.keySet())
+//					{
+//						if (!enchantment.getKey().getNamespace().equals("minecraft"))
+//						{
+//							resultMeta.addEnchant(enchantment, firstItemEnchants.get(enchantment), true);
+//							applied = true;
+//						}
+//					}
+//					for (Enchantment enchantment : secondItemEnchants.keySet())
+//					{
+//						// 인챈트 가능한 아이템인가?(예 : 효율은 도구에만)
+//						boolean canEnchant = enchantment.canEnchantItem(firstItem);
+//						// 특정 인챈트는 특정 아이템에 예외적으로 인챈트 가능(예: 드릴에 효율/행운)
+//						{
+//							if (enchantment.equals(Enchantment.EFFICIENCY) || enchantment.equals(Enchantment.FORTUNE))
+//							{
+//								if (firstItemCustomMaterial != null && firstItemCustomMaterial.isDrill())
+//								{
+//									canEnchant = true;
+//								}
+//							}
+//							// 방패에 가시 적용 가능
+//							if (enchantment.equals(Enchantment.THORNS) && firstItem.getType() == Material.SHIELD)
+//							{
+//								canEnchant = true;
+//							}
+//						}
+//						if (!canEnchant)
+//						{
+//							continue;
+//						}
+//						int level = secondItemEnchants.get(enchantment);
+//						if (!firstItemEnchants.keySet().isEmpty())
+//						{
+//							for (Enchantment firstEnchant : firstItemEnchants.keySet())
+//							{
+//								// 서로 다른 인챈트가 충돌할 경우 기존 인챈트를 제거한다
+//								if (!enchantment.equals(firstEnchant) && enchantment.conflictsWith(firstEnchant))
+//								{
+//									resultMeta.removeEnchant(firstEnchant);
+//									continue;
+//								}
+//								int firstEnchantLevel = firstItemEnchants.get(firstEnchant);
+//								// 인챈트가 서로 같을 경우
+//								if (enchantment.equals(firstEnchant))
+//								{
+//									// 레벨이 서로 같고 레벨 +1이 최대 레벨 이하일 경우
+//									if (level == firstEnchantLevel && level + 1 <= enchantment.getMaxLevel())
+//									{
+//										level += 1;
+//									}
+//									// 아닌 경우 만약 원래 인챈트 레벨이 더 높을 경우 기존 값 유지
+//									else if (firstEnchantLevel > level)
+//									{
+//										level = firstEnchantLevel;
+//									}
+//								}
+//							}
+//						}
+//						resultMeta.addEnchant(enchantment, level, true);
+//						applied = true;
+//					}
+//				}
 				if (firstItem.getType() == Material.ENCHANTED_BOOK && secondItem.getType() == Material.ENCHANTED_BOOK)
 				// 책 + 책
 				{

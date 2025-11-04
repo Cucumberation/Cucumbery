@@ -1044,7 +1044,7 @@ public class CustomEffectManager
 			TextColor textColor = effectType.isNegative() ? NamedTextColor.RED : NamedTextColor.GREEN;
 			if (effectType == CustomEffectTypeCustomMining.AQUA_AFFINITY || effectType == CustomEffectTypeCustomMining.AIR_SCAFFOLDING
 					|| effectType == CustomEffectTypeCustomMining.HASTE || effectType == CustomEffectTypeCustomMining.MINING_FATIGUE
-					|| effectType == CustomEffectTypeCustomMining.TITANIUM_FINDER || effectType == CustomEffectTypeCustomMining.MINING_FORTUNE
+					|| /*effectType == CustomEffectTypeCustomMining.TITANIUM_FINDER ||*/ effectType == CustomEffectTypeCustomMining.MINING_FORTUNE
 					|| effectType == CustomEffectTypeCustomMining.MOLE_CLAW || effectType == CustomEffectTypeCustomMining.MINDAS_TOUCH
 					|| effectType == CustomEffectTypeCustomMining.MINING_BOOSTER)
 			{

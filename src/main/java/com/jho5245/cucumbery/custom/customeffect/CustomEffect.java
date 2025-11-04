@@ -2,13 +2,14 @@ package com.jho5245.cucumbery.custom.customeffect;
 
 import com.jho5245.cucumbery.custom.customeffect.children.group.*;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
-import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCustomMining;
 import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import net.kyori.adventure.text.Component;
-import org.bukkit.*;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.Statistic;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -301,11 +302,11 @@ public class CustomEffect
 			case "MINECRAFT_WIND_CHARGED" -> VanillaEffectDescription.getDescription(new PotionEffect(PotionEffectType.WIND_CHARGED, duration, amplifier));
 			default -> effectType.getDescription(viewer);
 		};
-		if (effectType == CustomEffectTypeCustomMining.TITANIUM_FINDER)
-		{
-			description = ComponentUtil.translate("%s 채굴 시 %s 등장 확률이 %s 증가합니다 (기본 %s)", CustomMaterial.TITANIUM_ORE, CustomMaterial.TITANIUM_ORE,
-					Constant.THE_COLOR_HEX + Constant.Sosu2.format((amplifier + 1) * 0.1) + "%", Constant.THE_COLOR_HEX + "5%");
-		}
+//		if (effectType == CustomEffectTypeCustomMining.TITANIUM_FINDER)
+//		{
+//			description = ComponentUtil.translate("%s 채굴 시 %s 등장 확률이 %s 증가합니다 (기본 %s)", CustomMaterial.TITANIUM_ORE, CustomMaterial.TITANIUM_ORE,
+//					Constant.THE_COLOR_HEX + Constant.Sosu2.format((amplifier + 1) * 0.1) + "%", Constant.THE_COLOR_HEX + "5%");
+//		}
 		if (effectType == CustomEffectType.SUPERIOR_LEVITATION)
 		{
 			description = ComponentUtil.translate("노빠꾸로 공중으로 떠오릅니다");

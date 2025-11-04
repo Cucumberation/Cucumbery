@@ -217,7 +217,7 @@ public class BlockPlace implements Listener
 		}
 
 		CustomMaterial customMaterial = CustomMaterial.itemStackOf(item);
-		if (customMaterial == CustomMaterial.REDSTONE_BLOCK_INSTA_BREAK)
+/*		if (customMaterial == CustomMaterial.REDSTONE_BLOCK_INSTA_BREAK)
 		{
 			Location locationClone = location.clone().add(0.5, 0.5, 0.5);
 			Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
@@ -266,7 +266,7 @@ public class BlockPlace implements Listener
 				}
 			}, 2L);
 			return;
-		}
+		}*/
 
 		if (!special && Cucumbery.config.getBoolean("use-block-place-data-feature") && !Method.configContainsLocation(location,
 				Cucumbery.config.getStringList("no-use-block-place-data-feature-location")))

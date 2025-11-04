@@ -7,10 +7,9 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import com.jho5245.cucumbery.Cucumbery;
-import com.jho5245.cucumbery.commands.no_groups.CommandCgive;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
-import com.jho5245.cucumbery.custom.custommaterial.CustomMaterialNew;
+import com.jho5245.cucumbery.custom.custommaterial.CustomMaterial;
 import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.itemlore.ItemLore.RemoveFlag;
 import com.jho5245.cucumbery.util.itemlore.ItemLore4;
@@ -22,13 +21,14 @@ import com.jho5245.cucumbery.util.no_groups.Method2;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
-import de.tr7zw.changeme.nbtapi.*;
+import de.tr7zw.changeme.nbtapi.NBTCompound;
+import de.tr7zw.changeme.nbtapi.NBTContainer;
+import de.tr7zw.changeme.nbtapi.NBTItem;
+import de.tr7zw.changeme.nbtapi.NBTList;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
-import net.kyori.adventure.text.event.ClickEvent.Payload.Custom;
 import net.kyori.adventure.text.event.DataComponentValue;
 import net.kyori.adventure.text.event.DataComponentValue.Removed;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -51,7 +51,6 @@ import org.bukkit.inventory.meta.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -857,7 +856,7 @@ public class ItemStackUtil
 	}
 
 	@NotNull
-	private static ItemStack getAnimatedItemStack(@Nullable Collection<ItemStack> itemStacks, @Nullable Collection<CustomMaterial> customMaterials,
+	private static ItemStack getAnimatedItemStack(@Nullable Collection<ItemStack> itemStacks, @Nullable Collection<com.jho5245.cucumbery.util.storage.data.CustomMaterial> customMaterials,
 			@Nullable Collection<Material> materials)
 	{
 		List<ItemStack> newList = new ArrayList<>();
@@ -867,7 +866,7 @@ public class ItemStackUtil
 		}
 		if (customMaterials != null)
 		{
-			for (CustomMaterial customMaterial : customMaterials)
+			for (com.jho5245.cucumbery.util.storage.data.CustomMaterial customMaterial : customMaterials)
 			{
 				newList.add(customMaterial.create());
 			}
@@ -902,10 +901,10 @@ public class ItemStackUtil
 		try
 		{
 			NBTContainer nbtContainer = new NBTContainer(predicate);
-			String id = nbtContainer.getString(CustomMaterial.IDENDTIFER);
+			String id = nbtContainer.getString(com.jho5245.cucumbery.util.storage.data.CustomMaterial.IDENDTIFER);
 			if (!id.isEmpty())
 			{
-				CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
+				com.jho5245.cucumbery.util.storage.data.CustomMaterial customMaterial = com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(itemStack);
 				if (customMaterial != null)
 				{
 					itemStack = customMaterial.create();
@@ -915,7 +914,7 @@ public class ItemStackUtil
 				{
 					ItemStack i = new ItemStack(Material.STONE);
 					NBTItem nbtItem = new NBTItem(i, true);
-					nbtItem.setString(CustomMaterial.IDENDTIFER, id);
+					nbtItem.setString(com.jho5245.cucumbery.util.storage.data.CustomMaterial.IDENDTIFER, id);
 					itemStack = i;
 					display = i.getItemMeta().displayName();
 				}
@@ -1028,15 +1027,16 @@ public class ItemStackUtil
 							itemStack.setType(getAnimatedMaterial(
 									Arrays.asList(Material.TNT, Material.TNT_MINECART, Material.COMMAND_BLOCK, Material.FLINT_AND_STEEL, Material.TURTLE_SCUTE)));
 						}
-						if (customTags.getBoolean("gemstones"))
-						{
-							display = ComponentUtil.translate("아무 젬스톤");
-							ItemStack clone = getAnimatedItemStack(null,
-									Arrays.asList(CustomMaterial.AMBER, CustomMaterial.JADE, CustomMaterial.MORGANITE, CustomMaterial.SAPPHIRE, CustomMaterial.TOPAZ), null);
-							itemStack.setType(clone.getType());
-							itemStack.setItemMeta(clone.getItemMeta());
-							itemMeta = itemStack.getItemMeta();
-						}
+//						if (customTags.getBoolean("gemstones"))
+//						{
+//							display = ComponentUtil.translate("아무 젬스톤");
+//							ItemStack clone = getAnimatedItemStack(null,
+//									Arrays.asList(
+//											com.jho5245.cucumbery.util.storage.data.CustomMaterial.AMBER, com.jho5245.cucumbery.util.storage.data.CustomMaterial.JADE, com.jho5245.cucumbery.util.storage.data.CustomMaterial.MORGANITE, com.jho5245.cucumbery.util.storage.data.CustomMaterial.SAPPHIRE, com.jho5245.cucumbery.util.storage.data.CustomMaterial.TOPAZ), null);
+//							itemStack.setType(clone.getType());
+//							itemStack.setItemMeta(clone.getItemMeta());
+//							itemMeta = itemStack.getItemMeta();
+//						}
 					}
 					else
 					{
@@ -1202,6 +1202,14 @@ public class ItemStackUtil
 
 	public static void setTexture(@NotNull SkullMeta skullMeta, @NotNull String url)
 	{
+		String base64Data = getTextureBase64(url);
+		PlayerProfile playerProfile = Bukkit.createProfile(UUID.fromString("0-0-0-0-0"), null);
+		playerProfile.setProperty(new ProfileProperty("textures", base64Data));
+		skullMeta.setPlayerProfile(playerProfile);
+	}
+
+	public static String getTextureBase64(String url)
+	{
 		if (url.startsWith("https://textures.minecraft.net/texture/"))
 		{
 			url = url.substring("https://textures.minecraft.net/texture/".length());
@@ -1229,9 +1237,7 @@ public class ItemStackUtil
 			String JSONData = "{\"textures\":{\"SKIN\":{\"url\":\"" + url + "\"}}}";
 			base64Data = Base64.getEncoder().encodeToString(JSONData.getBytes());
 		}
-		PlayerProfile playerProfile = Bukkit.createProfile(UUID.fromString("0-0-0-0-0"), null);
-		playerProfile.setProperty(new ProfileProperty("textures", base64Data));
-		skullMeta.setPlayerProfile(playerProfile);
+		return base64Data;
 	}
 
 	/**
@@ -1262,11 +1268,11 @@ public class ItemStackUtil
 			{
 				continue;
 			}
-			if (CustomMaterial.itemStackOf(item) != null)
+			if (com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(item) != null)
 			{
 				ItemLore.setItemLore(item, ItemLoreView.of(player));
 			}
-			if (CustomMaterialNew.itemStackOf(item) != null)
+			if (CustomMaterial.itemStackOf(item) != null)
 			{
 				ItemLore.setItemLore(item, ItemLoreView.of(player));
 			}
@@ -1280,21 +1286,21 @@ public class ItemStackUtil
 			{
 				continue;
 			}
-			if (CustomMaterial.itemStackOf(item) != null)
+			if (com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(item) != null)
 			{
 				ItemLore.setItemLore(item, ItemLoreView.of(player));
 			}
-			if (CustomMaterialNew.itemStackOf(item) != null)
+			if (CustomMaterial.itemStackOf(item) != null)
 			{
 				ItemLore.setItemLore(item, ItemLoreView.of(player));
 			}
 			ItemLore.removeItemLore(item, RemoveFlag.create().removeItemFlags());
 		}
-		if (CustomMaterial.itemStackOf(player.getItemOnCursor()) != null)
+		if (com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(player.getItemOnCursor()) != null)
 		{
 			player.setItemOnCursor(ItemLore.setItemLore(player.getItemOnCursor(), ItemLoreView.of(player)));
 		}
-		if (CustomMaterialNew.itemStackOf(player.getItemOnCursor()) != null)
+		if (CustomMaterial.itemStackOf(player.getItemOnCursor()) != null)
 		{
 			player.setItemOnCursor(ItemLore.setItemLore(player.getItemOnCursor(), ItemLoreView.of(player)));
 		}
@@ -1382,24 +1388,24 @@ public class ItemStackUtil
 		NBTList<String> hideFlags = NBTAPI.getStringList(itemTag, CucumberyTag.HIDE_FLAGS_KEY);
 		if (NBTAPI.arrayContainsValue(hideFlags, Constant.CucumberyHideFlag.CUSTOM_NAME))
 			return false;
-		CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
-		// 일부 커스텀 아이템은 별도의 이름 표기 규칙을 가짐 (적용 후 return)
-		{
-			if (customMaterial != null)
-			{
-				switch (customMaterial)
-				{
-					case CORE_GEMSTONE, CORE_GEMSTONE_EXPERIENCE, CORE_GEMSTONE_MIRROR, CORE_GEMSTONE_MITRA ->
-					{
-						return false;
-					}
-					case RUNE_DESTRUCTION, RUNE_EARTHQUAKE ->
-					{
-						return true;
-					}
-				}
-			}
-		}
+//		com.jho5245.cucumbery.util.storage.data.CustomMaterial customMaterial = com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(itemStack);
+//		// 일부 커스텀 아이템은 별도의 이름 표기 규칙을 가짐 (적용 후 return)
+//		{
+//			if (customMaterial != null)
+//			{
+//				switch (customMaterial)
+//				{
+//					case CORE_GEMSTONE, CORE_GEMSTONE_EXPERIENCE, CORE_GEMSTONE_MIRROR, CORE_GEMSTONE_MITRA ->
+//					{
+//						return false;
+//					}
+//					case RUNE_DESTRUCTION, RUNE_EARTHQUAKE ->
+//					{
+//						return true;
+//					}
+//				}
+//			}
+//		}
 		return null;
 	}
 

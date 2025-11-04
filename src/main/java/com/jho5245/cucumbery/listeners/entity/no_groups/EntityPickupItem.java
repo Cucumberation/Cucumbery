@@ -57,7 +57,7 @@ public class EntityPickupItem implements Listener
 				event.setCancelled(true);
 				return;
 			}
-			CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
+/*			CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
 			if (customMaterial != null)
 			{
 				switch (customMaterial)
@@ -124,7 +124,7 @@ public class EntityPickupItem implements Listener
 						return;
 					}
 				}
-			}
+			}*/
 		}
 		if (CustomEffectManager.hasEffect(entity, CustomEffectType.CURSE_OF_PICKUP))
 		{

@@ -53,7 +53,7 @@ public class PlayerToggleSneak implements Listener
 		Player player = event.getPlayer();
 		if (!((Entity) player).isOnGround() && event.isSneaking())
 		{
-			CustomMaterial boots = CustomMaterial.itemStackOf(player.getInventory().getBoots());
+/*			CustomMaterial boots = CustomMaterial.itemStackOf(player.getInventory().getBoots());
 			if (boots == CustomMaterial.SPIDER_BOOTS)
 			{
 				if (player.getGameMode() != GameMode.CREATIVE && player.getGameMode() != GameMode.SPECTATOR)
@@ -67,7 +67,7 @@ public class PlayerToggleSneak implements Listener
 				}
 				Vector vector = player.getLocation().getDirection();
 				player.setVelocity(new Vector(vector.getX() * 1.1, vector.getY() * 1.1 + 0.8d, vector.getZ() * 1.1));
-			}
+			}*/
 		}
 	}
 

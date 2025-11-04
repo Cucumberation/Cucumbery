@@ -57,7 +57,7 @@ public class ProjectileLaunch implements Listener
       }
     }
 
-    if (projectile instanceof Snowball snowball)
+/*    if (projectile instanceof Snowball snowball)
     {
       ItemStack snowBallItemStack = snowball.getItem();
       CustomMaterial customMaterial = CustomMaterial.itemStackOf(snowBallItemStack);
@@ -85,6 +85,6 @@ public class ProjectileLaunch implements Listener
         }
         snowball.setItem(snowBallItemStack);
         snowball.setVelocity(snowball.getVelocity().multiply(0.5d));
-    }
+    }*/
   }
 }

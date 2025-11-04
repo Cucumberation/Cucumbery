@@ -14,6 +14,7 @@ import com.comphenix.protocol.utility.MinecraftReflection;
 import com.comphenix.protocol.wrappers.EnumWrappers.ItemSlot;
 import com.comphenix.protocol.wrappers.*;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Multimap;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffect;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffect.DisplayType;
@@ -22,7 +23,7 @@ import com.jho5245.cucumbery.custom.customeffect.children.group.DoubleCustomEffe
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCooldown;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeMinecraft;
-import com.jho5245.cucumbery.custom.custommaterial.CustomMaterialNew;
+import com.jho5245.cucumbery.custom.custommaterial.CustomMaterial;
 import com.jho5245.cucumbery.events.addon.protocollib.OpenWindowMerchantEvent;
 import com.jho5245.cucumbery.events.addon.protocollib.SetCursorItemEvent;
 import com.jho5245.cucumbery.events.addon.protocollib.SetSlotEvent;
@@ -41,7 +42,6 @@ import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
 import com.jho5245.cucumbery.util.storage.component.util.sendercomponent.SenderComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Constant.CucumberyHideFlag;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
@@ -49,7 +49,7 @@ import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
 import de.tr7zw.changeme.nbtapi.*;
 import de.tr7zw.changeme.nbtapi.handler.NBTHandlers;
-import de.tr7zw.changeme.nbtapi.iface.NBTHandler;
+import de.tr7zw.changeme.nbtapi.iface.ReadableNBT;
 import net.kyori.adventure.dialog.DialogLike;
 import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
@@ -72,6 +72,8 @@ import net.kyori.adventure.text.format.TextDecoration.State;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.json.JSONComponentSerializer;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemFlag;
@@ -615,29 +617,36 @@ public class ProtocolLibManager
 
 						PlayerInventory playerInventory = player.getInventory();
 						ItemStack helmet = playerInventory.getHelmet(), chestplate = playerInventory.getChestplate(), leggings = playerInventory.getLeggings(), boots = playerInventory.getBoots();
-						CustomMaterial helmetType = CustomMaterial.itemStackOf(helmet), chestplateType = CustomMaterial.itemStackOf(
-								chestplate), leggingsType = CustomMaterial.itemStackOf(leggings), bootsType = CustomMaterial.itemStackOf(boots);
-
-						if ((helmetType == CustomMaterial.MINER_HELMET || helmetType == CustomMaterial.MINDAS_HELMET) && potionEffectType.equals(
-								PotionEffectType.NIGHT_VISION))
-						{
-							modifier.write(3, PotionEffect.INFINITE_DURATION);
-							event.setPacket(packet);
-						}
-
-						if (helmetType == CustomMaterial.MINER_HELMET && chestplateType == CustomMaterial.MINER_CHESTPLATE && leggingsType == CustomMaterial.MINER_LEGGINGS
-								&& bootsType == CustomMaterial.MINER_BOOTS && potionEffectType.equals(PotionEffectType.HASTE))
-						{
-							packet.getModifier().write(3, PotionEffect.INFINITE_DURATION);
-							event.setPacket(packet);
-						}
-
-						if (helmetType == CustomMaterial.FROG_HELMET && chestplateType == CustomMaterial.FROG_CHESTPLATE && leggingsType == CustomMaterial.FROG_LEGGINGS
-								&& bootsType == CustomMaterial.FROG_BOOTS && potionEffectType.equals(PotionEffectType.JUMP_BOOST))
-						{
-							packet.getModifier().write(3, PotionEffect.INFINITE_DURATION);
-							event.setPacket(packet);
-						}
+//						com.jho5245.cucumbery.util.storage.data.CustomMaterial helmetType = com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(
+//								helmet), chestplateType = com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(
+//								chestplate), leggingsType = com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(
+//								leggings), bootsType = com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(boots);
+//
+//						if ((helmetType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.MINER_HELMET
+//								|| helmetType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.MINDAS_HELMET) && potionEffectType.equals(
+//								PotionEffectType.NIGHT_VISION))
+//						{
+//							modifier.write(3, PotionEffect.INFINITE_DURATION);
+//							event.setPacket(packet);
+//						}
+//
+//						if (helmetType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.MINER_HELMET
+//								&& chestplateType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.MINER_CHESTPLATE
+//								&& leggingsType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.MINER_LEGGINGS
+//								&& bootsType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.MINER_BOOTS && potionEffectType.equals(PotionEffectType.HASTE))
+//						{
+//							packet.getModifier().write(3, PotionEffect.INFINITE_DURATION);
+//							event.setPacket(packet);
+//						}
+//
+//						if (helmetType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.FROG_HELMET
+//								&& chestplateType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.FROG_CHESTPLATE
+//								&& leggingsType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.FROG_LEGGINGS
+//								&& bootsType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.FROG_BOOTS && potionEffectType.equals(PotionEffectType.JUMP_BOOST))
+//						{
+//							packet.getModifier().write(3, PotionEffect.INFINITE_DURATION);
+//							event.setPacket(packet);
+//						}
 					}
 				}
 			}
@@ -701,35 +710,36 @@ public class ProtocolLibManager
 				PacketContainer packet = event.getPacket();
 				Player player = event.getPlayer();
 				UUID uuid = player.getUniqueId();
-//				MessageUtil.consoleSendMessage("&c" + packet.getType().name());
+				//				MessageUtil.consoleSendMessage("&c" + packet.getType().name());
 				// 너무 자주 요청된 패킷은 처리하지 않고 반려
 				if (TOO_MANY_REQUESTS_COOLDOWN_UUIDS.contains(uuid))
 				{
 					if (!RESEND_PACKET_TARGETS.contains(uuid))
 					{
 						RESEND_PACKET_TARGETS.add(uuid);
-						Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> {
-//							MessageUtil.consoleSendMessage(player.getOpenInventory().getType().toString());
-//							ItemStackUtil.updateInventory(player);
+						Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () ->
+						{
+							//							MessageUtil.consoleSendMessage(player.getOpenInventory().getType().toString());
+							//							ItemStackUtil.updateInventory(player);
 							RESEND_PACKET_TARGETS.remove(uuid);
 						}, RESEND_PACKET_DELAY_IN_TICKS);
 					}
 					return;
 				}
-//				MessageUtil.consoleSendMessage("&a" + packet.getType().name());
+				//				MessageUtil.consoleSendMessage("&a" + packet.getType().name());
 				TOO_MANY_REQUESTS_COOLDOWN_UUIDS.add(uuid);
 				Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> TOO_MANY_REQUESTS_COOLDOWN_UUIDS.remove(uuid), RESEND_PACKET_DELAY_IN_TICKS);
 				// 아이템이 표시될 때 실제 적용되야 하는 nbt는 적용함
-//				{
-//					Inventory bottom = player.getOpenInventory().getBottomInventory();
-//					for (int i = 0; i < bottom.getSize(); i++)
-//					{
-//						ItemStack bottomItemStack = bottom.getItem(i);
-//						if (!ItemStackUtil.itemExists(bottomItemStack))
-//							continue;
-//						bottom.setItem(i, ItemLore.setItemLore(bottomItemStack, true, ItemLoreView.of(player)));
-//					}
-//				}
+				//				{
+				//					Inventory bottom = player.getOpenInventory().getBottomInventory();
+				//					for (int i = 0; i < bottom.getSize(); i++)
+				//					{
+				//						ItemStack bottomItemStack = bottom.getItem(i);
+				//						if (!ItemStackUtil.itemExists(bottomItemStack))
+				//							continue;
+				//						bottom.setItem(i, ItemLore.setItemLore(bottomItemStack, true, ItemLoreView.of(player)));
+				//					}
+				//				}
 				UserData.WINDOW_ID.set(uuid, packet.getIntegers().read(0));
 				StructureModifier<List<ItemStack>> modifier = packet.getItemListModifier();
 				ItemStack itemStack = setItemLore(packet.getType(), packet.getItemModifier().read(0), player);
@@ -776,24 +786,24 @@ public class ProtocolLibManager
 				}
 				PacketContainer packet = event.getPacket();
 				Player player = event.getPlayer();
-//				UUID uuid = player.getUniqueId();
-//				MessageUtil.consoleSendMessage("&c" + packet.getType().name());
-//				// 너무 자주 요청된 패킷은 처리하지 않고 반려
-//				if (TOO_MANY_REQUESTS_COOLDOWN_UUIDS.contains(uuid))
-//				{
-////					if (!RESEND_PACKET_TARGETS.contains(uuid))
-////					{
-////						RESEND_PACKET_TARGETS.add(uuid);
-////						Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> {
-////							ItemStackUtil.updateInventory(player);
-////							RESEND_PACKET_TARGETS.remove(uuid);
-////						}, RESEND_PACKET_DELAY_IN_TICKS);
-////					}
-//					return;
-//				}
-//				MessageUtil.consoleSendMessage("&a" + packet.getType().name());
-//				TOO_MANY_REQUESTS_COOLDOWN_UUIDS.add(uuid);
-//				Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> TOO_MANY_REQUESTS_COOLDOWN_UUIDS.remove(uuid), RESEND_PACKET_DELAY_IN_TICKS);
+				//				UUID uuid = player.getUniqueId();
+				//				MessageUtil.consoleSendMessage("&c" + packet.getType().name());
+				//				// 너무 자주 요청된 패킷은 처리하지 않고 반려
+				//				if (TOO_MANY_REQUESTS_COOLDOWN_UUIDS.contains(uuid))
+				//				{
+				////					if (!RESEND_PACKET_TARGETS.contains(uuid))
+				////          {
+				////						RESEND_PACKET_TARGETS.add(uuid);
+				////						Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> {
+				////							ItemStackUtil.updateInventory(player);
+				////							RESEND_PACKET_TARGETS.remove(uuid);
+				////            }, RESEND_PACKET_DELAY_IN_TICKS);
+				////          }
+				//					return;
+				//				}
+				//				MessageUtil.consoleSendMessage("&a" + packet.getType().name());
+				//				TOO_MANY_REQUESTS_COOLDOWN_UUIDS.add(uuid);
+				//				Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> TOO_MANY_REQUESTS_COOLDOWN_UUIDS.remove(uuid), RESEND_PACKET_DELAY_IN_TICKS);
 				ItemStack itemStack = setItemLore(packet.getType(), packet.getItemModifier().read(0), player);
 				SetSlotEvent setSlotEvent = new SetSlotEvent(player, itemStack);
 				Bukkit.getPluginManager().callEvent(setSlotEvent);
@@ -1346,9 +1356,9 @@ public class ProtocolLibManager
 				if (component instanceof TranslatableComponent translatableComponent && !translatableComponent.arguments().isEmpty())
 				{
 					// why this exists
-//					List<Component> components = new ArrayList<>();
-//					for (ComponentLike componentLike : translatableComponent.arguments())
-//						components.add(componentLike.asComponent());
+					//					List<Component> components = new ArrayList<>();
+					//					for (ComponentLike componentLike : translatableComponent.arguments())
+					//						components.add(componentLike.asComponent());
 					String key = ComponentUtil.convertConsonant(translatableComponent.key(), translatableComponent).key();
 					component = translatableComponent.key(key).fallback(key);
 				}
@@ -1947,45 +1957,45 @@ public class ProtocolLibManager
 			itemMeta.lore(lore.isEmpty() ? null : lore);
 		}
 
-		CustomMaterial customMaterial = CustomMaterial.itemStackOf(clone);
-		if (customMaterial != null)
-		{
-			itemMeta.itemName(customMaterial.getDisplayName());
-		}
-		CustomMaterialNew customMaterialNew = CustomMaterialNew.itemStackOf(clone);
-
-		if (ignoreCreativeWhat && customMaterial != null)
-		{
-			switch (customMaterial)
-			{
-				case BRICK_THROWABLE -> clone.setType(Material.BRICK);
-				case NETHER_BRICK_THROWABLE -> clone.setType(Material.NETHER_BRICK);
-				case COPPER_INGOT_THROWABLE -> clone.setType(Material.COPPER_INGOT);
-				case IRON_INGOT_THROWABLE -> clone.setType(Material.IRON_INGOT);
-				case GOLD_INGOT_THROWABLE -> clone.setType(Material.GOLD_INGOT);
-				case NETHERITE_INGOT_THROWABLE -> clone.setType(Material.NETHERITE_INGOT);
-			}
-		}
-
-//		if (!itemMeta.hasAttributeModifiers())
+//		com.jho5245.cucumbery.util.storage.data.CustomMaterial customMaterial = com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(clone);
+//		if (customMaterial != null)
 //		{
-//			Material type = clone.getType();
-//			Multimap<Attribute, AttributeModifier> attributeModifierMultimap = type.getDefaultAttributeModifiers();
-//			if (!attributeModifierMultimap.isEmpty())
+//			itemMeta.itemName(customMaterial.getDisplayName());
+//		}
+		CustomMaterial customMaterial = CustomMaterial.itemStackOf(clone);
+//
+//		if (ignoreCreativeWhat && customMaterial != null)
+//		{
+//			switch (customMaterial)
 //			{
-//				if (showItemLore)
-//					itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-//				for (Attribute attribute : attributeModifierMultimap.keySet())
-//				{
-//					for (AttributeModifier modifier : attributeModifierMultimap.get(attribute))
-//					{
-//						AttributeModifier newModifier = new AttributeModifier(new NamespacedKey(Cucumbery.getPlugin(), "protocollib_random_number_" + Math.random()),
-//								modifier.getAmount(), modifier.getOperation(), modifier.getSlotGroup());
-//						itemMeta.addAttributeModifier(attribute, newModifier);
-//					}
-//				}
+//				case BRICK_THROWABLE -> clone.setType(Material.BRICK);
+//				case NETHER_BRICK_THROWABLE -> clone.setType(Material.NETHER_BRICK);
+//				case COPPER_INGOT_THROWABLE -> clone.setType(Material.COPPER_INGOT);
+//				case IRON_INGOT_THROWABLE -> clone.setType(Material.IRON_INGOT);
+//				case GOLD_INGOT_THROWABLE -> clone.setType(Material.GOLD_INGOT);
+//				case NETHERITE_INGOT_THROWABLE -> clone.setType(Material.NETHERITE_INGOT);
 //			}
 //		}
+
+				if (!itemMeta.hasAttributeModifiers())
+				{
+					Material type = clone.getType();
+					Multimap<Attribute, AttributeModifier> attributeModifierMultimap = type.getDefaultAttributeModifiers();
+					if (!attributeModifierMultimap.isEmpty())
+					{
+						if (showItemLore)
+							itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+						for (Attribute attribute : attributeModifierMultimap.keySet())
+						{
+							for (AttributeModifier modifier : attributeModifierMultimap.get(attribute))
+							{
+								AttributeModifier newModifier = new AttributeModifier(new NamespacedKey(Cucumbery.getPlugin(), "protocollib_random_number_" + Math.random()),
+										modifier.getAmount(), modifier.getOperation(), modifier.getSlotGroup());
+								itemMeta.addAttributeModifier(attribute, newModifier);
+							}
+						}
+					}
+				}
 
 		// 일부 인챈트는 Attribute 설명을 추가하므로 클라이언트에서 해당 인챈트를 제거하여 보냄
 		if (showItemLore && ignoreCreativeWhat && itemMeta.hasEnchants())
@@ -2032,7 +2042,8 @@ public class ProtocolLibManager
 				try
 				{
 					if (overrideItemStackString.startsWith("custom_material_"))
-						overrideItemStack = CustomMaterial.valueOf(overrideItemStackString.substring("custom_material_".length())).create();
+						overrideItemStack = com.jho5245.cucumbery.util.storage.data.CustomMaterial.valueOf(overrideItemStackString.substring("custom_material_".length()))
+								.create();
 					if (overrideItemStackString.startsWith("material_"))
 						overrideItemStack = new ItemStack(Material.valueOf(overrideItemStackString.substring("material_".length())));
 				}
@@ -2106,22 +2117,27 @@ public class ProtocolLibManager
 		if (showItemLore && UserData.SHOW_ITEM_COMPONENTS_INFO.getBoolean(player))
 		{
 			List<Component> componentLore = new ArrayList<>();
-			NBT.getComponents(clone, nbt -> {
+			NBT.getComponents(clone, nbt ->
+			{
 				for (String key : nbt.getKeys())
 				{
+					if (!nbt.hasTag(key))
+						continue;
 					NBTType nbtType = nbt.getType(key);
-					String value = String.valueOf(nbt.get(key, NBTHandlers.STORE_READWRITE_TAG));
+					String value = String.valueOf(get(key, nbt, nbtType));
+					String skipped = "";
 					if (value.length() > 60)
 					{
-						value = value.substring(0, 50) + " .. 외 %s글자 더..".formatted(value.length() - 50);
+						skipped = " .. 외 %s글자 더..".formatted(value.length() - 50);
+						value = value.substring(0, 50);
 					}
-					componentLore.add(ComponentUtil.translate("&7%s : %s - %s", key, value, nbtType));
+					componentLore.add(ComponentUtil.translate("&f%s : %s%s - %s", "&b" + key, "&a" + value, "&7" + skipped, "&6" + nbtType));
 				}
 			});
 			if (!componentLore.isEmpty())
 			{
 				lore.add(Component.empty());
-				lore.add(ComponentUtil.translate("&b[아이템 컴포넌트 정보]"));
+				lore.add(ComponentUtil.translate("&b[아이템 컴포넌트 정보] [구성 요소 %s개]", componentLore.size()));
 				lore.addAll(componentLore);
 			}
 			itemMeta.lore(lore);
@@ -2167,29 +2183,31 @@ public class ProtocolLibManager
 		if (player.getGameMode() != GameMode.CREATIVE && !player.hasPermission("asdf"))
 		{
 			// 관리자가 아닐 경우 Material이 DEBUG_STICK이고 ItemModel이 있는 CustomMaterial들을 전부 Material <= ItemModel로 변경
-			if (customMaterial != null && clone.getType() == Material.DEBUG_STICK)
+//			if (customMaterial != null && clone.getType() == Material.DEBUG_STICK)
+//			{
+//				ItemMeta cloneMeta = clone.getItemMeta();
+//				if (cloneMeta.hasItemModel())
+//				{
+//					NamespacedKey itemModel = cloneMeta.getItemModel();
+//					Material material = Method2.valueOf(itemModel != null ? itemModel.getKey().toUpperCase() : "", Material.class);
+//					if (material != null)
+//					{
+//						cloneMeta.setItemModel(null);
+//						clone.setItemMeta(cloneMeta);
+//						clone.setType(material);
+//					}
+//				}
+//			}
+			if (customMaterial != null && (
+					customMaterial.getRealMaterial() == Material.DEBUG_STICK || customMaterial.getRealMaterial() != Material.PLAYER_HEAD && customMaterial.getDisplayMaterial() == Material.PLAYER_HEAD
+			))
 			{
 				ItemMeta cloneMeta = clone.getItemMeta();
 				if (cloneMeta.hasItemModel())
 				{
 					NamespacedKey itemModel = cloneMeta.getItemModel();
 					Material material = Method2.valueOf(itemModel != null ? itemModel.getKey().toUpperCase() : "", Material.class);
-					if (material != null)
-					{
-						cloneMeta.setItemModel(null);
-						clone.setItemMeta(cloneMeta);
-						clone.setType(material);
-					}
-				}
-			}
-			if (customMaterialNew != null && customMaterialNew.getRealMaterial() == Material.DEBUG_STICK)
-			{
-				ItemMeta cloneMeta = clone.getItemMeta();
-				if (cloneMeta.hasItemModel())
-				{
-					NamespacedKey itemModel = cloneMeta.getItemModel();
-					Material material = Method2.valueOf(itemModel != null ? itemModel.getKey().toUpperCase() : "", Material.class);
-					if (material == customMaterialNew.getDisplayMaterial() && material != null)
+					if (material == customMaterial.getDisplayMaterial() && material != null)
 					{
 						cloneMeta.setItemModel(null);
 						clone.setItemMeta(cloneMeta);
@@ -2224,7 +2242,54 @@ public class ProtocolLibManager
 			Server.OPEN_WINDOW_MERCHANT,
 			Server.SET_SLOT,
 			Server.SET_CURSOR_ITEM,
-	};
+			};
+
+	private static Object get(String key, ReadableNBT nbt, NBTType nbtType)
+	{
+		Object o = nbt.get(key, NBTHandlers.STORE_READWRITE_TAG);
+		if (o == null)
+		{
+			o = nbt.get(key, NBTHandlers.STORE_READABLE_TAG);
+		}
+		if (o == null)
+		{
+			o = nbt.get(key, NBTHandlers.ITEM_STACK);
+		}
+		if (o == null)
+			switch (nbtType)
+			{
+				case NBTTagByte -> o = nbt.getByte(key);
+				case NBTTagShort -> o = nbt.getShort(key);
+				case NBTTagInt -> o = nbt.getInteger(key);
+				case NBTTagLong -> o = nbt.getLong(key);
+				case NBTTagFloat -> o = nbt.getFloat(key);
+				case NBTTagDouble -> o = nbt.getDouble(key);
+				case NBTTagByteArray -> o = nbt.getByte(key);
+				case NBTTagString -> o = nbt.getString(key);
+				case NBTTagList ->
+				{
+					o = nbt.getCompoundList(key);
+					NBTType listType = nbt.getListType(key);
+					switch (listType)
+					{
+						case NBTTagInt -> o = nbt.getIntegerList(key);
+						case NBTTagLong -> o = nbt.getLongList(key);
+						case NBTTagFloat -> o = nbt.getFloatList(key);
+						case NBTTagDouble -> o = nbt.getDoubleList(key);
+						case NBTTagString -> o = nbt.getStringList(key);
+						case NBTTagCompound -> o = nbt.getCompoundList(key);
+						case NBTTagIntArray -> o = nbt.getIntArrayList(key);
+						case null, default ->
+						{
+						}
+					}
+				}
+				case NBTTagCompound -> o = nbt.getCompound(key);
+				case NBTTagIntArray -> o = nbt.getIntArray(key);
+				case NBTTagLongArray -> o = nbt.getLongArray(key);
+			}
+		return o;
+	}
 
 	public static int[] getBlockPositionOf(@NotNull Object object)
 	{

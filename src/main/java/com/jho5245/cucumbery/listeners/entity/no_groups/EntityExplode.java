@@ -4,17 +4,13 @@ import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.children.group.LongCustomEffect;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
-import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
 import com.jho5245.cucumbery.util.blockplacedata.ExplodeEventManager;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.Waterlogged;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -22,7 +18,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -89,7 +84,7 @@ public class EntityExplode implements Listener
                       }
                     }
                   }
-                  Location loc = new Location(location.getWorld(), x, y, z);
+/*                  Location loc = new Location(location.getWorld(), x, y, z);
                   ItemStack itemStack = BlockPlaceDataConfig.getItem(loc);
                   CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
                   if (customMaterial == CustomMaterial.TNT_DRAIN)
@@ -101,7 +96,7 @@ public class EntityExplode implements Listener
                   {
                     waterlogged.setWaterlogged(false);
                     block.setBlockData(waterlogged);
-                  }
+                  }*/
                 }
               }
             }

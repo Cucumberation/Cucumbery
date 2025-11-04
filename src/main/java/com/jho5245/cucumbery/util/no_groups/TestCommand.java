@@ -1,40 +1,22 @@
 package com.jho5245.cucumbery.util.no_groups;
 
-import com.comphenix.protocol.PacketType.Play;
-import com.comphenix.protocol.PacketType.Play.Server;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.wrappers.WrappedAttribute;
-import com.comphenix.protocol.wrappers.WrappedAttributeModifier;
-import com.comphenix.protocol.wrappers.WrappedAttributeModifier.Operation;
 import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent.Completion;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.ghostchu.quickshop.api.QuickShopAPI;
 import com.ghostchu.quickshop.api.shop.Shop;
-import com.google.common.collect.Lists;
 import com.jho5245.cucumbery.Cucumbery;
-import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
-import com.jho5245.cucumbery.custom.custommaterial.CustomMaterialNew;
-import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
+import com.jho5245.cucumbery.custom.custommaterial.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
-import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
-import de.tr7zw.changeme.nbtapi.NBT;
-import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
-import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBTList;
 import net.coreprotect.config.ConfigHandler;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -75,10 +57,6 @@ public class TestCommand implements CucumberyCommandExecutor
 					}
 					sender.sendMessage(Arrays.toString(integers.toArray()));
 				}
-				case "youpeoplegame" ->
-				{
-
-				}
 				case "coreproect" ->
 				{
 					Player player = (Player) sender;
@@ -104,7 +82,7 @@ public class TestCommand implements CucumberyCommandExecutor
 					{
 						case "list" ->
 						{
-							List<CustomMaterialNew> customMaterials = new ArrayList<>(CustomMaterialNew.values());
+							List<CustomMaterial> customMaterials = new ArrayList<>(CustomMaterial.values());
 							int page = args.length >= 3 ? Integer.parseInt(args[2]) : 1;
 							int maxPage = customMaterials.size() / 54 + 1;
 							Inventory inventory = Bukkit.createInventory(null, 54, Component.text("Custom Materials"));
@@ -119,7 +97,7 @@ public class TestCommand implements CucumberyCommandExecutor
 							String input = args.length >= 3 ? args[2] : "cucumbery:test_item";
 							String[] split = input.split(":");
 							NamespacedKey namespacedKey = new NamespacedKey(split[0], split[1]);
-							CustomMaterialNew customMaterial = CustomMaterialNew.getByKey(namespacedKey);
+							CustomMaterial customMaterial = CustomMaterial.getByKey(namespacedKey);
 							MessageUtil.sendMessage(player, "item is : %s", customMaterial);
 						}
 					}
@@ -214,7 +192,7 @@ public class TestCommand implements CucumberyCommandExecutor
 						{
 							if (args[1].equals("info"))
 							{
-								return CommandTabUtil.tabCompleterList(args, CustomMaterialNew.keySet(), "<아이템>");
+								return CommandTabUtil.tabCompleterList(args, CustomMaterial.keySet(), "<아이템>");
 							}
 						}
 					}

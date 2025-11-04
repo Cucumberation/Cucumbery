@@ -295,7 +295,7 @@ public class BlockBreak implements Listener
 
 		String toolId = ItemStackUtil.itemExists(itemStack) ? new NBTItem(itemStack).getString(CustomMaterial.IDENDTIFER) : "", blockId =
 				!drops.isEmpty() && ItemStackUtil.itemExists(drops.get(0)) ? new NBTItem(drops.get(0)).getString(CustomMaterial.IDENDTIFER) : "";
-		if (CustomMaterial.FLINT_SHOVEL.toString().equalsIgnoreCase(toolId) && blockId.isEmpty() && blockType == Material.GRAVEL)
+/*		if (CustomMaterial.FLINT_SHOVEL.toString().equalsIgnoreCase(toolId) && blockId.isEmpty() && blockType == Material.GRAVEL)
 		{
 			modified = true;
 			drops.forEach(item ->
@@ -305,7 +305,7 @@ public class BlockBreak implements Listener
 					item.setType(Material.FLINT);
 				}
 			});
-		}
+		}*/
 
 		boolean vanilliaDrop = !drops.isEmpty() && player.getGameMode() != GameMode.CREATIVE && event.isDropItems() && value != null && value.equals(true);
 		boolean isCoarseTouch = CustomEnchant.isEnabled() && itemMeta != null && itemMeta.hasEnchant(CustomEnchant.COARSE_TOUCH);

@@ -3,7 +3,7 @@ package com.jho5245.cucumbery;
 import com.jho5245.cucumbery.commands.sound.CommandSong;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
-import com.jho5245.cucumbery.custom.custommaterial.CustomMaterialNew;
+import com.jho5245.cucumbery.custom.custommaterial.CustomMaterial;
 import com.jho5245.cucumbery.custom.custommerchant.MerchantData;
 import com.jho5245.cucumbery.deathmessages.CustomDeathMessage;
 import com.jho5245.cucumbery.util.addons.Songs;
@@ -134,8 +134,8 @@ public class Initializer
 
 	public static void loadCustomMaterials()
 	{
-		CustomMaterialNew.unregister();
-		CustomMaterialNew.register();
+		CustomMaterial.unregister();
+		CustomMaterial.register();
 
 		File file = new File(Cucumbery.getPlugin().getDataFolder() + "/CustomItems.yml");
 		if (!file.exists())

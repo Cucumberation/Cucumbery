@@ -29,7 +29,7 @@ public class FireworkExplode implements Listener
     ItemStack itemStack = firework.getItem();
     NBTItem nbtItem = new NBTItem(itemStack);
     int lifeTime = firework.getTicksFlown(), detonateTime = firework.getTicksToDetonate();
-    CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
+/*    CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
     if (customMaterial != null)
     {
       switch (customMaterial)
@@ -79,6 +79,6 @@ public class FireworkExplode implements Listener
           }
         }
       }
-    }
+    }*/
   }
 }

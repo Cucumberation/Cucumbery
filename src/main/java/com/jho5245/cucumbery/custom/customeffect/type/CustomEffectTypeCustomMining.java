@@ -34,8 +34,8 @@ public class CustomEffectTypeCustomMining extends CustomEffectType
           MINING_FORTUNE = new CustomEffectType("mining_fortune", "채광 행운", builder().maxAmplifier(999).description("채광 행운이 증가합니다")),
           MOLE_CLAW = new CustomEffectType("mole_claw", "몰 클로", builder().description("채광 속도가 1 증가합니다\n채광 속도 % 증가의 영향을 받지 않습니다")),
           MINDAS_TOUCH = new CustomEffectType("mindas_touch", "마인더스의 손길", builder().maxAmplifier(99).description("곡괭이의 채광 등급이 증가합니다")),
-          TITANIUM_FINDER = new CustomEffectType("titanium_finder", "티타늄 광부", builder().maxAmplifier(949).description(
-                  ComponentUtil.translate("%s 채굴 시 %s 등장 확률이 증가합니다 (기본 %s)", CustomMaterial.TITANIUM_ORE, CustomMaterial.TITANIUM_ORE, Constant.THE_COLOR_HEX + "5%"))),
+//          TITANIUM_FINDER = new CustomEffectType("titanium_finder", "티타늄 광부", builder().maxAmplifier(949).description(
+//                  ComponentUtil.translate("%s 채굴 시 %s 등장 확률이 증가합니다 (기본 %s)", CustomMaterial.TITANIUM_ORE, CustomMaterial.TITANIUM_ORE, Constant.THE_COLOR_HEX + "5%"))),
           MINING_BOOSTER = new CustomEffectType("mining_booster", "채광 부스터", builder().removeOnQuit().nonRemovable().nonBuffFreezable().description("잠시 동안 채광 속도가 3배가 됩니다").defaultDuration(200)),
           MINING_BOOSTER_COOLDOWN = new CustomEffectType("mining_booster_cooldown", "채광 부스터 쿨타임", builder().negative().keepOnDeath().enumHidden().description("채광 부스터를 사용할 수 없는 상태입니다").defaultDuration(20 * 120)),
 
@@ -69,7 +69,7 @@ public class CustomEffectTypeCustomMining extends CustomEffectType
 
             HASTE, MINING_FATIGUE,
 
-            MINING_FORTUNE, MOLE_CLAW, MINDAS_TOUCH, TITANIUM_FINDER,
+            MINING_FORTUNE, MOLE_CLAW, MINDAS_TOUCH, //TITANIUM_FINDER,
 
             MINING_BOOSTER, MINING_BOOSTER_COOLDOWN, MOVEMENT_CHECK,
             MINER_ARMOR_SET_EFFECT, MINER_PVP, AIR_SCAFFOLDING, AQUA_AFFINITY

@@ -243,342 +243,342 @@ public class MiningManager
 			{
 				blockType = blockDataType;
 			}
-			boolean hasDwarvenGoldEffect = CustomEffectManager.hasEffect(player,
-					CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PREDEFINED_CUSTOM_ORE_DWARVEN_GOLDS), hasGemStoneEffect = CustomEffectManager.hasEffect(player,
-					CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PREDEFINED_CUSTOM_ORE_GEMSTONES);
-			if (hasDwarvenGoldEffect)
-			{
-				switch (blockType)
-				{
-					case GRAY_WOOL, LIGHT_GRAY_WOOL, GRAY_CONCRETE, LIGHT_GRAY_CONCRETE ->
-					{
-						blockTier = 3;
-						blockHardness = 400f;
-						drops.clear();
-						drops.add(new ItemStack(Material.GOLD_INGOT, 2));
-						expToDrop = 7f;
-					}
-					case GOLD_BLOCK ->
-					{
-						blockTier = 3;
-						blockHardness = 600f;
-						drops.clear();
-						drops.add(new ItemStack(Material.GOLD_INGOT, hasGemStoneEffect ? Method.random(5, 7) : Method.random(2, 4)));
-						expToDrop = 7f;
-					}
-				}
-			}
-			// 텅스텐
-			if (CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PREDEFINED_CUSTOM_ORE_TUNGSTENS))
-			{
-				switch (blockType)
-				{
-					case GRAY_WOOL, LIGHT_GRAY_WOOL, GRAY_CONCRETE, LIGHT_GRAY_CONCRETE ->
-					{
-						if (!hasDwarvenGoldEffect)
-						{
-							blockTier = getVanillaBlockTier(Material.STONE);
-							blockHardness = getBlockHardness(Material.STONE);
-							drops.clear();
-							drops.add(new ItemStack(isSilkTouch ? Material.STONE : Material.COBBLESTONE));
-							expToDrop = 0f;
-						}
-					}
-					case WAXED_WEATHERED_CUT_COPPER, WAXED_WEATHERED_COPPER, WAXED_OXIDIZED_COPPER ->
-					{
-						blockTier = 2;
-						blockHardness = 300f;
-						drops.clear();
-						drops.add(CustomMaterial.TUNGSTEN_ORE.create());
-						expToDrop = 0f;
-					}
-					case END_STONE_BRICKS ->
-					{
-						blockTier = 2;
-						blockHardness = 550f;
-						drops.clear();
-						drops.add(CustomMaterial.TUNGSTEN_ORE.create(2));
-						expToDrop = 0f;
-					}
-				}
-			}
-			// 코발트
-			if (CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PREDEFINED_CUSTOM_ORE_COBALTS))
-			{
-				switch (blockType)
-				{
-					case GRAY_WOOL, LIGHT_GRAY_WOOL, GRAY_CONCRETE, LIGHT_GRAY_CONCRETE ->
-					{
-						if (!hasDwarvenGoldEffect)
-						{
-							blockTier = getVanillaBlockTier(Material.STONE);
-							blockHardness = getBlockHardness(Material.STONE);
-							drops.clear();
-							drops.add(new ItemStack(isSilkTouch ? Material.STONE : Material.COBBLESTONE));
-							expToDrop = 0f;
-						}
-					}
-					case LAPIS_BLOCK, BLUE_WOOL, PACKED_ICE ->
-					{
-						blockTier = 4;
-						blockHardness = 3500f;
-						drops.clear();
-						drops.add(CustomMaterial.COBALT_ORE.create());
-						expToDrop = 0f;
-					}
-					case BLUE_ICE ->
-					{
-						blockTier = 4;
-						blockHardness = 6000f;
-						drops.clear();
-						drops.add(CustomMaterial.COBALT_ORE.create(2));
-						expToDrop = 0f;
-					}
-				}
-			}
-			// 쉬루마이트
-			if (CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PREDEFINED_CUSTOM_ORE_SHROOMITES))
-			{
-				switch (blockType)
-				{
-					case GRAY_WOOL, LIGHT_GRAY_WOOL, GRAY_CONCRETE, LIGHT_GRAY_CONCRETE ->
-					{
-						if (!hasDwarvenGoldEffect)
-						{
-							blockTier = getVanillaBlockTier(Material.STONE);
-							blockHardness = getBlockHardness(Material.STONE);
-							drops.clear();
-							drops.add(new ItemStack(isSilkTouch ? Material.STONE : Material.COBBLESTONE));
-							expToDrop = 0f;
-						}
-					}
-					case STRIPPED_MANGROVE_WOOD, MANGROVE_PLANKS, CRIMSON_HYPHAE ->
-					{
-						blockTier = 4;
-						blockHardness = 11000f;
-						drops.clear();
-						drops.add(CustomMaterial.SHROOMITE_ORE.create());
-						expToDrop = 1f;
-					}
-					case NETHER_WART_BLOCK ->
-					{
-						blockTier = 4;
-						blockHardness = 20500f;
-						drops.clear();
-						drops.add(CustomMaterial.SHROOMITE_ORE.create(2));
-						expToDrop = 1f;
-					}
-				}
-			}
-			// 오이스터늄
-			boolean isCucumberiteFromTungsten = blockDataType == Material.GREEN_WOOL;
-			if (CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PREDEFINED_CUSTOM_ORE_CUCUMBERITES)
-					|| isCucumberiteFromTungsten)
-			{
-				switch (blockType)
-				{
-					case GRAY_WOOL, LIGHT_GRAY_WOOL, GRAY_CONCRETE, LIGHT_GRAY_CONCRETE ->
-					{
-						if (!hasDwarvenGoldEffect)
-						{
-							blockTier = getVanillaBlockTier(Material.STONE);
-							blockHardness = getBlockHardness(Material.STONE);
-							drops.clear();
-							drops.add(new ItemStack(isSilkTouch ? Material.STONE : Material.COBBLESTONE));
-							expToDrop = 0f;
-						}
-					}
-					case GREEN_WOOL, GREEN_TERRACOTTA, GREEN_GLAZED_TERRACOTTA ->
-					{
-						blockTier = 4;
-						blockHardness = 13500f;
-						drops.clear();
-						drops.add(CustomMaterial.CUCUMBERITE_ORE.create());
-						expToDrop = 1f;
-					}
-					case LIME_WOOL ->
-					{
-						blockTier = 4;
-						blockHardness = 25500f;
-						drops.clear();
-						drops.add(CustomMaterial.CUCUMBERITE_ORE.create(2));
-						expToDrop = 1f;
-					}
-				}
-			}
-			// 미스릴
-			if (CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PREDEFINED_CUSTOM_ORE_MITHRILS))
-			{
-				switch (blockType)
-				{
-					case GRAY_WOOL, LIGHT_GRAY_WOOL, GRAY_CONCRETE, LIGHT_GRAY_CONCRETE ->
-					{
-						if (!hasDwarvenGoldEffect)
-						{
-							blockTier = getVanillaBlockTier(Material.STONE);
-							blockHardness = getBlockHardness(Material.STONE);
-							drops.clear();
-							drops.add(new ItemStack(isSilkTouch ? Material.STONE : Material.COBBLESTONE));
-							expToDrop = 0f;
-						}
-					}
-					case PRISMARINE, DARK_PRISMARINE, PRISMARINE_BRICKS ->
-					{
-						blockTier = 5;
-						blockHardness = 5500f;
-						drops.clear();
-						drops.add(CustomMaterial.MITHRIL_ORE.create());
-						expToDrop = 0f;
-					}
-					case LIGHT_BLUE_WOOL ->
-					{
-						blockTier = 5;
-						blockHardness = 10000f;
-						drops.clear();
-						drops.add(CustomMaterial.MITHRIL_ORE.create(2));
-						expToDrop = 0f;
-					}
-				}
-			}
-			// 티타늄
-			if (CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PREDEFINED_CUSTOM_ORE_TITANIUMS))
-			{
-				switch (blockType)
-				{
-					case GRAY_WOOL, LIGHT_GRAY_WOOL, GRAY_CONCRETE, LIGHT_GRAY_CONCRETE ->
-					{
-						if (!hasDwarvenGoldEffect)
-						{
-							blockTier = getVanillaBlockTier(Material.STONE);
-							blockHardness = getBlockHardness(Material.STONE);
-							drops.clear();
-							drops.add(new ItemStack(isSilkTouch ? Material.STONE : Material.COBBLESTONE));
-							expToDrop = 0f;
-						}
-					}
-					case POLISHED_ANDESITE, SMOOTH_STONE, BLACK_WOOL ->
-					{
-						blockTier = 6;
-						blockHardness = 7000f;
-						drops.clear();
-						drops.add(CustomMaterial.TITANIUM_ORE.create());
-						expToDrop = 0f;
-					}
-					case BLACK_CONCRETE ->
-					{
-						blockTier = 5;
-						blockHardness = 13000f;
-						drops.clear();
-						drops.add(CustomMaterial.TITANIUM_ORE.create(2));
-						expToDrop = 0f;
-					}
-				}
-			}
-			// 젬스톤
-			if (hasGemStoneEffect)
-			{
-				switch (blockType)
-				{
-					case RED_STAINED_GLASS ->
-					{
-						blockTier = 6;
-						blockHardness = 2500f;
-						drops.clear();
-						drops.add(CustomMaterial.RUBY.create(Method.random(3, 6)));
-					}
-					case RED_STAINED_GLASS_PANE ->
-					{
-						blockTier = 6;
-						blockHardness = 2300f;
-						drops.clear();
-						drops.add(CustomMaterial.RUBY.create(Method.random(2, 4)));
-					}
-					case ORANGE_STAINED_GLASS ->
-					{
-						blockTier = 7;
-						blockHardness = 3200f;
-						drops.clear();
-						drops.add(CustomMaterial.AMBER.create(Method.random(3, 6)));
-					}
-					case ORANGE_STAINED_GLASS_PANE ->
-					{
-						blockTier = 7;
-						blockHardness = 3000f;
-						drops.clear();
-						drops.add(CustomMaterial.AMBER.create(Method.random(2, 4)));
-					}
-					case PURPLE_STAINED_GLASS ->
-					{
-						blockTier = 7;
-						blockHardness = 3200f;
-						drops.clear();
-						drops.add(new ItemStack(Material.AMETHYST_SHARD, Method.random(3, 6)));
-					}
-					case PURPLE_STAINED_GLASS_PANE ->
-					{
-						blockTier = 7;
-						blockHardness = 3000f;
-						drops.clear();
-						drops.add(new ItemStack(Material.AMETHYST_SHARD, Method.random(2, 4)));
-					}
-					case LIME_STAINED_GLASS ->
-					{
-						blockTier = 7;
-						blockHardness = 3200f;
-						drops.clear();
-						drops.add(CustomMaterial.JADE.create(Method.random(3, 6)));
-					}
-					case LIME_STAINED_GLASS_PANE ->
-					{
-						blockTier = 7;
-						blockHardness = 3000f;
-						drops.clear();
-						drops.add(CustomMaterial.JADE.create(Method.random(2, 4)));
-					}
-					case LIGHT_BLUE_STAINED_GLASS ->
-					{
-						blockTier = 7;
-						blockHardness = 3200f;
-						drops.clear();
-						drops.add(CustomMaterial.SAPPHIRE.create(Method.random(3, 6)));
-					}
-					case LIGHT_BLUE_STAINED_GLASS_PANE ->
-					{
-						blockTier = 7;
-						blockHardness = 3000f;
-						drops.clear();
-						drops.add(CustomMaterial.SAPPHIRE.create(Method.random(2, 4)));
-					}
-					case YELLOW_STAINED_GLASS ->
-					{
-						blockTier = 8;
-						blockHardness = 4000f;
-						drops.clear();
-						drops.add(CustomMaterial.TOPAZ.create(Method.random(3, 6)));
-					}
-					case YELLOW_STAINED_GLASS_PANE ->
-					{
-						blockTier = 8;
-						blockHardness = 3800f;
-						drops.clear();
-						drops.add(CustomMaterial.TOPAZ.create(Method.random(2, 4)));
-					}
-					case PINK_STAINED_GLASS ->
-					{
-						blockTier = 9;
-						blockHardness = 5000f;
-						drops.clear();
-						drops.add(CustomMaterial.MORGANITE.create(Method.random(3, 6)));
-					}
-					case PINK_STAINED_GLASS_PANE ->
-					{
-						blockTier = 9;
-						blockHardness = 4800f;
-						drops.clear();
-						drops.add(CustomMaterial.MORGANITE.create(Method.random(2, 4)));
-					}
-				}
-			}
+//			boolean hasDwarvenGoldEffect = CustomEffectManager.hasEffect(player,
+//					CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PREDEFINED_CUSTOM_ORE_DWARVEN_GOLDS), hasGemStoneEffect = CustomEffectManager.hasEffect(player,
+//					CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PREDEFINED_CUSTOM_ORE_GEMSTONES);
+//			if (hasDwarvenGoldEffect)
+//			{
+//				switch (blockType)
+//				{
+//					case GRAY_WOOL, LIGHT_GRAY_WOOL, GRAY_CONCRETE, LIGHT_GRAY_CONCRETE ->
+//					{
+//						blockTier = 3;
+//						blockHardness = 400f;
+//						drops.clear();
+//						drops.add(new ItemStack(Material.GOLD_INGOT, 2));
+//						expToDrop = 7f;
+//					}
+//					case GOLD_BLOCK ->
+//					{
+//						blockTier = 3;
+//						blockHardness = 600f;
+//						drops.clear();
+//						drops.add(new ItemStack(Material.GOLD_INGOT, hasGemStoneEffect ? Method.random(5, 7) : Method.random(2, 4)));
+//						expToDrop = 7f;
+//					}
+//				}
+//			}
+//			// 텅스텐
+//			if (CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PREDEFINED_CUSTOM_ORE_TUNGSTENS))
+//			{
+//				switch (blockType)
+//				{
+//					case GRAY_WOOL, LIGHT_GRAY_WOOL, GRAY_CONCRETE, LIGHT_GRAY_CONCRETE ->
+//					{
+//						if (!hasDwarvenGoldEffect)
+//						{
+//							blockTier = getVanillaBlockTier(Material.STONE);
+//							blockHardness = getBlockHardness(Material.STONE);
+//							drops.clear();
+//							drops.add(new ItemStack(isSilkTouch ? Material.STONE : Material.COBBLESTONE));
+//							expToDrop = 0f;
+//						}
+//					}
+//					case WAXED_WEATHERED_CUT_COPPER, WAXED_WEATHERED_COPPER, WAXED_OXIDIZED_COPPER ->
+//					{
+//						blockTier = 2;
+//						blockHardness = 300f;
+//						drops.clear();
+////						drops.add(CustomMaterial.TUNGSTEN_ORE.create());
+//						expToDrop = 0f;
+//					}
+//					case END_STONE_BRICKS ->
+//					{
+//						blockTier = 2;
+//						blockHardness = 550f;
+//						drops.clear();
+////						drops.add(CustomMaterial.TUNGSTEN_ORE.create(2));
+//						expToDrop = 0f;
+//					}
+//				}
+//			}
+//			// 코발트
+//			if (CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PREDEFINED_CUSTOM_ORE_COBALTS))
+//			{
+//				switch (blockType)
+//				{
+//					case GRAY_WOOL, LIGHT_GRAY_WOOL, GRAY_CONCRETE, LIGHT_GRAY_CONCRETE ->
+//					{
+//						if (!hasDwarvenGoldEffect)
+//						{
+//							blockTier = getVanillaBlockTier(Material.STONE);
+//							blockHardness = getBlockHardness(Material.STONE);
+//							drops.clear();
+//							drops.add(new ItemStack(isSilkTouch ? Material.STONE : Material.COBBLESTONE));
+//							expToDrop = 0f;
+//						}
+//					}
+//					case LAPIS_BLOCK, BLUE_WOOL, PACKED_ICE ->
+//					{
+//						blockTier = 4;
+//						blockHardness = 3500f;
+//						drops.clear();
+//						drops.add(CustomMaterial.COBALT_ORE.create());
+//						expToDrop = 0f;
+//					}
+//					case BLUE_ICE ->
+//					{
+//						blockTier = 4;
+//						blockHardness = 6000f;
+//						drops.clear();
+//						drops.add(CustomMaterial.COBALT_ORE.create(2));
+//						expToDrop = 0f;
+//					}
+//				}
+//			}
+//			// 쉬루마이트
+//			if (CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PREDEFINED_CUSTOM_ORE_SHROOMITES))
+//			{
+//				switch (blockType)
+//				{
+//					case GRAY_WOOL, LIGHT_GRAY_WOOL, GRAY_CONCRETE, LIGHT_GRAY_CONCRETE ->
+//					{
+//						if (!hasDwarvenGoldEffect)
+//						{
+//							blockTier = getVanillaBlockTier(Material.STONE);
+//							blockHardness = getBlockHardness(Material.STONE);
+//							drops.clear();
+//							drops.add(new ItemStack(isSilkTouch ? Material.STONE : Material.COBBLESTONE));
+//							expToDrop = 0f;
+//						}
+//					}
+//					case STRIPPED_MANGROVE_WOOD, MANGROVE_PLANKS, CRIMSON_HYPHAE ->
+//					{
+//						blockTier = 4;
+//						blockHardness = 11000f;
+//						drops.clear();
+//						drops.add(CustomMaterial.SHROOMITE_ORE.create());
+//						expToDrop = 1f;
+//					}
+//					case NETHER_WART_BLOCK ->
+//					{
+//						blockTier = 4;
+//						blockHardness = 20500f;
+//						drops.clear();
+//						drops.add(CustomMaterial.SHROOMITE_ORE.create(2));
+//						expToDrop = 1f;
+//					}
+//				}
+//			}
+//			// 오이스터늄
+//			boolean isCucumberiteFromTungsten = blockDataType == Material.GREEN_WOOL;
+//			if (CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PREDEFINED_CUSTOM_ORE_CUCUMBERITES)
+//					|| isCucumberiteFromTungsten)
+//			{
+//				switch (blockType)
+//				{
+//					case GRAY_WOOL, LIGHT_GRAY_WOOL, GRAY_CONCRETE, LIGHT_GRAY_CONCRETE ->
+//					{
+//						if (!hasDwarvenGoldEffect)
+//						{
+//							blockTier = getVanillaBlockTier(Material.STONE);
+//							blockHardness = getBlockHardness(Material.STONE);
+//							drops.clear();
+//							drops.add(new ItemStack(isSilkTouch ? Material.STONE : Material.COBBLESTONE));
+//							expToDrop = 0f;
+//						}
+//					}
+//					case GREEN_WOOL, GREEN_TERRACOTTA, GREEN_GLAZED_TERRACOTTA ->
+//					{
+//						blockTier = 4;
+//						blockHardness = 13500f;
+//						drops.clear();
+//						drops.add(CustomMaterial.CUCUMBERITE_ORE.create());
+//						expToDrop = 1f;
+//					}
+//					case LIME_WOOL ->
+//					{
+//						blockTier = 4;
+//						blockHardness = 25500f;
+//						drops.clear();
+//						drops.add(CustomMaterial.CUCUMBERITE_ORE.create(2));
+//						expToDrop = 1f;
+//					}
+//				}
+//			}
+//			// 미스릴
+//			if (CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PREDEFINED_CUSTOM_ORE_MITHRILS))
+//			{
+//				switch (blockType)
+//				{
+//					case GRAY_WOOL, LIGHT_GRAY_WOOL, GRAY_CONCRETE, LIGHT_GRAY_CONCRETE ->
+//					{
+//						if (!hasDwarvenGoldEffect)
+//						{
+//							blockTier = getVanillaBlockTier(Material.STONE);
+//							blockHardness = getBlockHardness(Material.STONE);
+//							drops.clear();
+//							drops.add(new ItemStack(isSilkTouch ? Material.STONE : Material.COBBLESTONE));
+//							expToDrop = 0f;
+//						}
+//					}
+//					case PRISMARINE, DARK_PRISMARINE, PRISMARINE_BRICKS ->
+//					{
+//						blockTier = 5;
+//						blockHardness = 5500f;
+//						drops.clear();
+//						drops.add(CustomMaterial.MITHRIL_ORE.create());
+//						expToDrop = 0f;
+//					}
+//					case LIGHT_BLUE_WOOL ->
+//					{
+//						blockTier = 5;
+//						blockHardness = 10000f;
+//						drops.clear();
+//						drops.add(CustomMaterial.MITHRIL_ORE.create(2));
+//						expToDrop = 0f;
+//					}
+//				}
+//			}
+//			// 티타늄
+//			if (CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PREDEFINED_CUSTOM_ORE_TITANIUMS))
+//			{
+//				switch (blockType)
+//				{
+//					case GRAY_WOOL, LIGHT_GRAY_WOOL, GRAY_CONCRETE, LIGHT_GRAY_CONCRETE ->
+//					{
+//						if (!hasDwarvenGoldEffect)
+//						{
+//							blockTier = getVanillaBlockTier(Material.STONE);
+//							blockHardness = getBlockHardness(Material.STONE);
+//							drops.clear();
+//							drops.add(new ItemStack(isSilkTouch ? Material.STONE : Material.COBBLESTONE));
+//							expToDrop = 0f;
+//						}
+//					}
+//					case POLISHED_ANDESITE, SMOOTH_STONE, BLACK_WOOL ->
+//					{
+//						blockTier = 6;
+//						blockHardness = 7000f;
+//						drops.clear();
+//						drops.add(CustomMaterial.TITANIUM_ORE.create());
+//						expToDrop = 0f;
+//					}
+//					case BLACK_CONCRETE ->
+//					{
+//						blockTier = 5;
+//						blockHardness = 13000f;
+//						drops.clear();
+//						drops.add(CustomMaterial.TITANIUM_ORE.create(2));
+//						expToDrop = 0f;
+//					}
+//				}
+//			}
+//			// 젬스톤
+//			if (hasGemStoneEffect)
+//			{
+//				switch (blockType)
+//				{
+//					case RED_STAINED_GLASS ->
+//					{
+//						blockTier = 6;
+//						blockHardness = 2500f;
+//						drops.clear();
+//						drops.add(CustomMaterial.RUBY.create(Method.random(3, 6)));
+//					}
+//					case RED_STAINED_GLASS_PANE ->
+//					{
+//						blockTier = 6;
+//						blockHardness = 2300f;
+//						drops.clear();
+//						drops.add(CustomMaterial.RUBY.create(Method.random(2, 4)));
+//					}
+//					case ORANGE_STAINED_GLASS ->
+//					{
+//						blockTier = 7;
+//						blockHardness = 3200f;
+//						drops.clear();
+//						drops.add(CustomMaterial.AMBER.create(Method.random(3, 6)));
+//					}
+//					case ORANGE_STAINED_GLASS_PANE ->
+//					{
+//						blockTier = 7;
+//						blockHardness = 3000f;
+//						drops.clear();
+//						drops.add(CustomMaterial.AMBER.create(Method.random(2, 4)));
+//					}
+//					case PURPLE_STAINED_GLASS ->
+//					{
+//						blockTier = 7;
+//						blockHardness = 3200f;
+//						drops.clear();
+//						drops.add(new ItemStack(Material.AMETHYST_SHARD, Method.random(3, 6)));
+//					}
+//					case PURPLE_STAINED_GLASS_PANE ->
+//					{
+//						blockTier = 7;
+//						blockHardness = 3000f;
+//						drops.clear();
+//						drops.add(new ItemStack(Material.AMETHYST_SHARD, Method.random(2, 4)));
+//					}
+//					case LIME_STAINED_GLASS ->
+//					{
+//						blockTier = 7;
+//						blockHardness = 3200f;
+//						drops.clear();
+//						drops.add(CustomMaterial.JADE.create(Method.random(3, 6)));
+//					}
+//					case LIME_STAINED_GLASS_PANE ->
+//					{
+//						blockTier = 7;
+//						blockHardness = 3000f;
+//						drops.clear();
+//						drops.add(CustomMaterial.JADE.create(Method.random(2, 4)));
+//					}
+//					case LIGHT_BLUE_STAINED_GLASS ->
+//					{
+//						blockTier = 7;
+//						blockHardness = 3200f;
+//						drops.clear();
+//						drops.add(CustomMaterial.SAPPHIRE.create(Method.random(3, 6)));
+//					}
+//					case LIGHT_BLUE_STAINED_GLASS_PANE ->
+//					{
+//						blockTier = 7;
+//						blockHardness = 3000f;
+//						drops.clear();
+//						drops.add(CustomMaterial.SAPPHIRE.create(Method.random(2, 4)));
+//					}
+//					case YELLOW_STAINED_GLASS ->
+//					{
+//						blockTier = 8;
+//						blockHardness = 4000f;
+//						drops.clear();
+//						drops.add(CustomMaterial.TOPAZ.create(Method.random(3, 6)));
+//					}
+//					case YELLOW_STAINED_GLASS_PANE ->
+//					{
+//						blockTier = 8;
+//						blockHardness = 3800f;
+//						drops.clear();
+//						drops.add(CustomMaterial.TOPAZ.create(Method.random(2, 4)));
+//					}
+//					case PINK_STAINED_GLASS ->
+//					{
+//						blockTier = 9;
+//						blockHardness = 5000f;
+//						drops.clear();
+//						drops.add(CustomMaterial.MORGANITE.create(Method.random(3, 6)));
+//					}
+//					case PINK_STAINED_GLASS_PANE ->
+//					{
+//						blockTier = 9;
+//						blockHardness = 4800f;
+//						drops.clear();
+//						drops.add(CustomMaterial.MORGANITE.create(Method.random(2, 4)));
+//					}
+//				}
+//			}
 			if (blockDataType == Material.COBBLESTONE || blockDataType == Material.COBBLED_DEEPSLATE)
 			{
 				blockTier = getVanillaBlockTier(blockType);
@@ -609,132 +609,132 @@ public class MiningManager
 					}
 				}
 			}
-			// 시밤 서버 탐험 월드 커스텀 광물
-			if (Bukkit.getPluginManager().getPlugin("CBomb-Explore") != null && player.getWorld().getName().equals("world"))
-			{
-				int y = blockLocation.getBlockY();
-				switch (blockType)
-				{
-					case SMOOTH_SANDSTONE, END_STONE, END_STONE_BRICKS ->
-					{
-						if (y <= 256 && y >= -64)
-						{
-							blockTier = 3;
-							blockHardness = 300f;
-							drops.clear();
-							drops.add(CustomMaterial.PLATINUM_ORE.create());
-							expToDrop = 0f;
-						}
-					}
-					case LIGHT_GRAY_WOOL, LIGHT_GRAY_CONCRETE, LIGHT_GRAY_TERRACOTTA ->
-					{
-						if (y <= 112 && y >= -16)
-						{
-							blockTier = 2;
-							blockHardness = 300f;
-							drops.clear();
-							drops.add(CustomMaterial.TIN_ORE.create());
-							expToDrop = 0f;
-						}
-					}
-					case CYAN_TERRACOTTA, GRAY_WOOL, GRAY_CONCRETE ->
-					{
-						if (y <= 32 && y >= -32)
-						{
-							blockTier = 3;
-							blockHardness = 300f;
-							drops.clear();
-							drops.add(CustomMaterial.LEAD_ORE.create());
-							expToDrop = 0f;
-						}
-					}
-					case DEAD_FIRE_CORAL_BLOCK ->
-					{
-						if (y <= 60 && y >= 10)
-						{
-							blockTier = 3;
-							blockHardness = 300f;
-							drops.clear();
-							drops.add(CustomMaterial.PLASTIC_DEBRIS.create());
-							expToDrop = Math.random() * 2 + 1;
-						}
-					}
-					case LAPIS_BLOCK, BLUE_WOOL, BLUE_CONCRETE ->
-					{
-						if (y <= 384 && y >= -24)
-						{
-							blockTier = 5;
-							blockHardness = 300f;
-							drops.clear();
-							drops.add(CustomMaterial.COBALT_ORE.create());
-							expToDrop = 0;
-						}
-					}
-					case CYAN_WOOL, CYAN_CONCRETE, WARPED_WART_BLOCK ->
-					{
-						if (y <= 40 && y >= -110)
-						{
-							blockTier = 6;
-							blockHardness = 3500f;
-							drops.clear();
-							drops.add(CustomMaterial.MITHRIL_ORE.create());
-							expToDrop = Math.random() * 3 + 2;
-						}
-					}
-					case PRISMARINE, PRISMARINE_BRICKS, DARK_PRISMARINE ->
-					{
-						if (y <= 0 && y >= -128)
-						{
-							blockTier = 8;
-							blockHardness = 5500f;
-							drops.clear();
-							drops.add(CustomMaterial.TUNGSTEN_ORE.create());
-							expToDrop = 0;
-						}
-					}
-					case POLISHED_ANDESITE, SMOOTH_STONE, GRAY_GLAZED_TERRACOTTA ->
-					{
-						if (y <= -64 && y >= -164)
-						{
-							blockTier = 8;
-							blockHardness = 7000f;
-							drops.clear();
-							drops.add(CustomMaterial.TITANIUM_ORE.create());
-							expToDrop = 0;
-						}
-					}
-					case WHITE_WOOL, POLISHED_DIORITE, PINK_TERRACOTTA ->
-					{
-						if (y <= 45 && y >= -10)
-						{
-							blockTier = 9;
-							blockHardness = 7500f;
-							drops.clear();
-							drops.add(CustomMaterial.NAUTILITE_ORE.create());
-							expToDrop = Math.random() * 4 + 3;
-						}
-					}
-					case STRIPPED_MANGROVE_WOOD, MANGROVE_PLANKS, RED_TERRACOTTA ->
-					{
-						if (y <= 10 && y >= 3)
-						{
-							blockTier = 4;
-							blockHardness = 11000f;
-							drops.clear();
-							drops.add(CustomMaterial.SHROOMITE_ORE.create());
-							expToDrop = Math.random() * 2 + 10;
-						}
-					}
-					case GREEN_GLAZED_TERRACOTTA, GREEN_WOOL, GREEN_TERRACOTTA ->
-					{
-						blockTier = 4;
-						blockHardness = 13500f;
-						drops.clear();
-						drops.add(CustomMaterial.CUCUMBERITE_ORE.create());
-						expToDrop = Math.random() * 50 + 2;
-					}
-				}
-			}
+//			// 시밤 서버 탐험 월드 커스텀 광물
+//			if (Bukkit.getPluginManager().getPlugin("CBomb-Explore") != null && player.getWorld().getName().equals("world"))
+//			{
+//				int y = blockLocation.getBlockY();
+//				switch (blockType)
+//				{
+//					case SMOOTH_SANDSTONE, END_STONE, END_STONE_BRICKS ->
+//					{
+//						if (y <= 256 && y >= -64)
+//						{
+//							blockTier = 3;
+//							blockHardness = 300f;
+//							drops.clear();
+//							drops.add(CustomMaterial.PLATINUM_ORE.create());
+//							expToDrop = 0f;
+//						}
+//					}
+//					case LIGHT_GRAY_WOOL, LIGHT_GRAY_CONCRETE, LIGHT_GRAY_TERRACOTTA ->
+//					{
+//						if (y <= 112 && y >= -16)
+//						{
+//							blockTier = 2;
+//							blockHardness = 300f;
+//							drops.clear();
+//							drops.add(CustomMaterial.TIN_ORE.create());
+//							expToDrop = 0f;
+//						}
+//					}
+//					case CYAN_TERRACOTTA, GRAY_WOOL, GRAY_CONCRETE ->
+//					{
+//						if (y <= 32 && y >= -32)
+//						{
+//							blockTier = 3;
+//							blockHardness = 300f;
+//							drops.clear();
+//							drops.add(CustomMaterial.LEAD_ORE.create());
+//							expToDrop = 0f;
+//						}
+//					}
+//					case DEAD_FIRE_CORAL_BLOCK ->
+//					{
+//						if (y <= 60 && y >= 10)
+//						{
+//							blockTier = 3;
+//							blockHardness = 300f;
+//							drops.clear();
+//							drops.add(CustomMaterial.PLASTIC_DEBRIS.create());
+//							expToDrop = Math.random() * 2 + 1;
+//						}
+//					}
+//					case LAPIS_BLOCK, BLUE_WOOL, BLUE_CONCRETE ->
+//					{
+//						if (y <= 384 && y >= -24)
+//						{
+//							blockTier = 5;
+//							blockHardness = 300f;
+//							drops.clear();
+//							drops.add(CustomMaterial.COBALT_ORE.create());
+//							expToDrop = 0;
+//						}
+//					}
+//					case CYAN_WOOL, CYAN_CONCRETE, WARPED_WART_BLOCK ->
+//					{
+//						if (y <= 40 && y >= -110)
+//						{
+//							blockTier = 6;
+//							blockHardness = 3500f;
+//							drops.clear();
+//							drops.add(CustomMaterial.MITHRIL_ORE.create());
+//							expToDrop = Math.random() * 3 + 2;
+//						}
+//					}
+//					case PRISMARINE, PRISMARINE_BRICKS, DARK_PRISMARINE ->
+//					{
+//						if (y <= 0 && y >= -128)
+//						{
+//							blockTier = 8;
+//							blockHardness = 5500f;
+//							drops.clear();
+//							drops.add(CustomMaterial.TUNGSTEN_ORE.create());
+//							expToDrop = 0;
+//						}
+//					}
+//					case POLISHED_ANDESITE, SMOOTH_STONE, GRAY_GLAZED_TERRACOTTA ->
+//					{
+//						if (y <= -64 && y >= -164)
+//						{
+//							blockTier = 8;
+//							blockHardness = 7000f;
+//							drops.clear();
+//							drops.add(CustomMaterial.TITANIUM_ORE.create());
+//							expToDrop = 0;
+//						}
+//					}
+//					case WHITE_WOOL, POLISHED_DIORITE, PINK_TERRACOTTA ->
+//					{
+//						if (y <= 45 && y >= -10)
+//						{
+//							blockTier = 9;
+//							blockHardness = 7500f;
+//							drops.clear();
+//							drops.add(CustomMaterial.NAUTILITE_ORE.create());
+//							expToDrop = Math.random() * 4 + 3;
+//						}
+//					}
+//					case STRIPPED_MANGROVE_WOOD, MANGROVE_PLANKS, RED_TERRACOTTA ->
+//					{
+//						if (y <= 10 && y >= 3)
+//						{
+//							blockTier = 4;
+//							blockHardness = 11000f;
+//							drops.clear();
+//							drops.add(CustomMaterial.SHROOMITE_ORE.create());
+//							expToDrop = Math.random() * 2 + 10;
+//						}
+//					}
+//					case GREEN_GLAZED_TERRACOTTA, GREEN_WOOL, GREEN_TERRACOTTA ->
+//					{
+//						blockTier = 4;
+//						blockHardness = 13500f;
+//						drops.clear();
+//						drops.add(CustomMaterial.CUCUMBERITE_ORE.create());
+//						expToDrop = Math.random() * 50 + 2;
+//					}
+//				}
+//			}
 		}
 		//boolean hasExtra = Variable.customMiningExtraBlocks.containsKey(blockLocation);
 		// 커스텀 블록 채광 소리
@@ -894,13 +894,13 @@ public class MiningManager
 					}
 
 					// 일부 CustomMaterial은 Special drop 사용
-					CustomMaterial customMaterial = CustomMaterial.itemStackOf(dataItem);
-					Collection<ItemStack> specialDrops;
-					if (customMaterial != null && !(specialDrops = customMaterial.getSpecialDrops(player, itemStack)).isEmpty())
-					{
-						drops.clear();
-						drops.addAll(specialDrops);
-					}
+//					CustomMaterial customMaterial = CustomMaterial.itemStackOf(dataItem);
+//					Collection<ItemStack> specialDrops;
+//					if (customMaterial != null && !(specialDrops = customMaterial.getSpecialDrops(player, itemStack)).isEmpty())
+//					{
+//						drops.clear();
+//						drops.addAll(specialDrops);
+//					}
 				}
 			}
 		}
@@ -911,16 +911,16 @@ public class MiningManager
 		}
 		// 커스텀 아이템 id
 		CustomMaterial toolId = CustomMaterial.itemStackOf(itemStack), blockId = !drops.isEmpty() ? CustomMaterial.itemStackOf(drops.get(0)) : null;
-		if (toolId == CustomMaterial.FLINT_SHOVEL && blockId == null && blockType == Material.GRAVEL)
-		{
-			drops.forEach(item ->
-			{
-				if (item.getType() == Material.GRAVEL)
-				{
-					item.setType(Material.FLINT);
-				}
-			});
-		}
+//		if (toolId == CustomMaterial.FLINT_SHOVEL && blockId == null && blockType == Material.GRAVEL)
+//		{
+//			drops.forEach(item ->
+//			{
+//				if (item.getType() == Material.GRAVEL)
+//				{
+//					item.setType(Material.FLINT);
+//				}
+//			});
+//		}
 		// 드롭 경험치 처리
 		List<Double> expList = new ArrayList<>();
 		// 제련의 손길 처리(인챈트 또는 포션 효과)
@@ -973,51 +973,51 @@ public class MiningManager
 						toolSpeed += value;
 					}
 				}
-				if (toolId == CustomMaterial.MITHRIL_PICKAXE_REFINED && blockId == CustomMaterial.MITHRIL_ORE)
-				{
-					miningSpeed += 50f;
-				}
-				if (toolId == CustomMaterial.TITANIUM_PICKAXE_REFINED && blockId == CustomMaterial.TITANIUM_ORE)
-				{
-					miningSpeed += 60f;
-				}
-				if (toolId == CustomMaterial.STONK && blockId == null && (blockType == Material.STONE || blockType == Material.COBBLESTONE
-						|| blockType == Material.DEEPSLATE || blockType == Material.COBBLED_DEEPSLATE))
-				{
-					miningSpeed += 10000f;
-				}
-				if (helmetType == CustomMaterial.MINER_HELMET)
-				{
-					miningSpeed += 15f;
-				}
-				if (chestplateType == CustomMaterial.MINER_CHESTPLATE)
-				{
-					miningSpeed += 20f;
-				}
-				if (leggingsType == CustomMaterial.MINER_LEGGINGS)
-				{
-					miningSpeed += 20f;
-				}
-				if (bootsType == CustomMaterial.MINER_BOOTS)
-				{
-					miningSpeed += 10f;
-				}
-				if (helmetType == CustomMaterial.MINDAS_HELMET)
-				{
-					miningSpeed += 250f;
-				}
-				if (chestplateType == CustomMaterial.MINDAS_CHESTPLATE)
-				{
-					miningSpeed += 400f;
-				}
-				if (leggingsType == CustomMaterial.MINDAS_LEGGINGS)
-				{
-					miningSpeed += 350f;
-				}
-				if (bootsType == CustomMaterial.MINDAS_BOOTS)
-				{
-					miningSpeed += 300f;
-				}
+//				if (toolId == CustomMaterial.MITHRIL_PICKAXE_REFINED && blockId == CustomMaterial.MITHRIL_ORE)
+//				{
+//					miningSpeed += 50f;
+//				}
+//				if (toolId == CustomMaterial.TITANIUM_PICKAXE_REFINED && blockId == CustomMaterial.TITANIUM_ORE)
+//				{
+//					miningSpeed += 60f;
+//				}
+//				if (toolId == CustomMaterial.STONK && blockId == null && (blockType == Material.STONE || blockType == Material.COBBLESTONE
+//						|| blockType == Material.DEEPSLATE || blockType == Material.COBBLED_DEEPSLATE))
+//				{
+//					miningSpeed += 10000f;
+//				}
+//				if (helmetType == CustomMaterial.MINER_HELMET)
+//				{
+//					miningSpeed += 15f;
+//				}
+//				if (chestplateType == CustomMaterial.MINER_CHESTPLATE)
+//				{
+//					miningSpeed += 20f;
+//				}
+//				if (leggingsType == CustomMaterial.MINER_LEGGINGS)
+//				{
+//					miningSpeed += 20f;
+//				}
+//				if (bootsType == CustomMaterial.MINER_BOOTS)
+//				{
+//					miningSpeed += 10f;
+//				}
+//				if (helmetType == CustomMaterial.MINDAS_HELMET)
+//				{
+//					miningSpeed += 250f;
+//				}
+//				if (chestplateType == CustomMaterial.MINDAS_CHESTPLATE)
+//				{
+//					miningSpeed += 400f;
+//				}
+//				if (leggingsType == CustomMaterial.MINDAS_LEGGINGS)
+//				{
+//					miningSpeed += 350f;
+//				}
+//				if (bootsType == CustomMaterial.MINDAS_BOOTS)
+//				{
+//					miningSpeed += 300f;
+//				}
 			}
 			// 채광 속도 증가 (%영향을 안받음)
 			{
@@ -1165,46 +1165,46 @@ public class MiningManager
 			{
 				miningFortune += (miningFortuneEffect.getAmplifier() + 1) * 0.05;
 			}
-			if (toolId == CustomMaterial.MITHRIL_PICKAXE && blockId == CustomMaterial.MITHRIL_ORE)
-			{
-				miningFortune += 0.15f;
-			}
-			if (toolId == CustomMaterial.TITANIUM_PICKAXE && blockId == CustomMaterial.TITANIUM_ORE)
-			{
-				miningFortune += 0.2f;
-			}
-			if (helmetType == CustomMaterial.MINER_HELMET)
-			{
-				miningFortune += 0.05f;
-			}
-			if (chestplateType == CustomMaterial.MINER_CHESTPLATE)
-			{
-				miningFortune += 0.1f;
-			}
-			if (leggingsType == CustomMaterial.MINER_LEGGINGS)
-			{
-				miningFortune += 0.05f;
-			}
-			if (bootsType == CustomMaterial.MINER_BOOTS)
-			{
-				miningFortune += 0.05f;
-			}
-			if (helmetType == CustomMaterial.MINDAS_HELMET)
-			{
-				miningFortune += 0.8f;
-			}
-			if (chestplateType == CustomMaterial.MINDAS_CHESTPLATE)
-			{
-				miningFortune += 1.2f;
-			}
-			if (leggingsType == CustomMaterial.MINDAS_LEGGINGS)
-			{
-				miningFortune += 1.1f;
-			}
-			if (bootsType == CustomMaterial.MINDAS_BOOTS)
-			{
-				miningFortune += 1f;
-			}
+//			if (toolId == CustomMaterial.MITHRIL_PICKAXE && blockId == CustomMaterial.MITHRIL_ORE)
+//			{
+//				miningFortune += 0.15f;
+//			}
+//			if (toolId == CustomMaterial.TITANIUM_PICKAXE && blockId == CustomMaterial.TITANIUM_ORE)
+//			{
+//				miningFortune += 0.2f;
+//			}
+//			if (helmetType == CustomMaterial.MINER_HELMET)
+//			{
+//				miningFortune += 0.05f;
+//			}
+//			if (chestplateType == CustomMaterial.MINER_CHESTPLATE)
+//			{
+//				miningFortune += 0.1f;
+//			}
+//			if (leggingsType == CustomMaterial.MINER_LEGGINGS)
+//			{
+//				miningFortune += 0.05f;
+//			}
+//			if (bootsType == CustomMaterial.MINER_BOOTS)
+//			{
+//				miningFortune += 0.05f;
+//			}
+//			if (helmetType == CustomMaterial.MINDAS_HELMET)
+//			{
+//				miningFortune += 0.8f;
+//			}
+//			if (chestplateType == CustomMaterial.MINDAS_CHESTPLATE)
+//			{
+//				miningFortune += 1.2f;
+//			}
+//			if (leggingsType == CustomMaterial.MINDAS_LEGGINGS)
+//			{
+//				miningFortune += 1.1f;
+//			}
+//			if (bootsType == CustomMaterial.MINDAS_BOOTS)
+//			{
+//				miningFortune += 1f;
+//			}
 			int enchantHarvestingLevel = CustomEnchant.isEnabled() && itemStack.hasItemMeta() && itemStack.getItemMeta().hasEnchants() ? itemStack.getItemMeta()
 					.getEnchantLevel(CustomEnchant.HARVESTING) : 0;
 			if (enchantHarvestingLevel > 0)
@@ -1232,10 +1232,10 @@ public class MiningManager
 
 		// 기타 처리
 		{
-			if (Math.random() > 0.95 && toolId == CustomMaterial.TODWOT_PICKAXE)
-			{
-				drops.add(new ItemStack(Material.BONE));
-			}
+//			if (Math.random() > 0.95 && toolId == CustomMaterial.TODWOT_PICKAXE)
+//			{
+//				drops.add(new ItemStack(Material.BONE));
+//			}
 		}
 
 		// TODO: implement later commented since 2024.05.22
@@ -1272,21 +1272,21 @@ public class MiningManager
 			Material material = drops.isEmpty() ? null : drops.get(0).getType();
 			if (customMaterial != null)
 			{
-				switch (customMaterial)
-				{
-					case MITHRIL_ORE, MITHRIL_INGOT, TITANIUM_ORE, TITANIUM_INGOT, AMBER, JADE, MORGANITE, RUBY, TOPAZ, SHROOMITE_ORE, SHROOMITE_INGOT, TUNGSTEN_INGOT,
-							 TUNGSTEN_ORE, COBALT_INGOT, COBALT_ORE, CUCUMBERITE_INGOT, CUCUMBERITE_ORE, LEAD_ORE, NAUTILITE_ORE, PLATINUM_ORE, TIN_ORE, PLASTIC_DEBRIS,
-							 BRONZE_INGOT, LEAD_INGOT, NAUTILITE_INGOT, PLATINUM_INGOT, TIN_INGOT ->
-					{
-					}
-					default ->
-					{
-						if (!customMaterial.toString().startsWith("ENCHANTED_"))
-						{
-							miningFortune = 1f;
-						}
-					}
-				}
+//				switch (customMaterial)
+//				{
+//					case MITHRIL_ORE, MITHRIL_INGOT, TITANIUM_ORE, TITANIUM_INGOT, AMBER, JADE, MORGANITE, RUBY, TOPAZ, SHROOMITE_ORE, SHROOMITE_INGOT, TUNGSTEN_INGOT,
+//							 TUNGSTEN_ORE, COBALT_INGOT, COBALT_ORE, CUCUMBERITE_INGOT, CUCUMBERITE_ORE, LEAD_ORE, NAUTILITE_ORE, PLATINUM_ORE, TIN_ORE, PLASTIC_DEBRIS,
+//							 BRONZE_INGOT, LEAD_INGOT, NAUTILITE_INGOT, PLATINUM_INGOT, TIN_INGOT ->
+//					{
+//					}
+//					default ->
+//					{
+//						if (!customMaterial.toString().startsWith("ENCHANTED_"))
+//						{
+//							miningFortune = 1f;
+//						}
+//					}
+//				}
 			}
 			else if (material != null)
 			{
@@ -1373,10 +1373,10 @@ public class MiningManager
 		}
 
 		// SUS
-		if (!drop.isEmpty() && CustomMaterial.itemStackOf(drop.get(0)) == CustomMaterial.SUS)
-		{
-			miningSpeed = 50f;
-		}
+//		if (!drop.isEmpty() && CustomMaterial.itemStackOf(drop.get(0)) == CustomMaterial.SUS)
+//		{
+//			miningSpeed = 50f;
+//		}
 
 		if (!player.getWorld().getGameRuleValue(GameRule.DO_TILE_DROPS))
 		{

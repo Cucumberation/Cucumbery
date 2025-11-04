@@ -1,12 +1,10 @@
 package com.jho5245.cucumbery.util.itemlore;
 
-import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.no_groups.Method2;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemCategory;
-import de.tr7zw.changeme.nbtapi.NBTCompound;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -26,7 +24,7 @@ public class ItemLore2Durability
                                     @NotNull List<Component> lore,
                                     boolean isDrill, boolean hideDurability, boolean hideDurabilityChanceNotToConsume)
   {
-    if (customMaterial != CustomMaterial.UNBINDING_SHEARS)
+//    if (customMaterial != CustomMaterial.UNBINDING_SHEARS)
     {
       if (itemMeta.isUnbreakable())
       {

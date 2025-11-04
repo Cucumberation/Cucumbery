@@ -2,23 +2,20 @@ package com.jho5245.cucumbery.util.itemlore;
 
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
-import com.jho5245.cucumbery.custom.custommaterial.CustomMaterialNew;
+import com.jho5245.cucumbery.custom.custommaterial.CustomMaterial;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
-import com.jho5245.cucumbery.util.no_groups.ItemSerializer;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Constant.CucumberyHideFlag;
 import com.jho5245.cucumbery.util.storage.data.Constant.ExtraTag;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemCategory;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemCategory.Rarity;
 import de.tr7zw.changeme.nbtapi.*;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TranslatableComponent;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.format.TextDecoration.State;
 import org.bukkit.Bukkit;
@@ -32,7 +29,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -99,32 +95,32 @@ public class ItemLore
 		}
 		Material type = itemStack.getType();
 		NBTItem nbtItem = new NBTItem(itemStack);
-		String customType = NBT.get(itemStack, nbt ->
-		{
-			return nbt.getString(CustomMaterial.IDENDTIFER);
-		});
-		CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
-		{
-			try
-			{
-				type = Material.valueOf(customType.toUpperCase());
-			}
-			catch (Exception ignored)
-			{
-
-			}
-		}
-		if (customMaterial != null)
-		{
-			ItemLoreCustomItem.itemLore(itemStack, customMaterial);
-			itemMeta = itemStack.getItemMeta();
-		}
-		if (!customType.isEmpty())
-		{
-			ItemLoreCustomItem.itemLore(itemStack, nbtItem, customType);
-			itemMeta = itemStack.getItemMeta();
-		}
-		CustomMaterialNew customMaterialNew = CustomMaterialNew.itemStackOf(itemStack);
+//		String customType = NBT.get(itemStack, nbt ->
+//		{
+//			return nbt.getString(com.jho5245.cucumbery.util.storage.data.CustomMaterial.IDENDTIFER);
+//		});
+//		com.jho5245.cucumbery.util.storage.data.CustomMaterial customMaterial = com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(itemStack);
+//		{
+//			try
+//			{
+//				type = Material.valueOf(customType.toUpperCase());
+//			}
+//			catch (Exception ignored)
+//			{
+//
+//			}
+//		}
+//		if (customMaterial != null)
+//		{
+//			ItemLoreCustomItem.itemLore(itemStack, customMaterial);
+//			itemMeta = itemStack.getItemMeta();
+//		}
+//		if (!customType.isEmpty())
+//		{
+//			ItemLoreCustomItem.itemLore(itemStack, nbtItem, customType);
+//			itemMeta = itemStack.getItemMeta();
+//		}
+		CustomMaterial customMaterialNew = CustomMaterial.itemStackOf(itemStack);
 		if (customMaterialNew != null)
 		{
 			Player player = params instanceof Player p ? p : params instanceof ItemLoreView view ? view.getPlayer() : null;
@@ -191,40 +187,40 @@ public class ItemLore
 		{
 			itemGroup = ComponentUtil.translate(type.translationKey());
 		}
-		if (customMaterial != null)
-		{
-			itemGroup = ComponentUtil.translate(customMaterial.getCategory());
-			rarity = customMaterial.getRarity();
-		}
+//		if (customMaterial != null)
+//		{
+//			itemGroup = ComponentUtil.translate(customMaterial.getCategory());
+//			rarity = customMaterial.getRarity();
+//		}
 		if (customMaterialNew != null)
 		{
 			itemGroup = customMaterialNew.getCategory();
 			rarity = customMaterialNew.getRarity();
 		}
-		if (!customType.isEmpty())
-		{
-			try
-			{
-				ConfigurationSection root = Variable.customItemsConfig.getConfigurationSection(customType);
-				if (root != null)
-				{
-					String r = root.getString("Rarity");
-					if (r != null)
-					{
-						rarity = Rarity.valueOf(r);
-					}
-					String g = root.getString("ItemGroup");
-					if (g != null)
-					{
-						itemGroup = ComponentUtil.translate(g, true);
-					}
-				}
-			}
-			catch (Exception ignored)
-			{
-
-			}
-		}
+//		if (!customType.isEmpty())
+//		{
+//			try
+//			{
+//				ConfigurationSection root = Variable.customItemsConfig.getConfigurationSection(customType);
+//				if (root != null)
+//				{
+//					String r = root.getString("Rarity");
+//					if (r != null)
+//					{
+//						rarity = Rarity.valueOf(r);
+//					}
+//					String g = root.getString("ItemGroup");
+//					if (g != null)
+//					{
+//						itemGroup = ComponentUtil.translate(g, true);
+//					}
+//				}
+//			}
+//			catch (Exception ignored)
+//			{
+//
+//			}
+//		}
 		// 아이템의 등급(숫자)
 		long rarityValue = rarity.getRarityValue();
 		// 기본 설명 추가(공백, 종류, 등급)
@@ -257,7 +253,7 @@ public class ItemLore
 		if (!NBTAPI.arrayContainsValue(NBTAPI.getStringList(NBTAPI.getMainCompound(itemStack), CucumberyTag.HIDE_FLAGS_KEY),
 				CucumberyHideFlag.ORIGINAL_DISPLAY_NAME))
 		{
-			if (customMaterial != null)
+/*			if (customMaterial != null)
 			{
 				if (displayName != null && displayName.color() == null && displayName.decoration(TextDecoration.ITALIC) == State.NOT_SET)
 				{
@@ -265,9 +261,10 @@ public class ItemLore
 					defaultLore.add(ComponentUtil.translate("&7원래 아이템 이름 : %s", customMaterial.getDisplayName()));
 				}
 			}
-			else if (nbtItem.hasTag(CustomMaterial.IDENDTIFER) && !"".equals(nbtItem.getString(CustomMaterial.IDENDTIFER)))
+			else if (nbtItem.hasTag(com.jho5245.cucumbery.util.storage.data.CustomMaterial.IDENDTIFER) && !"".equals(nbtItem.getString(
+					com.jho5245.cucumbery.util.storage.data.CustomMaterial.IDENDTIFER)))
 			{
-				String id = nbtItem.getString(CustomMaterial.IDENDTIFER);
+				String id = nbtItem.getString(com.jho5245.cucumbery.util.storage.data.CustomMaterial.IDENDTIFER);
 				ConfigurationSection section = Variable.customItemsConfig.getConfigurationSection(id);
 				if (section != null)
 				{
@@ -284,7 +281,7 @@ public class ItemLore
 					}
 				}
 			}
-			else if (itemMeta.hasDisplayName() && !nbtItem.hasTag("block_location_info"))
+			else */if (itemMeta.hasDisplayName() && !nbtItem.hasTag("block_location_info"))
 			{
 				ItemStack clone = itemStack.clone();
 				ItemMeta cloneMeta = clone.getItemMeta();

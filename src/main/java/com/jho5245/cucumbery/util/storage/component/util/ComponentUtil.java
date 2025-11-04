@@ -6,7 +6,7 @@ import com.jho5245.cucumbery.custom.customeffect.CustomEffect.DisplayType;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.VanillaEffectDescription;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
-import com.jho5245.cucumbery.custom.custommaterial.CustomMaterialNew;
+import com.jho5245.cucumbery.custom.custommaterial.CustomMaterial;
 import com.jho5245.cucumbery.util.itemlore.ItemLoreUtil;
 import com.jho5245.cucumbery.util.no_groups.ItemSerializer;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
@@ -17,7 +17,6 @@ import com.jho5245.cucumbery.util.storage.component.ItemStackComponent;
 import com.jho5245.cucumbery.util.storage.component.LocationComponent;
 import com.jho5245.cucumbery.util.storage.component.util.sendercomponent.SenderComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
@@ -163,12 +162,12 @@ public class ComponentUtil
 						: ItemStackComponent.itemStackComponent(itemStack, 1, Constant.THE_COLOR, false, player);
 				component = component.append(concat);
 			}
-			else if (object instanceof CustomMaterial customMaterial)
+			else if (object instanceof com.jho5245.cucumbery.util.storage.data.CustomMaterial customMaterial)
 			{
 				Component concat = create(player, customMaterial.create());
 				component = component.append(concat);
 			}
-			else if (object instanceof CustomMaterialNew customMaterial)
+			else if (object instanceof CustomMaterial customMaterial)
 			{
 				Component concat = create(player, customMaterial.create());
 				component = component.append(concat);

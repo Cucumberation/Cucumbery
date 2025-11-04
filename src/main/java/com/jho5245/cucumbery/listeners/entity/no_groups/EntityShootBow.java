@@ -6,24 +6,21 @@ import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.children.group.DoubleCustomEffect;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
-import com.jho5245.cucumbery.util.no_groups.ItemSerializer;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Constant.RestrictionType;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.data.custom_enchant.CustomEnchant;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
-import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.*;
-import org.bukkit.entity.AbstractArrow.PickupStatus;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -122,7 +119,7 @@ public class EntityShootBow implements Listener
         }
       }
     }
-    CustomMaterial bowCustomMaterial = CustomMaterial.itemStackOf(bow);
+/*    CustomMaterial bowCustomMaterial = CustomMaterial.itemStackOf(bow);
     if (bowCustomMaterial != null)
     {
       switch (bowCustomMaterial)
@@ -313,7 +310,7 @@ public class EntityShootBow implements Listener
           event.setConsumeItem(true);
         }
       }
-    }
+    }*/
     int level = 0;
     if (CustomEffectManager.hasEffect(livingEntity, CustomEffectType.IDIOT_SHOOTER))
     {

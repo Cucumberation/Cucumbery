@@ -1,7 +1,6 @@
 package com.jho5245.cucumbery.util.itemlore;
 
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Bukkit;
@@ -27,37 +26,37 @@ public class ItemLore4
     }
     nbtCompound.removeKey(CucumberyTag.TMI_VANILLA_TAGS);
     NBTCompound customTags = nbtCompound.getCompound(CucumberyTag.TMI_CUSTOM_TAGS);
-    CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
-    if (customMaterial != null)
-    {
-      customTags = nbtCompound.addCompound(CucumberyTag.TMI_CUSTOM_TAGS);
-      switch (customMaterial)
-      {
-        case AMBER, JADE, MORGANITE, SAPPHIRE, TOPAZ -> customTags.setBoolean("gemstones", true);
-      }
-      if (customTags.getKeys().isEmpty())
-      {
-        nbtCompound.removeKey(CucumberyTag.TMI_CUSTOM_TAGS);
-      }
-      itemStack.setItemMeta(nbtItem.getItem().getItemMeta());
-      return;
-    }
-    if (customTags != null || nbtItem.hasTag(CustomMaterial.IDENDTIFER) && !"".equals(nbtItem.getString(CustomMaterial.IDENDTIFER)))
-    {
-      itemStack.setItemMeta(nbtItem.getItem().getItemMeta());
-      return;
-    }
+//    CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
+//    if (customMaterial != null)
+//    {
+//      customTags = nbtCompound.addCompound(CucumberyTag.TMI_CUSTOM_TAGS);
+//      switch (customMaterial)
+//      {
+//        case AMBER, JADE, MORGANITE, SAPPHIRE, TOPAZ -> customTags.setBoolean("gemstones", true);
+//      }
+//      if (customTags.getKeys().isEmpty())
+//      {
+//        nbtCompound.removeKey(CucumberyTag.TMI_CUSTOM_TAGS);
+//      }
+//      itemStack.setItemMeta(nbtItem.getItem().getItemMeta());
+//      return;
+//    }
+//    if (customTags != null || nbtItem.hasTag(CustomMaterial.IDENDTIFER) && !"".equals(nbtItem.getString(CustomMaterial.IDENDTIFER)))
+//    {
+//      itemStack.setItemMeta(nbtItem.getItem().getItemMeta());
+//      return;
+//    }
     NBTCompound vanillaTags = nbtCompound.addCompound(CucumberyTag.TMI_VANILLA_TAGS);
     Material type = itemStack.getType();
-    String customType = nbtItem.getString(CustomMaterial.IDENDTIFER);
-    try
-    {
-      type = Material.valueOf(customType.toUpperCase());
-    }
-    catch (Exception ignored)
-    {
-
-    }
+//    String customType = nbtItem.getString(CustomMaterial.IDENDTIFER);
+//    try
+//    {
+//      type = Material.valueOf(customType.toUpperCase());
+//    }
+//    catch (Exception ignored)
+//    {
+//
+//    }
     List<Tag<Material>> tags = new ArrayList<>();
     if (type.isBlock())
     {

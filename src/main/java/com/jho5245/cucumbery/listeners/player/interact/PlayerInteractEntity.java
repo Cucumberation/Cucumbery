@@ -49,8 +49,8 @@ public class PlayerInteractEntity implements Listener
     }
     EquipmentSlot hand = event.getHand();
     ItemStack item = player.getInventory().getItem(hand);
-    CustomMaterial customMaterial = CustomMaterial.itemStackOf(item);
-    Entity entity = event.getRightClicked();
+		Entity entity = event.getRightClicked();
+/*    CustomMaterial customMaterial = CustomMaterial.itemStackOf(item);
     if (customMaterial != null)
     {
       switch (customMaterial)
@@ -74,7 +74,7 @@ public class PlayerInteractEntity implements Listener
           }
         }
       }
-    }
+    }*/
     Material material = item.getType();
     EntityType entityType = entity.getType();
     if (entity instanceof Parrot)
