@@ -293,7 +293,7 @@
                             </mainClass>
                         </manifest>
                     </archive>
-                    <outputDirectory>G:\minecraft plugins</outputDirectory>
+                    <outputDirectory>C:\Users\samsung\Desktop\test_server_1.21.10\plugins</outputDirectory>
                 </configuration>
             </plugin>
             <plugin>

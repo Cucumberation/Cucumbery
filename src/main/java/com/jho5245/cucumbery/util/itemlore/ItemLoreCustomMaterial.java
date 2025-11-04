@@ -22,6 +22,7 @@ public class ItemLoreCustomMaterial
 		}
 		itemStack.setItemMeta(itemMeta);
 		ItemLoreCustomMaterialEvent event = new ItemLoreCustomMaterialEvent(player, itemStack);
-
+		event.callEvent();
+		itemStack.setItemMeta(event.getItemStack().getItemMeta());
 	}
 }
