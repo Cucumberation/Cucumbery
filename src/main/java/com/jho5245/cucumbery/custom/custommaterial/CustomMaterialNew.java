@@ -69,12 +69,12 @@ public class CustomMaterialNew implements Comparable<CustomMaterialNew>, Transla
 
 	private CustomMaterialNew(@NotNull String keyString, @NotNull Material displayMaterial, @NotNull String displayNameString, @NotNull Rarity rarity, @NotNull String categoryString)
 	{
-		this(keyString, Material.DEBUG_STICK, displayMaterial, ComponentUtil.translate(displayNameString), rarity, ComponentUtil.create(categoryString));
+		this(keyString, Material.DEBUG_STICK, displayMaterial, ComponentUtil.translate(displayNameString), rarity, ComponentUtil.translate(categoryString));
 	}
 
 	private CustomMaterialNew(@NotNull String keyString, @NotNull Material realMaterial, Material displayMaterial, @NotNull String displayNameString, @NotNull Rarity rarity, @NotNull String categoryString)
 	{
-		this(keyString, realMaterial, displayMaterial, ComponentUtil.translate(displayNameString), rarity, ComponentUtil.create(categoryString));
+		this(keyString, realMaterial, displayMaterial, ComponentUtil.translate(displayNameString), rarity, ComponentUtil.translate(categoryString));
 	}
 
 	private CustomMaterialNew(@NotNull String keyString, @NotNull Material realMaterial, Material displayMaterial, @NotNull Component displayName, @NotNull Rarity rarity, @NotNull Component category)
