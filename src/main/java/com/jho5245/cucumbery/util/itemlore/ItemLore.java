@@ -120,11 +120,11 @@ public class ItemLore
 //			ItemLoreCustomItem.itemLore(itemStack, nbtItem, customType);
 //			itemMeta = itemStack.getItemMeta();
 //		}
-		CustomMaterial customMaterialNew = CustomMaterial.itemStackOf(itemStack);
-		if (customMaterialNew != null)
+		CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
+		if (customMaterial != null)
 		{
 			Player player = params instanceof Player p ? p : params instanceof ItemLoreView view ? view.getPlayer() : null;
-			ItemLoreCustomMaterial.itemLore(player, itemStack, customMaterialNew);
+			ItemLoreCustomMaterial.itemLore(player, itemStack, customMaterial);
 			itemMeta = itemStack.getItemMeta();
 		}
 		boolean hasOnlyNbtTagLore =
@@ -192,10 +192,10 @@ public class ItemLore
 //			itemGroup = ComponentUtil.translate(customMaterial.getCategory());
 //			rarity = customMaterial.getRarity();
 //		}
-		if (customMaterialNew != null)
+		if (customMaterial != null)
 		{
-			itemGroup = customMaterialNew.getCategory();
-			rarity = customMaterialNew.getRarity();
+			itemGroup = customMaterial.getCategory();
+			rarity = customMaterial.getRarity();
 		}
 //		if (!customType.isEmpty())
 //		{

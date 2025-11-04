@@ -7,6 +7,8 @@ import com.jho5245.cucumbery.util.storage.no_groups.ItemCategory.Rarity;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import de.tr7zw.changeme.nbtapi.NBT;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.format.TextDecoration.State;
 import net.kyori.adventure.translation.Translatable;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -19,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class CustomMaterial implements Comparable<CustomMaterial>, Translatable
+public class CustomMaterial implements Translatable
 {
 	private static final HashMap<NamespacedKey, CustomMaterial> customMaterials = new HashMap<>();
 
@@ -158,7 +160,14 @@ public class CustomMaterial implements Comparable<CustomMaterial>, Translatable
 		this.key = key;
 		this.realMaterial = realMaterial;
 		this.displayMaterial = displayMaterial;
-		this.displayName = displayName;
+		if (displayName.decoration(TextDecoration.ITALIC) == State.FALSE)
+		{
+			this.displayName = displayName.decoration(TextDecoration.ITALIC, State.NOT_SET);
+		}
+		else
+		{
+			this.displayName = displayName;
+		}
 		this.rarity = rarity;
 		this.category = category;
 	}
@@ -280,12 +289,6 @@ public class CustomMaterial implements Comparable<CustomMaterial>, Translatable
 	public String toString()
 	{
 		return key.toString();
-	}
-
-	@Override
-	public int compareTo(@NotNull CustomMaterial o)
-	{
-		return key.compareTo(o.key);
 	}
 
 	/**
