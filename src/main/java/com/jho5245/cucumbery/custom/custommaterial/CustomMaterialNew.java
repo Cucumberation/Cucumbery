@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,10 +22,9 @@ public class CustomMaterialNew implements Comparable<CustomMaterialNew>, Transla
 {
 	private static final HashMap<NamespacedKey, CustomMaterialNew> customMaterials = new HashMap<>();
 
-	public static final CustomMaterialNew
-			TEST_ITEM = new CustomMaterialNew("test_item", Material.DIAMOND, "key:item.cucumbery.test_item|테스트 아이템", Rarity.NORMAL, "key:itemGroup.cucumbery_test_item|테스트 아이템"),
-			AMBER = new CustomMaterialNew("amber", Material.ORANGE_DYE, "key:item.cucumbery.amber|호박", Rarity.NORMAL, "key:itemGroup.cucumbery_test_item|테스트 아이템")
-			;
+	public static final CustomMaterialNew TEST_ITEM = new CustomMaterialNew("test_item", Material.DIAMOND, "key:item.cucumbery.test_item|테스트 아이템", Rarity.NORMAL,
+			"key:itemGroup.cucumbery_test_item|테스트 아이템"), AMBER = new CustomMaterialNew("amber", Material.ORANGE_DYE, "key:item.cucumbery.amber|호박", Rarity.NORMAL,
+			"key:itemGroup.cucumbery_test_item|테스트 아이템");
 
 	/**
 	 * Internal registriation. must NOT be called by other plugins!
@@ -37,6 +37,17 @@ public class CustomMaterialNew implements Comparable<CustomMaterialNew>, Transla
 	public static void unregister()
 	{
 		customMaterials.clear();
+	}
+
+	public static void unregister(Plugin plugin)
+	{
+		customMaterials.keySet().forEach(key ->
+		{
+			if (plugin.getName().equals(key.getNamespace()))
+			{
+				customMaterials.remove(key);
+			}
+		});
 	}
 
 	public static boolean register(CustomMaterialNew... customMaterialNew)
@@ -67,27 +78,32 @@ public class CustomMaterialNew implements Comparable<CustomMaterialNew>, Transla
 	private final Rarity rarity;
 	private final Component category;
 
-	private CustomMaterialNew(@NotNull String keyString, @NotNull Material displayMaterial, @NotNull String displayNameString, @NotNull Rarity rarity, @NotNull String categoryString)
+	private CustomMaterialNew(@NotNull String keyString, @NotNull Material displayMaterial, @NotNull String displayNameString, @NotNull Rarity rarity,
+			@NotNull String categoryString)
 	{
 		this(keyString, Material.DEBUG_STICK, displayMaterial, ComponentUtil.translate(displayNameString), rarity, ComponentUtil.translate(categoryString));
 	}
 
-	private CustomMaterialNew(@NotNull String keyString, @NotNull Material realMaterial, Material displayMaterial, @NotNull String displayNameString, @NotNull Rarity rarity, @NotNull String categoryString)
+	private CustomMaterialNew(@NotNull String keyString, @NotNull Material realMaterial, Material displayMaterial, @NotNull String displayNameString,
+			@NotNull Rarity rarity, @NotNull String categoryString)
 	{
 		this(keyString, realMaterial, displayMaterial, ComponentUtil.translate(displayNameString), rarity, ComponentUtil.translate(categoryString));
 	}
 
-	private CustomMaterialNew(@NotNull String keyString, @NotNull Material realMaterial, Material displayMaterial, @NotNull Component displayName, @NotNull Rarity rarity, @NotNull Component category)
+	private CustomMaterialNew(@NotNull String keyString, @NotNull Material realMaterial, Material displayMaterial, @NotNull Component displayName,
+			@NotNull Rarity rarity, @NotNull Component category)
 	{
 		this(new NamespacedKey("cucumbery", keyString), realMaterial, displayMaterial, displayName, rarity, category);
 	}
 
-	public CustomMaterialNew(@NotNull NamespacedKey key, @NotNull Material realMaterial, @NotNull Component displayName, @NotNull Rarity rarity, @NotNull Component category)
+	public CustomMaterialNew(@NotNull NamespacedKey key, @NotNull Material realMaterial, @NotNull Component displayName, @NotNull Rarity rarity,
+			@NotNull Component category)
 	{
 		this(key, realMaterial, null, displayName, rarity, category);
 	}
 
-	public CustomMaterialNew(@NotNull NamespacedKey key, @NotNull Material realMaterial, @Nullable Material displayMaterial, @NotNull Component displayName, @NotNull Rarity rarity, @NotNull Component category)
+	public CustomMaterialNew(@NotNull NamespacedKey key, @NotNull Material realMaterial, @Nullable Material displayMaterial, @NotNull Component displayName,
+			@NotNull Rarity rarity, @NotNull Component category)
 	{
 		this.key = key;
 		this.realMaterial = realMaterial;
@@ -104,6 +120,7 @@ public class CustomMaterialNew implements Comparable<CustomMaterialNew>, Transla
 
 	/**
 	 * minecraft:item_model component로 지정될 표시용 Material을 반환합니다.
+	 *
 	 * @return 표시용 Material, 없을 경우 <code>null</code>
 	 */
 	@Nullable
@@ -114,6 +131,7 @@ public class CustomMaterialNew implements Comparable<CustomMaterialNew>, Transla
 
 	/**
 	 * 실제 이 아이템의 Material을 반환합니다.
+	 *
 	 * @return 아이템의 실제 Material
 	 */
 	@NotNull
@@ -162,7 +180,8 @@ public class CustomMaterialNew implements Comparable<CustomMaterialNew>, Transla
 	public ItemStack create(int amount, boolean nbtOnly)
 	{
 		ItemStack itemStack = new ItemStack(realMaterial, amount);
-		NBT.modify(itemStack, nbt -> {
+		NBT.modify(itemStack, nbt ->
+		{
 			nbt.setString(IDENDTIFER, key.toString());
 		});
 		ItemLore.setItemLore(itemStack, nbtOnly);
@@ -177,8 +196,10 @@ public class CustomMaterialNew implements Comparable<CustomMaterialNew>, Transla
 	@Override
 	public boolean equals(Object o)
 	{
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
 		CustomMaterialNew that = (CustomMaterialNew) o;
 		return that.key.equals(this.key);
 	}
@@ -202,11 +223,9 @@ public class CustomMaterialNew implements Comparable<CustomMaterialNew>, Transla
 	}
 
 	/**
-	 * Gets the translation key.<p>
-	 * this will return <code>"(item|block).{@link NamespacedKey#getNamespace()}.{@link NamespacedKey#getKey()}"</code><p>
-	 *   Example: item.cucumbery.test_item for items, block.cucumbery.test_block for blocks.
+	 * Gets the translation key.<p> this will return <code>"(item|block).{@link NamespacedKey#getNamespace()}.{@link NamespacedKey#getKey()}"</code><p> Example:
+	 * item.cucumbery.test_item for items, block.cucumbery.test_block for blocks.
 	 * </p>
-	 *
 	 *
 	 * @return the translation key
 	 */
@@ -219,8 +238,10 @@ public class CustomMaterialNew implements Comparable<CustomMaterialNew>, Transla
 	@Nullable
 	public static CustomMaterialNew itemStackOf(@Nullable ItemStack itemStack)
 	{
-		if (!ItemStackUtil.itemExists(itemStack)) return null;
-		String rawKey = NBT.get(itemStack, nbt -> {
+		if (!ItemStackUtil.itemExists(itemStack))
+			return null;
+		String rawKey = NBT.get(itemStack, nbt ->
+		{
 			return nbt.getString(IDENDTIFER);
 		});
 		if (rawKey == null)
@@ -239,6 +260,7 @@ public class CustomMaterialNew implements Comparable<CustomMaterialNew>, Transla
 
 	/**
 	 * Gets all keys from registered custom materials.
+	 *
 	 * @return keyset from all registered custom material.
 	 */
 	@NotNull
@@ -249,6 +271,7 @@ public class CustomMaterialNew implements Comparable<CustomMaterialNew>, Transla
 
 	/**
 	 * Gets all registered custom materials.
+	 *
 	 * @return all registered custom materials
 	 */
 	@NotNull

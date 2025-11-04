@@ -22,6 +22,7 @@ import com.jho5245.cucumbery.custom.customeffect.children.group.DoubleCustomEffe
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCooldown;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeMinecraft;
+import com.jho5245.cucumbery.custom.custommaterial.CustomMaterialNew;
 import com.jho5245.cucumbery.events.addon.protocollib.OpenWindowMerchantEvent;
 import com.jho5245.cucumbery.events.addon.protocollib.SetCursorItemEvent;
 import com.jho5245.cucumbery.events.addon.protocollib.SetSlotEvent;
@@ -47,6 +48,8 @@ import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
 import de.tr7zw.changeme.nbtapi.*;
+import de.tr7zw.changeme.nbtapi.handler.NBTHandlers;
+import de.tr7zw.changeme.nbtapi.iface.NBTHandler;
 import net.kyori.adventure.dialog.DialogLike;
 import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
@@ -1949,6 +1952,7 @@ public class ProtocolLibManager
 		{
 			itemMeta.itemName(customMaterial.getDisplayName());
 		}
+		CustomMaterialNew customMaterialNew = CustomMaterialNew.itemStackOf(clone);
 
 		if (ignoreCreativeWhat && customMaterial != null)
 		{
@@ -2102,10 +2106,18 @@ public class ProtocolLibManager
 		if (showItemLore && UserData.SHOW_ITEM_COMPONENTS_INFO.getBoolean(player))
 		{
 			List<Component> componentLore = new ArrayList<>();
-			if (itemMeta.hasMaxStackSize())
-			{
-				componentLore.add(ComponentUtil.translate("&7최대 스택 크기 : %s", itemMeta.getMaxStackSize()));
-			}
+			NBT.getComponents(clone, nbt -> {
+				for (String key : nbt.getKeys())
+				{
+					NBTType nbtType = nbt.getType(key);
+					String value = String.valueOf(nbt.get(key, NBTHandlers.STORE_READWRITE_TAG));
+					if (value.length() > 60)
+					{
+						value = value.substring(0, 50) + " .. 외 %s글자 더..".formatted(value.length() - 50);
+					}
+					componentLore.add(ComponentUtil.translate("&7%s : %s - %s", key, value, nbtType));
+				}
+			});
 			if (!componentLore.isEmpty())
 			{
 				lore.add(Component.empty());
@@ -2163,6 +2175,21 @@ public class ProtocolLibManager
 					NamespacedKey itemModel = cloneMeta.getItemModel();
 					Material material = Method2.valueOf(itemModel != null ? itemModel.getKey().toUpperCase() : "", Material.class);
 					if (material != null)
+					{
+						cloneMeta.setItemModel(null);
+						clone.setItemMeta(cloneMeta);
+						clone.setType(material);
+					}
+				}
+			}
+			if (customMaterialNew != null && customMaterialNew.getRealMaterial() == Material.DEBUG_STICK)
+			{
+				ItemMeta cloneMeta = clone.getItemMeta();
+				if (cloneMeta.hasItemModel())
+				{
+					NamespacedKey itemModel = cloneMeta.getItemModel();
+					Material material = Method2.valueOf(itemModel != null ? itemModel.getKey().toUpperCase() : "", Material.class);
+					if (material == customMaterialNew.getDisplayMaterial() && material != null)
 					{
 						cloneMeta.setItemModel(null);
 						clone.setItemMeta(cloneMeta);
