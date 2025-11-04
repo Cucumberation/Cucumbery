@@ -6,6 +6,7 @@ import com.jho5245.cucumbery.custom.customeffect.CustomEffect.DisplayType;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.VanillaEffectDescription;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
+import com.jho5245.cucumbery.custom.custommaterial.CustomMaterialNew;
 import com.jho5245.cucumbery.util.itemlore.ItemLoreUtil;
 import com.jho5245.cucumbery.util.no_groups.ItemSerializer;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
@@ -163,6 +164,11 @@ public class ComponentUtil
 				component = component.append(concat);
 			}
 			else if (object instanceof CustomMaterial customMaterial)
+			{
+				Component concat = create(player, customMaterial.create());
+				component = component.append(concat);
+			}
+			else if (object instanceof CustomMaterialNew customMaterial)
 			{
 				Component concat = create(player, customMaterial.create());
 				component = component.append(concat);

@@ -1,9 +1,9 @@
 package com.jho5245.cucumbery;
 
-import com.destroystokyo.paper.profile.PlayerProfile;
 import com.jho5245.cucumbery.commands.sound.CommandSong;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
+import com.jho5245.cucumbery.custom.custommaterial.CustomMaterialNew;
 import com.jho5245.cucumbery.custom.custommerchant.MerchantData;
 import com.jho5245.cucumbery.deathmessages.CustomDeathMessage;
 import com.jho5245.cucumbery.util.addons.Songs;
@@ -132,8 +132,11 @@ public class Initializer
 		}
 	}
 
-	public static void loadCustomItems()
+	public static void loadCustomMaterials()
 	{
+		CustomMaterialNew.unregister();
+		CustomMaterialNew.register();
+
 		File file = new File(Cucumbery.getPlugin().getDataFolder() + "/CustomItems.yml");
 		if (!file.exists())
 		{
@@ -304,7 +307,7 @@ public class Initializer
 	{
 		loadDeathMessagesConfig();
 		loadLang();
-		loadCustomItems();
+		loadCustomMaterials();
 		loadCustomEffects();
 		loadCustomRecipes();
 		Variable.craftingTime.clear();

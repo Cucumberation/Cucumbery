@@ -149,7 +149,7 @@ public class CommandCucumbery implements CucumberyCommandExecutor
         Constant.ERROR_SOUND_VOLUME = Cucumbery.config.getDouble("sound-const.error-sound.volume");
         Initializer.loadLang();
         Initializer.loadDeathMessagesConfig();
-        Initializer.loadCustomItems();
+        Initializer.loadCustomMaterials();
         for (Player player : Bukkit.getOnlinePlayers())
         {
           ItemStackUtil.updateInventory(player);
