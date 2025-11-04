@@ -1,9 +1,5 @@
 package com.jho5245.cucumbery.listeners.player.item;
 
-import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
-import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
-import com.jho5245.cucumbery.util.no_groups.MessageUtil;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import io.papermc.paper.event.player.PlayerStopUsingItemEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

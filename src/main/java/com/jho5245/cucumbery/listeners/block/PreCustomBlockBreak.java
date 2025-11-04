@@ -2,7 +2,6 @@ package com.jho5245.cucumbery.listeners.block;
 
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.events.block.PreCustomBlockBreakEvent;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,7 +28,6 @@ public class PreCustomBlockBreak implements Listener
     Player player = event.getPlayer();
     ItemStack itemStack = player.getInventory().getItemInMainHand();
     Material material = itemStack.getType();
-    CustomMaterial customMaterial = CustomMaterial.itemStackOf(itemStack);
     if (!material.isAir())
     {
       switch (material)

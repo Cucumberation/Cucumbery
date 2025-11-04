@@ -10,7 +10,6 @@ import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Constant.CucumberyHideFlag;
 import com.jho5245.cucumbery.util.storage.data.Constant.ExtraTag;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemCategory;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemCategory.Rarity;
@@ -45,7 +44,7 @@ public class ItemLore2
 		Player viewer = params instanceof ItemLoreView view ? view.player() : null;
 		Material type = item.getType();
 		NBTItem nbtItem = new NBTItem(item.clone());
-		String customType = nbtItem.getString(CustomMaterial.IDENDTIFER);
+/*		String customType = nbtItem.getString(CustomMaterial.IDENDTIFER);
 		// CustomMaterial read
 		final CustomMaterial customMaterial = CustomMaterial.itemStackOf(item);
 		{
@@ -57,7 +56,7 @@ public class ItemLore2
 			{
 
 			}
-		}
+		}*/
 		// 아이템 태그
 		@Nullable NBTCompound itemTag = nbtItem.getCompound(CucumberyTag.KEY_MAIN);
 		if (lore == null)
@@ -140,7 +139,7 @@ public class ItemLore2
 		boolean hideBlockData = hideFlagsTagExists && NBTAPI.arrayContainsValue(hideFlags, CucumberyHideFlag.BLOCK_DATA);
 		boolean hideBlockState = hideFlagsTagExists && NBTAPI.arrayContainsValue(hideFlags, CucumberyHideFlag.BLOCK_STATE);
 		// 내구도 설명
-		ItemLore2Durability.setItemLore(item, type, customMaterial, itemMeta, lore, false, hideDurability, hideDurabilityChanceNotToConsume);
+		ItemLore2Durability.setItemLore(item, type, itemMeta, lore, false, hideDurability, hideDurabilityChanceNotToConsume);
 		// 모루 사용 횟수 설명
 		ItemLore2Anvil.setItemLore(item, type, itemMeta, lore);
 		// 커스텀 채광 - 채광 등급/속도/행운 설명
@@ -148,21 +147,21 @@ public class ItemLore2
 		// 인챈트된 아이템/마법이 부여된 책 설명 추가
 		ItemLore2Enchant.setItemLore(item, type, itemMeta, lore, viewer, hideEnchant, eventAccessMode);
 		// Custom Material일 경우애만 추가할 아이템 설명
-		if (customMaterial != null)
-		{
-			ItemLore2CustomMaterial.setItemLore(viewer, customMaterial, item, itemMeta, lore);
-		}
+//		if (customMaterial != null)
+//		{
+//			ItemLore2CustomMaterial.setItemLore(viewer, item, itemMeta, lore);
+//		}
 		// Attribute 설명
 		ItemLore2Attribute.setItemLore(type, item, itemMeta, lore, hideAttributes);
 		// 음식 추가 상태 효과
 		ItemLore2Food.setItemLore(item, type, lore, viewer, hideStatusEffects);
 		// Custom Material이 아닌 경우에만 추가할 아이템 설명
-		if (customMaterial == null)
+//		if (customMaterial == null)
 		{
 			ItemLore2Meta.setItemLore(viewer, item, type, itemMeta, lore, nbtItem, hideFlags, hideBlockData, hideStatusEffects, params);
 		}
 		// custom material 유무에 상관 없이 아이템 설명 추가
-		ItemLore2Meta2.setItemLore(item, type, customMaterial, itemMeta, lore, nbtItem, hideFireworkEffects);
+		ItemLore2Meta2.setItemLore(item, type, itemMeta, lore, nbtItem, hideFireworkEffects);
 		// 생성 알 설명
 		ItemLoreSpawnEgg.setItemLore(item, itemMeta, lore, viewer);
 		// 블록 엔티티 태그 설명
@@ -390,10 +389,10 @@ public class ItemLore2
 		// 추가 설명으로 인한 아이템의 등급 수치 변경
 		long rarity2 = ItemLoreUtil.getItemRarityValue(lore);
 		Rarity rarity = Rarity.getRarityFromValue(rarity2);
-		if (customMaterial != null && customMaterial.getRarity().toString().startsWith("_"))
-		{
-			rarity = customMaterial.getRarity();
-		}
+//		if (customMaterial != null && customMaterial.getRarity().toString().startsWith("_"))
+//		{
+//			rarity = customMaterial.getRarity();
+//		}
 		if (ItemCategory.getItemRarirty(type).toString().startsWith("_"))
 		{
 			rarity = ItemCategory.getItemRarirty(type);

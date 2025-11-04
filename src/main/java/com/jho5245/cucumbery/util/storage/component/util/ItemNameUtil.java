@@ -1,6 +1,5 @@
 package com.jho5245.cucumbery.util.storage.component.util;
 
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import de.tr7zw.changeme.nbtapi.NBT;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -76,23 +75,6 @@ public class ItemNameUtil
 	 */
 	@NotNull
 	public static Component itemName(@NotNull ItemStack itemStack, @Nullable TextColor defaultColor)
-	{
-		return itemName(itemStack, defaultColor, false);
-	}
-
-	/**
-	 * 아이템의 이름을 컴포넌트 형태로 반환합니다.
-	 *
-	 * @param itemStack
-	 * 		아이템
-	 * @param defaultColor
-	 * 		색상이 없을 경우 적용할 기본 값
-	 * @param respectCustomMaterial
-	 *    {@link CustomMaterial#getDisplayName()} 을 보전할 것인가?
-	 * @return 컴포넌트 형태의 아이템 이름
-	 */
-	@NotNull
-	public static Component itemName(@NotNull ItemStack itemStack, @Nullable TextColor defaultColor, boolean respectCustomMaterial)
 	{
 		Material material = itemStack.getType();
 		ItemMeta itemMeta = itemStack.getItemMeta();

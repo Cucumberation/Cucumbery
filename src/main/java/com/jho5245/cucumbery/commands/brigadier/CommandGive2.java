@@ -2,6 +2,7 @@ package com.jho5245.cucumbery.commands.brigadier;
 
 import com.jho5245.cucumbery.commands.brigadier.base.ArgumentUtil;
 import com.jho5245.cucumbery.commands.brigadier.base.CommandBase;
+import com.jho5245.cucumbery.custom.custommaterial.CustomMaterial;
 import com.jho5245.cucumbery.util.additemmanager.AddItemUtil;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
@@ -19,6 +20,7 @@ import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -48,8 +50,7 @@ public class CommandGive2 extends CommandBase
 				}
 			}
 		}
-		CustomMaterial[] customMaterials = CustomMaterial.values();
-		for (CustomMaterial customMaterial : customMaterials)
+		for (CustomMaterial customMaterial : CustomMaterial.values())
 		{
 			map.put(customMaterial.toString().toLowerCase(), ComponentUtil.serialize(customMaterial.getDisplayName()));
 		}
@@ -155,8 +156,9 @@ public class CommandGive2 extends CommandBase
 	{
 		try
 		{
-			CustomMaterial customMaterial = CustomMaterial.valueOf(customType.toUpperCase());
-			ItemStack itemStack = new ItemStack(customMaterial.getDisplayMaterial());
+			String[] split = customType.split(":");
+			CustomMaterial customMaterial = CustomMaterial.getByKey(new NamespacedKey(split[0], split[1]));
+			ItemStack itemStack = new ItemStack(customMaterial.getRealMaterial());
 			NBTItem nbtItem = new NBTItem(itemStack, true);
 			nbtItem.setString(CustomMaterial.IDENDTIFER, customMaterial.toString().toLowerCase());
 			return itemStack;

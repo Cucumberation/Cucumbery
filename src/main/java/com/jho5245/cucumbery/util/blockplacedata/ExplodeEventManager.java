@@ -1,7 +1,6 @@
 package com.jho5245.cucumbery.util.blockplacedata;
 
 import com.jho5245.cucumbery.custom.customeffect.custom_mining.MiningManager;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.NBTType;
@@ -11,8 +10,6 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public class ExplodeEventManager

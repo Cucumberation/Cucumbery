@@ -42,11 +42,12 @@ public class CustomMaterial implements Comparable<CustomMaterial>, Translatable
 		customMaterials.clear();
 	}
 
+	@SuppressWarnings("unused")
 	public static void unregister(Plugin plugin)
 	{
 		customMaterials.keySet().forEach(key ->
 		{
-			if (plugin.getName().equals(key.getNamespace()))
+			if (plugin.getName().equalsIgnoreCase(key.getNamespace()))
 			{
 				customMaterials.remove(key);
 			}
@@ -89,18 +90,6 @@ public class CustomMaterial implements Comparable<CustomMaterial>, Translatable
 	private CustomMaterial(@NotNull Material displayMaterial, @NotNull String displayNameString, @NotNull String categoryString)
 	{
 		this(displayNameString.split("cucumbery\\.")[1].split("\\|")[0], Material.DEBUG_STICK, displayMaterial, displayNameString, Rarity.NORMAL, categoryString);
-	}
-
-	private CustomMaterial(@NotNull Material displayMaterial, @NotNull String displayNameString, @NotNull Rarity rarity, @NotNull String categoryString)
-	{
-		this(displayNameString.split("cucumbery\\.")[1].split("\\|")[0], Material.DEBUG_STICK, displayMaterial, ComponentUtil.translate(displayNameString), rarity,
-				ComponentUtil.translate(categoryString));
-	}
-
-	private CustomMaterial(@NotNull String keyString, @NotNull Material displayMaterial, @NotNull String displayNameString, @NotNull Rarity rarity,
-			@NotNull String categoryString)
-	{
-		this(keyString, Material.DEBUG_STICK, displayMaterial, ComponentUtil.translate(displayNameString), rarity, ComponentUtil.translate(categoryString));
 	}
 
 	private CustomMaterial(@NotNull Material displayMaterial, @NotNull String displayNameString, @NotNull Rarity rarity,

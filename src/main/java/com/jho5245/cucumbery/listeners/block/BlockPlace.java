@@ -216,7 +216,7 @@ public class BlockPlace implements Listener
 			Bukkit.getServer().getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> player.getInventory().setItem(event.getHand(), finalItem), 0L);
 		}
 
-		CustomMaterial customMaterial = CustomMaterial.itemStackOf(item);
+//		CustomMaterial customMaterial = CustomMaterial.itemStackOf(item);
 /*		if (customMaterial == CustomMaterial.REDSTONE_BLOCK_INSTA_BREAK)
 		{
 			Location locationClone = location.clone().add(0.5, 0.5, 0.5);

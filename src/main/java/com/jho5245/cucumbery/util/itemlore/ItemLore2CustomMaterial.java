@@ -1,34 +1,17 @@
 package com.jho5245.cucumbery.util.itemlore;
 
-import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
-import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCustomMining;
-import com.jho5245.cucumbery.util.no_groups.Method;
-import com.jho5245.cucumbery.util.no_groups.Method2;
-import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
-import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
-import com.jho5245.cucumbery.util.storage.data.Constant;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
-import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
-import de.tr7zw.changeme.nbtapi.NBTCompound;
-import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.UUID;
 
 public class ItemLore2CustomMaterial
 {
-  protected static void setItemLore(@Nullable Player viewer, @NotNull CustomMaterial customMaterial, @NotNull ItemStack itemStack, @NotNull ItemMeta itemMeta, @NotNull List<Component> lore)
+  protected static void setItemLore(@Nullable Player viewer, @NotNull ItemStack itemStack, @NotNull ItemMeta itemMeta, @NotNull List<Component> lore)
   {
 //    ItemLoreView itemLoreView = viewer != null ? ItemLoreView.of(viewer) : null;
 //    NBTItem nbtItem = new NBTItem(itemStack);

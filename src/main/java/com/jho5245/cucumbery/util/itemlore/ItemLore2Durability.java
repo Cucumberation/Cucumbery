@@ -3,7 +3,6 @@ package com.jho5245.cucumbery.util.itemlore;
 import com.jho5245.cucumbery.util.no_groups.Method2;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemCategory;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
@@ -13,14 +12,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class ItemLore2Durability
 {
-  protected static void setItemLore(@NotNull ItemStack item, @NotNull Material type,
-                                    @Nullable CustomMaterial customMaterial, @NotNull ItemMeta itemMeta,
+  protected static void setItemLore(@NotNull ItemStack item, @NotNull Material type, @NotNull ItemMeta itemMeta,
                                     @NotNull List<Component> lore,
                                     boolean isDrill, boolean hideDurability, boolean hideDurabilityChanceNotToConsume)
   {

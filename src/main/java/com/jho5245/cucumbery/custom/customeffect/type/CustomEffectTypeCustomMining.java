@@ -1,13 +1,7 @@
 package com.jho5245.cucumbery.custom.customeffect.type;
 
 import com.jho5245.cucumbery.custom.customeffect.CustomEffect.DisplayType;
-import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
-import com.jho5245.cucumbery.util.storage.data.Constant;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
-import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 
 public class CustomEffectTypeCustomMining extends CustomEffectType

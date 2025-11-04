@@ -5,7 +5,6 @@ import com.jho5245.cucumbery.util.storage.component.ItemStackComponent;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant.RestrictionType;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.NBTType;
 import net.kyori.adventure.text.Component;
@@ -22,14 +21,13 @@ import org.bukkit.inventory.meta.trim.ArmorTrim;
 import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.inventory.meta.trim.TrimPattern;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ItemLore2Meta2
 {
-  protected static void setItemLore(@NotNull ItemStack item, @NotNull Material type, @Nullable CustomMaterial customMaterial, @NotNull ItemMeta itemMeta, @NotNull List<Component> lore, @NotNull NBTItem nbtItem, boolean hideFireworkEffects)
+  protected static void setItemLore(@NotNull ItemStack item, @NotNull Material type, @NotNull ItemMeta itemMeta, @NotNull List<Component> lore, @NotNull NBTItem nbtItem, boolean hideFireworkEffects)
   {
     switch (type)
     {
@@ -106,7 +104,7 @@ public class ItemLore2Meta2
           minExp = maxExp;
         }
         lore.add(ComponentUtil.translate("&7경험치 : %s", minExp != maxExp ? ComponentUtil.translate("&a%s~%s", minExp, maxExp) : "&a" + maxExp));
-        if (customMaterial == null)
+//        if (customMaterial == null)
         {
           ItemLoreUtil.setItemRarityValue(lore, (long) (minExp * 0.01 + maxExp * 0.001));
         }

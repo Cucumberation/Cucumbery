@@ -16,7 +16,6 @@ import com.jho5245.cucumbery.util.no_groups.PlaceHolderUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Constant.ExtraTag;
 import com.jho5245.cucumbery.util.storage.data.Constant.RestrictionType;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.data.custom_enchant.CustomEnchant;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
@@ -50,7 +49,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -910,7 +908,7 @@ public class MiningManager
 			return null;
 		}
 		// 커스텀 아이템 id
-		CustomMaterial toolId = CustomMaterial.itemStackOf(itemStack), blockId = !drops.isEmpty() ? CustomMaterial.itemStackOf(drops.get(0)) : null;
+//		CustomMaterial toolId = CustomMaterial.itemStackOf(itemStack), blockId = !drops.isEmpty() ? CustomMaterial.itemStackOf(drops.get(0)) : null;
 //		if (toolId == CustomMaterial.FLINT_SHOVEL && blockId == null && blockType == Material.GRAVEL)
 //		{
 //			drops.forEach(item ->
@@ -942,10 +940,10 @@ public class MiningManager
 		}
 
 		PlayerInventory playerInventory = player.getInventory();
-		CustomMaterial helmetType = CustomMaterial.itemStackOf(playerInventory.getHelmet());
-		CustomMaterial chestplateType = CustomMaterial.itemStackOf(playerInventory.getChestplate());
-		CustomMaterial leggingsType = CustomMaterial.itemStackOf(playerInventory.getLeggings());
-		CustomMaterial bootsType = CustomMaterial.itemStackOf(playerInventory.getBoots());
+//		CustomMaterial helmetType = CustomMaterial.itemStackOf(playerInventory.getHelmet());
+//		CustomMaterial chestplateType = CustomMaterial.itemStackOf(playerInventory.getChestplate());
+//		CustomMaterial leggingsType = CustomMaterial.itemStackOf(playerInventory.getLeggings());
+//		CustomMaterial bootsType = CustomMaterial.itemStackOf(playerInventory.getBoots());
 		// 채광 속도 처리
 		{
 			// 채광 속도 증가 (%영향을 받음)
@@ -1268,9 +1266,9 @@ public class MiningManager
 
 		// 일부 아이템은 채광 행운 미적용
 		{
-			CustomMaterial customMaterial = drops.isEmpty() ? null : CustomMaterial.itemStackOf(drops.get(0));
+//			CustomMaterial customMaterial = drops.isEmpty() ? null : CustomMaterial.itemStackOf(drops.get(0));
 			Material material = drops.isEmpty() ? null : drops.get(0).getType();
-			if (customMaterial != null)
+//			if (customMaterial != null)
 			{
 //				switch (customMaterial)
 //				{
@@ -1288,7 +1286,7 @@ public class MiningManager
 //					}
 //				}
 			}
-			else if (material != null)
+			if (material != null)
 			{
 				switch (material)
 				{
@@ -1403,40 +1401,40 @@ public class MiningManager
 		boolean toDefaultSpeed = false;
 		if (matchTools != null)
 		{
-			CustomMaterial customMaterial = CustomMaterial.itemStackOf(tool);
+//			CustomMaterial customMaterial = CustomMaterial.itemStackOf(tool);
 			switch (matchTools)
 			{
 				case "AXE" ->
 				{
 					toDefaultSpeed = !Tag.ITEMS_AXES.isTagged(tool.getType());
-					toDefaultSpeed = toDefaultSpeed || (customMaterial != null && !customMaterial.toString().endsWith("_AXE"));
+//					toDefaultSpeed = toDefaultSpeed || (customMaterial != null && !customMaterial.toString().endsWith("_AXE"));
 				}
 				case "PICKAXE" ->
 				{
 					toDefaultSpeed = !Tag.ITEMS_PICKAXES.isTagged(tool.getType());
-					toDefaultSpeed = toDefaultSpeed || (customMaterial != null && !customMaterial.toString().endsWith("_PICKAXE"));
+//					toDefaultSpeed = toDefaultSpeed || (customMaterial != null && !customMaterial.toString().endsWith("_PICKAXE"));
 				}
 				case "SHOVEL" ->
 				{
 					toDefaultSpeed = !Tag.ITEMS_SHOVELS.isTagged(tool.getType());
-					toDefaultSpeed = toDefaultSpeed || (customMaterial != null && !customMaterial.toString().endsWith("_SHOVEL"));
+//					toDefaultSpeed = toDefaultSpeed || (customMaterial != null && !customMaterial.toString().endsWith("_SHOVEL"));
 				}
 				case "SWORD" ->
 				{
 					toDefaultSpeed = !Tag.ITEMS_SWORDS.isTagged(tool.getType());
-					toDefaultSpeed = toDefaultSpeed || (customMaterial != null && !customMaterial.toString().endsWith("_SWORD"));
+//					toDefaultSpeed = toDefaultSpeed || (customMaterial != null && !customMaterial.toString().endsWith("_SWORD"));
 				}
 				case "HOE" ->
 				{
 					toDefaultSpeed = !Tag.ITEMS_HOES.isTagged(tool.getType());
-					toDefaultSpeed = toDefaultSpeed || (customMaterial != null && !customMaterial.toString().endsWith("_HOE"));
+//					toDefaultSpeed = toDefaultSpeed || (customMaterial != null && !customMaterial.toString().endsWith("_HOE"));
 				}
-				case "DRILL" -> toDefaultSpeed = customMaterial != null && !customMaterial.toString().endsWith("_DRILL");
+//				case "DRILL" -> toDefaultSpeed = customMaterial != null && !customMaterial.toString().endsWith("_DRILL");
 				case "MINING_TOOL" ->
 				{
 					toDefaultSpeed = !Tag.ITEMS_PICKAXES.isTagged(tool.getType());
-					toDefaultSpeed =
-							toDefaultSpeed || (customMaterial != null && !customMaterial.toString().endsWith("_PICKAXE") && !customMaterial.toString().endsWith("_DRILL"));
+//					toDefaultSpeed =
+//							toDefaultSpeed || (customMaterial != null && !customMaterial.toString().endsWith("_PICKAXE") && !customMaterial.toString().endsWith("_DRILL"));
 				}
 			}
 		}

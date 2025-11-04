@@ -13,7 +13,10 @@ import com.jho5245.cucumbery.util.no_groups.ItemSerializer;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
-import com.jho5245.cucumbery.util.storage.data.*;
+import com.jho5245.cucumbery.util.storage.data.Constant;
+import com.jho5245.cucumbery.util.storage.data.Permission;
+import com.jho5245.cucumbery.util.storage.data.Prefix;
+import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.data.custom_enchant.CustomEnchant;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
@@ -293,8 +296,8 @@ public class BlockBreak implements Listener
 			modified = true;
 		}
 
-		String toolId = ItemStackUtil.itemExists(itemStack) ? new NBTItem(itemStack).getString(CustomMaterial.IDENDTIFER) : "", blockId =
-				!drops.isEmpty() && ItemStackUtil.itemExists(drops.get(0)) ? new NBTItem(drops.get(0)).getString(CustomMaterial.IDENDTIFER) : "";
+//		String toolId = ItemStackUtil.itemExists(itemStack) ? new NBTItem(itemStack).getString(CustomMaterial.IDENDTIFER) : "", blockId =
+//				!drops.isEmpty() && ItemStackUtil.itemExists(drops.get(0)) ? new NBTItem(drops.get(0)).getString(CustomMaterial.IDENDTIFER) : "";
 /*		if (CustomMaterial.FLINT_SHOVEL.toString().equalsIgnoreCase(toolId) && blockId.isEmpty() && blockType == Material.GRAVEL)
 		{
 			modified = true;

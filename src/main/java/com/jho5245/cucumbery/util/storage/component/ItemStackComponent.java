@@ -23,7 +23,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.format.TextDecoration.State;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -38,7 +37,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
 
 public class ItemStackComponent
 {
@@ -98,7 +96,7 @@ public class ItemStackComponent
 		ItemLore.removeItemLore(itemStack);
 		final ItemStack giveItem = itemStack.clone();
 		itemStack.setAmount(Math.max(1, Math.min(64, itemStack.getAmount())));
-		Component itemName = ItemNameUtil.itemName(itemStack, defaultColor, false);
+		Component itemName = ItemNameUtil.itemName(itemStack, defaultColor);
 		ItemStack hover = new ItemStack(Material.BUNDLE);
 		BundleMeta bundleMeta = (BundleMeta) hover.getItemMeta();
 		if (viewer != null)

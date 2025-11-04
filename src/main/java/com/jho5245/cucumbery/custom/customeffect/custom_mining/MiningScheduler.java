@@ -13,7 +13,6 @@ import com.jho5245.cucumbery.util.blockplacedata.BlockPlaceDataConfig;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.TPSMeter;
 import com.jho5245.cucumbery.util.storage.data.Constant;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.data.custom_enchant.CustomEnchant;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
@@ -479,7 +478,7 @@ public class MiningScheduler
 			return;
 		}
 		List<ItemStack> drops = miningResult.drops();
-		CustomMaterial customMaterial = drops.isEmpty() ? null : CustomMaterial.itemStackOf(drops.getFirst());
+//		CustomMaterial customMaterial = drops.isEmpty() ? null : CustomMaterial.itemStackOf(drops.getFirst());
 		// sus
 //		boolean isSUS = !drops.isEmpty() && CustomMaterial.itemStackOf(drops.getFirst()) == CustomMaterial.SUS;
 		if (miningResult.blockTier() > miningResult.miningTier())
@@ -527,13 +526,13 @@ public class MiningScheduler
 			// 블록을 캤을 때 소리 재생 및 채광 모드 2/미복구일 경우 블록 파괴 파티클 처리
 			{
 				SoundGroup soundGroup = block.getBlockSoundGroup();
-				if (customMaterial != null)
-				{
-					switch (customMaterial)
-					{
-//						case RUBY, AMBER, JADE, SAPPHIRE, TOPAZ, MORGANITE -> soundGroup = Material.AMETHYST_CLUSTER.createBlockData().getSoundGroup();
-					}
-				}
+//				if (customMaterial != null)
+//				{
+//					switch (customMaterial)
+//					{
+////						case RUBY, AMBER, JADE, SAPPHIRE, TOPAZ, MORGANITE -> soundGroup = Material.AMETHYST_CLUSTER.createBlockData().getSoundGroup();
+//					}
+//				}
 				if (Variable.customMiningExtraBlocks.containsKey(location))
 				{
 					soundGroup = Variable.customMiningExtraBlocks.get(location).getSoundGroup();
@@ -752,7 +751,7 @@ public class MiningScheduler
 					{
 						Block block1 = locationClone.add(0, -1, 0).getBlock();
 						Material block1Type = block1.getType();
-						if ((block.getType() == Material.ICE && (block1Type.isSolid() || block1Type == Material.WATER) && drops.isEmpty() && customMaterial == null) || (
+						if ((block.getType() == Material.ICE && (block1Type.isSolid() || block1Type == Material.WATER) && drops.isEmpty()) || (
 								block.getBlockData() instanceof Waterlogged waterlogged && waterlogged.isWaterlogged()))
 						{
 							block.setType(Material.WATER, customBlockBreakEvent.isApplyPhysics());
@@ -805,10 +804,10 @@ public class MiningScheduler
 					}
 					else if (!drops.isEmpty() && !drops.getFirst().getType().isAir())
 					{
-						if (customMaterial != null)
-						{
-							switch (customMaterial)
-							{
+//						if (customMaterial != null)
+//						{
+//							switch (customMaterial)
+//							{
 //								case TUNGSTEN_INGOT, TUNGSTEN_ORE ->
 //								{
 //									if (CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_PREDEFINED_CUSTOM_ORE_CUCUMBERITES))
@@ -824,9 +823,9 @@ public class MiningScheduler
 //										}
 //									}
 //								}
-							}
-						}
-						else
+//							}
+//						}
+//						else
 						{
 							boolean hasAllowedBlocks = CustomEffectManager.hasEffect(player, CustomEffectTypeCustomMining.CUSTOM_MINING_SPEED_MODE_ALLOWED_BLOCKS);
 							boolean cobbleMode = Cucumbery.config.getBoolean("mining-mode-1-cobble-mode");

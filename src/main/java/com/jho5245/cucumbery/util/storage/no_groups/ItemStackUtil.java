@@ -856,20 +856,13 @@ public class ItemStackUtil
 	}
 
 	@NotNull
-	private static ItemStack getAnimatedItemStack(@Nullable Collection<ItemStack> itemStacks, @Nullable Collection<com.jho5245.cucumbery.util.storage.data.CustomMaterial> customMaterials,
+	private static ItemStack getAnimatedItemStack(@Nullable Collection<ItemStack> itemStacks,
 			@Nullable Collection<Material> materials)
 	{
 		List<ItemStack> newList = new ArrayList<>();
 		if (itemStacks != null)
 		{
 			newList.addAll(itemStacks);
-		}
-		if (customMaterials != null)
-		{
-			for (com.jho5245.cucumbery.util.storage.data.CustomMaterial customMaterial : customMaterials)
-			{
-				newList.add(customMaterial.create());
-			}
 		}
 		if (materials != null)
 		{
@@ -901,25 +894,25 @@ public class ItemStackUtil
 		try
 		{
 			NBTContainer nbtContainer = new NBTContainer(predicate);
-			String id = nbtContainer.getString(com.jho5245.cucumbery.util.storage.data.CustomMaterial.IDENDTIFER);
-			if (!id.isEmpty())
-			{
-				com.jho5245.cucumbery.util.storage.data.CustomMaterial customMaterial = com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(itemStack);
-				if (customMaterial != null)
-				{
-					itemStack = customMaterial.create();
-					display = customMaterial.getDisplayName();
-				}
-				else
-				{
-					ItemStack i = new ItemStack(Material.STONE);
-					NBTItem nbtItem = new NBTItem(i, true);
-					nbtItem.setString(com.jho5245.cucumbery.util.storage.data.CustomMaterial.IDENDTIFER, id);
-					itemStack = i;
-					display = i.getItemMeta().displayName();
-				}
-			}
-			else
+//			String id = nbtContainer.getString(com.jho5245.cucumbery.util.storage.data.CustomMaterial.IDENDTIFER);
+//			if (!id.isEmpty())
+//			{
+//				com.jho5245.cucumbery.util.storage.data.CustomMaterial customMaterial = com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(itemStack);
+//				if (customMaterial != null)
+//				{
+//					itemStack = customMaterial.create();
+//					display = customMaterial.getDisplayName();
+//				}
+//				else
+//				{
+//					ItemStack i = new ItemStack(Material.STONE);
+//					NBTItem nbtItem = new NBTItem(i, true);
+//					nbtItem.setString(com.jho5245.cucumbery.util.storage.data.CustomMaterial.IDENDTIFER, id);
+//					itemStack = i;
+//					display = i.getItemMeta().displayName();
+//				}
+//			}
+//			else
 			{
 				NBTCompound tmi = nbtContainer.getCompound(CucumberyTag.KEY_TMI);
 				if (tmi != null)
@@ -1268,10 +1261,6 @@ public class ItemStackUtil
 			{
 				continue;
 			}
-			if (com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(item) != null)
-			{
-				ItemLore.setItemLore(item, ItemLoreView.of(player));
-			}
 			if (CustomMaterial.itemStackOf(item) != null)
 			{
 				ItemLore.setItemLore(item, ItemLoreView.of(player));
@@ -1286,19 +1275,11 @@ public class ItemStackUtil
 			{
 				continue;
 			}
-			if (com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(item) != null)
-			{
-				ItemLore.setItemLore(item, ItemLoreView.of(player));
-			}
 			if (CustomMaterial.itemStackOf(item) != null)
 			{
 				ItemLore.setItemLore(item, ItemLoreView.of(player));
 			}
 			ItemLore.removeItemLore(item, RemoveFlag.create().removeItemFlags());
-		}
-		if (com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(player.getItemOnCursor()) != null)
-		{
-			player.setItemOnCursor(ItemLore.setItemLore(player.getItemOnCursor(), ItemLoreView.of(player)));
 		}
 		if (CustomMaterial.itemStackOf(player.getItemOnCursor()) != null)
 		{

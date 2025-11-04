@@ -162,7 +162,7 @@ public class ComponentUtil
 						: ItemStackComponent.itemStackComponent(itemStack, 1, Constant.THE_COLOR, false, player);
 				component = component.append(concat);
 			}
-			else if (object instanceof com.jho5245.cucumbery.util.storage.data.CustomMaterial customMaterial)
+			else if (object instanceof CustomMaterial customMaterial)
 			{
 				Component concat = create(player, customMaterial.create());
 				component = component.append(concat);

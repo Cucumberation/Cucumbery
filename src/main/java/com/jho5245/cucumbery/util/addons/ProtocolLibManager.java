@@ -2041,9 +2041,9 @@ public class ProtocolLibManager
 				String overrideItemStackString = nbtItem.getString("override_item_stack");
 				try
 				{
-					if (overrideItemStackString.startsWith("custom_material_"))
-						overrideItemStack = com.jho5245.cucumbery.util.storage.data.CustomMaterial.valueOf(overrideItemStackString.substring("custom_material_".length()))
-								.create();
+//					if (overrideItemStackString.startsWith("custom_material_"))
+//						overrideItemStack = com.jho5245.cucumbery.util.storage.data.CustomMaterial.valueOf(overrideItemStackString.substring("custom_material_".length()))
+//								.create();
 					if (overrideItemStackString.startsWith("material_"))
 						overrideItemStack = new ItemStack(Material.valueOf(overrideItemStackString.substring("material_".length())));
 				}

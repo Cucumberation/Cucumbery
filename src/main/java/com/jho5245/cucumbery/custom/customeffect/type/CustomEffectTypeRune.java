@@ -1,7 +1,6 @@
 package com.jho5245.cucumbery.custom.customeffect.type;
 
 import com.jho5245.cucumbery.custom.customeffect.CustomEffect.DisplayType;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 
 public class CustomEffectTypeRune extends CustomEffectType
 {

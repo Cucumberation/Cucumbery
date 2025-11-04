@@ -16,10 +16,12 @@ import com.jho5245.cucumbery.events.entity.EntityCustomEffectAbstractApplyEvent.
 import com.jho5245.cucumbery.util.itemlore.ItemLore2Attribute;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
-import com.jho5245.cucumbery.util.no_groups.*;
+import com.jho5245.cucumbery.util.no_groups.MessageUtil;
+import com.jho5245.cucumbery.util.no_groups.Method;
+import com.jho5245.cucumbery.util.no_groups.MythicMobManager;
+import com.jho5245.cucumbery.util.no_groups.NumberHangulConverter;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.data.custom_enchant.CustomEnchant;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
@@ -50,9 +52,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.BoundingBox;
-
-import java.util.function.Consumer;
-
 import org.bukkit.util.Transformation;
 import org.joml.Vector3f;
 
@@ -61,6 +60,7 @@ import java.math.RoundingMode;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
 public class EntityDamage implements Listener

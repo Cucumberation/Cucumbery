@@ -12,7 +12,6 @@ import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
-import com.jho5245.cucumbery.util.storage.data.CustomMaterial;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CreateItemStack;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
@@ -340,19 +339,19 @@ public class RecipeInventoryRecipe
 				if (ingredientString.startsWith("predicate:{id:"))
 				{
 					String id = ingredientString.substring("predicate:{id:".length(), ingredientString.length() - 1);
-					try
-					{
-						CustomMaterial customMaterial = CustomMaterial.valueOf(id);
-						ItemStack create = customMaterial.create();
-						ingredient.setItemMeta(create.getItemMeta());
-					}
-					catch (Exception e)
-					{
-						ItemStack itemStack = new ItemStack(Material.STONE);
-						NBTItem nbtItem = new NBTItem(itemStack, true);
-						nbtItem.setString(CustomMaterial.IDENDTIFER, id);
-						ingredient.setItemMeta(itemStack.getItemMeta());
-					}
+//					try
+//					{
+//						CustomMaterial customMaterial = CustomMaterial.valueOf(id);
+//						ItemStack create = customMaterial.create();
+//						ingredient.setItemMeta(create.getItemMeta());
+//					}
+//					catch (Exception e)
+//					{
+//						ItemStack itemStack = new ItemStack(Material.STONE);
+//						NBTItem nbtItem = new NBTItem(itemStack, true);
+//						nbtItem.setString(CustomMaterial.IDENDTIFER, id);
+//						ingredient.setItemMeta(itemStack.getItemMeta());
+//					}
 				}
 				playerAmount = ItemStackUtil.countItem(player.getInventory(), ingredientString.substring(10));
 			}

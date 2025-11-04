@@ -1,6 +1,7 @@
 package com.jho5245.cucumbery.commands.no_groups;
 
 import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent.Completion;
+import com.jho5245.cucumbery.custom.custommaterial.CustomMaterial;
 import com.jho5245.cucumbery.util.additemmanager.AddItemUtil;
 import com.jho5245.cucumbery.util.no_groups.*;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
@@ -10,6 +11,7 @@ import com.jho5245.cucumbery.util.storage.data.Variable;
 import de.tr7zw.changeme.nbtapi.NBT;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -41,8 +43,7 @@ public class CommandCgive implements CucumberyCommandExecutor
 				}
 			}
 		}
-		CustomMaterial[] customMaterials = CustomMaterial.values();
-		for (CustomMaterial customMaterial : customMaterials)
+		for (CustomMaterial customMaterial : CustomMaterial.values())
 		{
 			completions.add(Completion.completion(customMaterial.toString().toLowerCase(), customMaterial.getDisplayName()));
 		}
@@ -145,8 +146,9 @@ public class CommandCgive implements CucumberyCommandExecutor
 	{
 		try
 		{
-			CustomMaterial customMaterial = CustomMaterial.valueOf(customType.toUpperCase());
-			ItemStack itemStack = new ItemStack(customMaterial.getDisplayMaterial());
+			String[] split = customType.split(":");
+			CustomMaterial customMaterial = CustomMaterial.getByKey(new NamespacedKey(split[0], split[1]));
+			ItemStack itemStack = new ItemStack(customMaterial.getRealMaterial());
 			NBT.modify(itemStack, nbt ->
 			{
 				nbt.setString(CustomMaterial.IDENDTIFER, customMaterial.toString().toLowerCase());
