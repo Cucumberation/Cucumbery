@@ -49,6 +49,7 @@ import com.jho5245.cucumbery.listeners.hanging.HangingBreak;
 import com.jho5245.cucumbery.listeners.hanging.HangingBreakByEntity;
 import com.jho5245.cucumbery.listeners.hanging.HangingPlace;
 import com.jho5245.cucumbery.listeners.inventory.*;
+import com.jho5245.cucumbery.listeners.itemlore.ItemLore3;
 import com.jho5245.cucumbery.listeners.itemlore.ItemLoreCustomMaterial;
 import com.jho5245.cucumbery.listeners.player.bucket.PlayerBucketEmpty;
 import com.jho5245.cucumbery.listeners.player.bucket.PlayerBucketEntity;
@@ -966,6 +967,7 @@ public class Cucumbery extends JavaPlugin
 		Initializer.registerEvent(new PrepareSmithing());
 
 		// listener.itemlore
+		Initializer.registerEvent(new ItemLore3());
 		Initializer.registerEvent(new ItemLoreCustomMaterial());
 
 		// listener.player

@@ -175,7 +175,7 @@ public class ItemLore
 
 		// 아이템의 등급
 		Rarity rarity = ItemCategory.getItemRarirty(type);
-		TranslatableComponent itemGroup;
+		Component itemGroup;
 		CreativeCategory itemCategoryType = type.getCreativeCategory();
 		if (itemCategoryType == null)
 		{
@@ -195,6 +195,11 @@ public class ItemLore
 		{
 			itemGroup = ComponentUtil.translate(customMaterial.getCategory());
 			rarity = customMaterial.getRarity();
+		}
+		if (customMaterialNew != null)
+		{
+			itemGroup = customMaterialNew.getCategory();
+			rarity = customMaterialNew.getRarity();
 		}
 		if (!customType.isEmpty())
 		{
