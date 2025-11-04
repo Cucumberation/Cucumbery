@@ -124,10 +124,12 @@ public class ItemLore
 			itemMeta = itemStack.getItemMeta();
 		}
 		CustomMaterialNew customMaterialNew = CustomMaterialNew.itemStackOf(itemStack);
+		System.out.println("custom: " + customMaterialNew);
 		if (customMaterialNew != null)
 		{
 			Player player = params instanceof Player p ? p : params instanceof ItemLoreView view ? view.getPlayer() : null;
 			ItemLoreCustomMaterial.itemLore(player, itemStack, customMaterialNew);
+			itemMeta = itemStack.getItemMeta();
 		}
 		boolean hasOnlyNbtTagLore =
 				ItemLoreUtil.hasOnlyNbtTagLore(itemStack) || new NBTItem(itemStack).hasTag("NBTCopied") && new NBTItem(itemStack).getBoolean("NBTCopied");

@@ -23,7 +23,7 @@ public class CustomMaterialNew implements Comparable<CustomMaterialNew>, Transla
 
 	public static final CustomMaterialNew
 			TEST_ITEM = new CustomMaterialNew("test_item", Material.DIAMOND, "key:item.cucumbery.test_item|테스트 아이템", Rarity.NORMAL, "key:itemGroup.cucumbery_test_item|테스트 아이템"),
-			AMBER = new CustomMaterialNew("amber", Material.DIAMOND, "key:item.cucumbery.amber|호박", Rarity.NORMAL, "key:itemGroup.cucumbery_test_item|테스트 아이템")
+			AMBER = new CustomMaterialNew("amber", Material.ORANGE_DYE, "key:item.cucumbery.amber|호박", Rarity.NORMAL, "key:itemGroup.cucumbery_test_item|테스트 아이템")
 			;
 
 	/**
@@ -69,12 +69,12 @@ public class CustomMaterialNew implements Comparable<CustomMaterialNew>, Transla
 
 	private CustomMaterialNew(@NotNull String keyString, @NotNull Material displayMaterial, @NotNull String displayNameString, @NotNull Rarity rarity, @NotNull String categoryString)
 	{
-		this(keyString, Material.DEBUG_STICK, displayMaterial, ComponentUtil.create(displayNameString), rarity, ComponentUtil.create(categoryString));
+		this(keyString, Material.DEBUG_STICK, displayMaterial, ComponentUtil.translate(displayNameString), rarity, ComponentUtil.create(categoryString));
 	}
 
 	private CustomMaterialNew(@NotNull String keyString, @NotNull Material realMaterial, Material displayMaterial, @NotNull String displayNameString, @NotNull Rarity rarity, @NotNull String categoryString)
 	{
-		this(keyString, realMaterial, displayMaterial, ComponentUtil.create(displayNameString), rarity, ComponentUtil.create(categoryString));
+		this(keyString, realMaterial, displayMaterial, ComponentUtil.translate(displayNameString), rarity, ComponentUtil.create(categoryString));
 	}
 
 	private CustomMaterialNew(@NotNull String keyString, @NotNull Material realMaterial, Material displayMaterial, @NotNull Component displayName, @NotNull Rarity rarity, @NotNull Component category)
