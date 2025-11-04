@@ -11,6 +11,7 @@ import net.kyori.adventure.translation.Translatable;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.CreativeCategory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
@@ -18,20 +19,22 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class CustomMaterialNew implements Comparable<CustomMaterialNew>, Translatable
+public class CustomMaterial implements Comparable<CustomMaterial>, Translatable
 {
-	private static final HashMap<NamespacedKey, CustomMaterialNew> customMaterials = new HashMap<>();
+	private static final HashMap<NamespacedKey, CustomMaterial> customMaterials = new HashMap<>();
 
-	public static final CustomMaterialNew TEST_ITEM = new CustomMaterialNew("test_item", Material.DIAMOND, "key:item.cucumbery.test_item|테스트 아이템", Rarity.NORMAL,
-			"key:itemGroup.cucumbery_test_item|테스트 아이템"), AMBER = new CustomMaterialNew("amber", Material.ORANGE_DYE, "key:item.cucumbery.amber|호박", Rarity.NORMAL,
-			"key:itemGroup.cucumbery_test_item|테스트 아이템");
+	public static final CustomMaterial AMBER = new CustomMaterial(Material.ORANGE_DYE, "key:item.cucumbery.amber|호박",
+			"key:itemGroup.cucumbery_test_item|테스트 아이템"), WEATHER_FORECAST = new CustomMaterial(Material.ENDER_EYE, "key:item.cucumbery.weather_forecast|날씨를 알려주는 눈",
+			Rarity.ELITE, CreativeCategory.TOOLS), WNYNYA_ORE = new CustomMaterial(Material.BARRIER, Material.PLAYER_HEAD,
+			"rgb200,100,255;key:block.cucumbery.wnynya_ore|완YEE 광석", Rarity.RARE, "itemGroup.natural"), TEST_ITEM = new CustomMaterial(Material.DIAMOND,
+			"key:item.cucumbery.test_item|테스트 아이템", "key:itemGroup.cucumbery_test_item|테스트 아이템");
 
 	/**
 	 * Internal registriation. must NOT be called by other plugins!
 	 */
 	public static void register()
 	{
-		register(TEST_ITEM, AMBER);
+		register(AMBER, WEATHER_FORECAST, WNYNYA_ORE, TEST_ITEM);
 	}
 
 	public static void unregister()
@@ -50,10 +53,10 @@ public class CustomMaterialNew implements Comparable<CustomMaterialNew>, Transla
 		});
 	}
 
-	public static boolean register(CustomMaterialNew... customMaterialNew)
+	public static boolean register(CustomMaterial... customMaterial)
 	{
 		boolean success = true;
-		for (CustomMaterialNew newMaterial : customMaterialNew)
+		for (CustomMaterial newMaterial : customMaterial)
 		{
 			if (customMaterials.containsKey(newMaterial.key))
 			{
@@ -66,43 +69,101 @@ public class CustomMaterialNew implements Comparable<CustomMaterialNew>, Transla
 		return success;
 	}
 
-	public static CustomMaterialNew getByKey(@NotNull NamespacedKey key)
+	public static CustomMaterial getByKey(@NotNull NamespacedKey key)
 	{
 		return customMaterials.get(key);
 	}
 
 	public static final String IDENDTIFER = "internal_material_id";
+
 	private final NamespacedKey key;
+
 	private final Material realMaterial, displayMaterial;
+
 	private final Component displayName;
+
 	private final Rarity rarity;
+
 	private final Component category;
 
-	private CustomMaterialNew(@NotNull String keyString, @NotNull Material displayMaterial, @NotNull String displayNameString, @NotNull Rarity rarity,
+	private CustomMaterial(@NotNull Material displayMaterial, @NotNull String displayNameString, @NotNull String categoryString)
+	{
+		this(displayNameString.split("cucumbery\\.")[1].split("\\|")[0], Material.DEBUG_STICK, displayMaterial, displayNameString, Rarity.NORMAL, categoryString);
+	}
+
+	private CustomMaterial(@NotNull Material displayMaterial, @NotNull String displayNameString, @NotNull Rarity rarity, @NotNull String categoryString)
+	{
+		this(displayNameString.split("cucumbery\\.")[1].split("\\|")[0], Material.DEBUG_STICK, displayMaterial, ComponentUtil.translate(displayNameString), rarity,
+				ComponentUtil.translate(categoryString));
+	}
+
+	private CustomMaterial(@NotNull String keyString, @NotNull Material displayMaterial, @NotNull String displayNameString, @NotNull Rarity rarity,
 			@NotNull String categoryString)
 	{
 		this(keyString, Material.DEBUG_STICK, displayMaterial, ComponentUtil.translate(displayNameString), rarity, ComponentUtil.translate(categoryString));
 	}
 
-	private CustomMaterialNew(@NotNull String keyString, @NotNull Material realMaterial, Material displayMaterial, @NotNull String displayNameString,
+	private CustomMaterial(@NotNull Material displayMaterial, @NotNull String displayNameString, @NotNull Rarity rarity,
+			@NotNull CreativeCategory creativeCategory)
+	{
+		this(displayNameString.split("cucumbery\\.")[1].split("\\|")[0], Material.DEBUG_STICK, displayMaterial, ComponentUtil.translate(displayNameString), rarity,
+				ComponentUtil.translate(creativeCategory.translationKey()));
+	}
+
+	private CustomMaterial(@NotNull Material realMaterial, @NotNull Material displayMaterial, @NotNull String displayNameString, @NotNull Rarity rarity,
+			@NotNull String categoryString)
+	{
+		this(displayNameString.split("cucumbery\\.")[1].split("\\|")[0], realMaterial, displayMaterial, ComponentUtil.translate(displayNameString), rarity,
+				ComponentUtil.translate(categoryString));
+	}
+
+	private CustomMaterial(@NotNull String keyString, @NotNull Material realMaterial, Material displayMaterial, @NotNull String displayNameString,
 			@NotNull Rarity rarity, @NotNull String categoryString)
 	{
 		this(keyString, realMaterial, displayMaterial, ComponentUtil.translate(displayNameString), rarity, ComponentUtil.translate(categoryString));
 	}
 
-	private CustomMaterialNew(@NotNull String keyString, @NotNull Material realMaterial, Material displayMaterial, @NotNull Component displayName,
+	private CustomMaterial(@NotNull String keyString, @NotNull Material realMaterial, Material displayMaterial, @NotNull Component displayName,
 			@NotNull Rarity rarity, @NotNull Component category)
 	{
 		this(new NamespacedKey("cucumbery", keyString), realMaterial, displayMaterial, displayName, rarity, category);
 	}
 
-	public CustomMaterialNew(@NotNull NamespacedKey key, @NotNull Material realMaterial, @NotNull Component displayName, @NotNull Rarity rarity,
-			@NotNull Component category)
+	public CustomMaterial(@NotNull NamespacedKey key, @NotNull Material displayMaterial, @NotNull String displayNameString, @NotNull String categoryString)
 	{
-		this(key, realMaterial, null, displayName, rarity, category);
+		this(key, Material.DEBUG_STICK, displayMaterial, ComponentUtil.translate(displayNameString), Rarity.NORMAL, ComponentUtil.translate(categoryString));
 	}
 
-	public CustomMaterialNew(@NotNull NamespacedKey key, @NotNull Material realMaterial, @Nullable Material displayMaterial, @NotNull Component displayName,
+	public CustomMaterial(@NotNull NamespacedKey key, @NotNull Material displayMaterial, @NotNull String displayNameString, @NotNull Rarity rarity,
+			@NotNull String categoryString)
+	{
+		this(key, Material.DEBUG_STICK, displayMaterial, ComponentUtil.translate(displayNameString), rarity, ComponentUtil.translate(categoryString));
+	}
+
+	public CustomMaterial(@NotNull NamespacedKey key, @NotNull Material displayMaterial, @NotNull Component displayName, @NotNull Rarity rarity,
+			@NotNull Component category)
+	{
+		this(key, Material.DEBUG_STICK, displayMaterial, displayName, rarity, category);
+	}
+
+	public CustomMaterial(@NotNull NamespacedKey key, @NotNull Material realMaterial, @Nullable Material displayMaterial, @NotNull Component displayName,
+			@NotNull Rarity rarity, @NotNull String categoryString)
+	{
+		this(key, realMaterial, displayMaterial, displayName, rarity, ComponentUtil.translate(categoryString));
+	}
+
+	public CustomMaterial(@NotNull NamespacedKey key, @Nullable Material displayMaterial, @NotNull Component displayName,
+			@NotNull Rarity rarity, @NotNull String categoryString)
+	{
+		this(key, Material.DEBUG_STICK, displayMaterial, displayName, rarity, ComponentUtil.translate(categoryString));
+	}
+
+	public CustomMaterial(@NotNull NamespacedKey key, @NotNull Material realMaterial, @Nullable Material displayMaterial, @NotNull String displayNameString, @NotNull String categoryString)
+	{
+		this(key, realMaterial, displayMaterial, ComponentUtil.translate(displayNameString), Rarity.NORMAL, ComponentUtil.translate(categoryString));
+	}
+
+	public CustomMaterial(@NotNull NamespacedKey key, @NotNull Material realMaterial, @Nullable Material displayMaterial, @NotNull Component displayName,
 			@NotNull Rarity rarity, @NotNull Component category)
 	{
 		this.key = key;
@@ -158,6 +219,22 @@ public class CustomMaterialNew implements Comparable<CustomMaterialNew>, Transla
 		return category;
 	}
 
+	@Nullable
+	public CustomMaterial getSmeltedItem()
+	{
+		return null;
+	}
+
+	@Nullable
+	public Material getSmeltedItemVanilla()
+	{
+		if (this == WNYNYA_ORE)
+		{
+			return Material.TNT;
+		}
+		return null;
+	}
+
 	@NotNull
 	public ItemStack create()
 	{
@@ -200,7 +277,7 @@ public class CustomMaterialNew implements Comparable<CustomMaterialNew>, Transla
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
-		CustomMaterialNew that = (CustomMaterialNew) o;
+		CustomMaterial that = (CustomMaterial) o;
 		return that.key.equals(this.key);
 	}
 
@@ -217,7 +294,7 @@ public class CustomMaterialNew implements Comparable<CustomMaterialNew>, Transla
 	}
 
 	@Override
-	public int compareTo(@NotNull CustomMaterialNew o)
+	public int compareTo(@NotNull CustomMaterial o)
 	{
 		return key.compareTo(o.key);
 	}
@@ -236,7 +313,7 @@ public class CustomMaterialNew implements Comparable<CustomMaterialNew>, Transla
 	}
 
 	@Nullable
-	public static CustomMaterialNew itemStackOf(@Nullable ItemStack itemStack)
+	public static CustomMaterial itemStackOf(@Nullable ItemStack itemStack)
 	{
 		if (!ItemStackUtil.itemExists(itemStack))
 			return null;
@@ -275,7 +352,7 @@ public class CustomMaterialNew implements Comparable<CustomMaterialNew>, Transla
 	 * @return all registered custom materials
 	 */
 	@NotNull
-	public static Collection<CustomMaterialNew> values()
+	public static Collection<CustomMaterial> values()
 	{
 		return new ArrayList<>(customMaterials.values());
 	}
