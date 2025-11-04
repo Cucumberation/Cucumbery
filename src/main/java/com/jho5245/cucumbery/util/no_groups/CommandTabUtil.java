@@ -674,7 +674,7 @@ public class CommandTabUtil
 		{
 			hover = ComponentUtil.translate(translatable.translationKey());
 		}
-		return Completion.completion(o.toString(), hover);
+		return Completion.completion(o instanceof Enum<?> ? o.toString().toLowerCase() : o.toString(), hover);
 	}
 
 	private static <T> List<Completion> parse(Iterable<?> iterable, @Nullable Predicate<T> exclude)
