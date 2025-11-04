@@ -1,5 +1,6 @@
 package com.jho5245.cucumbery.listeners.block;
 
+import com.ghostchu.quickshop.QuickShop;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.children.group.StringCustomEffectImple;
@@ -41,7 +42,6 @@ import org.bukkit.inventory.BlockInventoryHolder;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.maxgamer.quickshop.QuickShop;
 
 import java.util.*;
 

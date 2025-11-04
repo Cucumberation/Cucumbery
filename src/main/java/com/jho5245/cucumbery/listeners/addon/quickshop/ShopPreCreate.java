@@ -1,5 +1,6 @@
 package com.jho5245.cucumbery.listeners.addon.quickshop;
 
+import com.ghostchu.quickshop.api.event.modification.ShopPreCreateEvent;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
 import com.jho5245.cucumbery.util.storage.data.Constant;
@@ -7,14 +8,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.maxgamer.quickshop.api.event.ShopPreCreateEvent;
 
 public class ShopPreCreate implements Listener
 {
 	@EventHandler
 	public void onShopPreCreate(ShopPreCreateEvent event)
 	{
-		Player player = event.getPlayer();
+		Player player = event.getCreator().getBukkitPlayer().orElse(null);
+		if (player == null)
+		{
+			return;
+		}
 		ItemStack item = player.getInventory().getItemInMainHand();
 		if (NBTAPI.isRestricted(player, item, Constant.RestrictionType.NO_TRADE))
 		{

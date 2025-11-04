@@ -1,5 +1,7 @@
 package com.jho5245.cucumbery.util.no_groups;
 
+import com.ghostchu.quickshop.QuickShop;
+import com.ghostchu.quickshop.api.shop.Shop;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.util.no_groups.ColorUtil.Type;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
@@ -29,8 +31,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.maxgamer.quickshop.QuickShop;
-import org.maxgamer.quickshop.api.shop.Shop;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -708,7 +708,7 @@ public class PlaceHolderUtil
                 Shop shop = QuickShop.getInstance().getShopManager().getShop(new Location(Bukkit.getWorld(split[0]), Integer.parseInt(split[1]), Integer.parseInt(split[2]),
                         Integer.parseInt(split[3])));
                 double price = shop.getPrice();
-                cmd = cmd.replace("%quickshop_price_" + split[0] + "_" + split[1] + "_" + split[2] + "_" + split[3] + "%", Constant.rawFormat.format(price) + "");
+                cmd = cmd.replace("%quickshop_price_" + split[0] + "_" + split[1] + "_" + split[2] + "_" + split[3] + "%", Constant.rawFormat.format(price));
               }
               catch (Exception ignored)
               {

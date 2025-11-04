@@ -150,7 +150,7 @@ public enum Permission
 
   OTHER_EVAL("eval"),
   OTHER_PLACEHOLDER("placeholder"),
-  ;
+	CMD_QUICKSHOP_ADDON(C + "quickshopaddon");
 
   private final String permission;
 

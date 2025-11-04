@@ -1,15 +1,15 @@
 package com.jho5245.cucumbery.listeners.addon.quickshop;
 
+import com.ghostchu.quickshop.api.event.management.ShopDeleteEvent;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.maxgamer.quickshop.api.event.ShopDeleteEvent;
 
 public class ShopDelete implements Listener
 {
-  @EventHandler
-  public void onShopDelete(ShopDeleteEvent event)
-  {
-    Variable.shops.remove(event.getShop());
-  }
+	@EventHandler
+	public void onShopDelete(ShopDeleteEvent event)
+	{
+		event.shop().ifPresent(shop -> Variable.shops.remove(shop));
+	}
 }

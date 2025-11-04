@@ -1,6 +1,11 @@
 package com.jho5245.cucumbery;
 
 import com.comphenix.protocol.ProtocolLib;
+import com.ghostchu.quickshop.QuickShopBukkit;
+import com.ghostchu.quickshop.api.QuickShopAPI;
+import com.ghostchu.quickshop.api.shop.Shop;
+import com.gmail.nossr50.mcMMO;
+import com.jho5245.cucumbery.commands.addon.CommandQuickShopAddon;
 import com.jho5245.cucumbery.commands.air.CommandAirPoint;
 import com.jho5245.cucumbery.commands.brigadier.*;
 import com.jho5245.cucumbery.commands.brigadier.hp.CommandHealthPoint;
@@ -52,7 +57,6 @@ import com.jho5245.cucumbery.listeners.player.interact.PlayerInteract;
 import com.jho5245.cucumbery.listeners.player.interact.PlayerInteractAtEntity;
 import com.jho5245.cucumbery.listeners.player.interact.PlayerInteractEntity;
 import com.jho5245.cucumbery.listeners.player.item.*;
-import com.jho5245.cucumbery.listeners.player.item.PlayerPickItem;
 import com.jho5245.cucumbery.listeners.player.no_groups.*;
 import com.jho5245.cucumbery.listeners.server.ServerCommand;
 import com.jho5245.cucumbery.listeners.server.ServerListPing;
@@ -88,11 +92,10 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIPaperConfig;
 import dev.jorel.commandapi.Converter;
 import io.lumine.mythic.bukkit.BukkitAPIHelper;
+import io.lumine.mythic.bukkit.MythicBukkit;
 import me.clip.placeholderapi.PlaceholderAPIPlugin;
 import me.sedattr.deluxeauctions.DeluxeAuctions;
 import net.coreprotect.CoreProtect;
-import net.coreprotect.CoreProtectAPI;
-import net.coreprotect.worldedit.CoreProtectEditSessionEvent;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -108,9 +111,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.maxgamer.quickshop.QuickShop;
-import org.maxgamer.quickshop.api.QuickShopAPI;
-import org.maxgamer.quickshop.api.shop.Shop;
 
 import java.io.File;
 import java.util.List;
@@ -203,9 +203,7 @@ public class Cucumbery extends JavaPlugin
 			return;
 		}
 		isLoaded = true;
-		CommandAPI.onLoad(new CommandAPIPaperConfig(this)
-				.initializeNBTAPI(NBTContainer.class, NBTContainer::new)
-		);
+		CommandAPI.onLoad(new CommandAPIPaperConfig(this).initializeNBTAPI(NBTContainer.class, NBTContainer::new));
 	}
 
 	@Override
@@ -558,30 +556,44 @@ public class Cucumbery extends JavaPlugin
 
 	private void checkUsingAddons()
 	{
-//		Cucumbery.using_CommandAPI = Cucumbery.config.getBoolean("use-hook-plugins.CommandAPI") && this.pluginManager.getPlugin("CommandAPI") != null;
+		//		Cucumbery.using_CommandAPI = Cucumbery.config.getBoolean("use-hook-plugins.CommandAPI") && this.pluginManager.getPlugin("CommandAPI") != null;
 		Cucumbery.using_Vault_Economy = Cucumbery.config.getBoolean("use-hook-plugins.Vault-Economy") && Initializer.setupEconomy() && eco != null;
 		Cucumbery.using_Vault_Chat = Cucumbery.config.getBoolean("use-hook-plugins.Vault-Chat") && Initializer.setupChat() && chat != null;
 		Cucumbery.using_NoteBlockAPI =
-				Cucumbery.config.getBoolean("use-hook-plugins.NoteBlockAPI") && this.pluginManager.getPlugin("NoteBlockAPI") instanceof NoteBlockAPI;
-		Cucumbery.using_QuickShop = Cucumbery.config.getBoolean("use-hook-plugins.QuickShop") && this.pluginManager.getPlugin("QuickShop") instanceof QuickShop;
-		Cucumbery.using_PlaceHolderAPI =
-				Cucumbery.config.getBoolean("use-hook-plugins.PlaceHolderAPI") && this.pluginManager.getPlugin("PlaceHolderAPI") instanceof PlaceholderAPIPlugin;
-		Cucumbery.using_mcMMO = Cucumbery.config.getBoolean("use-hook-plugins.mcMMO") && this.pluginManager.getPlugin("mcMMO") != null;
-		Cucumbery.using_MythicMobs = Cucumbery.config.getBoolean("use-hook-plugins.MythicMobs") && this.pluginManager.getPlugin("MythicMobs") != null;
+				Cucumbery.config.getBoolean("use-hook-plugins.NoteBlockAPI") && this.pluginManager.getPlugin("NoteBlockAPI") instanceof NoteBlockAPI noteBlockAPI
+						&& noteBlockAPI.isEnabled();
+		Cucumbery.using_QuickShop =
+				Cucumbery.config.getBoolean("use-hook-plugins.QuickShop") && this.pluginManager.getPlugin("QuickShop-Hikari") != null && this.pluginManager.getPlugin(
+						"QuickShop-Hikari").isEnabled();
+		Cucumbery.using_PlaceHolderAPI = Cucumbery.config.getBoolean("use-hook-plugins.PlaceHolderAPI") && this.pluginManager.getPlugin(
+				"PlaceHolderAPI") instanceof PlaceholderAPIPlugin placeholderAPIPlugin && placeholderAPIPlugin.isEnabled();
+		Cucumbery.using_mcMMO =
+				Cucumbery.config.getBoolean("use-hook-plugins.mcMMO") && this.pluginManager.getPlugin("mcMMO") instanceof mcMMO mcMMO && mcMMO.isEnabled();
+		Cucumbery.using_MythicMobs =
+				Cucumbery.config.getBoolean("use-hook-plugins.MythicMobs") && this.pluginManager.getPlugin("MythicMobs") instanceof MythicBukkit mythicBukkit
+						&& mythicBukkit.isEnabled();
 		Cucumbery.using_ProtocolLib =
-				Cucumbery.config.getBoolean("use-hook-plugins.ProtocolLib") && this.pluginManager.getPlugin("ProtocolLib") instanceof ProtocolLib;
+				Cucumbery.config.getBoolean("use-hook-plugins.ProtocolLib") && this.pluginManager.getPlugin("ProtocolLib") instanceof ProtocolLib protocolLib
+						&& protocolLib.isEnabled();
 		Cucumbery.using_WorldEdit =
-				Cucumbery.config.getBoolean("use-hook-plugins.WorldEdit") && this.pluginManager.getPlugin("WorldEdit") instanceof WorldEditPlugin;
+				Cucumbery.config.getBoolean("use-hook-plugins.WorldEdit") && this.pluginManager.getPlugin("WorldEdit") instanceof WorldEditPlugin worldEdit
+						&& worldEdit.isEnabled();
 		Cucumbery.using_WorldGuard =
-				Cucumbery.config.getBoolean("use-hook-plugins.WorldGuard") && this.pluginManager.getPlugin("WorldGuard") instanceof WorldGuardPlugin;
-		Cucumbery.using_GSit = Cucumbery.config.getBoolean("use-hook-plugins.GSit") && this.pluginManager.getPlugin("GSit") instanceof GSitMain;
-		Cucumbery.using_UltimateTimber =
-				Cucumbery.config.getBoolean("use-hook-plugins.UltimateTimber") && this.pluginManager.getPlugin("UltimateTimber") instanceof UltimateTimber;
+				Cucumbery.config.getBoolean("use-hook-plugins.WorldGuard") && this.pluginManager.getPlugin("WorldGuard") instanceof WorldGuardPlugin worldGuardPlugin
+						&& worldGuardPlugin.isEnabled();
+		Cucumbery.using_GSit =
+				Cucumbery.config.getBoolean("use-hook-plugins.GSit") && this.pluginManager.getPlugin("GSit") instanceof GSitMain gsit && gsit.isEnabled();
+		Cucumbery.using_UltimateTimber = Cucumbery.config.getBoolean("use-hook-plugins.UltimateTimber") && this.pluginManager.getPlugin(
+				"UltimateTimber") instanceof UltimateTimber ultimateTimber && ultimateTimber.isEnabled();
 		Cucumbery.using_Residence = Cucumbery.config.getBoolean("use-hook-plugins.Residence");
 		Cucumbery.using_CoreProtect =
-				Cucumbery.config.getBoolean("use-hook-plugins.CoreProtect") && this.pluginManager.getPlugin("CoreProtect") instanceof CoreProtect;
-		Cucumbery.using_DeluxeAuctions =  Cucumbery.config.getBoolean("use-hook-plugins.DeluxeAuctions") && this.pluginManager.getPlugin("DeluxeAuctions") instanceof DeluxeAuctions;
-		Cucumbery.using_Shopkeepers =  Cucumbery.config.getBoolean("use-hook-plugins.Shopkeepers") && this.pluginManager.getPlugin("Shopkeepers") != null;
+				Cucumbery.config.getBoolean("use-hook-plugins.CoreProtect") && this.pluginManager.getPlugin("CoreProtect") instanceof CoreProtect coreProtect
+						&& coreProtect.isEnabled();
+		Cucumbery.using_DeluxeAuctions = Cucumbery.config.getBoolean("use-hook-plugins.DeluxeAuctions") && this.pluginManager.getPlugin(
+				"DeluxeAuctions") instanceof DeluxeAuctions deluxeAuctions && deluxeAuctions.isEnabled();
+		Cucumbery.using_Shopkeepers =
+				Cucumbery.config.getBoolean("use-hook-plugins.Shopkeepers") && this.pluginManager.getPlugin("Shopkeepers") != null && this.pluginManager.getPlugin(
+						"Shopkeepers").isEnabled();
 
 		if (using_Residence)
 		{
@@ -847,6 +859,7 @@ public class Cucumbery extends JavaPlugin
 		Initializer.registerCommand("lookat", new CommandLookAt());
 		Initializer.registerCommand("cenchant", new CommandEnchant());
 		Initializer.registerCommand("cgive", new CommandCgive());
+		Initializer.registerCommand("quickshopaddon", new CommandQuickShopAddon());
 	}
 
 	private void registerEvents()
@@ -1031,11 +1044,11 @@ public class Cucumbery extends JavaPlugin
 		// listener.addon.quickshop
 		if (using_QuickShop)
 		{
-			Initializer.registerEvent(new PlayerShopClick());
 			Initializer.registerEvent(new ShopDelete());
 			Initializer.registerEvent(new ShopItemChange());
 			Initializer.registerEvent(new ShopPreCreate());
 			Initializer.registerEvent(new ShopPriceChange());
+			Initializer.registerEvent(new ShopSignUpdate());
 			Initializer.registerEvent(new ShopSuccessPurchase());
 		}
 		// listener.addon.noteblockapi
@@ -1060,8 +1073,15 @@ public class Cucumbery extends JavaPlugin
 		}
 		if (using_DeluxeAuctions)
 		{
-			Initializer.registerEvent(new AuctionCreate());
-			Initializer.registerEvent(new ItemPreview());
+			try
+			{
+				Initializer.registerEvent(new AuctionCreate());
+				Initializer.registerEvent(new ItemPreview());
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 

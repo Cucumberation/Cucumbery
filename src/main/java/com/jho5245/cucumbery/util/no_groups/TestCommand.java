@@ -10,6 +10,8 @@ import com.comphenix.protocol.wrappers.WrappedAttributeModifier;
 import com.comphenix.protocol.wrappers.WrappedAttributeModifier.Operation;
 import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent.Completion;
 import com.destroystokyo.paper.profile.PlayerProfile;
+import com.ghostchu.quickshop.api.QuickShopAPI;
+import com.ghostchu.quickshop.api.shop.Shop;
 import com.google.common.collect.Lists;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
@@ -32,6 +34,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -74,6 +77,17 @@ public class TestCommand implements CucumberyCommandExecutor
 					Player player = (Player) sender;
 					player.sendMessage(Cucumbery.using_CoreProtect + "");
 					player.sendMessage(ConfigHandler.inspecting.getOrDefault(player.getName(), false) + "");
+				}
+				case "quickshop" -> {
+					QuickShopAPI quickShopAPI = QuickShopAPI.getInstance();
+					List<Shop> shops = quickShopAPI.getShopManager().getAllShops();
+					for (Shop shop : shops)
+					{
+						Location location = shop.getLocation();
+						ItemStack itemStack = shop.getItem();
+						MessageUtil.sendMessage(sender, "location: %s, item: %s", location, itemStack);
+						shop.setPrice(Math.random());
+					}
 				}
 			}
 		}

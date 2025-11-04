@@ -389,6 +389,10 @@ commands:
     description: 아이템에 마법을 부여하거나 제거합니다
     usage: /<command> <마법> [레벨]
     aliases: [enchant]
+  quickshopaddon:
+    description: QuickShop 플러그인 애드온 명령어
+    usage: /<command> <상점 위치> <price|amount|type|get> ...
+    aliases: [qsa, shopa]
 #  cgive:
 #    description: 아이템 지급 명령어
 #    usage: /<command> <플레이어> <아이템> [개수] [명령어 출력 숨김 여부]

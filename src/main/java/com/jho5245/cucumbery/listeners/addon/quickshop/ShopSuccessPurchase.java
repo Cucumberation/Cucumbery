@@ -1,5 +1,7 @@
 package com.jho5245.cucumbery.listeners.addon.quickshop;
 
+import com.ghostchu.quickshop.api.event.economy.ShopSuccessPurchaseEvent;
+import com.ghostchu.quickshop.api.shop.Shop;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
@@ -13,8 +15,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.maxgamer.quickshop.api.event.ShopSuccessPurchaseEvent;
-import org.maxgamer.quickshop.api.shop.Shop;
 
 import java.util.UUID;
 
@@ -24,7 +24,11 @@ public class ShopSuccessPurchase implements Listener
   public void onShopSuccessPurchase(ShopSuccessPurchaseEvent event)
   {
     Shop shop = event.getShop();
-    UUID uuid = event.getPurchaser();
+    UUID uuid = event.getPurchaser().getUniqueId();
+		if (uuid == null)
+		{
+			return;
+		}
     Entity entity = Method2.getEntity(uuid);
     if (entity instanceof Player player)
     {

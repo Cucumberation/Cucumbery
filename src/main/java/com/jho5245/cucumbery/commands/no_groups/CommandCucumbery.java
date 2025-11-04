@@ -1,6 +1,8 @@
 package com.jho5245.cucumbery.commands.no_groups;
 
 import com.destroystokyo.paper.event.server.AsyncTabCompleteEvent.Completion;
+import com.ghostchu.quickshop.QuickShop;
+import com.ghostchu.quickshop.api.QuickShopAPI;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.Initializer;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
@@ -20,21 +22,20 @@ import com.jho5245.cucumbery.util.storage.no_groups.RecipeChecker;
 import com.jho5245.cucumbery.util.storage.no_groups.Updater;
 import com.nisovin.shopkeepers.api.ShopkeepersAPI;
 import com.nisovin.shopkeepers.api.shopkeeper.Shopkeeper;
-import com.nisovin.shopkeepers.api.shopkeeper.TradingRecipe;
 import com.nisovin.shopkeepers.api.shopkeeper.admin.regular.RegularAdminShopkeeper;
 import com.nisovin.shopkeepers.api.shopkeeper.offers.TradeOffer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.maxgamer.quickshop.QuickShop;
-import org.maxgamer.quickshop.api.QuickShopAPI;
 
 import java.io.File;
 import java.util.*;

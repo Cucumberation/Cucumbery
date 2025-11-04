@@ -57,6 +57,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.*;
+import org.bukkit.Particle.DustOptions;
 import org.bukkit.attribute.Attributable;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -127,7 +128,8 @@ public class Scheduler
 			// 이름표 - 트래커
 			nameTagTrackerAsync();
 		}, 20L, 20L);
-		Bukkit.getScheduler().runTaskTimer(Cucumbery.getPlugin(), () -> {
+		Bukkit.getScheduler().runTaskTimer(Cucumbery.getPlugin(), () ->
+		{
 			// gui 업데이트
 			updateGUI();
 		}, 0L, 20L);
@@ -315,7 +317,6 @@ public class Scheduler
 			worldEditPositionParticleAsync(player);
 			CustomEffectScheduler.display(player);
 			CustomEffectScheduler.fly(player);
-			CustomEffectScheduler.rune(player);
 			CustomEffectScheduler.masterOfFishing(player);
 			CustomEffectScheduler.gliding(player);
 			CustomEffectScheduler.fancySpotlight(player);
@@ -344,6 +345,7 @@ public class Scheduler
 			CustomEffectScheduler.dynamicLight(player);
 			CustomEffectScheduler.townShield(player);
 			CustomEffectScheduler.displayGUI(player);
+			CustomEffectScheduler.rune(player);
 			MiningScheduler.customMiningPre(player);
 			MiningScheduler.breakingBlock(player);
 			AttributeInstance instance = player.getAttribute(Attribute.BLOCK_BREAK_SPEED);
@@ -580,79 +582,109 @@ public class Scheduler
 		double avgy = (maxy + miny) / 2.;
 		double avgz = (maxz + minz) / 2.;
 		World world = player.getWorld();
-		player.spawnParticle(Particle.DUST, new Location(world, avgx, avgy, avgz), 0, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(245, 189, 4), 1));
-		player.spawnParticle(Particle.DUST, new Location(world, avgx + 1, avgy + 1, avgz + 1), 0, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(245, 189, 4), 1));
-		player.spawnParticle(Particle.DUST, new Location(world, avgx, avgy + 1, avgz), 0, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(245, 189, 4), 1));
-		player.spawnParticle(Particle.DUST, new Location(world, avgx, avgy, avgz + 1), 0, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(245, 189, 4), 1));
-		player.spawnParticle(Particle.DUST, new Location(world, avgx + 1, avgy + 1, avgz), 0, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(245, 189, 4), 1));
-		player.spawnParticle(Particle.DUST, new Location(world, avgx, avgy, avgz + 1), 0, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(245, 189, 4), 1));
-		player.spawnParticle(Particle.DUST, new Location(world, avgx + 1, avgy, avgz + 1), 0, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(245, 189, 4), 1));
-		player.spawnParticle(Particle.DUST, new Location(world, avgx + 1, avgy, avgz), 0, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(245, 189, 4), 1));
-		player.spawnParticle(Particle.DUST, new Location(world, avgx, avgy + 1, avgz + 1), 0, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(245, 189, 4), 1));
-		player.spawnParticle(Particle.DUST, new Location((world), minx, miny, minz), 0, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(102, 255, 196), 1));
-		player.spawnParticle(Particle.DUST, new Location((world), minx, miny, maxz + 1), 0, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(102, 255, 196), 1));
-		player.spawnParticle(Particle.DUST, new Location((world), maxx + 1, maxy + 1, maxz + 1), 0, 0, 0, 0,
-				new Particle.DustOptions(Color.fromRGB(102, 255, 196), 1));
-		player.spawnParticle(Particle.DUST, new Location((world), minx, maxy + 1, maxz + 1), 0, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(102, 255, 196), 1));
-		player.spawnParticle(Particle.DUST, new Location((world), minx, maxy + 1, minz), 0, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(102, 255, 196), 1));
-		player.spawnParticle(Particle.DUST, new Location((world), maxx + 1, miny, maxz + 1), 0, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(102, 255, 196), 1));
-		player.spawnParticle(Particle.DUST, new Location((world), maxx + 1, miny, minz), 0, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(102, 255, 196), 1));
-		player.spawnParticle(Particle.DUST, new Location((world), maxx + 1, maxy + 1, minz), 0, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(102, 255, 196), 1));
+		Location playerLocation = player.getLocation();
+		DustOptions centerColor = new DustOptions(Color.fromRGB(245, 189, 4), 1);
+		DustOptions borderColor = new DustOptions(Color.fromRGB(102, 255, 196), 1);
+		player.spawnParticle(Particle.DUST, new Location(world, avgx, avgy, avgz), 0, 0, 0, 0, centerColor);
+		player.spawnParticle(Particle.DUST, new Location(world, avgx + 1, avgy + 1, avgz + 1), 0, 0, 0, 0, centerColor);
+		player.spawnParticle(Particle.DUST, new Location(world, avgx, avgy + 1, avgz), 0, 0, 0, 0, centerColor);
+		player.spawnParticle(Particle.DUST, new Location(world, avgx, avgy, avgz + 1), 0, 0, 0, 0, centerColor);
+		player.spawnParticle(Particle.DUST, new Location(world, avgx + 1, avgy + 1, avgz), 0, 0, 0, 0, centerColor);
+		player.spawnParticle(Particle.DUST, new Location(world, avgx, avgy, avgz + 1), 0, 0, 0, 0, centerColor);
+		player.spawnParticle(Particle.DUST, new Location(world, avgx + 1, avgy, avgz + 1), 0, 0, 0, 0, centerColor);
+		player.spawnParticle(Particle.DUST, new Location(world, avgx + 1, avgy, avgz), 0, 0, 0, 0, centerColor);
+		player.spawnParticle(Particle.DUST, new Location(world, avgx, avgy + 1, avgz + 1), 0, 0, 0, 0, centerColor);
+		player.spawnParticle(Particle.DUST, new Location((world), minx, miny, minz), 0, 0, 0, 0, borderColor);
+		player.spawnParticle(Particle.DUST, new Location((world), minx, miny, maxz + 1), 0, 0, 0, 0, borderColor);
+		player.spawnParticle(Particle.DUST, new Location((world), maxx + 1, maxy + 1, maxz + 1), 0, 0, 0, 0, borderColor);
+		player.spawnParticle(Particle.DUST, new Location((world), minx, maxy + 1, maxz + 1), 0, 0, 0, 0, borderColor);
+		player.spawnParticle(Particle.DUST, new Location((world), minx, maxy + 1, minz), 0, 0, 0, 0, borderColor);
+		player.spawnParticle(Particle.DUST, new Location((world), maxx + 1, miny, maxz + 1), 0, 0, 0, 0, borderColor);
+		player.spawnParticle(Particle.DUST, new Location((world), maxx + 1, miny, minz), 0, 0, 0, 0, borderColor);
+		player.spawnParticle(Particle.DUST, new Location((world), maxx + 1, maxy + 1, minz), 0, 0, 0, 0, borderColor);
 		for (int a = 0; !(maxx - minx == a); a++)
 		{
-			player.spawnParticle(Particle.DUST, new Location(world, minx + a + 1, miny, minz), 0, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(102, 255, 196), 1));
+			Location location = new Location(world, minx + a + 1, miny, minz);
+			if (Method2.distance(playerLocation, location) > 50d)
+				continue;
+			player.spawnParticle(Particle.DUST, location, 0, 0, 0, 0, borderColor);
 		}
 		for (int b = 0; !(maxy - miny == b); b++)
 		{
-			player.spawnParticle(Particle.DUST, new Location(world, minx, miny + b + 1, minz), 0, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(102, 255, 196), 1));
+			Location location = new Location(world, minx, miny + b + 1, minz);
+			if (Method2.distance(playerLocation, location) > 50d)
+				continue;
+			player.spawnParticle(Particle.DUST, location, 0, 0, 0, 0, borderColor);
 		}
 		for (int c = 0; !(maxz - minz == c); c++)
 		{
-			player.spawnParticle(Particle.DUST, new Location(world, minx, miny, minz + c + 1), 0, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(102, 255, 196), 1));
+			Location location = new Location(world, minx, miny, minz + c + 1);
+			if (Method2.distance(playerLocation, location) > 50d)
+				continue;
+			player.spawnParticle(Particle.DUST, location, 0, 0, 0, 0, borderColor);
 		}
 		for (int d = 0; !(maxx - d == minx); d++)
 		{
-			player.spawnParticle(Particle.DUST, new Location(world, maxx - d, maxy + 1, maxz + 1), 0, 0, 0, 0,
-					new Particle.DustOptions(Color.fromRGB(102, 255, 196), 1));
+			Location location = new Location(world, maxx - d, maxy + 1, maxz + 1);
+			if (Method2.distance(playerLocation, location) > 50d)
+				continue;
+			player.spawnParticle(Particle.DUST, location, 0, 0, 0, 0, borderColor);
 		}
 		for (int e = 0; !(maxz - e == minz); e++)
 		{
-			player.spawnParticle(Particle.DUST, new Location((world), maxx + 1, maxy + 1, maxz - e), 0, 0, 0, 0,
-					new Particle.DustOptions(Color.fromRGB(102, 255, 196), 1));
+			Location location = new Location((world), maxx + 1, maxy + 1, maxz - e);
+			if (Method2.distance(playerLocation, location) > 50d)
+				continue;
+			player.spawnParticle(Particle.DUST, location, 0, 0, 0, 0, borderColor);
 		}
 		for (int f = 0; !(maxy - f == miny); f++)
 		{
-			player.spawnParticle(Particle.DUST, new Location((world), maxx + 1, maxy - f, maxz + 1), 0, 0, 0, 0,
-					new Particle.DustOptions(Color.fromRGB(102, 255, 196), 1));
+			Location location = new Location((world), maxx + 1, maxy - f, maxz + 1);
+			if (Method2.distance(playerLocation, location) > 50d)
+				continue;
+			player.spawnParticle(Particle.DUST, location, 0, 0, 0, 0, borderColor);
 		}
 		for (int g = 0; !(maxx - minx == g); g++)
 		{
-			player.spawnParticle(Particle.DUST, new Location(world, minx + g + 1, maxy + 1, minz), 0, 0, 0, 0,
-					new Particle.DustOptions(Color.fromRGB(102, 255, 196), 1));
+			Location location = new Location(world, minx + g + 1, maxy + 1, minz);
+			if (Method2.distance(playerLocation, location) > 50d)
+				continue;
+			player.spawnParticle(Particle.DUST, location, 0, 0, 0, 0, borderColor);
 		}
 		for (int h = 0; !(maxz - minz == h); h++)
 		{
-			player.spawnParticle(Particle.DUST, new Location(world, minx, maxy + 1, minz + h + 1), 0, 0, 0, 0,
-					new Particle.DustOptions(Color.fromRGB(102, 255, 196), 1));
+			Location location = new Location(world, minx, maxy + 1, minz + h + 1);
+			if (Method2.distance(playerLocation, location) > 50d)
+				continue;
+			player.spawnParticle(Particle.DUST, location, 0, 0, 0, 0, borderColor);
 		}
 		for (int i = 0; !(maxx - i == minx); i++)
 		{
-			player.spawnParticle(Particle.DUST, new Location(world, maxx - i, miny, maxz + 1), 0, 0, 0, 0, new Particle.DustOptions(Color.fromRGB(102, 255, 196), 1));
+			Location location = new Location(world, maxx - i, miny, maxz + 1);
+			if (Method2.distance(playerLocation, location) > 50d)
+				continue;
+			player.spawnParticle(Particle.DUST, location, 0, 0, 0, 0, borderColor);
 		}
 		for (int j = 0; !(maxz - j == minz); j++)
 		{
-			player.spawnParticle(Particle.DUST, new Location((world), maxx + 1, miny, maxz - j), 0, 0, 0, 0,
-					new Particle.DustOptions(Color.fromRGB(102, 255, 196), 1));
+			Location location = new Location((world), maxx + 1, miny, maxz - j);
+			if (Method2.distance(playerLocation, location) > 50d)
+				continue;
+			player.spawnParticle(Particle.DUST, location, 0, 0, 0, 0, borderColor);
 		}
 		for (int k = 0; !(maxy - k == miny); k++)
 		{
-			player.spawnParticle(Particle.DUST, new Location((world), maxx + 1, maxy - k, minz), 0, 0, 0, 0,
-					new Particle.DustOptions(Color.fromRGB(102, 255, 196), 1));
+			Location location = new Location((world), maxx + 1, maxy - k, minz);
+			if (Method2.distance(playerLocation, location) > 50d)
+				continue;
+			player.spawnParticle(Particle.DUST, location, 0, 0, 0, 0, borderColor);
 		}
 		for (int l = 0; !(maxy - l == miny); l++)
 		{
-			player.spawnParticle(Particle.DUST, new Location((world), minx, maxy - l, maxz + 1), 0, 0, 0, 0,
-					new Particle.DustOptions(Color.fromRGB(102, 255, 196), 1));
+			Location location = new Location((world), minx, maxy - l, maxz + 1);
+			if (Method2.distance(playerLocation, location) > 50d)
+				continue;
+			player.spawnParticle(Particle.DUST, location, 0, 0, 0, 0, borderColor);
 		}
 	}
 
