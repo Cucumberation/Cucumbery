@@ -1055,11 +1055,11 @@ public class ProtocolLibManager
 				{
 					if (!ItemStackUtil.itemExists(pair.getSecond()))
 						continue;
-					ItemStack itemStack = pair.getSecond();
+					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, pair.getSecond(), player);
 					EntityEquipmentEvent entityEquipmentEvent = new EntityEquipmentEvent(player, itemStack);
 					if (entityEquipmentEvent.callEvent())
 					{
-						pair.setSecond(setItemLore(Server.WINDOW_ITEMS, entityEquipmentEvent.getItemStack(), player));
+						pair.setSecond(entityEquipmentEvent.getItemStack());
 					}
 				}
 				packet.getSlotStackPairLists().write(0, listStructureModifier);
@@ -2258,20 +2258,11 @@ public class ProtocolLibManager
 			}
 			NBT.modify(clone, nbt ->
 			{
-				nbt.getKeys().forEach(nbt::removeKey);
-			});
-			NBT.modifyComponents(clone, nbt ->
-			{
-				for (String key : nbt.getKeys())
+				nbt.getKeys().forEach(key ->
 				{
-					switch (key)
-					{
-						case "minecraft:custom_data", "" -> nbt.removeKey(key);
-						default ->
-						{
-						}
-					}
-				}
+					if (!key.equals(CustomMaterial.IDENDTIFER))
+						nbt.removeKey(key);
+				});
 			});
 		}
 
