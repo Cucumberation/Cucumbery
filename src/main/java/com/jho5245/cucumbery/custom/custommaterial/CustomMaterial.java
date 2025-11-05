@@ -25,11 +25,11 @@ public class CustomMaterial implements Translatable
 {
 	private static final Map<NamespacedKey, CustomMaterial> customMaterials = new HashMap<>();
 
-	public static final CustomMaterial AMBER = new CustomMaterial(Material.ORANGE_DYE, "key:item.cucumbery.amber|호박",
-			"key:itemGroup.cucumbery_test_item|테스트 아이템"), WEATHER_FORECAST = new CustomMaterial(Material.ENDER_EYE, "key:item.cucumbery.weather_forecast|날씨를 알려주는 눈",
-			Rarity.ELITE, CreativeCategory.TOOLS), WNYNYA_ORE = new CustomMaterial(Material.BARRIER, Material.PLAYER_HEAD,
-			"rgb200,100,255;key:block.cucumbery.wnynya_ore|완YEE 광석", Rarity.RARE, "itemGroup.natural"), TEST_ITEM = new CustomMaterial(Material.DIAMOND,
-			"key:item.cucumbery.test_item|테스트 아이템", "key:itemGroup.cucumbery_test_item|테스트 아이템");
+	public static final CustomMaterial
+			AMBER = new CustomMaterial(Material.ORANGE_DYE, "key:item.cucumbery.amber|호박", "key:itemGroup.cucumbery_test_item|테스트 아이템"),
+			WEATHER_FORECAST = new CustomMaterial(Material.ENDER_EYE, "key:item.cucumbery.weather_forecast|날씨를 알려주는 눈", Rarity.ELITE, CreativeCategory.TOOLS),
+			WNYNYA_ORE = new CustomMaterial(Material.BARRIER, Material.PLAYER_HEAD, "rgb200,100,255;key:block.cucumbery.wnynya_ore|완YEE 광석", Rarity.RARE, "itemGroup.natural"),
+			TEST_ITEM = new CustomMaterial(Material.DIAMOND, "key:item.cucumbery.test_item|테스트 아이템", "key:itemGroup.cucumbery_test_item|테스트 아이템");
 
 	/**
 	 * Internal registriation. must NOT be called by other plugins!
