@@ -23,7 +23,7 @@ import java.util.*;
 
 public class CustomMaterial implements Translatable
 {
-	private static final HashMap<NamespacedKey, CustomMaterial> customMaterials = new HashMap<>();
+	private static final Map<NamespacedKey, CustomMaterial> customMaterials = new HashMap<>();
 
 	public static final CustomMaterial AMBER = new CustomMaterial(Material.ORANGE_DYE, "key:item.cucumbery.amber|호박",
 			"key:itemGroup.cucumbery_test_item|테스트 아이템"), WEATHER_FORECAST = new CustomMaterial(Material.ENDER_EYE, "key:item.cucumbery.weather_forecast|날씨를 알려주는 눈",
@@ -47,7 +47,7 @@ public class CustomMaterial implements Translatable
 	@SuppressWarnings("unused")
 	public static void unregister(Plugin plugin)
 	{
-		customMaterials.keySet().forEach(key ->
+		new HashSet<>(customMaterials.keySet()).forEach(key ->
 		{
 			if (plugin.getName().equalsIgnoreCase(key.getNamespace()))
 			{
@@ -56,20 +56,16 @@ public class CustomMaterial implements Translatable
 		});
 	}
 
-	public static boolean register(CustomMaterial... customMaterial)
+	public static void register(CustomMaterial... customMaterial)
 	{
-		boolean success = true;
 		for (CustomMaterial newMaterial : customMaterial)
 		{
 			if (customMaterials.containsKey(newMaterial.key))
 			{
-				success = false;
-				MessageUtil.sendWarn(Bukkit.getConsoleSender(), "중복되는 CustomMaterial이 이미 존재하여 등록에 실패했습니다: %s", newMaterial.key);
-				continue;
+				MessageUtil.sendWarn(Bukkit.getConsoleSender(), "중복되는 CustomMaterial이 이미 존재하여 덮어씌웁니다: %s", newMaterial.key);
 			}
 			customMaterials.put(newMaterial.key, newMaterial);
 		}
-		return success;
 	}
 
 	public static CustomMaterial getByKey(@NotNull NamespacedKey key)
