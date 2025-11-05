@@ -4,6 +4,7 @@ import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.children.group.ItemStackCustomEffectImple;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
+import com.jho5245.cucumbery.events.item.PlayerDropItemActionbarEvent;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
@@ -242,16 +243,22 @@ public class PlayerDropItem implements Listener
   {
     if (UserData.SHOW_ACTIONBAR_ON_ITEM_DROP.getBoolean(player.getUniqueId()))
     {
-      int amount = itemStack.getAmount();
-      Component itemStackComponent = ItemNameUtil.itemName(itemStack, TextColor.fromHexString("#ff9900"));
-      if (amount == 1 && (itemStack.getType().getMaxStackSize() == 1 || itemStack.getItemMeta().hasMaxStackSize() && itemStack.getItemMeta().getMaxStackSize() == 1))
-      {
-        player.sendActionBar(ComponentUtil.translate(player,"#ffd900;key:cucumbery.action_bar.item_drop|%s을(를) 버렸습니다", itemStackComponent));
-      }
-      else
-      {
-        player.sendActionBar(ComponentUtil.translate(player, "#ffd900;key:cucumbery.action_bar.item_drop.count|%s을(를) %s개 버렸습니다", itemStackComponent, "#ff9900;" + amount));
-      }
+			PlayerDropItemActionbarEvent event = new PlayerDropItemActionbarEvent(player, itemStack);
+			event.callEvent();
+			if (!event.isCancelled())
+			{
+				ItemStack eventItemStack = event.getItemStack();
+				int amount = eventItemStack.getAmount();
+				Component itemStackComponent = ItemNameUtil.itemName(eventItemStack, TextColor.fromHexString("#ff9900"));
+				if (amount == 1 && (eventItemStack.getType().getMaxStackSize() == 1 || eventItemStack.getItemMeta().hasMaxStackSize() && eventItemStack.getItemMeta().getMaxStackSize() == 1))
+				{
+					player.sendActionBar(ComponentUtil.translate(player,"#ffd900;key:cucumbery.action_bar.item_drop|%s을(를) 버렸습니다", itemStackComponent));
+				}
+				else
+				{
+					player.sendActionBar(ComponentUtil.translate(player, "#ffd900;key:cucumbery.action_bar.item_drop.count|%s을(를) %s개 버렸습니다", itemStackComponent, "#ff9900;" + amount));
+				}
+			}
     }
     if (UserData.LISTEN_ITEM_DROP.getBoolean(player.getUniqueId()))
     {

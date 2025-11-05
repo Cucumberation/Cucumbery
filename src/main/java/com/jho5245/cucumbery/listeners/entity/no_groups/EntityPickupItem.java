@@ -6,6 +6,7 @@ import com.jho5245.cucumbery.custom.customeffect.children.group.PlayerCustomEffe
 import com.jho5245.cucumbery.custom.customeffect.children.group.StringCustomEffectImple;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeRune;
+import com.jho5245.cucumbery.events.item.PlayerPickupItemActionbarEvent;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method;
@@ -252,16 +253,27 @@ public class EntityPickupItem implements Listener
 
 	private void actionbarOnItemPickup(@NotNull Player player, @NotNull ItemStack itemStack, int amount)
 	{
-		if (UserData.SHOW_ACTIONBAR_ON_ITEM_PICKUP.getBoolean(player))
+		handleActionbarItemPickup(player, itemStack, amount);
+	}
+
+	public static void handleActionbarItemPickup(@NotNull Player player, @NotNull ItemStack itemStack, int amount)
+	{
+		if (UserData.SHOW_ACTIONBAR_ON_ITEM_PICKUP.getBoolean(player.getUniqueId()))
 		{
-			Component itemStackComponent = ItemNameUtil.itemName(itemStack, TextColor.fromHexString("#00ff3c"));
-			if (amount == 1 && (itemStack.getType().getMaxStackSize() == 1 || itemStack.getItemMeta().hasMaxStackSize() && itemStack.getItemMeta().getMaxStackSize() == 1))
+			PlayerPickupItemActionbarEvent playerPickupItemActionbarEvent = new  PlayerPickupItemActionbarEvent(player, itemStack);
+			playerPickupItemActionbarEvent.callEvent();
+			if (!playerPickupItemActionbarEvent.isCancelled())
 			{
-				player.sendActionBar(ComponentUtil.translate(player, "#00ccff;key:cucumbery.action_bar.item_pickup|%s을(를) 주웠습니다", itemStackComponent));
-			}
-			else
-			{
-				player.sendActionBar(ComponentUtil.translate(player,"#00ccff;key:cucumbery.action_bar.item_pickup.count|%s을(를) %s개 주웠습니다", itemStackComponent, "#00ff3c;" + amount));
+				ItemStack eventItemStack = playerPickupItemActionbarEvent.getItemStack();
+				Component itemStackComponent = ItemNameUtil.itemName(eventItemStack, TextColor.fromHexString("#00ff3c"));
+				if (amount == 1 && eventItemStack.getType().getMaxStackSize() == 1)
+				{
+					player.sendActionBar(ComponentUtil.translate(player, "#00ccff;key:cucumbery.action_bar.pickup_item|%s을(를) 주웠습니다", itemStackComponent));
+				}
+				else
+				{
+					player.sendActionBar(ComponentUtil.translate(player,"#00ccff;key:cucumbery.action_bar.pickup_item.count|%s을(를) %s개 주웠습니다", itemStackComponent, "#00ff3c;" + amount));
+				}
 			}
 		}
 	}

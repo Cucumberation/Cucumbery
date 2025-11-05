@@ -926,8 +926,6 @@ public class ProtocolLibManager
 					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, item.getItemStack(), player);
 					int itemAmount = itemStack.getAmount();
 					Component itemName = ItemNameUtil.itemName(itemStack);
-					Component component =
-							itemAmount == 1 ? itemName : Component.translatable("%s (%s)").arguments(itemName, Component.text(itemAmount, Constant.THE_COLOR));
 					//					boolean showCustomName =
 					//							UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player) && !UserData.FORCE_HIDE_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player);
 					//					Boolean shouldShowCustomName = ItemStackUtil.shouldShowCustomName(itemStack);
@@ -935,12 +933,14 @@ public class ProtocolLibManager
 					entityMetaDataEvent.callEvent();
 					if (!entityMetaDataEvent.isCancelled())
 					{
+						itemName = ItemNameUtil.itemName(entityMetaDataEvent.getItemStack());
 						StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
 						List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
 						wrappedDataValues.add(
 								new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(entityMetaDataEvent.getItemStack())));
 						watchableAccessor.write(0, wrappedDataValues);
 					}
+					Component component = itemAmount == 1 ? itemName : Component.translatable("%s (%s)").arguments(itemName, Component.text(itemAmount, Constant.THE_COLOR));
 
 					//					wrappedDataValues.add(new WrappedDataValue(2, WrappedDataWatcher.Registry.getChatComponentSerializer(true),
 					//							Optional.of(WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(component)).getHandle())));

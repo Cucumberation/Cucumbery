@@ -3,6 +3,8 @@ package com.jho5245.cucumbery.listeners.player.item;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
+import com.jho5245.cucumbery.events.item.PlayerPickupItemActionbarEvent;
+import com.jho5245.cucumbery.listeners.entity.no_groups.EntityPickupItem;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
 import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
@@ -91,18 +93,7 @@ public class PlayerAttemptPickupItem implements Listener
 					Method.updateItem(item);
 				}
 			}, 0L);
-			if (UserData.SHOW_ACTIONBAR_ON_ITEM_PICKUP.getBoolean(player.getUniqueId()))
-			{
-				Component itemStackComponent = ItemNameUtil.itemName(itemStack, TextColor.fromHexString("#00ff3c"));
-				if (amount == 1 && itemStack.getType().getMaxStackSize() == 1)
-				{
-					player.sendActionBar(ComponentUtil.translate(player, "#00ccff;key:cucumbery.action_bar.pickup_item|%s을(를) 주웠습니다", itemStackComponent));
-				}
-				else
-				{
-					player.sendActionBar(ComponentUtil.translate(player,"#00ccff;key:cucumbery.action_bar.pickup_item.count|%s을(를) %s개 주웠습니다", itemStackComponent, "#00ff3c;" + amount));
-				}
-			}
+			EntityPickupItem.handleActionbarItemPickup(player, itemStack, amount);
 		}
 	}
 }
