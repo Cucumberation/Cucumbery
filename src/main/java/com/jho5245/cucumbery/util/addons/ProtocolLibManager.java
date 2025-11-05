@@ -30,6 +30,7 @@ import com.jho5245.cucumbery.util.itemlore.ItemLore.RemoveFlag;
 import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
 import com.jho5245.cucumbery.util.nbt.CucumberyTag;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
+import com.jho5245.cucumbery.util.no_groups.ItemSerializer;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.no_groups.Method2;
@@ -614,36 +615,36 @@ public class ProtocolLibManager
 
 						PlayerInventory playerInventory = player.getInventory();
 						ItemStack helmet = playerInventory.getHelmet(), chestplate = playerInventory.getChestplate(), leggings = playerInventory.getLeggings(), boots = playerInventory.getBoots();
-//						com.jho5245.cucumbery.util.storage.data.CustomMaterial helmetType = com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(
-//								helmet), chestplateType = com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(
-//								chestplate), leggingsType = com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(
-//								leggings), bootsType = com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(boots);
-//
-//						if ((helmetType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.MINER_HELMET
-//								|| helmetType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.MINDAS_HELMET) && potionEffectType.equals(
-//								PotionEffectType.NIGHT_VISION))
-//						{
-//							modifier.write(3, PotionEffect.INFINITE_DURATION);
-//							event.setPacket(packet);
-//						}
-//
-//						if (helmetType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.MINER_HELMET
-//								&& chestplateType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.MINER_CHESTPLATE
-//								&& leggingsType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.MINER_LEGGINGS
-//								&& bootsType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.MINER_BOOTS && potionEffectType.equals(PotionEffectType.HASTE))
-//						{
-//							packet.getModifier().write(3, PotionEffect.INFINITE_DURATION);
-//							event.setPacket(packet);
-//						}
-//
-//						if (helmetType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.FROG_HELMET
-//								&& chestplateType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.FROG_CHESTPLATE
-//								&& leggingsType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.FROG_LEGGINGS
-//								&& bootsType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.FROG_BOOTS && potionEffectType.equals(PotionEffectType.JUMP_BOOST))
-//						{
-//							packet.getModifier().write(3, PotionEffect.INFINITE_DURATION);
-//							event.setPacket(packet);
-//						}
+						//						com.jho5245.cucumbery.util.storage.data.CustomMaterial helmetType = com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(
+						//								helmet), chestplateType = com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(
+						//								chestplate), leggingsType = com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(
+						//								leggings), bootsType = com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(boots);
+						//
+						//						if ((helmetType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.MINER_HELMET
+						//								|| helmetType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.MINDAS_HELMET) && potionEffectType.equals(
+						//								PotionEffectType.NIGHT_VISION))
+						//						{
+						//							modifier.write(3, PotionEffect.INFINITE_DURATION);
+						//							event.setPacket(packet);
+						//						}
+						//
+						//						if (helmetType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.MINER_HELMET
+						//								&& chestplateType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.MINER_CHESTPLATE
+						//								&& leggingsType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.MINER_LEGGINGS
+						//								&& bootsType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.MINER_BOOTS && potionEffectType.equals(PotionEffectType.HASTE))
+						//						{
+						//							packet.getModifier().write(3, PotionEffect.INFINITE_DURATION);
+						//							event.setPacket(packet);
+						//						}
+						//
+						//						if (helmetType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.FROG_HELMET
+						//								&& chestplateType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.FROG_CHESTPLATE
+						//								&& leggingsType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.FROG_LEGGINGS
+						//								&& bootsType == com.jho5245.cucumbery.util.storage.data.CustomMaterial.FROG_BOOTS && potionEffectType.equals(PotionEffectType.JUMP_BOOST))
+						//						{
+						//							packet.getModifier().write(3, PotionEffect.INFINITE_DURATION);
+						//							event.setPacket(packet);
+						//						}
 					}
 				}
 			}
@@ -936,11 +937,12 @@ public class ProtocolLibManager
 						itemName = ItemNameUtil.itemName(entityMetaDataEvent.getItemStack());
 						StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
 						List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-						wrappedDataValues.add(
-								new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(entityMetaDataEvent.getItemStack())));
+						wrappedDataValues.add(new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false),
+								MinecraftReflection.getMinecraftItemStack(entityMetaDataEvent.getItemStack())));
 						watchableAccessor.write(0, wrappedDataValues);
 					}
-					Component component = itemAmount == 1 ? itemName : Component.translatable("%s (%s)").arguments(itemName, Component.text(itemAmount, Constant.THE_COLOR));
+					Component component =
+							itemAmount == 1 ? itemName : Component.translatable("%s (%s)").arguments(itemName, Component.text(itemAmount, Constant.THE_COLOR));
 
 					//					wrappedDataValues.add(new WrappedDataValue(2, WrappedDataWatcher.Registry.getChatComponentSerializer(true),
 					//							Optional.of(WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(component)).getHandle())));
@@ -963,8 +965,8 @@ public class ProtocolLibManager
 					{
 						StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
 						List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-						wrappedDataValues.add(
-								new WrappedDataValue(9, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(entityMetaDataEvent.getItemStack())));
+						wrappedDataValues.add(new WrappedDataValue(9, WrappedDataWatcher.Registry.getItemStackSerializer(false),
+								MinecraftReflection.getMinecraftItemStack(entityMetaDataEvent.getItemStack())));
 						watchableAccessor.write(0, wrappedDataValues);
 					}
 				}
@@ -977,8 +979,8 @@ public class ProtocolLibManager
 					{
 						StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
 						List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-						wrappedDataValues.add(
-								new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(entityMetaDataEvent.getItemStack())));
+						wrappedDataValues.add(new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false),
+								MinecraftReflection.getMinecraftItemStack(entityMetaDataEvent.getItemStack())));
 						watchableAccessor.write(0, wrappedDataValues);
 					}
 				}
@@ -991,8 +993,8 @@ public class ProtocolLibManager
 					{
 						StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
 						List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-						wrappedDataValues.add(
-								new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(entityMetaDataEvent.getItemStack())));
+						wrappedDataValues.add(new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false),
+								MinecraftReflection.getMinecraftItemStack(entityMetaDataEvent.getItemStack())));
 						watchableAccessor.write(0, wrappedDataValues);
 					}
 				}
@@ -1005,8 +1007,8 @@ public class ProtocolLibManager
 					{
 						StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
 						List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-						wrappedDataValues.add(
-								new WrappedDataValue(23, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(entityMetaDataEvent.getItemStack())));
+						wrappedDataValues.add(new WrappedDataValue(23, WrappedDataWatcher.Registry.getItemStackSerializer(false),
+								MinecraftReflection.getMinecraftItemStack(entityMetaDataEvent.getItemStack())));
 						watchableAccessor.write(0, wrappedDataValues);
 					}
 				}
@@ -1029,8 +1031,8 @@ public class ProtocolLibManager
 					{
 						StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
 						List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-						wrappedDataValues.add(
-								new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(entityMetaDataEvent.getItemStack())));
+						wrappedDataValues.add(new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false),
+								MinecraftReflection.getMinecraftItemStack(entityMetaDataEvent.getItemStack())));
 						watchableAccessor.write(0, wrappedDataValues);
 					}
 				}
@@ -1658,6 +1660,7 @@ public class ProtocolLibManager
 				{
 					ItemStack itemStack = ItemStackUtil.getItemStackFromHoverEvent(showItem);
 					ParseComponentItemStackEvent event = new ParseComponentItemStackEvent(player, itemStack);
+					event.callEvent();
 					if (!event.isCancelled())
 					{
 						component = ItemStackComponent.itemStackComponent(event.getItemStack(), 1, Constant.THE_COLOR, false, player);
@@ -1776,6 +1779,7 @@ public class ProtocolLibManager
 					argument = argument.color(null).decoration(TextDecoration.ITALIC, State.NOT_SET);
 				}
 				arguments.add(argument);
+				translatableComponent = translatableComponent.arguments(arguments);
 			}
 			// 시스템 메시지를 보는 플레이어의 언어가 한국어일 경우 조사(을/를, 은/는 등) 적절하게 조정
 			if (player.locale().equals(Locale.KOREA))
@@ -1990,45 +1994,45 @@ public class ProtocolLibManager
 			itemMeta.lore(lore.isEmpty() ? null : lore);
 		}
 
-//		com.jho5245.cucumbery.util.storage.data.CustomMaterial customMaterial = com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(clone);
-//		if (customMaterial != null)
-//		{
-//			itemMeta.itemName(customMaterial.getDisplayName());
-//		}
+		//		com.jho5245.cucumbery.util.storage.data.CustomMaterial customMaterial = com.jho5245.cucumbery.util.storage.data.CustomMaterial.itemStackOf(clone);
+		//		if (customMaterial != null)
+		//		{
+		//			itemMeta.itemName(customMaterial.getDisplayName());
+		//		}
 		CustomMaterial customMaterial = CustomMaterial.itemStackOf(clone);
-//
-//		if (ignoreCreativeWhat && customMaterial != null)
-//		{
-//			switch (customMaterial)
-//			{
-//				case BRICK_THROWABLE -> clone.setType(Material.BRICK);
-//				case NETHER_BRICK_THROWABLE -> clone.setType(Material.NETHER_BRICK);
-//				case COPPER_INGOT_THROWABLE -> clone.setType(Material.COPPER_INGOT);
-//				case IRON_INGOT_THROWABLE -> clone.setType(Material.IRON_INGOT);
-//				case GOLD_INGOT_THROWABLE -> clone.setType(Material.GOLD_INGOT);
-//				case NETHERITE_INGOT_THROWABLE -> clone.setType(Material.NETHERITE_INGOT);
-//			}
-//		}
+		//
+		//		if (ignoreCreativeWhat && customMaterial != null)
+		//		{
+		//			switch (customMaterial)
+		//			{
+		//				case BRICK_THROWABLE -> clone.setType(Material.BRICK);
+		//				case NETHER_BRICK_THROWABLE -> clone.setType(Material.NETHER_BRICK);
+		//				case COPPER_INGOT_THROWABLE -> clone.setType(Material.COPPER_INGOT);
+		//				case IRON_INGOT_THROWABLE -> clone.setType(Material.IRON_INGOT);
+		//				case GOLD_INGOT_THROWABLE -> clone.setType(Material.GOLD_INGOT);
+		//				case NETHERITE_INGOT_THROWABLE -> clone.setType(Material.NETHERITE_INGOT);
+		//			}
+		//		}
 
-				if (!itemMeta.hasAttributeModifiers())
+		if (!itemMeta.hasAttributeModifiers())
+		{
+			Material type = clone.getType();
+			Multimap<Attribute, AttributeModifier> attributeModifierMultimap = type.getDefaultAttributeModifiers();
+			if (!attributeModifierMultimap.isEmpty())
+			{
+				if (showItemLore)
+					itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+				for (Attribute attribute : attributeModifierMultimap.keySet())
 				{
-					Material type = clone.getType();
-					Multimap<Attribute, AttributeModifier> attributeModifierMultimap = type.getDefaultAttributeModifiers();
-					if (!attributeModifierMultimap.isEmpty())
+					for (AttributeModifier modifier : attributeModifierMultimap.get(attribute))
 					{
-						if (showItemLore)
-							itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-						for (Attribute attribute : attributeModifierMultimap.keySet())
-						{
-							for (AttributeModifier modifier : attributeModifierMultimap.get(attribute))
-							{
-								AttributeModifier newModifier = new AttributeModifier(new NamespacedKey(Cucumbery.getPlugin(), "protocollib_random_number_" + Math.random()),
-										modifier.getAmount(), modifier.getOperation(), modifier.getSlotGroup());
-								itemMeta.addAttributeModifier(attribute, newModifier);
-							}
-						}
+						AttributeModifier newModifier = new AttributeModifier(new NamespacedKey(Cucumbery.getPlugin(), "protocollib_random_number_" + Math.random()),
+								modifier.getAmount(), modifier.getOperation(), modifier.getSlotGroup());
+						itemMeta.addAttributeModifier(attribute, newModifier);
 					}
 				}
+			}
+		}
 
 		// 일부 인챈트는 Attribute 설명을 추가하므로 클라이언트에서 해당 인챈트를 제거하여 보냄
 		if (showItemLore && ignoreCreativeWhat && itemMeta.hasEnchants())
@@ -2074,9 +2078,9 @@ public class ProtocolLibManager
 				String overrideItemStackString = nbtItem.getString("override_item_stack");
 				try
 				{
-//					if (overrideItemStackString.startsWith("custom_material_"))
-//						overrideItemStack = com.jho5245.cucumbery.util.storage.data.CustomMaterial.valueOf(overrideItemStackString.substring("custom_material_".length()))
-//								.create();
+					//					if (overrideItemStackString.startsWith("custom_material_"))
+					//						overrideItemStack = com.jho5245.cucumbery.util.storage.data.CustomMaterial.valueOf(overrideItemStackString.substring("custom_material_".length()))
+					//								.create();
 					if (overrideItemStackString.startsWith("material_"))
 						overrideItemStack = new ItemStack(Material.valueOf(overrideItemStackString.substring("material_".length())));
 				}
@@ -2216,24 +2220,23 @@ public class ProtocolLibManager
 		if (player.getGameMode() != GameMode.CREATIVE && !player.hasPermission("asdf"))
 		{
 			// 관리자가 아닐 경우 Material이 DEBUG_STICK이고 ItemModel이 있는 CustomMaterial들을 전부 Material <= ItemModel로 변경
-//			if (customMaterial != null && clone.getType() == Material.DEBUG_STICK)
-//			{
-//				ItemMeta cloneMeta = clone.getItemMeta();
-//				if (cloneMeta.hasItemModel())
-//				{
-//					NamespacedKey itemModel = cloneMeta.getItemModel();
-//					Material material = Method2.valueOf(itemModel != null ? itemModel.getKey().toUpperCase() : "", Material.class);
-//					if (material != null)
-//					{
-//						cloneMeta.setItemModel(null);
-//						clone.setItemMeta(cloneMeta);
-//						clone.setType(material);
-//					}
-//				}
-//			}
-			if (customMaterial != null && (
-					customMaterial.getRealMaterial() == Material.DEBUG_STICK || customMaterial.getRealMaterial() != Material.PLAYER_HEAD && customMaterial.getDisplayMaterial() == Material.PLAYER_HEAD
-			))
+			//			if (customMaterial != null && clone.getType() == Material.DEBUG_STICK)
+			//			{
+			//				ItemMeta cloneMeta = clone.getItemMeta();
+			//				if (cloneMeta.hasItemModel())
+			//				{
+			//					NamespacedKey itemModel = cloneMeta.getItemModel();
+			//					Material material = Method2.valueOf(itemModel != null ? itemModel.getKey().toUpperCase() : "", Material.class);
+			//					if (material != null)
+			//					{
+			//						cloneMeta.setItemModel(null);
+			//						clone.setItemMeta(cloneMeta);
+			//						clone.setType(material);
+			//					}
+			//				}
+			//			}
+			if (customMaterial != null && (customMaterial.getRealMaterial() == Material.DEBUG_STICK
+					|| customMaterial.getRealMaterial() != Material.PLAYER_HEAD && customMaterial.getDisplayMaterial() == Material.PLAYER_HEAD))
 			{
 				ItemMeta cloneMeta = clone.getItemMeta();
 				if (cloneMeta.hasItemModel())

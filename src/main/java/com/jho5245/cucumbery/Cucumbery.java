@@ -232,6 +232,7 @@ public class Cucumbery extends JavaPlugin
 			{
 				SoundPlay.playSound(online, Sound.BLOCK_WOODEN_DOOR_OPEN);
 			}
+			Bukkit.getScheduler().runTaskLater(Cucumbery.getPlugin(), () -> ItemStackUtil.updateInventory(online), 1L);
 		}
 	}
 

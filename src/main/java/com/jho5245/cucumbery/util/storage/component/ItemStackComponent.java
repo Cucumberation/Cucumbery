@@ -2,7 +2,6 @@ package com.jho5245.cucumbery.util.storage.component;
 
 import com.comphenix.protocol.PacketType.Play.Server;
 import com.jho5245.cucumbery.Cucumbery;
-import com.jho5245.cucumbery.events.addon.protocollib.ParseComponentItemStackEvent;
 import com.jho5245.cucumbery.util.addons.ProtocolLibManager;
 import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
@@ -91,27 +90,18 @@ public class ItemStackComponent
 
 	@NotNull
 	public static Component itemStackComponent(@NotNull ItemStack itemStack, int amount, @Nullable TextColor defaultColor, boolean showAmount,
-			@Nullable Player viewer)
+			@Nullable Player player)
 	{
 		itemStack = itemStack.clone();
-		if (viewer != null)
-		{
-			ParseComponentItemStackEvent event = new ParseComponentItemStackEvent(viewer, itemStack);
-			event.callEvent();
-			if (!event.isCancelled())
-			{
-				itemStack = event.getItemStack();
-			}
-		}
 		ItemLore.removeItemLore(itemStack);
 		final ItemStack giveItem = itemStack.clone();
 		itemStack.setAmount(Math.max(1, Math.min(64, itemStack.getAmount())));
 		Component itemName = ItemNameUtil.itemName(itemStack, defaultColor);
 		ItemStack hover = new ItemStack(Material.BUNDLE);
 		BundleMeta bundleMeta = (BundleMeta) hover.getItemMeta();
-		if (viewer != null)
+		if (player != null)
 		{
-			boolean showItemLore = UserData.SHOW_ITEM_LORE.getBoolean(viewer), showAll = UserData.EVENT_EXCEPTION_ACCESS.getBoolean(viewer);
+			boolean showItemLore = UserData.SHOW_ITEM_LORE.getBoolean(player), showAll = UserData.EVENT_EXCEPTION_ACCESS.getBoolean(player);
 			NBTItem nbtItem = new NBTItem(itemStack.clone());
 			@Nullable NBTCompound itemTag = nbtItem.getCompound(CucumberyTag.KEY_MAIN);
 			NBTList<String> hideFlags = NBTAPI.getStringList(itemTag, CucumberyTag.HIDE_FLAGS_KEY);
@@ -123,8 +113,8 @@ public class ItemStackComponent
 			if (showItemLore) // 아이템 설명을 사용할 경우 큐컴버리의 setItemLore의 설명만 사용하고 모든 ItemFlag 추가
 			{
 				clone = Cucumbery.using_ProtocolLib
-						? ProtocolLibManager.setItemLore(Server.ABILITIES, clone, viewer)
-						: ItemLore.setItemLore(itemStack, false, ItemLoreView.of(viewer));
+						? ProtocolLibManager.setItemLore(Server.ABILITIES, clone, player)
+						: ItemLore.setItemLore(itemStack, false, ItemLoreView.of(player));
 				cloneMeta = clone.getItemMeta();
 				cloneMeta.addItemFlags(ItemFlag.values());
 			}
@@ -139,7 +129,7 @@ public class ItemStackComponent
 					cloneMeta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
 			}
 			clone.setItemMeta(cloneMeta);
-			List<Component> tooltip = new ArrayList<>(clone.computeTooltipLines(TooltipContext.create(), viewer));
+			List<Component> tooltip = new ArrayList<>(clone.computeTooltipLines(TooltipContext.create(), player));
 
 			// 공백 라인 제거
 			while (!tooltip.isEmpty() && tooltip.getFirst() instanceof TextComponent textComponent && textComponent.content().isEmpty())
@@ -155,7 +145,7 @@ public class ItemStackComponent
 				if (tooltip1.color() != null && tooltip1.decoration(TextDecoration.ITALIC) == State.NOT_SET)
 					tooltip.set(i, tooltip1.decoration(TextDecoration.ITALIC, State.FALSE));
 			}
-			if (viewer.hasPermission("asdf") && !nbtItem.hasTag("VirtualItem"))
+			if (player.hasPermission("asdf") && !nbtItem.hasTag("VirtualItem"))
 			{
 				tooltip.add(Component.empty());
 				tooltip.add(ComponentUtil.translate("&7클릭하여 /give 명령어로 복사"));
@@ -163,7 +153,7 @@ public class ItemStackComponent
 				if (nbt.equals("[]"))
 					nbt = "";
 				String giveCommand = "/give @p " + giveItem.getType().getKey() + nbt;
-				if (UserData.SHOW_GIVE_COMMAND_NBT_ON_ITEM_ON_CHAT.getBoolean(viewer) && !nbt.isEmpty())
+				if (UserData.SHOW_GIVE_COMMAND_NBT_ON_ITEM_ON_CHAT.getBoolean(player) && !nbt.isEmpty())
 				{
 					String nbtClone = giveCommand;
 					int count = 0;
@@ -186,7 +176,7 @@ public class ItemStackComponent
 		}
 		// 꾸러미 아이템 표시 규칙 변경
 		final ItemStack displayItemStack =
-				Cucumbery.using_ProtocolLib && viewer != null ? ProtocolLibManager.setItemLore(Server.ABILITIES, itemStack, viewer) : itemStack;
+				Cucumbery.using_ProtocolLib && player != null ? ProtocolLibManager.setItemLore(Server.ABILITIES, itemStack, player) : itemStack;
 		ItemMeta displayItemMeta = displayItemStack.getItemMeta();
 		displayItemMeta.setMaxStackSize(99);
 		displayItemStack.setItemMeta(displayItemMeta);
