@@ -2,6 +2,7 @@ package com.jho5245.cucumbery.util.storage.component;
 
 import com.comphenix.protocol.PacketType.Play.Server;
 import com.jho5245.cucumbery.Cucumbery;
+import com.jho5245.cucumbery.events.addon.protocollib.ParseComponentItemStackEvent;
 import com.jho5245.cucumbery.util.addons.ProtocolLibManager;
 import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
@@ -93,6 +94,15 @@ public class ItemStackComponent
 			@Nullable Player viewer)
 	{
 		itemStack = itemStack.clone();
+		if (viewer != null)
+		{
+			ParseComponentItemStackEvent event = new ParseComponentItemStackEvent(viewer, itemStack);
+			event.callEvent();
+			if (!event.isCancelled())
+			{
+				itemStack = event.getItemStack();
+			}
+		}
 		ItemLore.removeItemLore(itemStack);
 		final ItemStack giveItem = itemStack.clone();
 		itemStack.setAmount(Math.max(1, Math.min(64, itemStack.getAmount())));
