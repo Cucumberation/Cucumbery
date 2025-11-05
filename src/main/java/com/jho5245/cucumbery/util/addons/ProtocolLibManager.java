@@ -1055,7 +1055,12 @@ public class ProtocolLibManager
 				{
 					if (!ItemStackUtil.itemExists(pair.getSecond()))
 						continue;
-					pair.setSecond(setItemLore(Server.WINDOW_ITEMS, pair.getSecond(), player));
+					ItemStack itemStack = pair.getSecond();
+					EntityEquipmentEvent entityEquipmentEvent = new EntityEquipmentEvent(player, itemStack);
+					if (!entityEquipmentEvent.callEvent())
+					{
+						pair.setSecond(setItemLore(Server.WINDOW_ITEMS, entityEquipmentEvent.getItemStack(), player));
+					}
 				}
 				packet.getSlotStackPairLists().write(0, listStructureModifier);
 			}
