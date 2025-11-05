@@ -1656,7 +1656,12 @@ public class ProtocolLibManager
 			{
 				if (hoverEvent.value() instanceof ShowItem showItem)
 				{
-					component = ItemStackComponent.itemStackComponent(ItemStackUtil.getItemStackFromHoverEvent(showItem), 1, Constant.THE_COLOR, false, player);
+					ItemStack itemStack = ItemStackUtil.getItemStackFromHoverEvent(showItem);
+					ParseComponentItemStackEvent event = new ParseComponentItemStackEvent(player, itemStack);
+					if (!event.isCancelled())
+					{
+						component = ItemStackComponent.itemStackComponent(event.getItemStack(), 1, Constant.THE_COLOR, false, player);
+					}
 				}
 				else if (hoverEvent.value() instanceof ShowEntity showEntity)
 				{
