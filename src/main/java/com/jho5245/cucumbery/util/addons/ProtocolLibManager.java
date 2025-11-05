@@ -24,10 +24,7 @@ import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeCooldown;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeMinecraft;
 import com.jho5245.cucumbery.custom.custommaterial.CustomMaterial;
-import com.jho5245.cucumbery.events.addon.protocollib.OpenWindowMerchantEvent;
-import com.jho5245.cucumbery.events.addon.protocollib.SetCursorItemEvent;
-import com.jho5245.cucumbery.events.addon.protocollib.SetSlotEvent;
-import com.jho5245.cucumbery.events.addon.protocollib.WindowItemsEvent;
+import com.jho5245.cucumbery.events.addon.protocollib.*;
 import com.jho5245.cucumbery.util.itemlore.ItemLore;
 import com.jho5245.cucumbery.util.itemlore.ItemLore.RemoveFlag;
 import com.jho5245.cucumbery.util.itemlore.ItemLoreView;
@@ -934,11 +931,17 @@ public class ProtocolLibManager
 					//					boolean showCustomName =
 					//							UserData.SHOW_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player) && !UserData.FORCE_HIDE_DROPPED_ITEM_CUSTOM_NAME.getBoolean(player);
 					//					Boolean shouldShowCustomName = ItemStackUtil.shouldShowCustomName(itemStack);
-					StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
-					List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-					wrappedDataValues.add(
-							new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
-					watchableAccessor.write(0, wrappedDataValues);
+					EntityMetaDataEvent entityMetaDataEvent = new EntityMetaDataEvent(player, itemStack, entity);
+					entityMetaDataEvent.callEvent();
+					if (!entityMetaDataEvent.isCancelled())
+					{
+						StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
+						List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
+						wrappedDataValues.add(
+								new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(entityMetaDataEvent.getItemStack())));
+						watchableAccessor.write(0, wrappedDataValues);
+					}
+
 					//					wrappedDataValues.add(new WrappedDataValue(2, WrappedDataWatcher.Registry.getChatComponentSerializer(true),
 					//							Optional.of(WrappedChatComponent.fromJson(ComponentUtil.serializeAsJson(component)).getHandle())));
 					//					wrappedDataValues.add(
@@ -954,38 +957,58 @@ public class ProtocolLibManager
 				if (entity instanceof ItemFrame itemFrame)
 				{
 					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, itemFrame.getItem(), player);
-					StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
-					List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-					wrappedDataValues.add(
-							new WrappedDataValue(9, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
-					watchableAccessor.write(0, wrappedDataValues);
+					EntityMetaDataEvent entityMetaDataEvent = new EntityMetaDataEvent(player, itemStack, entity);
+					entityMetaDataEvent.callEvent();
+					if (!entityMetaDataEvent.isCancelled())
+					{
+						StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
+						List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
+						wrappedDataValues.add(
+								new WrappedDataValue(9, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(entityMetaDataEvent.getItemStack())));
+						watchableAccessor.write(0, wrappedDataValues);
+					}
 				}
 				if (entity instanceof ThrowableProjectile throwableProjectile && !(entity instanceof Trident))
 				{
 					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, throwableProjectile.getItem(), player);
-					StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
-					List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-					wrappedDataValues.add(
-							new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
-					watchableAccessor.write(0, wrappedDataValues);
+					EntityMetaDataEvent entityMetaDataEvent = new EntityMetaDataEvent(player, itemStack, entity);
+					entityMetaDataEvent.callEvent();
+					if (!entityMetaDataEvent.isCancelled())
+					{
+						StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
+						List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
+						wrappedDataValues.add(
+								new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(entityMetaDataEvent.getItemStack())));
+						watchableAccessor.write(0, wrappedDataValues);
+					}
 				}
 				if (entity instanceof EnderSignal enderSignal)
 				{
 					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, enderSignal.getItem(), player);
-					StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
-					List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-					wrappedDataValues.add(
-							new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
-					watchableAccessor.write(0, wrappedDataValues);
+					EntityMetaDataEvent entityMetaDataEvent = new EntityMetaDataEvent(player, itemStack, entity);
+					entityMetaDataEvent.callEvent();
+					if (!entityMetaDataEvent.isCancelled())
+					{
+						StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
+						List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
+						wrappedDataValues.add(
+								new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(entityMetaDataEvent.getItemStack())));
+						watchableAccessor.write(0, wrappedDataValues);
+					}
 				}
 				if (entity instanceof ItemDisplay itemDisplay && ItemStackUtil.itemExists(itemDisplay.getItemStack()))
 				{
 					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, itemDisplay.getItemStack(), player);
-					StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
-					List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-					wrappedDataValues.add(
-							new WrappedDataValue(23, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
-					watchableAccessor.write(0, wrappedDataValues);
+					EntityMetaDataEvent entityMetaDataEvent = new EntityMetaDataEvent(player, itemStack, entity);
+					entityMetaDataEvent.callEvent();
+					if (!entityMetaDataEvent.isCancelled())
+					{
+						StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
+						List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
+						wrappedDataValues.add(
+								new WrappedDataValue(23, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(entityMetaDataEvent.getItemStack())));
+						watchableAccessor.write(0, wrappedDataValues);
+					}
 				}
 				if (entity instanceof Trident)
 				{
@@ -1000,11 +1023,16 @@ public class ProtocolLibManager
 				if (entity instanceof OminousItemSpawner ominousItemSpawner)
 				{
 					ItemStack itemStack = setItemLore(Server.WINDOW_ITEMS, ominousItemSpawner.getItem(), player);
-					StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
-					List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
-					wrappedDataValues.add(
-							new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(itemStack)));
-					watchableAccessor.write(0, wrappedDataValues);
+					EntityMetaDataEvent entityMetaDataEvent = new EntityMetaDataEvent(player, itemStack, entity);
+					entityMetaDataEvent.callEvent();
+					if (!entityMetaDataEvent.isCancelled())
+					{
+						StructureModifier<List<WrappedDataValue>> watchableAccessor = packet.getDataValueCollectionModifier();
+						List<WrappedDataValue> wrappedDataValues = watchableAccessor.read(0);
+						wrappedDataValues.add(
+								new WrappedDataValue(8, WrappedDataWatcher.Registry.getItemStackSerializer(false), MinecraftReflection.getMinecraftItemStack(entityMetaDataEvent.getItemStack())));
+						watchableAccessor.write(0, wrappedDataValues);
+					}
 				}
 			}
 		});
