@@ -2,20 +2,18 @@ package com.jho5245.cucumbery.listeners.entity.no_groups;
 
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
-import com.jho5245.cucumbery.custom.customeffect.children.group.PlayerCustomEffectImple;
-import com.jho5245.cucumbery.custom.customeffect.children.group.StringCustomEffectImple;
 import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectType;
-import com.jho5245.cucumbery.custom.customeffect.type.CustomEffectTypeRune;
 import com.jho5245.cucumbery.events.item.PlayerPickupItemActionbarEvent;
 import com.jho5245.cucumbery.util.nbt.NBTAPI;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
-import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
-import com.jho5245.cucumbery.util.storage.data.*;
+import com.jho5245.cucumbery.util.storage.data.Constant;
+import com.jho5245.cucumbery.util.storage.data.Permission;
+import com.jho5245.cucumbery.util.storage.data.Prefix;
+import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.data.custom_enchant.CustomEnchant;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
-import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.no_groups.SoundPlay;
 import de.tr7zw.changeme.nbtapi.NBTEntity;
 import net.kyori.adventure.text.Component;
@@ -260,7 +258,7 @@ public class EntityPickupItem implements Listener
 	{
 		if (UserData.SHOW_ACTIONBAR_ON_ITEM_PICKUP.getBoolean(player.getUniqueId()))
 		{
-			PlayerPickupItemActionbarEvent playerPickupItemActionbarEvent = new  PlayerPickupItemActionbarEvent(player, itemStack);
+			PlayerPickupItemActionbarEvent playerPickupItemActionbarEvent = new PlayerPickupItemActionbarEvent(player, itemStack);
 			playerPickupItemActionbarEvent.callEvent();
 			if (!playerPickupItemActionbarEvent.isCancelled())
 			{
@@ -272,7 +270,8 @@ public class EntityPickupItem implements Listener
 				}
 				else
 				{
-					player.sendActionBar(ComponentUtil.translate(player,"#00ccff;key:cucumbery.action_bar.pickup_item.count|%s을(를) %s개 주웠습니다", itemStackComponent, "#00ff3c;" + amount));
+					player.sendActionBar(
+							ComponentUtil.translate(player, "#00ccff;key:cucumbery.action_bar.pickup_item.count|%s을(를) %s개 주웠습니다", itemStackComponent, "#00ff3c;" + amount));
 				}
 			}
 		}
