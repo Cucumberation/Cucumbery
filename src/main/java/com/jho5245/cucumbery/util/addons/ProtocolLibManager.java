@@ -1057,7 +1057,7 @@ public class ProtocolLibManager
 						continue;
 					ItemStack itemStack = pair.getSecond();
 					EntityEquipmentEvent entityEquipmentEvent = new EntityEquipmentEvent(player, itemStack);
-					if (!entityEquipmentEvent.callEvent())
+					if (entityEquipmentEvent.callEvent())
 					{
 						pair.setSecond(setItemLore(Server.WINDOW_ITEMS, entityEquipmentEvent.getItemStack(), player));
 					}
