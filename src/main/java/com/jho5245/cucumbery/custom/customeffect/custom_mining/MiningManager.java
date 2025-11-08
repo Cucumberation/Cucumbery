@@ -1,5 +1,8 @@
 package com.jho5245.cucumbery.custom.customeffect.custom_mining;
 
+import com.ghostchu.quickshop.QuickShop;
+import com.ghostchu.quickshop.api.QuickShopAPI;
+import com.ghostchu.quickshop.api.shop.Shop;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffect;
 import com.jho5245.cucumbery.custom.customeffect.CustomEffectManager;
@@ -33,6 +36,7 @@ import de.tr7zw.changeme.nbtapi.NBTType;
 import net.coreprotect.config.ConfigHandler;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Waterlogged;
@@ -121,6 +125,32 @@ public class MiningManager
 			if (ConfigHandler.inspecting.getOrDefault(player.getName(), false))
 			{
 				return null;
+			}
+		}
+
+		// QuickShop 상점인지 확인
+		if (Cucumbery.using_QuickShop)
+		{
+			Shop shop =	QuickShop.getInstance().getShopManager().getShop(blockLocation);
+			if (shop != null)
+			{
+				return null;
+			}
+			// 표지판 확인
+			if (blockLocation.getBlock().getState() instanceof Sign sign)
+			{
+				for (int x = blockLocation.getBlockX() - 1; x <= blockLocation.getBlockX() + 1; x++)
+				{
+					for (int z = blockLocation.getBlockZ() - 1; z <= blockLocation.getBlockZ() + 1; z++)
+					{
+						Location l = new Location(blockLocation.getWorld(), x, blockLocation.getBlockY(), z);
+						Shop s = QuickShop.getInstance().getShopManager().getShop(l);
+						if (s != null && s.getSigns().contains(sign))
+						{
+							return null;
+						}
+					}
+				}
 			}
 		}
 
