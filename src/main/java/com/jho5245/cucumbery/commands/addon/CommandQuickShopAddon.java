@@ -367,7 +367,6 @@ public class CommandQuickShopAddon implements CucumberyCommandExecutor
 					List<Completion> list2 = CommandTabUtil.tabCompleterDoubleRadius(args, 0d, false, 10_000_000_000_000d, false, "<" + display + "의 거래 가격>");
 					return CommandTabUtil.sortError(list1, list2);
 				}
-
 				case "amount" ->
 				{
 					if (shopItem.getMaxStackSize() == 1)
@@ -395,7 +394,6 @@ public class CommandQuickShopAddon implements CucumberyCommandExecutor
 				return CommandTabUtil.tabCompleterBoolean(args, "[명령어 출력 숨김 여부]");
 			}
 		}
-
 		return CommandTabUtil.ARGS_LONG;
 	}
 

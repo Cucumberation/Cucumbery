@@ -115,13 +115,13 @@ public class CommandSetItemMeta implements CommandExecutor, TabCompleter
 					{
 						return true;
 					}
-					String displayName = ComponentUtil.serialize(ItemNameUtil.itemName(itemStack));
+					String displayName = MessageUtil.stripColor(ComponentUtil.serialize(ItemNameUtil.itemName(itemStack)));
 					if (subString >= displayName.length())
 					{
 						itemMeta.displayName(null);
 						itemStack.setItemMeta(itemMeta);
 						inventory.setItemInMainHand(itemStack);
-						MessageUtil.sendMessage(player, Prefix.INFO_SETDATA, ComponentUtil.translate("주로 사용하는 손에 들고 있는 아이템의 이름을 제거했습니다").hoverEvent(itemStack.asHoverEvent()));
+						MessageUtil.sendMessage(player, Prefix.INFO_SETDATA, "주로 사용하는 손에 들고 있는 아이템의 이름을 제거했습니다 (%s)", itemStack);
 					}
 					else
 					{
@@ -129,8 +129,7 @@ public class CommandSetItemMeta implements CommandExecutor, TabCompleter
 						itemMeta.displayName(ComponentUtil.create(displayName));
 						itemStack.setItemMeta(itemMeta);
 						inventory.setItemInMainHand(itemStack);
-						MessageUtil.sendMessage(player, Prefix.INFO_SETDATA,
-								ComponentUtil.translate("주로 사용하는 손에 들고 있는 아이템의 이름을 %s글자 제거했습니다", Constant.THE_COLOR_HEX + subString).hoverEvent(itemStack.asHoverEvent()));
+						MessageUtil.sendMessage(player, Prefix.INFO_SETDATA,"주로 사용하는 손에 들고 있는 아이템의 이름을 %s글자 제거했습니다 (%s)", Constant.THE_COLOR_HEX + subString, itemStack);
 					}
 				}
 				else
@@ -341,7 +340,8 @@ public class CommandSetItemMeta implements CommandExecutor, TabCompleter
 						ItemLoreUtil.removeCucumberyTMIFood(itemStack);
 					}
 					MessageUtil.sendMessage(player, Prefix.INFO_SETDATA,
-							ComponentUtil.translate("주로 사용하는 손에 들고 있는 아이템의 %s번째 줄에 공백 설명을 추가했습니다", Constant.THE_COLOR_HEX + lore.size()).hoverEvent(itemStack.asHoverEvent()));
+							ComponentUtil.translate("주로 사용하는 손에 들고 있는 아이템의 %s번째 줄에 공백 설명을 추가했습니다", Constant.THE_COLOR_HEX + lore.size())
+									.hoverEvent(itemStack.asHoverEvent()));
 				}
 				else
 				{
@@ -399,12 +399,14 @@ public class CommandSetItemMeta implements CommandExecutor, TabCompleter
 				itemStack.setItemMeta(itemMeta);
 				if (lores.isEmpty())
 				{
-					MessageUtil.sendMessage(player, Prefix.INFO_SETDATA, ComponentUtil.translate("주로 사용하는 손에 들고 있는 아이템의 모든 설명을 제거했습니다").hoverEvent(itemStack.asHoverEvent()));
+					MessageUtil.sendMessage(player, Prefix.INFO_SETDATA,
+							ComponentUtil.translate("주로 사용하는 손에 들고 있는 아이템의 모든 설명을 제거했습니다").hoverEvent(itemStack.asHoverEvent()));
 				}
 				else
 				{
 					MessageUtil.sendMessage(player, Prefix.INFO_SETDATA,
-							ComponentUtil.translate("주로 사용하는 손에 들고 있는 아이템의 %s번째 줄의 설명을 제거했습니다", Constant.THE_COLOR_HEX + (lores.size() + 1)).hoverEvent(itemStack.asHoverEvent()));
+							ComponentUtil.translate("주로 사용하는 손에 들고 있는 아이템의 %s번째 줄의 설명을 제거했습니다", Constant.THE_COLOR_HEX + (lores.size() + 1))
+									.hoverEvent(itemStack.asHoverEvent()));
 				}
 				inventory.setItemInMainHand(itemStack);
 			}
@@ -415,7 +417,8 @@ public class CommandSetItemMeta implements CommandExecutor, TabCompleter
 					itemMeta.lore(null);
 					itemStack.setItemMeta(itemMeta);
 					inventory.setItemInMainHand(itemStack);
-					MessageUtil.sendMessage(player, Prefix.INFO_SETDATA, ComponentUtil.translate("주로 사용하는 손에 들고 있는 아이템의 모든 설명을 제거했습니다").hoverEvent(itemStack.asHoverEvent()));
+					MessageUtil.sendMessage(player, Prefix.INFO_SETDATA,
+							ComponentUtil.translate("주로 사용하는 손에 들고 있는 아이템의 모든 설명을 제거했습니다").hoverEvent(itemStack.asHoverEvent()));
 					return true;
 				}
 				if (!MessageUtil.isInteger(sender, args[0], true))
@@ -433,12 +436,14 @@ public class CommandSetItemMeta implements CommandExecutor, TabCompleter
 				inventory.setItemInMainHand(itemStack);
 				if (lores.isEmpty())
 				{
-					MessageUtil.sendMessage(player, Prefix.INFO_SETDATA, ComponentUtil.translate("주로 사용하는 손에 들고 있는 아이템의 모든 설명을 제거했습니다").hoverEvent(itemStack.asHoverEvent()));
+					MessageUtil.sendMessage(player, Prefix.INFO_SETDATA,
+							ComponentUtil.translate("주로 사용하는 손에 들고 있는 아이템의 모든 설명을 제거했습니다").hoverEvent(itemStack.asHoverEvent()));
 				}
 				else
 				{
 					MessageUtil.sendMessage(player, Prefix.INFO_SETDATA,
-							ComponentUtil.translate("주로 사용하는 손에 들고 있는 아이템의 %s번째 줄의 설명을 제거했습니다", Constant.THE_COLOR_HEX + (lores.size() + 1)).hoverEvent(itemStack.asHoverEvent()));
+							ComponentUtil.translate("주로 사용하는 손에 들고 있는 아이템의 %s번째 줄의 설명을 제거했습니다", Constant.THE_COLOR_HEX + (lores.size() + 1))
+									.hoverEvent(itemStack.asHoverEvent()));
 				}
 			}
 			else
@@ -528,7 +533,8 @@ public class CommandSetItemMeta implements CommandExecutor, TabCompleter
 				if (!hideOutput)
 				{
 					MessageUtil.sendMessage(player, Prefix.INFO_SETDATA,
-							ComponentUtil.translate("주로 사용하는 손에 들고 있는 아이템의 모루 사용 횟수를 %s번으로 설정했습니다", Constant.THE_COLOR_HEX + repairCost).hoverEvent(itemStack.asHoverEvent()));
+							ComponentUtil.translate("주로 사용하는 손에 들고 있는 아이템의 모루 사용 횟수를 %s번으로 설정했습니다", Constant.THE_COLOR_HEX + repairCost)
+									.hoverEvent(itemStack.asHoverEvent()));
 				}
 			}
 			else

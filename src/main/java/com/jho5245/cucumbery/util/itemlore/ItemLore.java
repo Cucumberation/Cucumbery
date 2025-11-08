@@ -11,7 +11,6 @@ import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
 import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Constant.CucumberyHideFlag;
 import com.jho5245.cucumbery.util.storage.data.Constant.ExtraTag;
-import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemCategory;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemCategory.Rarity;
 import de.tr7zw.changeme.nbtapi.*;
@@ -22,7 +21,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.CreativeCategory;
 import org.bukkit.inventory.ItemFlag;
@@ -124,7 +122,7 @@ public class ItemLore
 		if (customMaterial != null)
 		{
 			Player player = params instanceof Player p ? p : params instanceof ItemLoreView view ? view.getPlayer() : null;
-			ItemLoreCustomMaterial.itemLore(player, itemStack, customMaterial);
+			ItemComponentCustomMaterial.send(player, itemStack, customMaterial);
 			itemMeta = itemStack.getItemMeta();
 		}
 		boolean hasOnlyNbtTagLore =

@@ -21,6 +21,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.beans.EventHandler;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -318,6 +319,8 @@ public class ItemLore3
 			if (!itemLore3Event.getItemLore().isEmpty())
 			{
 				description.addAll(itemLore3Event.getItemLore());
+				itemStack.setItemMeta(itemLore3Event.getItemStack().getItemMeta());
+				itemMeta = itemStack.getItemMeta();
 			}
 
 //      if (!customType.isEmpty())

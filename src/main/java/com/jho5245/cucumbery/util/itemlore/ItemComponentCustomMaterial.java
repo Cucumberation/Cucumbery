@@ -13,9 +13,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 
-public class ItemLoreCustomMaterial
+public class ItemComponentCustomMaterial
 {
-	protected static void itemLore(@Nullable Player player, @NotNull ItemStack itemStack, @NotNull CustomMaterial customMaterial)
+	protected static void send(@Nullable Player player, @NotNull ItemStack itemStack, @NotNull CustomMaterial customMaterial)
 	{
 		ItemMeta itemMeta = itemStack.getItemMeta();
 		itemMeta.itemName(customMaterial.getDisplayName());

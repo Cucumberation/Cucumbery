@@ -84,12 +84,6 @@ public class ItemLoreUtil
         return true;
       }
 
-      // 아이템의 설명이 있고 그 설명의 개수가 1개이고, 값이 (+NBT) 라면 true
-      if (hasOnlyNbtTagLore(itemStack))
-      {
-        return true;
-      }
-
       // 아이템의 설명이 있고 설명의 개수가 1개 이상
       if (lore != null && lore.size() > 0)
       {
