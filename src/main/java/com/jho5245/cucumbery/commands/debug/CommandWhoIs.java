@@ -191,6 +191,11 @@ public class CommandWhoIs implements CucumberyCommandExecutor
           {
             listName = offlinePlayer.getUniqueId().toString();
           }
+					String characterName = UserData.CHARACTER_NAME.getString(offlinePlayer);
+					if (characterName == null)
+					{
+						characterName = offlinePlayer.getName();
+					}
           @Nullable Component displayComponent = ComponentUtil.create(display), listComponent = ComponentUtil.create(listName);
           String playerDisplayName = ComponentUtil.serialize(displayComponent),
                   playerListName = ComponentUtil.serialize(listComponent);
@@ -233,6 +238,7 @@ public class CommandWhoIs implements CucumberyCommandExecutor
           {
             MessageUtil.sendMessage(sender, Prefix.INFO_WHOIS, "목록 닉네임(NBT) : %s", Component.text(listName).hoverEvent(ComponentUtil.translate("chat.copy.click")).clickEvent(ClickEvent.copyToClipboard(listName)));
           }
+					MessageUtil.sendMessage(sender, Prefix.INFO_WHOIS, "캐릭터 닉네임 : %s", characterName != null ? characterName : "&c알 수 없음");
           MessageUtil.sendMessage(sender, Prefix.INFO_WHOIS, Constant.separatorSubString(3));
         }
         else if (args[1].equalsIgnoreCase("state"))

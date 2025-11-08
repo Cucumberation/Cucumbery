@@ -1363,6 +1363,11 @@ public class Method extends SoundPlay
 					{
 						return Bukkit.getServer().getOfflinePlayer(uuid);
 					}
+					String characterName = config.getString(UserData.CHARACTER_NAME.getKey());
+					if (characterName != null && MessageUtil.stripColor(ComponentUtil.serialize(ComponentUtil.create(characterName))).toLowerCase().contains(name.toLowerCase()))
+					{
+						return Bukkit.getServer().getOfflinePlayer(uuid);
+					}
 				}
 			}
 			if (notice)

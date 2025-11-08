@@ -190,7 +190,7 @@ public class CommandUserData implements CucumberyCommandExecutor
 					}
 					switch (key)
 					{
-						case DISPLAY_NAME, PLAYER_LIST_NAME ->
+						case DISPLAY_NAME, PLAYER_LIST_NAME, CHARACTER_NAME ->
 						{
 							MessageUtil.sendError(sender, "닉네임은 닉네임 명령어(rg255,204;/nick&r, rg255,204;/nickothers&r)를 사용하여 변경해주세요.");
 							return true;
@@ -430,7 +430,7 @@ public class CommandUserData implements CucumberyCommandExecutor
 			return switch (key)
 			{
 				case ITEM_DROP_MODE, ITEM_PICKUP_MODE -> CommandTabUtil.tabCompleterList(args, "<모드>", false, "normal", "sneak", "disabled");
-				case DISPLAY_NAME, PLAYER_LIST_NAME -> CommandTabUtil.errorMessage("닉네임은 닉네임 명령어(/nick, /nickothers)를 사용하여 변경해주세요.");
+				case DISPLAY_NAME, PLAYER_LIST_NAME, CHARACTER_NAME -> CommandTabUtil.errorMessage("닉네임은 닉네임 명령어(/nick, /nickothers)를 사용하여 변경해주세요.");
 				case HEALTH_BAR -> CommandTabUtil.errorMessage("HP바는 hp바 명령어(/shp)를 사용하여 변경해주세요.");
 				case ID, UUID -> CommandTabUtil.errorMessage(args[1] + "(" + key.getKey().replace("-", " ") + ")" + " 키의 값은 변경할 수 없습니다");
 				case ITEM_USE_DELAY, ITEM_DROP_DELAY -> CommandTabUtil.tabCompleterIntegerRadius(args, 0, 200, "<틱>");

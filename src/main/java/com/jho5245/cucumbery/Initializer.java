@@ -31,6 +31,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.jetbrains.annotations.NotNull;
+import xyz.haoshoku.nick.api.NickAPI;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -532,6 +533,7 @@ public class Initializer
 					String id = userDataConfig.getString(CustomConfig.UserData.ID.getKey());
 					String display = userDataConfig.getString(CustomConfig.UserData.DISPLAY_NAME.getKey());
 					String listName = userDataConfig.getString(CustomConfig.UserData.PLAYER_LIST_NAME.getKey());
+					String characterName = userDataConfig.getString(UserData.CHARACTER_NAME.getKey());
 					if (!nickNames.contains(uuid))
 					{
 						nickNames.add(uuid);
@@ -554,6 +556,14 @@ public class Initializer
 						if (!nickNames.contains(listName))
 						{
 							nickNames.add(MessageUtil.stripColor(listName));
+						}
+					}
+					if (characterName != null)
+					{
+						characterName = MessageUtil.stripColor(ComponentUtil.serialize(ComponentUtil.create(characterName)));
+						if (!nickNames.contains(characterName))
+						{
+							nickNames.add(characterName);
 						}
 					}
 				}
@@ -629,17 +639,24 @@ public class Initializer
 		Variable.cachedUUIDs.put(Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName()), uuid);
 		String displayname = UserData.DISPLAY_NAME.getString(player.getUniqueId());
 		String playerListName = UserData.PLAYER_LIST_NAME.getString(player.getUniqueId());
+		String characterName = UserData.CHARACTER_NAME.getString(player.getUniqueId());
 		if (displayname != null)
 		{
-			displayname = MessageUtil.stripColor(displayname);
+			displayname = MessageUtil.stripColor(ComponentUtil.serialize(ComponentUtil.create(displayname)));
 			Variable.nickNames.add(displayname);
 			Variable.cachedUUIDs.put(displayname, uuid);
 		}
 		if (playerListName != null)
 		{
-			playerListName = MessageUtil.stripColor(playerListName);
+			playerListName = MessageUtil.stripColor(ComponentUtil.serialize(ComponentUtil.create(playerListName)));
 			Variable.nickNames.add(playerListName);
 			Variable.cachedUUIDs.put(playerListName, uuid);
+		}
+		if (characterName != null)
+		{
+			characterName = MessageUtil.stripColor(ComponentUtil.serialize(ComponentUtil.create(characterName)));
+			Variable.nickNames.add(characterName);
+			Variable.cachedUUIDs.put(characterName, uuid);
 		}
 		int invincibleTime = UserData.INVINCIBLE_TIME.getInt(uuid), loginInvincibleTime = UserData.INVINCIBLE_TIME_JOIN.getInt(uuid);
 		if (invincibleTime >= 0)
@@ -694,6 +711,7 @@ public class Initializer
 		{
 			displayname = UserData.DISPLAY_NAME.getString(uuid);
 			playerListName = UserData.PLAYER_LIST_NAME.getString(uuid);
+			characterName = UserData.CHARACTER_NAME.getString(uuid);
 		}
 		Component senderComponent = SenderComponentUtil.senderComponent(player, player, null);
 		if (displayname == null)
@@ -708,12 +726,21 @@ public class Initializer
 		{
 			playerListName = Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName());
 		}
+		if (characterName == null)
+		{
+			characterName = Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName());
+		}
 		finalDislay = ComponentUtil.create(playerListName);
 		final Component originalDisplayName = player.displayName();
 		player.displayName(finalDislay.hoverEvent(null).clickEvent(null).insertion(null));
 		senderComponent = SenderComponentUtil.senderComponent(player, player, null);
 		player.playerListName(senderComponent.hoverEvent(null).clickEvent(null).insertion(null));
 		player.displayName(originalDisplayName);
+		if (Cucumbery.using_NickAPI)
+		{
+			NickAPI.setNick(player, ComponentUtil.serialize(ComponentUtil.create(characterName)));
+			NickAPI.refreshPlayer(player);
+		}
 		boolean isSpectator = UserData.SPECTATOR_MODE.getBoolean(player);
 		if (isSpectator && UserData.SPECTATOR_MODE_ON_JOIN.getBoolean(player))
 		{
@@ -732,7 +759,7 @@ public class Initializer
 		{
 			return;
 		}
-		String displayName = UserData.DISPLAY_NAME.getString(player), listName = UserData.PLAYER_LIST_NAME.getString(player);
+		String displayName = UserData.DISPLAY_NAME.getString(player), listName = UserData.PLAYER_LIST_NAME.getString(player), characterName = UserData.CHARACTER_NAME.getString(player);
 		if (displayName == null)
 		{
 			displayName = Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName());
@@ -741,21 +768,19 @@ public class Initializer
 		{
 			listName = Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName());
 		}
+		if (characterName == null)
+		{
+			characterName = Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName());
+		}
 		Component display = ComponentUtil.create(displayName);
 		player.displayName(display);
-/*		if (UserData.DISPLAY_NAME.getString(player) != null)
-		{
-			PlayerProfile playerProfile = player.getPlayerProfile();
-			String name = MessageUtil.stripColor(ComponentUtil.serialize(display));
-			if (name.length() > 16)
-			{
-				name = name.substring(0, 16);
-			}
-			playerProfile.setName(name);
-			player.setPlayerProfile(playerProfile);
-		}*/
 		Component list = ComponentUtil.create(listName);
 		player.playerListName(list);
+		if (Cucumbery.using_NickAPI)
+		{
+			NickAPI.setNick(player, ComponentUtil.serialize(ComponentUtil.create(characterName)));
+			NickAPI.refreshPlayer(player);
+		}
 	}
 
 	public static void saveUserData()

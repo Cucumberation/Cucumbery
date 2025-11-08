@@ -112,6 +112,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import xyz.haoshoku.nick.NickPlugin;
 
 import java.io.File;
 import java.util.List;
@@ -120,7 +121,7 @@ import java.util.UUID;
 
 public class Cucumbery extends JavaPlugin
 {
-	public static final int CONFIG_VERSION = 52, DEATH_MESSAGES_CONFIG_VERSION = 13, LANG_CONFIG_VERSION = 8, RESOURCE_PACK_VERSION = 1;
+	public static final int CONFIG_VERSION = 53, DEATH_MESSAGES_CONFIG_VERSION = 13, LANG_CONFIG_VERSION = 8, RESOURCE_PACK_VERSION = 1;
 
 	//  private static final ExecutorService brigadierService = Executors.newFixedThreadPool(1);
 	public static YamlConfiguration config;
@@ -158,6 +159,8 @@ public class Cucumbery extends JavaPlugin
 	public static boolean using_DeluxeAuctions;
 
 	public static boolean using_Shopkeepers;
+
+	public static boolean using_NickAPI;
 
 	/**
 	 * MythicMobs API
@@ -596,6 +599,7 @@ public class Cucumbery extends JavaPlugin
 		Cucumbery.using_Shopkeepers =
 				Cucumbery.config.getBoolean("use-hook-plugins.Shopkeepers") && this.pluginManager.getPlugin("Shopkeepers") != null && this.pluginManager.getPlugin(
 						"Shopkeepers").isEnabled();
+		Cucumbery.using_NickAPI = Cucumbery.config.getBoolean("use-hook-plugins.NickAPI") && this.pluginManager.getPlugin("NickAPI") instanceof NickPlugin nickAPI && nickAPI.isEnabled();
 
 		if (using_Residence)
 		{
@@ -679,6 +683,10 @@ public class Cucumbery extends JavaPlugin
 			if (using_DeluxeAuctions)
 			{
 				MessageUtil.consoleSendMessage(Prefix.INFO, "DeluxeAuctions 플러그인을 연동했습니다");
+			}
+			if (using_NickAPI)
+			{
+				MessageUtil.consoleSendMessage(Prefix.INFO, "NickAPI 플러그인을 연동했습니다");
 			}
 		}
 		if (using_QuickShop)

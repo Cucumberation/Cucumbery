@@ -6,6 +6,7 @@ import com.ghostchu.quickshop.api.QuickShopAPI;
 import com.ghostchu.quickshop.api.shop.Shop;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.custom.custommaterial.CustomMaterial;
+import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
 import net.coreprotect.config.ConfigHandler;
 import net.kyori.adventure.text.Component;
@@ -20,6 +21,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import xyz.haoshoku.nick.api.NickAPI;
 
 import java.util.*;
 
@@ -101,6 +103,13 @@ public class TestCommand implements CucumberyCommandExecutor
 							MessageUtil.sendMessage(player, "item is : %s", customMaterial);
 						}
 					}
+				}
+				case "nick" -> {
+					Player player = (Player) sender;
+					String nickname = args[1];
+					NickAPI.setNick(player, nickname);
+					NickAPI.refreshPlayer(player);
+					MessageUtil.sendMessage(player, "nick changed");
 				}
 			}
 		}

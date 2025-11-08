@@ -1,20 +1,18 @@
 package com.jho5245.cucumbery.commands.no_groups;
 
-import com.destroystokyo.paper.profile.PlayerProfile;
 import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.no_groups.Method;
 import com.jho5245.cucumbery.util.no_groups.SelectorUtil;
-import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig;
-import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
-import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ItemNameUtil;
 import com.jho5245.cucumbery.util.storage.component.util.sendercomponent.SenderComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Permission;
 import com.jho5245.cucumbery.util.storage.data.Prefix;
 import com.jho5245.cucumbery.util.storage.data.Variable;
-import io.lumine.mythic.bukkit.entities.BukkitTadpole;
+import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig;
+import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
+import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -23,6 +21,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import xyz.haoshoku.nick.api.NickAPI;
 
 import java.io.File;
 import java.util.*;
@@ -94,15 +93,21 @@ public class CommandNickName implements CommandExecutor, TabCompleter
 				finalNickname = finalNickname.hoverEvent(senderComponent.hoverEvent()).clickEvent(senderComponent.clickEvent());
 				String serialNickname = off ? null : ComponentUtil.serializeAsJson(nickName);
 				String originDisplay = MessageUtil.stripColor(ComponentUtil.serialize(player.displayName())), originList = MessageUtil.stripColor(
-						ComponentUtil.serialize(player.playerListName()));
+						ComponentUtil.serialize(player.playerListName())), originCharacter = Cucumbery.using_NickAPI ? NickAPI.getName(player) : null;
 				String type;
 				if (args[0].equalsIgnoreCase("all"))
 				{
 					type = "모든";
 					player.displayName(finalNickname);
 					player.playerListName(finalNickname);
+					if (Cucumbery.using_NickAPI)
+					{
+						NickAPI.setNick(player, ComponentUtil.serialize(finalNickname));
+						NickAPI.refreshPlayer(player);
+					}
 					UserData.DISPLAY_NAME.set(uuid, serialNickname);
 					UserData.PLAYER_LIST_NAME.set(uuid, serialNickname);
+					UserData.CHARACTER_NAME.set(uuid, serialNickname);
 /*					PlayerProfile profile = player.getPlayerProfile();
 					String name = MessageUtil.stripColor(off ? Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName()) : ComponentUtil.serialize(nickName));
 					if (name.length() > 16)
@@ -122,6 +127,21 @@ public class CommandNickName implements CommandExecutor, TabCompleter
 					player.playerListName(finalNickname);
 					UserData.PLAYER_LIST_NAME.set(uuid, serialNickname);
 				}
+				else if (args[0].equalsIgnoreCase("character"))
+				{
+					if (Cucumbery.using_NickAPI)
+					{
+						type = "캐릭터";
+						NickAPI.setNick(player, ComponentUtil.serialize(finalNickname));
+						NickAPI.refreshPlayer(player);
+						UserData.CHARACTER_NAME.set(uuid, serialNickname);
+					}
+					else
+					{
+						MessageUtil.sendError(sender, "NickAPI 플러그인을 사용하고 있지 않습니다.");
+						return true;
+					}
+				}
 				else
 				{
 					MessageUtil.wrongArg(sender, 1, args);
@@ -138,16 +158,21 @@ public class CommandNickName implements CommandExecutor, TabCompleter
 				finalNickname = senderComponent;
 				if (off)
 				{
-					MessageUtil.sendMessage(player, Prefix.INFO_NICK, "%s을 초기화 했습니다", type + " 닉네임");
+					MessageUtil.sendMessage(player, Prefix.INFO_NICK, "%s을 초기화 했습니다. (%s)", type + " 닉네임", player);
 				}
 				else
 				{
-					MessageUtil.sendMessage(player, Prefix.INFO_NICK, "%s을 %s(으)로 변경했습니다", type + " 닉네임", finalNickname);
+					MessageUtil.sendMessage(player, Prefix.INFO_NICK, "%s을 %s(으)로 변경했습니다. (%s)", type + " 닉네임", nickName, player);
 				}
 				Variable.nickNames.remove(originDisplay);
 				Variable.nickNames.remove(originList);
 				Variable.cachedUUIDs.remove(originDisplay);
 				Variable.cachedUUIDs.remove(originList);
+				if (originCharacter != null)
+				{
+					Variable.nickNames.remove(originCharacter);
+					Variable.cachedUUIDs.remove(originCharacter);
+				}
 				Variable.nickNames.add(uuid.toString());
 				Variable.nickNames.add(Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName()));
 				Variable.nickNames.add(MessageUtil.stripColor(ComponentUtil.serialize(player.displayName())));
@@ -155,6 +180,12 @@ public class CommandNickName implements CommandExecutor, TabCompleter
 				Variable.cachedUUIDs.put(Variable.ORIGINAL_NAME.getOrDefault(player.getUniqueId(), player.getName()), uuid);
 				Variable.cachedUUIDs.put(MessageUtil.stripColor(ComponentUtil.serialize(player.displayName())), uuid);
 				Variable.cachedUUIDs.put(MessageUtil.stripColor(ComponentUtil.serialize(player.playerListName())), uuid);
+				if (Cucumbery.using_NickAPI)
+				{
+					Variable.nickNames.add(MessageUtil.stripColor(NickAPI.getName(player)));
+					Variable.cachedUUIDs.put(MessageUtil.stripColor(NickAPI.getName(player)), uuid);
+				}
+
 				File nickNamesFile = new File(Cucumbery.getPlugin().getDataFolder() + "/data/Nicknames.yml");
 				if (!nickNamesFile.exists())
 				{
@@ -199,7 +230,8 @@ public class CommandNickName implements CommandExecutor, TabCompleter
 				MessageUtil.sendError(sender, "너무 긴 닉네임입니다. 최대 rg255,204;4096자&r까지 입력할 수 있으나, rg255,204;" + nickName.length() + "자&r가 입력되었습니다");
 				return true;
 			}
-			String originDisplay = UserData.DISPLAY_NAME.getString(uuid), originList = UserData.PLAYER_LIST_NAME.getString(uuid);
+			String originDisplay = UserData.DISPLAY_NAME.getString(uuid), originList = UserData.PLAYER_LIST_NAME.getString(
+					uuid), originCharacter = UserData.CHARACTER_NAME.getString(uuid);
 			if (originDisplay != null)
 			{
 				originDisplay = ComponentUtil.serialize(ComponentUtil.create(originDisplay));
@@ -207,6 +239,10 @@ public class CommandNickName implements CommandExecutor, TabCompleter
 			if (originList != null)
 			{
 				originList = ComponentUtil.serialize(ComponentUtil.create(originList));
+			}
+			if (originCharacter != null)
+			{
+				originCharacter = ComponentUtil.serialize(ComponentUtil.create(originCharacter));
 			}
 			String type;
 			if (args[1].equalsIgnoreCase("all"))
@@ -216,15 +252,22 @@ public class CommandNickName implements CommandExecutor, TabCompleter
 				{
 					target.displayName(finalNickname);
 					target.playerListName(finalNickname);
-/*					PlayerProfile profile = target.getPlayerProfile();
-					String name = MessageUtil.stripColor(off ? Variable.ORIGINAL_NAME.getOrDefault(target.getUniqueId(), target.getName()) : ComponentUtil.serialize(finalNickname));
-					if (name.length() > 16)
-						name = name.substring(0, 16);
-					profile.setName(name);
-					target.setPlayerProfile(profile);*/
+					if (Cucumbery.using_NickAPI)
+					{
+						if (finalNickname == null)
+						{
+							NickAPI.resetNick(target);
+						}
+						else
+						{
+							NickAPI.setNick(target, ComponentUtil.serialize(finalNickname));
+						}
+						NickAPI.refreshPlayer(target);
+					}
 				}
 				UserData.DISPLAY_NAME.set(uuid, nicknameSerialJson);
 				UserData.PLAYER_LIST_NAME.set(uuid, nicknameSerialJson);
+				UserData.CHARACTER_NAME.set(uuid, nicknameSerial);
 				if (originDisplay != null)
 				{
 					Variable.nickNames.remove(originDisplay);
@@ -234,6 +277,11 @@ public class CommandNickName implements CommandExecutor, TabCompleter
 				{
 					Variable.nickNames.remove(originList);
 					Variable.cachedUUIDs.remove(originList);
+				}
+				if (originCharacter != null)
+				{
+					Variable.nickNames.remove(originCharacter);
+					Variable.cachedUUIDs.remove(originCharacter);
 				}
 				if (!off)
 				{
@@ -273,8 +321,42 @@ public class CommandNickName implements CommandExecutor, TabCompleter
 				{
 					Variable.nickNames.add(nicknameSerial);
 					Variable.cachedUUIDs.put(nicknameSerial, uuid);
-					Variable.nickNames.add(originDisplay);
-					Variable.cachedUUIDs.put(originDisplay, uuid);
+					Variable.nickNames.add(originList);
+					Variable.cachedUUIDs.put(originList, uuid);
+				}
+			}
+			else if (args[1].equalsIgnoreCase("character"))
+			{
+				if (Cucumbery.using_NickAPI)
+				{
+					type = "캐릭터";
+					if (isOnline)
+					{
+						if (finalNickname == null)
+						{
+							NickAPI.resetNick(target);
+						}
+						else
+						{
+							NickAPI.setNick(target, ComponentUtil.serialize(finalNickname));
+						}
+						NickAPI.refreshPlayer(target);
+					}
+					UserData.CHARACTER_NAME.set(uuid, nicknameSerialJson);
+					Variable.nickNames.remove(originCharacter);
+					Variable.cachedUUIDs.remove(originCharacter);
+					if (!off)
+					{
+						Variable.nickNames.add(nicknameSerial);
+						Variable.cachedUUIDs.put(nicknameSerial, uuid);
+						Variable.nickNames.add(originCharacter);
+						Variable.cachedUUIDs.put(originCharacter, uuid);
+					}
+				}
+				else
+				{
+					MessageUtil.sendError(sender, "NickAPI 플러그인을 사용하고 있지 않습니다.");
+					return true;
 				}
 			}
 			else
@@ -300,20 +382,20 @@ public class CommandNickName implements CommandExecutor, TabCompleter
 				{
 					if (off)
 					{
-						MessageUtil.sendMessage(target, Prefix.INFO_NICK, "%s이(가) 당신의 %s을 초기화 했습니다", sender, type + " 닉네임");
+						MessageUtil.sendMessage(target, Prefix.INFO_NICK, "%s이(가) 당신의 %s을 초기화 했습니다. (%s)", sender, type + " 닉네임", target);
 					}
 					else
 					{
-						MessageUtil.sendMessage(target, Prefix.INFO_NICK, "%s이(가) 당신의 %s을 %s(으)로 변경했습니다", sender, type + " 닉네임", finalNickname);
+						MessageUtil.sendMessage(target, Prefix.INFO_NICK, "%s이(가) 당신의 %s을 %s(으)로 변경했습니다. (%s)", sender, type + " 닉네임", nickName, target);
 					}
 				}
 				if (off)
 				{
-					MessageUtil.sendMessage(sender, Prefix.INFO_NICK, "%s의 %s을 초기화 했습니다", offlinePlayer, type + " 닉네임");
+					MessageUtil.sendMessage(sender, Prefix.INFO_NICK, "%s의 %s을 초기화 했습니다. (%s)", offlinePlayer, type + " 닉네임", offlinePlayer);
 				}
 				else
 				{
-					MessageUtil.sendMessage(sender, Prefix.INFO_NICK, "%s의 %s을 %s(으)로 변경했습니다", offlinePlayer, type + " 닉네임", finalNickname);
+					MessageUtil.sendMessage(sender, Prefix.INFO_NICK, "%s의 %s을 %s(으)로 변경했습니다. (%s)", offlinePlayer, type + " 닉네임", nickName, offlinePlayer);
 				}
 			}
 			File nickNamesFile = new File(Cucumbery.getPlugin().getDataFolder() + "/data/Nicknames.yml");
@@ -356,7 +438,7 @@ public class CommandNickName implements CommandExecutor, TabCompleter
 				}
 				if (length == 1)
 				{
-					return Method.tabCompleterList(args, "<닉네임 유형>", "all", "display", "list");
+					return Method.tabCompleterList(args, "<닉네임 유형>", "all", "display", "list", "character");
 				}
 				else if (length == 2)
 				{
@@ -375,7 +457,7 @@ public class CommandNickName implements CommandExecutor, TabCompleter
 				}
 				else if (length == 2)
 				{
-					return Method.tabCompleterList(args, "<닉네임 유형>", "all", "display", "list");
+					return Method.tabCompleterList(args, "<닉네임 유형>", "all", "display", "list", "character");
 				}
 				else if (length == 3)
 				{

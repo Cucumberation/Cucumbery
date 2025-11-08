@@ -106,6 +106,12 @@
             <id>shopkeepers-repo</id>
             <url>https://raw.githubusercontent.com/Shopkeepers/Repository/main/releases/</url>
         </repository>
+
+        <!-- NickAPI Repository -->
+        <repository>
+            <id>nickapi</id>
+            <url>https://haoshoku.xyz:8081/repository/default/</url>
+        </repository>
     </repositories>
 
     <pluginRepositories>
@@ -124,13 +130,13 @@
         </dependency>
 
         <!-- Cucumper Dependency -->
-<!--        <dependency>-->
-<!--            <groupId>cucumper</groupId>-->
-<!--            <artifactId>Cucumper</artifactId>-->
-<!--            <version>1.21.5</version>-->
-<!--            <scope>system</scope>-->
-<!--            <systemPath>${project.basedir}/lib/paper-api-1.21.5-R0.1-SNAPSHOT.jar</systemPath>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>cucumper</groupId>-->
+        <!--            <artifactId>Cucumper</artifactId>-->
+        <!--            <version>1.21.5</version>-->
+        <!--            <scope>system</scope>-->
+        <!--            <systemPath>${project.basedir}/lib/paper-api-1.21.5-R0.1-SNAPSHOT.jar</systemPath>-->
+        <!--        </dependency>-->
 
         <!-- Paper Dependency -->
         <dependency>
@@ -272,6 +278,14 @@
             <groupId>com.nisovin.shopkeepers</groupId>
             <artifactId>ShopkeepersAPI</artifactId>
             <version>2.24.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- NickAPI Dependency -->
+        <dependency>
+            <groupId>xyz.haoshoku.nick</groupId>
+            <artifactId>nickapi</artifactId>
+            <version>7.6</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

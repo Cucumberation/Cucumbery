@@ -61,7 +61,7 @@ public class CustomConfig
 		boolean needToUpdate = false;
 		for (String key : config.getKeys(false))
 		{
-			if (Objects.equals(key, UserData.DISPLAY_NAME.getKey()) || Objects.equals(key, UserData.PLAYER_LIST_NAME.getKey()))
+			if (Objects.equals(key, UserData.DISPLAY_NAME.getKey()) || Objects.equals(key, UserData.PLAYER_LIST_NAME.getKey()) || Objects.equals(key, UserData.CHARACTER_NAME.getKey()))
 			{
 				continue;
 			}
@@ -74,7 +74,7 @@ public class CustomConfig
 		}
 		for (UserData key : UserData.values())
 		{
-			if (key == UserData.DISPLAY_NAME || key == UserData.PLAYER_LIST_NAME)
+			if (key == UserData.DISPLAY_NAME || key == UserData.PLAYER_LIST_NAME || key == UserData.CHARACTER_NAME)
 			{
 				continue;
 			}
@@ -106,6 +106,12 @@ public class CustomConfig
 		if (playerListName != null && playerListName.equals("플레이어-아이디"))
 		{
 			config.set(UserData.PLAYER_LIST_NAME.getKey(), null);
+			needToUpdate = true;
+		}
+		String characterName = config.getString(UserData.CHARACTER_NAME.getKey());
+		if (characterName != null && characterName.equals("플레이어-아이디"))
+		{
+			config.set(UserData.CHARACTER_NAME.getKey(), null);
 			needToUpdate = true;
 		}
 		if (needToUpdate)
@@ -266,8 +272,6 @@ public class CustomConfig
 
 	public enum UserData implements EnumHideable
 	{
-		WINDOW_ID("internal-window-id", 1),
-		GSIT_EXEMPT("GSit-예외-모드", false),
 		ANNOUNCE_ADVANCEMENTS("발전-과제-달성-메시지-띄움", true),
 		COPY_BLOCK_DATA("픽블록으로-블록-데이터-복사", false),
 		COPY_BLOCK_DATA_FACING("픽블록으로-블록-데이터-facing-복사", false),
@@ -276,10 +280,13 @@ public class CustomConfig
 		COPY_NOTE_BLOCK_INSTRUMENT("픽블록으로-소리-블록-악기-복사", false),
 		COPY_NOTE_BLOCK_PITCH("픽블록으로-소리-블록-음높이-복사", false),
 		COPY_NOTE_BLOCK_VALUE_WHEN_SNEAKING("웅크리기-상태에서만-소리-블록-값-복사", true),
+		CUSTOM_DATA("custom_data", Collections.EMPTY_LIST),
 		CUSTOM_MINING_COOLDOWN_DISPLAY_BLOCK("커스텀-채광-쿨타임-표시-블록", Material.BEDROCK.toString()),
 		DISABLE_COMMAND_BLOCK_BREAK_WHEN_SNEAKING("웅크린-상태에서-명령-블록-파괴-방지", false),
 		DISABLE_ITEM_COOLDOWN("아이템-재사용-대기-시간-무시(바닐라-아이템-전용)", false),
+		DISABLE_PORTAL_USAGE_ON_CREATIVE("크리에이티브에서-포탈-사용-비활성화", false),
 		DISPLAY_NAME("닉네임", "플레이어-아이디"),
+		CHARACTER_NAME("캐릭터-닉네임", "플레이어-아이디"),
 		ENTITY_AGGRO("몬스터로부터-어그로가-끌림", true),
 		ENTITY_HOVER_EVENT_DISPLAY_NAME("개체-호버-이벤트-TMI-모드", false),
 		ENTITY_HOVER_EVENT_TMI_MODE("개체-호버-이벤트-TMI-모드", false),
@@ -289,10 +296,12 @@ public class CustomConfig
 		FORCE_HIDE_DROPPED_ITEM_CUSTOM_NAME("바닥에-떨어진-아이템-이름-강제-숨김", false),
 		FORCE_PLAY_SERVER_RADIO("서버-라디오-강제-재생", false),
 		GOD_MODE("무적-모드", false),
+		GSIT_EXEMPT("GSit-예외-모드", false),
 		HEALTH_BAR("HP바", 20D),
 		HEALTH_SCALED("HP바-최대-HP-비례", true),
 		HIDE_ACTIONBAR_ON_ATTACK_PVP_TO_OTHERS("PVP-할-때-상대방에게-액션바-띄우지-않음", false),
 		ID("아이디", "플레이어-아이디"),
+		IGNORE_MINING_SPEED_RATIO_MODIFIER_LIGHT_PENALTY("채광-속도-비율-수정자-빛-페널티-무시", false),
 		IMMEDIATE_RESPAWN("즉시-리스폰", false),
 		INVERT_NOTE_BLOCK_PITCH_WHEN_SNEAKING_IN_CREATIVE_MODE("크리에이티브-모드에서-소리-블록-시프트-우클릭으로-음높이-낮춤", true),
 		INVINCIBLE_TIME("무적-시간", -1),
@@ -314,6 +323,7 @@ public class CustomConfig
 		LISTEN_JOIN_FORCE("입장-소리-무조건-들음", false),
 		LISTEN_QUIT("퇴장-소리-들음", true),
 		LISTEN_QUIT_FORCE("퇴장-소리-무조건-들음", false),
+		MINING_SPEED_RATIO_MODIFIER_LIGHT_PENALTY("채광-속도-비율-수정자-빛-페널티", 0),
 		NEWBIE_BUFF_ENABLED("뉴비-환영-효과-사용", true),
 		NOTIFY_IF_INVENTORY_IS_FULL("인벤토리-공간-없음-경고-메시지-띄움", true),
 		NOTIFY_IF_INVENTORY_IS_FULL_FORCE_DISABLE("인벤토리-공간-없음-경고-메시지-강제-비활성화", false),
@@ -343,14 +353,24 @@ public class CustomConfig
 		SHOW_ACTIONBAR_ON_ITEM_PICKUP_FORCE("아이템-주울때-액션바-무조건-띄움", false),
 		SHOW_ACTIONBAR_WHEN_ITEM_IS_COOLDOWN("재사용-대기시간-액션바-띄움", true),
 		SHOW_BLOCK_BREAK_PARTICLE_ON_CUSTOM_MINING("커스텀-채광-모드-블록-파괴-입자-표시", true),
+		SHOW_CLICK_EVENT_INFORMATION_ON_CHAT_IF_NULL("채팅-메시지-클릭-이벤트-정보-표시(없을 경우)", false),
 		SHOW_COMMAND_BLOCK_EXECUTION_LOCATION("명령-블록-실행-위치-출력", false),
 		SHOW_DAMAGE_INDICATOR("대미지-숫자-표시", true),
 		SHOW_DAMAGE_INDICATOR_SPECTATING_ENTITY("관전-중인-개체의-대미지-숫자-표시", true),
+		SHOW_DEATH_LOCATION_ON_CHAT("사망-시-죽은-위치-채팅창에-표시", false),
+		SHOW_DEATH_MESSAGE("데스-메시지-표시", true),
+		SHOW_DEATH_PVP_MESSAGE("데스-메시지-PVP-표시", true),
+		SHOW_DEATH_SELF_MESSAGE("자신의-데스-메시지-표시", true),
 		SHOW_DROPPED_ITEM_CUSTOM_NAME("바닥에-떨어진-아이템-이름-표시", true),
 		SHOW_DROPPED_ITEM_CUSTOM_NAME_BEHIND_BLOCKS("바닥에-떨어진-아이템-이름-표시(블록 뒤에 있어도 표시)", true),
+		SHOW_ENCHANTED_ITEM_GLINTS("마법이-부여된-아이템-반짝임-표시", true),
 		SHOW_ENCHANTMENT_TMI_DESCRIPTION("부여된-마법-TMI-표시", true),
 		SHOW_GIVE_COMMAND_NBT_ON_ITEM_ON_CHAT("채팅창에-있는-아이템에-nbt-표시", false),
 		SHOW_ITEM_BREAK_TITLE("아이템-파괴-타이틀-띄움", true),
+		SHOW_ITEM_COMPONENTS_INFO("이템-컴포넌트-정보-표시", false),
+
+		SHOW_ITEM_LORE("추가-아이템-설명-표시", true),
+		SHOW_ITEM_LORE_IN_CREATIVE_MODE("크리에이티브에서-추가-아이템-설명-표시", false),
 		SHOW_JOIN_MESSAGE("입장-메시지-띄움", true),
 		SHOW_JOIN_MESSAGE_FORCE("입장-메시지-무조건-띄움", false),
 		SHOW_JOIN_TITLE("입장-타이틀-띄움", true),
@@ -360,8 +380,8 @@ public class CustomConfig
 		SHOW_QUIT_MESSAGE_FORCE("퇴장-메시지-무조건-띄움", false),
 		SHOW_SPECTATOR_TARGET_INFO_IN_ACTIONBAR("관전-중인-개체-정보-액션바에-표시", true),
 		SHOW_SPECTATOR_TARGET_INFO_IN_ACTIONBAR_TMI_MODE("관전-중인-개체-정보-액션바에-표시(TMI 모드)", false),
+		SHOW_TIMESTAMP_ON_CHAT_MESSAGES("채팅-메시지에-현재-시각-표시", true),
 		SHOW_WORLDEDIT_POSITION_PARTICLE("월드에딧-포지션-입자-표시", false),
-
 		SPECTATOR_MODE("관전-모드", false),
 		SPECTATOR_MODE_ON_JOIN("접속-시-자동-관전-모드-전환", false),
 		TRAMPLE_SOIL("경작지-파괴-금지", true),
@@ -370,21 +390,7 @@ public class CustomConfig
 		TRAMPLE_SOIL_NO_ALERT_FORCE("경작지-파괴-금지-무조건-띄우지-않음", false),
 		USE_QUICK_COMMAND_BLOCK("빠른-명령-블록-사용", false),
 		UUID("UUID", "플레이어-UUID"),
-		SHOW_DEATH_MESSAGE("데스-메시지-표시", true),
-		SHOW_DEATH_SELF_MESSAGE("자신의-데스-메시지-표시", true),
-		SHOW_DEATH_PVP_MESSAGE("데스-메시지-PVP-표시", true),
-		SHOW_DEATH_LOCATION_ON_CHAT("사망-시-죽은-위치-채팅창에-표시", false),
-		DISABLE_PORTAL_USAGE_ON_CREATIVE("크리에이티브에서-포탈-사용-비활성화", false),
-		SHOW_ITEM_LORE("추가-아이템-설명-표시", true),
-		SHOW_ITEM_LORE_IN_CREATIVE_MODE("크리에이티브에서-추가-아이템-설명-표시", false),
-		SHOW_ITEM_COMPONENTS_INFO("이템-컴포넌트-정보-표시", false),
-		SHOW_ENCHANTED_ITEM_GLINTS("마법이-부여된-아이템-반짝임-표시", true),
-		SHOW_TIMESTAMP_ON_CHAT_MESSAGES("채팅-메시지에-현재-시각-표시", true),
-		MINING_SPEED_RATIO_MODIFIER_LIGHT_PENALTY("채광-속도-비율-수정자-빛-페널티", 0),
-		IGNORE_MINING_SPEED_RATIO_MODIFIER_LIGHT_PENALTY("채광-속도-비율-수정자-빛-페널티-무시", false),
-		SHOW_CLICK_EVENT_INFORMATION_ON_CHAT_IF_NULL("채팅-메시지-클릭-이벤트-정보-표시(없을 경우)", false),
-		CUSTOM_DATA("custom_data", Collections.EMPTY_LIST)
-		;
+		WINDOW_ID("internal-window-id", 1);
 
 		private final String key;
 
@@ -553,7 +559,7 @@ public class CustomConfig
 
 		public static int getInt(OfflinePlayer offlinePlayer, Object key)
 		{
-			return  getInt(offlinePlayer, key, 0);
+			return getInt(offlinePlayer, key, 0);
 		}
 
 		public static int getInt(OfflinePlayer offlinePlayer, Object key, int defaultValue)
@@ -641,7 +647,8 @@ public class CustomConfig
 			return config.get(CUSTOM_DATA.getKey() + "." + key);
 		}
 
-		public static void set(OfflinePlayer player, Object key, Object value) {
+		public static void set(OfflinePlayer player, Object key, Object value)
+		{
 			set(player.getUniqueId(), key, value);
 		}
 
