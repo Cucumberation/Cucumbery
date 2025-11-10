@@ -3164,6 +3164,7 @@ public class Method extends SoundPlay
 		List<String> list = new ArrayList<>(tabCompleterEntity(sender, args[args.length - 1], true));
 		for (String nickName : Variable.nickNames)
 		{
+			if (nickName.isEmpty()) continue;
 			if (!Method.isUUID(nickName) || (Bukkit.getOfflinePlayer(UUID.fromString(nickName)).getName() == null))
 			{
 				list.add(MessageUtil.stripColor(nickName).replace(" ", "+"));

@@ -536,6 +536,7 @@ public class CommandTabUtil
 		}
 		for (String nickName : Variable.nickNames)
 		{
+			if (nickName.isEmpty()) continue;
 			if (!Method.isUUID(nickName) || Bukkit.getOfflinePlayer(UUID.fromString(nickName)).getName() == null)
 			{
 				nickName = MessageUtil.stripColor(nickName);

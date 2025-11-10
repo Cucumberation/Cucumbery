@@ -182,8 +182,12 @@ public class CommandNickName implements CommandExecutor, TabCompleter
 				Variable.cachedUUIDs.put(MessageUtil.stripColor(ComponentUtil.serialize(player.playerListName())), uuid);
 				if (Cucumbery.using_NickAPI)
 				{
-					Variable.nickNames.add(MessageUtil.stripColor(NickAPI.getName(player)));
-					Variable.cachedUUIDs.put(MessageUtil.stripColor(NickAPI.getName(player)), uuid);
+					String characterName = MessageUtil.stripColor(NickAPI.getName(player));
+					if (!characterName.isEmpty())
+					{
+						Variable.nickNames.add(characterName);
+						Variable.cachedUUIDs.put(characterName, uuid);
+					}
 				}
 
 				File nickNamesFile = new File(Cucumbery.getPlugin().getDataFolder() + "/data/Nicknames.yml");
@@ -283,7 +287,7 @@ public class CommandNickName implements CommandExecutor, TabCompleter
 					Variable.nickNames.remove(originCharacter);
 					Variable.cachedUUIDs.remove(originCharacter);
 				}
-				if (!off)
+				if (!off && !nicknameSerial.isEmpty())
 				{
 					Variable.nickNames.add(nicknameSerial);
 					Variable.cachedUUIDs.put(nicknameSerial, uuid);
@@ -299,7 +303,7 @@ public class CommandNickName implements CommandExecutor, TabCompleter
 				UserData.DISPLAY_NAME.set(uuid, nicknameSerialJson);
 				Variable.nickNames.remove(originDisplay);
 				Variable.cachedUUIDs.remove(originDisplay);
-				if (!off)
+				if (!off && !nicknameSerial.isEmpty())
 				{
 					Variable.nickNames.add(nicknameSerial);
 					Variable.cachedUUIDs.put(nicknameSerial, uuid);
@@ -317,7 +321,7 @@ public class CommandNickName implements CommandExecutor, TabCompleter
 				UserData.PLAYER_LIST_NAME.set(uuid, nicknameSerialJson);
 				Variable.nickNames.remove(originList);
 				Variable.cachedUUIDs.remove(originList);
-				if (!off)
+				if (!off && !nicknameSerial.isEmpty())
 				{
 					Variable.nickNames.add(nicknameSerial);
 					Variable.cachedUUIDs.put(nicknameSerial, uuid);
@@ -345,7 +349,7 @@ public class CommandNickName implements CommandExecutor, TabCompleter
 					UserData.CHARACTER_NAME.set(uuid, nicknameSerialJson);
 					Variable.nickNames.remove(originCharacter);
 					Variable.cachedUUIDs.remove(originCharacter);
-					if (!off)
+					if (!off && !nicknameSerial.isEmpty())
 					{
 						Variable.nickNames.add(nicknameSerial);
 						Variable.cachedUUIDs.put(nicknameSerial, uuid);

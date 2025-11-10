@@ -561,7 +561,7 @@ public class Initializer
 					if (characterName != null)
 					{
 						characterName = MessageUtil.stripColor(ComponentUtil.serialize(ComponentUtil.create(characterName)));
-						if (!nickNames.contains(characterName))
+						if (!nickNames.contains(characterName) && !characterName.isEmpty())
 						{
 							nickNames.add(characterName);
 						}
@@ -655,8 +655,11 @@ public class Initializer
 		if (characterName != null)
 		{
 			characterName = MessageUtil.stripColor(ComponentUtil.serialize(ComponentUtil.create(characterName)));
-			Variable.nickNames.add(characterName);
-			Variable.cachedUUIDs.put(characterName, uuid);
+			if (!characterName.isEmpty())
+			{
+				Variable.nickNames.add(characterName);
+				Variable.cachedUUIDs.put(characterName, uuid);
+			}
 		}
 		int invincibleTime = UserData.INVINCIBLE_TIME.getInt(uuid), loginInvincibleTime = UserData.INVINCIBLE_TIME_JOIN.getInt(uuid);
 		if (invincibleTime >= 0)
