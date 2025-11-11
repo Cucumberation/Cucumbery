@@ -17,11 +17,11 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Explosive;
 import org.bukkit.entity.Mob;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
-import java.util.function.Consumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import static com.jho5245.cucumbery.commands.brigadier.base.ArgumentUtil.*;
 
@@ -32,18 +32,18 @@ public class CommandSummon2 extends CommandBase
   private final List<Argument<?>> list1_2 = List.of(ENTITY_TYPE, HIDE_OUTPUT);
   private final List<Argument<?>> list2_1 = List.of(ENTITY_TYPE, AMOUNT);
   private final List<Argument<?>> list2_2 = List.of(ENTITY_TYPE, LOCATION);
-  private final List<Argument<?>> list2_3 = List.of(ENTITY_TYPE, NBT_CONTAINER);
+//  private final List<Argument<?>> list2_3 = List.of(ENTITY_TYPE, NBT_CONTAINER);
   private final List<Argument<?>> list2_4 = List.of(ENTITY_TYPE, AMOUNT, HIDE_OUTPUT);
   private final List<Argument<?>> list2_5 = List.of(ENTITY_TYPE, LOCATION, HIDE_OUTPUT);
-  private final List<Argument<?>> list2_6 = List.of(ENTITY_TYPE, NBT_CONTAINER, HIDE_OUTPUT);
+//  private final List<Argument<?>> list2_6 = List.of(ENTITY_TYPE, NBT_CONTAINER, HIDE_OUTPUT);
   private final List<Argument<?>> list3_1 = List.of(ENTITY_TYPE, AMOUNT, LOCATION);
-  private final List<Argument<?>> list3_2 = List.of(ENTITY_TYPE, AMOUNT, NBT_CONTAINER);
+//  private final List<Argument<?>> list3_2 = List.of(ENTITY_TYPE, AMOUNT, NBT_CONTAINER);
   private final List<Argument<?>> list3_3 = List.of(ENTITY_TYPE, AMOUNT, LOCATION, HIDE_OUTPUT);
-  private final List<Argument<?>> list3_4 = List.of(ENTITY_TYPE, AMOUNT, NBT_CONTAINER, HIDE_OUTPUT);
-  private final List<Argument<?>> list4_1 = List.of(ENTITY_TYPE, LOCATION, NBT_CONTAINER);
-  private final List<Argument<?>> list4_2 = List.of(ENTITY_TYPE, LOCATION, NBT_CONTAINER, HIDE_OUTPUT);
-  private final List<Argument<?>> list5_1 = List.of(ENTITY_TYPE, AMOUNT, LOCATION, NBT_CONTAINER);
-  private final List<Argument<?>> list5_2 = List.of(ENTITY_TYPE, AMOUNT, LOCATION, NBT_CONTAINER, HIDE_OUTPUT);
+//  private final List<Argument<?>> list3_4 = List.of(ENTITY_TYPE, AMOUNT, NBT_CONTAINER, HIDE_OUTPUT);
+//  private final List<Argument<?>> list4_1 = List.of(ENTITY_TYPE, LOCATION, NBT_CONTAINER);
+//  private final List<Argument<?>> list4_2 = List.of(ENTITY_TYPE, LOCATION, NBT_CONTAINER, HIDE_OUTPUT);
+//  private final List<Argument<?>> list5_1 = List.of(ENTITY_TYPE, AMOUNT, LOCATION, NBT_CONTAINER);
+//  private final List<Argument<?>> list5_2 = List.of(ENTITY_TYPE, AMOUNT, LOCATION, NBT_CONTAINER, HIDE_OUTPUT);
 
   private void summon(@NotNull NativeProxyCommandSender sender, @NotNull EntityType entityType, int amount, @Nullable Location location, @Nullable NBTContainer nbtContainer, boolean hideOutput)
   {
@@ -124,13 +124,13 @@ public class CommandSummon2 extends CommandBase
       });
       commandAPICommand.register();
 
-      commandAPICommand = CommandBase.getCommandBase(command, permission, aliases);
-      commandAPICommand = commandAPICommand.withArguments(list2_3);
-      commandAPICommand = commandAPICommand.executesNative((sender, args) ->
-      {
-        summon(sender, (EntityType) args.get(0), 1, null, (NBTContainer) args.get(1), false);
-      });
-      commandAPICommand.register();
+//      commandAPICommand = CommandBase.getCommandBase(command, permission, aliases);
+//      commandAPICommand = commandAPICommand.withArguments(list2_3);
+//      commandAPICommand = commandAPICommand.executesNative((sender, args) ->
+//      {
+//        summon(sender, (EntityType) args.get(0), 1, null, (NBTContainer) args.get(1), false);
+//      });
+//      commandAPICommand.register();
 
       commandAPICommand = CommandBase.getCommandBase(command, permission, aliases);
       commandAPICommand = commandAPICommand.withArguments(list2_4);
@@ -149,13 +149,13 @@ public class CommandSummon2 extends CommandBase
       });
       commandAPICommand.register();
 
-      commandAPICommand = CommandBase.getCommandBase(command, permission, aliases);
-      commandAPICommand = commandAPICommand.withArguments(list2_6);
-      commandAPICommand = commandAPICommand.executesNative((sender, args) ->
-      {
-        summon(sender, (EntityType) args.get(0), 1, null, (NBTContainer) args.get(1),  (Boolean) args.get(2));
-      });
-      commandAPICommand.register();
+//      commandAPICommand = CommandBase.getCommandBase(command, permission, aliases);
+//      commandAPICommand = commandAPICommand.withArguments(list2_6);
+//      commandAPICommand = commandAPICommand.executesNative((sender, args) ->
+//      {
+//        summon(sender, (EntityType) args.get(0), 1, null, (NBTContainer) args.get(1),  (Boolean) args.get(2));
+//      });
+//      commandAPICommand.register();
     }
 
     {
@@ -167,13 +167,13 @@ public class CommandSummon2 extends CommandBase
       });
       commandAPICommand.register();
 
-      commandAPICommand = CommandBase.getCommandBase(command, permission, aliases);
-      commandAPICommand = commandAPICommand.withArguments(list3_2);
-      commandAPICommand = commandAPICommand.executesNative((sender, args) ->
-      {
-        summon(sender, (EntityType) args.get(0), (Integer) args.get(1), null, (NBTContainer) args.get(2), false);
-      });
-      commandAPICommand.register();
+//      commandAPICommand = CommandBase.getCommandBase(command, permission, aliases);
+//      commandAPICommand = commandAPICommand.withArguments(list3_2);
+//      commandAPICommand = commandAPICommand.executesNative((sender, args) ->
+//      {
+//        summon(sender, (EntityType) args.get(0), (Integer) args.get(1), null, (NBTContainer) args.get(2), false);
+//      });
+//      commandAPICommand.register();
 
       commandAPICommand = CommandBase.getCommandBase(command, permission, aliases);
       commandAPICommand = commandAPICommand.withArguments(list3_3);
@@ -183,49 +183,49 @@ public class CommandSummon2 extends CommandBase
       });
       commandAPICommand.register();
 
-      commandAPICommand = CommandBase.getCommandBase(command, permission, aliases);
-      commandAPICommand = commandAPICommand.withArguments(list3_4);
-      commandAPICommand = commandAPICommand.executesNative((sender, args) ->
-      {
-        summon(sender, (EntityType) args.get(0), (Integer) args.get(1), null, (NBTContainer) args.get(2), (Boolean) args.get(3));
-      });
-      commandAPICommand.register();
+//      commandAPICommand = CommandBase.getCommandBase(command, permission, aliases);
+//      commandAPICommand = commandAPICommand.withArguments(list3_4);
+//      commandAPICommand = commandAPICommand.executesNative((sender, args) ->
+//      {
+//        summon(sender, (EntityType) args.get(0), (Integer) args.get(1), null, (NBTContainer) args.get(2), (Boolean) args.get(3));
+//      });
+//      commandAPICommand.register();
     }
 
     {
-      commandAPICommand = CommandBase.getCommandBase(command, permission, aliases);
-      commandAPICommand = commandAPICommand.withArguments(list4_1);
-      commandAPICommand = commandAPICommand.executesNative((sender, args) ->
-      {
-        summon(sender, (EntityType) args.get(0), 1, (Location) args.get(1), (NBTContainer) args.get(2), false);
-      });
-      commandAPICommand.register();
-
-      commandAPICommand = CommandBase.getCommandBase(command, permission, aliases);
-      commandAPICommand = commandAPICommand.withArguments(list4_2);
-      commandAPICommand = commandAPICommand.executesNative((sender, args) ->
-      {
-        summon(sender, (EntityType) args.get(0), 1, (Location) args.get(1), (NBTContainer) args.get(2), (Boolean) args.get(3));
-      });
-      commandAPICommand.register();
+//      commandAPICommand = CommandBase.getCommandBase(command, permission, aliases);
+//      commandAPICommand = commandAPICommand.withArguments(list4_1);
+//      commandAPICommand = commandAPICommand.executesNative((sender, args) ->
+//      {
+//        summon(sender, (EntityType) args.get(0), 1, (Location) args.get(1), (NBTContainer) args.get(2), false);
+//      });
+//      commandAPICommand.register();
+//
+//      commandAPICommand = CommandBase.getCommandBase(command, permission, aliases);
+//      commandAPICommand = commandAPICommand.withArguments(list4_2);
+//      commandAPICommand = commandAPICommand.executesNative((sender, args) ->
+//      {
+//        summon(sender, (EntityType) args.get(0), 1, (Location) args.get(1), (NBTContainer) args.get(2), (Boolean) args.get(3));
+//      });
+//      commandAPICommand.register();
     }
 
     {
-      commandAPICommand = CommandBase.getCommandBase(command, permission, aliases);
-      commandAPICommand = commandAPICommand.withArguments(list5_1);
-      commandAPICommand = commandAPICommand.executesNative((sender, args) ->
-      {
-        summon(sender, (EntityType) args.get(0), (Integer) args.get(1), (Location) args.get(2), (NBTContainer) args.get(3), false);
-      });
-      commandAPICommand.register();
-
-      commandAPICommand = CommandBase.getCommandBase(command, permission, aliases);
-      commandAPICommand = commandAPICommand.withArguments(list5_2);
-      commandAPICommand = commandAPICommand.executesNative((sender, args) ->
-      {
-        summon(sender, (EntityType) args.get(0), (Integer) args.get(1), (Location) args.get(2), (NBTContainer) args.get(3), (Boolean) args.get(4));
-      });
-      commandAPICommand.register();
+//      commandAPICommand = CommandBase.getCommandBase(command, permission, aliases);
+//      commandAPICommand = commandAPICommand.withArguments(list5_1);
+//      commandAPICommand = commandAPICommand.executesNative((sender, args) ->
+//      {
+//        summon(sender, (EntityType) args.get(0), (Integer) args.get(1), (Location) args.get(2), (NBTContainer) args.get(3), false);
+//      });
+//      commandAPICommand.register();
+//
+//      commandAPICommand = CommandBase.getCommandBase(command, permission, aliases);
+//      commandAPICommand = commandAPICommand.withArguments(list5_2);
+//      commandAPICommand = commandAPICommand.executesNative((sender, args) ->
+//      {
+//        summon(sender, (EntityType) args.get(0), (Integer) args.get(1), (Location) args.get(2), (NBTContainer) args.get(3), (Boolean) args.get(4));
+//      });
+//      commandAPICommand.register();
     }
   }
 }

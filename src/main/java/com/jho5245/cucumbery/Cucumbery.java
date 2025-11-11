@@ -90,6 +90,7 @@ import com.xxmicloxx.NoteBlockAPI.songplayer.RadioSongPlayer;
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.geco.gsit.GSitMain;
 import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIConfig;
 import dev.jorel.commandapi.CommandAPIPaperConfig;
 import dev.jorel.commandapi.Converter;
 import io.lumine.mythic.bukkit.BukkitAPIHelper;
@@ -126,7 +127,7 @@ public class Cucumbery extends JavaPlugin
 	//  private static final ExecutorService brigadierService = Executors.newFixedThreadPool(1);
 	public static YamlConfiguration config;
 
-	public static boolean using_CommandAPI = true;
+	public static boolean using_CommandAPI;
 
 	public static boolean using_Vault_Economy;
 
@@ -207,7 +208,8 @@ public class Cucumbery extends JavaPlugin
 			return;
 		}
 		isLoaded = true;
-		CommandAPI.onLoad(new CommandAPIPaperConfig(this).initializeNBTAPI(NBTContainer.class, NBTContainer::new));
+//		System.out.println("[Cucumbery] Loading plugin...");
+//		CommandAPI.onLoad(new CommandAPIPaperConfig(this).initializeNBTAPI(NBTContainer.class, NBTContainer::new));
 	}
 
 	@Override
@@ -561,7 +563,7 @@ public class Cucumbery extends JavaPlugin
 
 	private void checkUsingAddons()
 	{
-		//		Cucumbery.using_CommandAPI = Cucumbery.config.getBoolean("use-hook-plugins.CommandAPI") && this.pluginManager.getPlugin("CommandAPI") != null;
+				Cucumbery.using_CommandAPI = Cucumbery.config.getBoolean("use-hook-plugins.CommandAPI") && this.pluginManager.getPlugin("CommandAPI") != null;
 		Cucumbery.using_Vault_Economy = Cucumbery.config.getBoolean("use-hook-plugins.Vault-Economy") && Initializer.setupEconomy() && eco != null;
 		Cucumbery.using_Vault_Chat = Cucumbery.config.getBoolean("use-hook-plugins.Vault-Chat") && Initializer.setupChat() && chat != null;
 		Cucumbery.using_NoteBlockAPI =

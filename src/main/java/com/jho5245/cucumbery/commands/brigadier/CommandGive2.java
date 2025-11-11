@@ -1,5 +1,6 @@
 package com.jho5245.cucumbery.commands.brigadier;
 
+import com.jho5245.cucumbery.Cucumbery;
 import com.jho5245.cucumbery.commands.brigadier.base.ArgumentUtil;
 import com.jho5245.cucumbery.commands.brigadier.base.CommandBase;
 import com.jho5245.cucumbery.custom.custommaterial.CustomMaterial;
@@ -7,16 +8,14 @@ import com.jho5245.cucumbery.util.additemmanager.AddItemUtil;
 import com.jho5245.cucumbery.util.no_groups.MessageUtil;
 import com.jho5245.cucumbery.util.storage.component.util.ComponentUtil;
 import com.jho5245.cucumbery.util.storage.data.Variable;
+import com.mojang.brigadier.Message;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.StringTooltip;
-import dev.jorel.commandapi.arguments.Argument;
-import dev.jorel.commandapi.arguments.ArgumentSuggestions;
-import dev.jorel.commandapi.arguments.CustomArgument;
+import dev.jorel.commandapi.arguments.*;
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
-import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 import org.bukkit.Material;
@@ -32,12 +31,12 @@ import static com.jho5245.cucumbery.commands.brigadier.base.ArgumentUtil.*;
 
 public class CommandGive2 extends CommandBase
 {
-	private final Argument<?> CUSTOM_ITEM = customMaterialArgument();
+	private final Argument<ItemStack> CUSTOM_ITEM = customMaterialArgument();
 
 
 	private IStringTooltip[] tooltips()
 	{
-		Map<String, String> map = new HashMap<>();
+		Map<NamespacedKey, String> map = new HashMap<>();
 		ConfigurationSection root = Variable.customItemsConfig.getConfigurationSection("");
 		if (root != null)
 		{
@@ -46,26 +45,36 @@ public class CommandGive2 extends CommandBase
 				String displayName = root.getString(key + ".display-name");
 				if (displayName != null)
 				{
-					map.put(key, ComponentUtil.serialize(ComponentUtil.create(MessageUtil.n2s(displayName))));
+					NamespacedKey namespacedKey;
+					if (key.contains(":"))
+					{
+						String[] split = key.split(":");
+						namespacedKey = new NamespacedKey(split[0], split[1]);
+					}
+					else
+					{
+						namespacedKey = new NamespacedKey(Cucumbery.getPlugin(), key);
+					}
+					map.put(namespacedKey, ComponentUtil.serialize(ComponentUtil.create(MessageUtil.n2s(displayName))));
 				}
 			}
 		}
 		for (CustomMaterial customMaterial : CustomMaterial.values())
 		{
-			map.put(customMaterial.toString().toLowerCase(), ComponentUtil.serialize(customMaterial.getDisplayName()));
+			map.put(customMaterial.getKey(), ComponentUtil.serialize(customMaterial.getDisplayName()));
 		}
-		List<String> keys = new ArrayList<>(map.keySet());
+		List<NamespacedKey> keys = new ArrayList<>(map.keySet());
 		IStringTooltip[] tooltips = new IStringTooltip[keys.size()];
 		for (int i = 0; i < keys.size(); i++)
 		{
-			tooltips[i] = StringTooltip.ofString(keys.get(i), map.getOrDefault(keys.get(i), keys.get(i)));
+			tooltips[i] = StringTooltip.ofString(keys.get(i).toString(), map.getOrDefault(keys.get(i), keys.get(i).toString()));
 		}
 		return tooltips;
 	}
 
-	private Argument<?> customMaterialArgument()
+	private Argument<ItemStack> customMaterialArgument()
 	{
-		return new CustomArgument<>(new StringArgument("커스텀 아이템"), info ->
+		return new CustomArgument<>(new NamespacedKeyArgument("커스텀 아이템"), info ->
 		{
 			try
 			{

@@ -4,7 +4,7 @@ api-version: 1.20.6
 main: com.jho5245.cucumbery.Cucumbery
 author: jho5245
 description: 굳검버리 플러그인
-softdepend: [Vault, NoteBlockAPI, QuickShop, PlaceHolderAPI, mcMMO, MythicMobs, ProtocolLib, WorldEdit, WorldGuard, GSit, UltimateTimber, Residence, NickAPI]
+softdepend: [CommandAPI, Vault, NoteBlockAPI, QuickShop, PlaceHolderAPI, mcMMO, MythicMobs, ProtocolLib, WorldEdit, WorldGuard, GSit, UltimateTimber, Residence, NickAPI]
 website: https://cucumbery.com/
 
 commands:

@@ -70,7 +70,8 @@ public class ArgumentUtil
       case ROTATION -> new RotationArgument(key != null ? key : "방향");
       case POTION_EFFECT_TYPE -> new PotionEffectArgument(key != null ? key : "효과 유형");
       case ENTITY_TYPE -> new EntityTypeArgument(key != null ? key : "개체 유형");
-      case NBT_CONTAINER -> new NBTCompoundArgument<NBTContainer>(key != null ? key : "nbt");
+			default -> null;
+//      case NBT_CONTAINER -> new NBTCompoundArgument<NBTContainer>(key != null ? key : "nbt");
     };
   }
 
@@ -112,7 +113,7 @@ public class ArgumentUtil
 
   public static final Argument<EntityType> ENTITY_TYPE = (Argument<EntityType>) of(ArgumentType.ENTITY_TYPE);
 
-  public static final Argument<NBTContainer> NBT_CONTAINER = (Argument<NBTContainer>) of(ArgumentType.NBT_CONTAINER);
+//  public static final Argument<NBTContainer> NBT_CONTAINER = (Argument<NBTContainer>) of(ArgumentType.NBT_CONTAINER);
 }
 
 

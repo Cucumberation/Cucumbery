@@ -150,8 +150,9 @@
         <!-- CommandAPI Dependency -->
         <dependency>
             <groupId>dev.jorel</groupId>
-            <artifactId>commandapi-paper-shade</artifactId>
-            <version>11.0.1-SNAPSHOT</version>
+            <artifactId>commandapi-paper-core</artifactId>
+            <version>11.0.0</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Mojang Brigadier Dependency -->
@@ -324,10 +325,10 @@
                             <pattern>de.tr7zw.changeme.nbtapi</pattern>
                             <shadedPattern>com.jho5245.cucumbery.util.shading</shadedPattern>
                         </relocation>
-                        <relocation>
-                            <pattern>dev.jorel.commandapi</pattern>
-                            <shadedPattern>com.jho5245.cucumbery.util.shading</shadedPattern>
-                        </relocation>
+<!--                        <relocation>-->
+<!--                            <pattern>dev.jorel.commandapi</pattern>-->
+<!--                            <shadedPattern>com.jho5245.cucumbery.util.shading</shadedPattern>-->
+<!--                        </relocation>-->
                         <relocation>
                             <pattern>io.wany.amethyst</pattern>
                         </relocation>
