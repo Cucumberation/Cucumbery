@@ -1424,7 +1424,11 @@ public class ItemStackUtil
 			{
 				switch (dataComponentValue)
 				{
-					case GsonDataComponentValue componentValue -> strings.add(key.asString() + "=" + componentValue.element() + ",");
+					case GsonDataComponentValue componentValue ->
+					{
+						// TODO: Boolean tags are treated as number tags (0b, 1b -> 0, 1)
+						strings.add(key.asString() + "=" + componentValue.element() + ",");
+					}
 					case Removed ignored -> strings.add("!" + key.asString() + ",");
 					case null -> MessageUtil.consoleSendMessage("dataComponentValue null with key: " + key.asString());
 					default ->
