@@ -106,12 +106,6 @@
             <id>shopkeepers-repo</id>
             <url>https://raw.githubusercontent.com/Shopkeepers/Repository/main/releases/</url>
         </repository>
-
-        <!-- NickAPI Repository -->
-        <repository>
-            <id>nickapi</id>
-            <url>https://haoshoku.xyz:8081/repository/default/</url>
-        </repository>
     </repositories>
 
     <pluginRepositories>
@@ -285,8 +279,9 @@
         <dependency>
             <groupId>xyz.haoshoku.nick</groupId>
             <artifactId>nickapi</artifactId>
-            <version>7.6</version>
-            <scope>provided</scope>
+            <version>7.10</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/NickAPI.jar</systemPath>
         </dependency>
     </dependencies>
 
@@ -307,7 +302,7 @@
                             </mainClass>
                         </manifest>
                     </archive>
-                    <outputDirectory>G:\minecraft plugins</outputDirectory>
+                    <outputDirectory>C:\Users\samsung\Desktop\test_server_1.21.10\plugins</outputDirectory>
                 </configuration>
             </plugin>
             <plugin>
