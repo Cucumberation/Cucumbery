@@ -14,8 +14,6 @@ import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
-import io.papermc.paper.registry.RegistryAccess;
-import io.papermc.paper.registry.RegistryKey;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TranslatableComponent;
@@ -146,7 +144,7 @@ public class EntityComponentUtil
 			}
 			if (entity instanceof Villager villager)
 			{
-				nameComponent = ComponentUtil.translate(entity.getType().translationKey() + "." + villager.getProfession().toString().toLowerCase());
+				nameComponent = Component.translatable(villager.getProfession().translationKey());
 			}
 			if (entity instanceof Ageable ageable && !ageable.isAdult())
 			{
@@ -302,10 +300,10 @@ public class EntityComponentUtil
 						.color(TextColor.color(color.getRed(), color.getGreen(), color.getBlue()))));
 			}
 		}
-		if (entity instanceof Villager villager)
+		if (entity instanceof Villager villager && false)
 		{
 			Profession profession = villager.getProfession();
-			String key = Constant.THE_COLOR_HEX + "entity.minecraft.villager." + profession.toString().toLowerCase();
+			String key = Constant.THE_COLOR_HEX + profession.translationKey();
 			if (profession != Profession.NONE)
 			{
 				hover = hover.append(Component.text("\n"));
@@ -323,9 +321,10 @@ public class EntityComponentUtil
 			Biome biome;
 			try
 			{
-				biome = RegistryAccess.registryAccess().getRegistry(RegistryKey.BIOME).get(villagerType.getKey());
+				biome = Biome.valueOf(villagerType.getKey().toString());
+//				biome = RegistryAccess.registryAccess().getRegistry(RegistryKey.BIOME).get(villagerType.getKey());
 			}
-			catch (Exception e)
+			catch (Throwable t)
 			{
 				biome = null;
 			}
@@ -506,10 +505,10 @@ public class EntityComponentUtil
 				}
 			}
 		}
-		if (entity instanceof ZombieVillager zombieVillager)
+		if (entity instanceof ZombieVillager zombieVillager && false)
 		{
 			Profession profession = zombieVillager.getVillagerProfession();
-			String key = Constant.THE_COLOR_HEX + "entity.minecraft.villager." + profession.toString().toLowerCase();
+			String key = Constant.THE_COLOR_HEX + profession.translationKey();
 			if (profession != Profession.NONE)
 			{
 				hover = hover.append(Component.text("\n"));
@@ -519,7 +518,8 @@ public class EntityComponentUtil
 			Biome biome;
 			try
 			{
-				biome = RegistryAccess.registryAccess().getRegistry(RegistryKey.BIOME).get(villagerType.getKey());
+//				biome = RegistryAccess.registryAccess().getRegistry(RegistryKey.BIOME).get(villagerType.getKey());
+				biome = null;
 			}
 			catch (Exception e)
 			{

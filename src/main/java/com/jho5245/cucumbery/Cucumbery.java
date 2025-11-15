@@ -454,19 +454,25 @@ public class Cucumbery extends JavaPlugin
 		{
 			location.getBlock().getState().update();
 		}
-		for (UUID uuid : CommandRide.RIDE_AREA_EFFECT_CLOUDS)
+		if (using_CommandAPI)
 		{
-			Entity entity = Method2.getEntity(uuid);
-			if (entity != null)
+			for (UUID uuid : CommandRide.RIDE_AREA_EFFECT_CLOUDS)
 			{
-				if (entity.getPassengers().isEmpty() || entity.getVehicle() == null)
+				Entity entity = Method2.getEntity(uuid);
+				if (entity != null)
 				{
-					entity.remove();
+					if (entity.getPassengers().isEmpty() || entity.getVehicle() == null)
+					{
+						entity.remove();
+					}
 				}
 			}
 		}
 		RecipeManager.unload();
-		CommandAPI.onDisable();
+		if (using_CommandAPI)
+		{
+			CommandAPI.onDisable();
+		}
 	}
 
 	private void registerItems()

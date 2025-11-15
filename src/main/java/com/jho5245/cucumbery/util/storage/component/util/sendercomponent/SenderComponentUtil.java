@@ -110,7 +110,7 @@ public class SenderComponentUtil
         }
         if (entity instanceof Villager villager)
         {
-          nameComponent = ComponentUtil.translate(entity.getType().translationKey() + "." + villager.getProfession().toString().toLowerCase());
+          nameComponent = Component.translatable(villager.getProfession().translationKey());
         }
         if (entity instanceof Ageable ageable && !ageable.isAdult())
         {

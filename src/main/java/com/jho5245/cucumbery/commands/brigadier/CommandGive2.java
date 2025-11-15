@@ -165,6 +165,10 @@ public class CommandGive2 extends CommandBase
 	{
 		try
 		{
+			if (!customType.contains(":"))
+			{
+				customType = "cucumbery:" + customType;
+			}
 			String[] split = customType.split(":");
 			CustomMaterial customMaterial = CustomMaterial.getByKey(new NamespacedKey(split[0], split[1]));
 			ItemStack itemStack = new ItemStack(customMaterial.getRealMaterial());

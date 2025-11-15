@@ -1679,6 +1679,13 @@ public class ProtocolLibManager
 					{
 						component = SenderComponentUtil.senderComponent(player, entity, Constant.THE_COLOR);
 					}
+					else
+					{
+						if (component.color() == null)
+						{
+							component = component.color(Constant.THE_COLOR).hoverEvent(component.hoverEvent()).clickEvent(component.clickEvent());
+						}
+					}
 				}
 			}
 			catch (Exception e)

@@ -483,11 +483,13 @@ public class ExtraExecuteArgument
     this.registerRandom();
     this.registerRandomChance();
 
-    this.registerIfHasPermission();
-    this.registerUnlessHasPermission();
+		// TODO: Fix entity related argument error
 
-    this.registerIfIsInWorld();
-    this.registerUnlessIsInWorld();
+//    this.registerIfHasPermission();
+//    this.registerUnlessHasPermission();
+
+//    this.registerIfIsInWorld();
+//    this.registerUnlessIsInWorld();
 
     this.registerIfWeather();
     this.registerUnlessWeather();
@@ -498,7 +500,7 @@ public class ExtraExecuteArgument
     this.registerIfRealPeriod();
     this.registerUnlessRealPeriod();
 
-    this.registerIfMoneyRadius();
-    this.registerUnlessMoneyRadius();
+//    this.registerIfMoneyRadius();
+//    this.registerUnlessMoneyRadius();
   }
 }
