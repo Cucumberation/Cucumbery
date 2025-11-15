@@ -14,6 +14,8 @@ import com.jho5245.cucumbery.util.storage.data.Constant;
 import com.jho5245.cucumbery.util.storage.data.Variable;
 import com.jho5245.cucumbery.util.storage.no_groups.CustomConfig.UserData;
 import com.jho5245.cucumbery.util.storage.no_groups.ItemStackUtil;
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.TranslatableComponent;
@@ -318,10 +320,18 @@ public class EntityComponentUtil
 								Constant.THE_COLOR_HEX + villagerExperience));
 			}
 			Villager.Type villagerType = villager.getVillagerType();
-			Biome biome = Biome.valueOf(villagerType.toString().replace("SNOW", "SNOWY_PLAINS"));
+			Biome biome;
+			try
+			{
+				biome = RegistryAccess.registryAccess().getRegistry(RegistryKey.BIOME).get(villagerType.getKey());
+			}
+			catch (Exception e)
+			{
+				biome = null;
+			}
 			hover = hover.append(Component.text("\n"));
 			hover = hover.append(
-					ComponentUtil.translate("기후 : %s", ComponentUtil.translate("biome.minecraft." + biome.toString().toLowerCase()).color(Constant.THE_COLOR)));
+					ComponentUtil.translate("기후 : %s", ComponentUtil.translate(biome != null ? biome.translationKey() : villagerType.getKey().toString())));
 			Map<UUID, Reputation> reputationMap = villager.getReputations();
 			Set<UUID> uuidSet = reputationMap.keySet();
 			if (!uuidSet.isEmpty())
@@ -506,10 +516,18 @@ public class EntityComponentUtil
 				hover = hover.append(ComponentUtil.translate("직업 : %s", ComponentUtil.translate(key)));
 			}
 			Villager.Type villagerType = zombieVillager.getVillagerType();
-			Biome biome = Biome.valueOf(villagerType.toString().replace("SNOW", Biome.SNOWY_TAIGA.toString()));
+			Biome biome;
+			try
+			{
+				biome = RegistryAccess.registryAccess().getRegistry(RegistryKey.BIOME).get(villagerType.getKey());
+			}
+			catch (Exception e)
+			{
+				biome = null;
+			}
 			hover = hover.append(Component.text("\n"));
 			hover = hover.append(
-					ComponentUtil.translate("기후 : %s", ComponentUtil.translate("biome.minecraft." + biome.toString().toLowerCase()).color(Constant.THE_COLOR)));
+					ComponentUtil.translate("기후 : %s", ComponentUtil.translate(biome != null ? biome.translationKey() : villagerType.getKey().toString())));
 
 			OfflinePlayer offlinePlayer = zombieVillager.getConversionPlayer();
 			if (offlinePlayer != null)
