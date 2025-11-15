@@ -303,7 +303,7 @@
                             </mainClass>
                         </manifest>
                     </archive>
-                    <outputDirectory>C:\Users\samsung\Desktop\test_server_1.21.10\plugins</outputDirectory>
+                    <outputDirectory>G:\minecraft plugins</outputDirectory>
                 </configuration>
             </plugin>
             <plugin>
